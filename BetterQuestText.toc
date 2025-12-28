@@ -1,0 +1,7 @@
+## Interface: 11200
+## Title: Better Quest Text
+## Notes: Improves quest and dialog text readability
+## Author: YourName
+## Version: 1.0
+
+BetterQuestText.lua
