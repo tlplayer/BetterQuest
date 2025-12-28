@@ -1,6 +1,6 @@
 -- WideQuestFrame.lua
 -- pfUI-aware wide quest layout for WoW 1.12.1
--- Proper backdrop-aware positioning
+-- Simple and working version
 
 -------------------------
 -- CONFIG
@@ -8,23 +8,28 @@
 local CONFIG = {
   -- Frame dimensions
   WIDTH = 700,
-  HEIGHT = 400,  -- Increased from 360 to 400 (taller)
+  HEIGHT = 400,
   
   -- Frame position
   POS_X = 0,
-  POS_Y = -60,  -- Changed from 0 to 100 (anchor 100px up from bottom)
+  POS_Y = -60,
   
   -- Content margins
   MARGIN_LEFT = 25,
-  MARGIN_RIGHT = 60,  -- Increased from 25 to 60 to prevent text clipping
-  MARGIN_TOP = 55,
+  MARGIN_RIGHT = 50,
+  MARGIN_TOP = 50,
+
+  -- Text Margins
+  TEXT_MARGIN_LEFT = 25,
+  TEXT_MARGIN_RIGHT = 90,
+  TEXT_MARGIN_TOP = 55,
   
   -- Scroll heights
-  HEIGHT_DETAIL_SCROLL = 220,  -- Increased to use taller frame
+  HEIGHT_DETAIL_SCROLL = 220,
   HEIGHT_PROGRESS_SCROLL = 220,
   HEIGHT_REWARD_SCROLL = 200,
   
-  -- Button offsets from backdrop edges
+  -- Button offsets
   BUTTON_OFFSET_X = 20,
   BUTTON_OFFSET_Y = 20,
   
@@ -32,20 +37,17 @@ local CONFIG = {
   CLOSE_OFFSET_X = 8,
   CLOSE_OFFSET_Y = 8,
   
-  -- Scrollbar (outside text area, to the right)
-  SCROLLBAR_OFFSET_X = 15,  -- Changed from -2 to 15 (outside text)
+  -- Scrollbar
+  SCROLLBAR_OFFSET_X = 16,
   SCROLLBAR_OFFSET_TOP = 16,
   SCROLLBAR_OFFSET_BOTTOM = 16,
-  
-  -- Move step
-  MOVE_STEP = 20,
+
 }
 
 -------------------------
 -- Get Backdrop
 -------------------------
 local function GetBackdrop()
-  -- pfUI creates QuestFrame.backdrop
   return QuestFrame.backdrop or QuestFrame
 end
 
@@ -57,11 +59,9 @@ local function ApplyLayout()
   
   local backdrop = GetBackdrop()
   
-  -- Size QuestFrame
+  -- Size and position frame
   QuestFrame:SetWidth(CONFIG.WIDTH)
   QuestFrame:SetHeight(CONFIG.HEIGHT)
-  
-  -- Position QuestFrame
   QuestFrame:ClearAllPoints()
   QuestFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", CONFIG.POS_X, CONFIG.POS_Y)
   
@@ -69,7 +69,7 @@ local function ApplyLayout()
   local contentWidth = CONFIG.WIDTH - CONFIG.MARGIN_LEFT - CONFIG.MARGIN_RIGHT
   
   ------------------------------------------------
-  -- Scroll Frames (relative to QuestFrame)
+  -- Detail Scroll
   ------------------------------------------------
   if QuestDetailScrollFrame then
     QuestDetailScrollFrame:ClearAllPoints()
@@ -88,6 +88,9 @@ local function ApplyLayout()
     end
   end
   
+  ------------------------------------------------
+  -- Progress Scroll
+  ------------------------------------------------
   if QuestProgressScrollFrame then
     QuestProgressScrollFrame:ClearAllPoints()
     QuestProgressScrollFrame:SetPoint("TOPLEFT", QuestFrame, "TOPLEFT", CONFIG.MARGIN_LEFT, -CONFIG.MARGIN_TOP)
@@ -105,6 +108,9 @@ local function ApplyLayout()
     end
   end
   
+  ------------------------------------------------
+  -- Reward Scroll  
+  ------------------------------------------------
   if QuestRewardScrollFrame then
     QuestRewardScrollFrame:ClearAllPoints()
     QuestRewardScrollFrame:SetPoint("TOPLEFT", QuestFrame, "TOPLEFT", CONFIG.MARGIN_LEFT, -CONFIG.MARGIN_TOP)
@@ -123,30 +129,36 @@ local function ApplyLayout()
   end
   
   ------------------------------------------------
-  -- Buttons (relative to backdrop)
+  -- Buttons - Accept/Complete forced to LEFT (Blizzard resets Complete here)
+  -- Decline/Goodbye on RIGHT for consistency
   ------------------------------------------------
+  
+  -- Accept button (LEFT)
   if QuestFrameAcceptButton then
     QuestFrameAcceptButton:ClearAllPoints()
-    QuestFrameAcceptButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", -CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
+    QuestFrameAcceptButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
   end
   
+  -- Complete button (LEFT - Blizzard forces this position)
   if QuestFrameCompleteButton then
     QuestFrameCompleteButton:ClearAllPoints()
-    QuestFrameCompleteButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", -CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
+    QuestFrameCompleteButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
   end
   
+  -- Decline button (RIGHT)
   if QuestFrameDeclineButton then
     QuestFrameDeclineButton:ClearAllPoints()
-    QuestFrameDeclineButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
+    QuestFrameDeclineButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", -CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
   end
   
+  -- Goodbye/Cancel button (RIGHT)
   if QuestFrameGoodbyeButton then
     QuestFrameGoodbyeButton:ClearAllPoints()
-    QuestFrameGoodbyeButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
+    QuestFrameGoodbyeButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", -CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
   end
   
   ------------------------------------------------
-  -- Close Button (relative to backdrop)
+  -- Close Button
   ------------------------------------------------
   if QuestFrameCloseButton then
     QuestFrameCloseButton:ClearAllPoints()
@@ -158,7 +170,7 @@ end
 -- Fix Text Widths
 -------------------------
 local function FixTextWidths()
-  local textWidth = CONFIG.WIDTH - CONFIG.MARGIN_LEFT - CONFIG.MARGIN_RIGHT
+  local textWidth = CONFIG.WIDTH - CONFIG.MARGIN_LEFT - CONFIG.MARGIN_RIGHT -10
   
   local texts = {
     QuestTitleText,
@@ -229,26 +241,6 @@ local function Init()
       DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccWideQuestFrame|r loaded")
     end
   end)
-end
-
--------------------------
--- Commands
--------------------------
-SLASH_WIDEQUEST1 = "/wq"
-SlashCmdList["WIDEQUEST"] = function(msg)
-  if msg == "up" then
-    CONFIG.POS_Y = CONFIG.POS_Y + CONFIG.MOVE_STEP
-    ApplyLayout()
-  elseif msg == "down" then
-    CONFIG.POS_Y = CONFIG.POS_Y - CONFIG.MOVE_STEP
-    ApplyLayout()
-  elseif msg == "reset" then
-    CONFIG.POS_Y = 0
-    ApplyLayout()
-  elseif msg == "reload" then
-    ApplyLayout()
-    FixTextWidths()
-  end
 end
 
 Init()
