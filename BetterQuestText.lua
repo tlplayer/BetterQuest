@@ -44,6 +44,32 @@ local CONFIG = {
 
 }
 
+local WIDE_TEXT_CONFIG = {
+  -- Shared frame size
+  FRAME_WIDTH = 620,
+  FRAME_HEIGHT = 350,
+
+  -- Text Padding
+  TEXT_RIGHT_PADDING =-20,
+
+  -- Screen position
+  ANCHOR_POINT = "CENTER",
+  ANCHOR_RELATIVE = "CENTER",
+  OFFSET_X = 0,
+  OFFSET_Y = -250,
+
+  -- Content margins
+  CONTENT_MARGIN_LEFT = 15,
+  CONTENT_MARGIN_RIGHT = 20,
+  CONTENT_MARGIN_TOP = 30,
+  CONTENT_MARGIN_BOTTOM = 30,
+
+  -- Scrollbar spacing
+  SCROLLBAR_OFFSET_X = 16,
+  SCROLLBAR_OFFSET_TOP = 16,
+  SCROLLBAR_OFFSET_BOTTOM = 16,
+}
+
 -------------------------
 -- Get Backdrop
 -------------------------
@@ -225,6 +251,190 @@ f:SetScript("OnEvent", function()
     this:SetScript("OnUpdate", nil)
   end)
 end)
+-------------------------
+-- Utility
+-------------------------
+local function GetVisualBackdrop(frame, inset)
+  if frame and frame.backdrop then
+    return frame.backdrop
+  end
+
+  if inset then
+    return inset
+  end
+
+  return frame
+end
+
+local function ApplyScrollbarLayout(scrollFrame, scrollBar)
+  if not scrollFrame or not scrollBar then return end
+
+  scrollBar:ClearAllPoints()
+  scrollBar:SetPoint(
+    "TOPRIGHT",
+    scrollFrame,
+    "TOPRIGHT",
+    WIDE_TEXT_CONFIG.SCROLLBAR_OFFSET_X,
+    -WIDE_TEXT_CONFIG.SCROLLBAR_OFFSET_TOP
+  )
+  scrollBar:SetPoint(
+    "BOTTOMRIGHT",
+    scrollFrame,
+    "BOTTOMRIGHT",
+    WIDE_TEXT_CONFIG.SCROLLBAR_OFFSET_X,
+    WIDE_TEXT_CONFIG.SCROLLBAR_OFFSET_BOTTOM
+  )
+end
+
+-------------------------------------------------
+-- ItemTextFrame (Books, Notes, Letters)
+-------------------------------------------------
+local function ApplyItemTextLayout()
+  if not ItemTextFrame then return end
+
+  local backdrop = GetVisualBackdrop(ItemTextFrame, ItemTextFrameInset)
+  if not backdrop then return end
+
+  -- Size & position ROOT frame
+  ItemTextFrame:SetWidth(WIDE_TEXT_CONFIG.FRAME_WIDTH)
+  ItemTextFrame:SetHeight(WIDE_TEXT_CONFIG.FRAME_HEIGHT)
+  ItemTextFrame:ClearAllPoints()
+  ItemTextFrame:SetPoint(
+    WIDE_TEXT_CONFIG.ANCHOR_POINT,
+    UIParent,
+    WIDE_TEXT_CONFIG.ANCHOR_RELATIVE,
+    WIDE_TEXT_CONFIG.OFFSET_X,
+    WIDE_TEXT_CONFIG.OFFSET_Y
+  )
+
+  local contentWidth =
+    backdrop:GetWidth()
+    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT
+    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
+
+  local contentHeight =
+    backdrop:GetHeight()
+    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
+    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM
+
+  if ItemTextScrollFrame then
+    ItemTextScrollFrame:ClearAllPoints()
+    ItemTextScrollFrame:SetPoint(
+      "TOPLEFT",
+      backdrop,
+      "TOPLEFT",
+      WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT,
+      -WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
+    )
+    ItemTextScrollFrame:SetWidth(contentWidth)
+    ItemTextScrollFrame:SetHeight(contentHeight)
+
+    ApplyScrollbarLayout(
+      ItemTextScrollFrame,
+      ItemTextScrollFrameScrollBar
+    )
+  end
+
+  if ItemTextPageText then
+    ItemTextPageText:SetWidth(contentWidth+WIDE_TEXT_CONFIG.TEXT_RIGHT_PADDING)
+    ItemTextPageText:SetJustifyH("LEFT")
+  end
+end
+
+-------------------------------------------------
+-- GossipFrame (NPC dialogue text)
+-------------------------------------------------
+local function ApplyGossipLayout()
+  if not GossipFrame then return end
+
+  local backdrop = GetVisualBackdrop(GossipFrame, GossipFrameInset)
+  if not backdrop then return end
+
+  GossipFrame:SetWidth(WIDE_TEXT_CONFIG.FRAME_WIDTH)
+  GossipFrame:SetHeight(WIDE_TEXT_CONFIG.FRAME_HEIGHT)
+  GossipFrame:ClearAllPoints()
+  GossipFrame:SetPoint(
+    WIDE_TEXT_CONFIG.ANCHOR_POINT,
+    UIParent,
+    WIDE_TEXT_CONFIG.ANCHOR_RELATIVE,
+    WIDE_TEXT_CONFIG.OFFSET_X,
+    WIDE_TEXT_CONFIG.OFFSET_Y
+  )
+
+  local contentWidth =
+    backdrop:GetWidth()
+    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT
+    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
+
+  local contentHeight =
+    backdrop:GetHeight()
+    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
+    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM
+
+  if GossipScrollFrame then
+    GossipScrollFrame:ClearAllPoints()
+    GossipScrollFrame:SetPoint(
+      "TOPLEFT",
+      backdrop,
+      "TOPLEFT",
+      WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT,
+      -WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
+    )
+    GossipScrollFrame:SetWidth(contentWidth)
+    GossipScrollFrame:SetHeight(contentHeight)
+
+    ApplyScrollbarLayout(
+      GossipScrollFrame,
+      GossipScrollFrameScrollBar
+    )
+  end
+
+  if GossipGreetingText then
+    GossipGreetingText:SetWidth(contentWidth)
+    GossipGreetingText:SetJustifyH("LEFT")
+  end
+
+  if GossipTitleText then
+    GossipTitleText:SetWidth(contentWidth+WIDE_TEXT_CONFIG.TEXT_RIGHT_PADDING)
+    GossipTitleText:SetJustifyH("LEFT")
+  end
+end
+
+-------------------------
+-- Event Handling
+-------------------------
+local eventFrame = CreateFrame("Frame")
+eventFrame:RegisterEvent("ITEM_TEXT_BEGIN")
+eventFrame:RegisterEvent("ITEM_TEXT_READY")
+eventFrame:RegisterEvent("GOSSIP_SHOW")
+
+eventFrame:SetScript("OnEvent", function()
+  this:SetScript("OnUpdate", function()
+    ApplyItemTextLayout()
+    ApplyGossipLayout()
+    this:SetScript("OnUpdate", nil)
+  end)
+end)
+
+-------------------------
+-- OnShow Hooks (Blizzard resets layout)
+-------------------------
+if ItemTextFrame then
+  local originalItemTextOnShow = ItemTextFrame:GetScript("OnShow")
+  ItemTextFrame:SetScript("OnShow", function()
+    if originalItemTextOnShow then originalItemTextOnShow() end
+    ApplyItemTextLayout()
+  end)
+end
+
+if GossipFrame then
+  local originalGossipOnShow = GossipFrame:GetScript("OnShow")
+  GossipFrame:SetScript("OnShow", function()
+    if originalGossipOnShow then originalGossipOnShow() end
+    ApplyGossipLayout()
+  end)
+end
+
 
 -------------------------
 -- Init
