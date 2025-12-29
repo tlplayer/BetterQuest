@@ -7,7 +7,7 @@
 -------------------------
 local CONFIG = {
   -- Frame dimensions
-  WIDTH = 700,
+  WIDTH = 620,
   HEIGHT = 400,
   
   -- Frame position
