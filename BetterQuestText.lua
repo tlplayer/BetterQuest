@@ -359,22 +359,24 @@ function GossipResize(titleButton)
   -- ALSO set width (this is what Blizzard doesn't do)
   titleButton:SetWidth(contentWidth)
   
-  -- Make sure button is mouse-enabled and can receive clicks
-  titleButton:EnableMouse(true)
-  titleButton:SetHitRectInsets(0, 0, 0, 0)
+  
+  -- Don't interfere with OnClick handler - it's already set in XML
+  -- Don't touch titleButton.type - Blizzard sets this after calling GossipResize
   
   -- Fix the text element inside the button
   local buttonText = getglobal(titleButton:GetName() .. "Text")
   if buttonText then
-    buttonText:SetWidth(contentWidth - 30) -- Leave room for icon
+    buttonText:ClearAllPoints()
+    buttonText:SetPoint("LEFT", titleButton, "LEFT", 25, 0) -- Leave room for icon
+    buttonText:SetWidth(contentWidth - 30)
     buttonText:SetJustifyH("LEFT")
   end
   
-  -- Make sure the icon is positioned correctly
+  -- Make sure the icon stays in place
   local buttonIcon = getglobal(titleButton:GetName() .. "GossipIcon")
   if buttonIcon then
     buttonIcon:ClearAllPoints()
-    buttonIcon:SetPoint("LEFT", titleButton, "LEFT", 0, 0)
+    buttonIcon:SetPoint("LEFT", titleButton, "LEFT", 3, 0)
   end
 end
 
@@ -413,6 +415,9 @@ local function ApplyGossipLayout()
     GossipGreetingScrollFrame:SetWidth(contentWidth)
     GossipGreetingScrollFrame:SetHeight(contentHeight)
     
+    -- CRITICAL: Enable mouse on scroll frame so clicks pass through
+    GossipGreetingScrollFrame:EnableMouse(true)
+    
     if GossipGreetingScrollFrameScrollBar then
       ApplyScrollbarLayout(GossipGreetingScrollFrame, GossipGreetingScrollFrameScrollBar)
     end
@@ -422,6 +427,10 @@ local function ApplyGossipLayout()
   -- CRITICAL: This must be WIDER than the buttons for clicks to work
   if GossipGreetingScrollChildFrame then
     GossipGreetingScrollChildFrame:SetWidth(contentWidth)
+    
+    -- CRITICAL: Disable mouse on child frame so clicks pass to buttons
+    GossipGreetingScrollChildFrame:EnableMouse(true)
+    
     -- Also set height dynamically based on content
     local totalHeight = 0
     if GossipGreetingText then
@@ -451,25 +460,19 @@ end
 
 -- Store original GossipFrameUpdate to hook it
 local OriginalGossipFrameUpdate = GossipFrameUpdate
+local gossipUpdateFrame = CreateFrame("Frame")
 
 function GossipFrameUpdate()
-  -- Call original first (this will call our new GossipResize for each button)
   if OriginalGossipFrameUpdate then
     OriginalGossipFrameUpdate()
   end
-  
-  -- Then apply our layout
-  ApplyGossipLayout()
-end
 
--- Hook GossipFrame OnShow
-if GossipFrame then
-  local origShow = GossipFrame:GetScript("OnShow")
-  GossipFrame:SetScript("OnShow", function()
-    if origShow then origShow() end
+  gossipUpdateFrame:SetScript("OnUpdate", function()
     ApplyGossipLayout()
+    this:SetScript("OnUpdate", nil)
   end)
 end
+
 
 -------------------------
 -- Event Handling
@@ -518,6 +521,16 @@ if GossipFrame then
   end)
 end
 
+for i = 1, NUMGOSSIPBUTTONS do
+  local b = getglobal("GossipTitleButton"..i)
+  if b and b:IsShown() then
+    b:SetScript("OnClick", function()
+      DEFAULT_CHAT_FRAME:AddMessage("Clicked "..b:GetName())
+      SelectGossipOption(b:GetID())
+    end)
+  end
+end
+
 
 -------------------------
 -- Init
@@ -531,7 +544,7 @@ local function Init()
       ApplyLayout()
       FixTextWidths()
       this:SetScript("OnUpdate", nil)
-      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccWideQuestFrame|r loaded")
+      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccBetterQuest|r loaded")
     end
   end)
 end
