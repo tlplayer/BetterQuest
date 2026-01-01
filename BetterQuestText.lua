@@ -1,6 +1,6 @@
 -- WideQuestFrame.lua
 -- pfUI-aware wide quest layout for WoW 1.12.1
--- Simple and working version
+-- With working texture-based portraits
 
 -------------------------
 -- CONFIG
@@ -15,12 +15,12 @@ local CONFIG = {
   POS_Y = -60,
   
   -- Content margins
-  MARGIN_LEFT = 25,
+  MARGIN_LEFT = 140,  -- Increased to make room for portrait
   MARGIN_RIGHT = 50,
   MARGIN_TOP = 50,
 
   -- Text Margins
-  TEXT_MARGIN_LEFT = 25,
+  TEXT_MARGIN_LEFT = 140,
   TEXT_MARGIN_RIGHT = 90,
   TEXT_MARGIN_TOP = 55,
   
@@ -41,7 +41,6 @@ local CONFIG = {
   SCROLLBAR_OFFSET_X = 16,
   SCROLLBAR_OFFSET_TOP = 16,
   SCROLLBAR_OFFSET_BOTTOM = 16,
-
 }
 
 local WIDE_TEXT_CONFIG = {
@@ -50,7 +49,7 @@ local WIDE_TEXT_CONFIG = {
   FRAME_HEIGHT = 350,
 
   -- Text Padding
-  TEXT_RIGHT_PADDING =-20,
+  TEXT_RIGHT_PADDING = -20,
 
   -- Screen position
   ANCHOR_POINT = "CENTER",
@@ -69,6 +68,140 @@ local WIDE_TEXT_CONFIG = {
   SCROLLBAR_OFFSET_TOP = 16,
   SCROLLBAR_OFFSET_BOTTOM = 16,
 }
+
+-------------------------
+-- Portrait System
+-------------------------
+local PORTRAIT_CONFIG = {
+  WIDTH = 110,
+  HEIGHT = 110,
+  OFFSET_X = 15,  -- Distance from left edge
+  OFFSET_Y = 60,  -- Distance from top
+}
+
+-- Portrait Database - maps NPC names to texture paths
+-- You'll need to place portrait images in Interface/AddOns/YourAddonName/portraits/
+local PortraitDB = {
+  -- Named NPCs (use texture paths relative to WoW interface folder)
+  named = {
+    ["Thrall"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\thrall",
+    ["Cairne Bloodhoof"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\cairne",
+    ["Vol'jin"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\voljin",
+    ["King Magni Bronzebeard"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\magni",
+    ["Lady Sylvanas Windrunner"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\sylvanas",
+    ["Highlord Bolvar Fordragon"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\bolvar",
+    ["Tyrande Whisperwind"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\tyrande",
+  },
+  
+  -- Zone-based portraits (guards, citizens)
+  zone = {
+    ["Orgrimmar"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\orc_generic",
+    ["Stormwind City"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\human_generic",
+    ["Ironforge"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\dwarf_generic",
+    ["Darnassus"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\nightelf_generic",
+    ["Thunder Bluff"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\tauren_generic",
+    ["Undercity"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\undead_generic",
+  },
+  
+  -- Race-based fallbacks
+  race = {
+    ["Human"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\human_generic",
+    ["Orc"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\orc_generic",
+    ["Dwarf"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\dwarf_generic",
+    ["Night Elf"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\nightelf_generic",
+    ["Undead"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\undead_generic",
+    ["Tauren"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\tauren_generic",
+    ["Gnome"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\gnome_generic",
+    ["Troll"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\troll_generic",
+  },
+  
+  -- Default fallback
+  default = "Interface\\AddOns\\WideQuestFrame\\portraits\\default",
+}
+
+-- Get NPC information
+local function GetNPCInfo()
+  return {
+    name = UnitName("npc") or UnitName("target") or "Unknown",
+    zone = GetZoneText(),
+    race = UnitRace("npc") or UnitRace("target"),
+  }
+end
+
+-- Find the appropriate portrait texture
+local function FindPortraitTexture()
+  local npc = GetNPCInfo()
+  local texture = nil
+  
+  -- 1. Try named NPC lookup (most specific)
+  if npc.name and PortraitDB.named[npc.name] then
+    texture = PortraitDB.named[npc.name]
+    return texture, "named: " .. npc.name
+  end
+  
+  -- 2. Try zone-based lookup
+  if npc.zone and PortraitDB.zone[npc.zone] then
+    texture = PortraitDB.zone[npc.zone]
+    return texture, "zone: " .. npc.zone
+  end
+  
+  -- 3. Try race-based lookup
+  if npc.race and PortraitDB.race[npc.race] then
+    texture = PortraitDB.race[npc.race]
+    return texture, "race: " .. npc.race
+  end
+  
+  -- 4. Use default
+  return PortraitDB.default, "default"
+end
+
+-- Create or update portrait frame
+local function UpdatePortrait(parentFrame)
+  if not parentFrame then return end
+  
+  local portrait = parentFrame.widePortrait
+  
+  -- Create portrait frame if it doesn't exist
+  if not portrait then
+    portrait = CreateFrame("Frame", nil, parentFrame)
+    portrait:SetWidth(PORTRAIT_CONFIG.WIDTH)
+    portrait:SetHeight(PORTRAIT_CONFIG.HEIGHT)
+    portrait:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", PORTRAIT_CONFIG.OFFSET_X, -PORTRAIT_CONFIG.OFFSET_Y)
+    
+    -- Create texture
+    portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
+    portrait.texture:SetAllPoints(portrait)
+    
+    -- Create border (optional)
+    portrait.border = portrait:CreateTexture(nil, "OVERLAY")
+    portrait.border:SetAllPoints(portrait)
+    portrait.border:SetTexture("Interface\\DialogFrame\\UI-DialogBox-Border")
+    portrait.border:SetTexCoord(0, 0.8, 0, 0.8)
+    
+    parentFrame.widePortrait = portrait
+  end
+  
+  -- Update texture to current NPC
+  local texturePath, source = FindPortraitTexture()
+  portrait.texture:SetTexture(texturePath)
+  
+  -- If texture fails to load, use a fallback
+  if not portrait.texture:GetTexture() then
+    portrait.texture:SetTexture("Interface\\CharacterFrame\\TempPortrait")
+  end
+  
+  portrait:Show()
+  
+  -- Debug output (optional)
+  -- DEFAULT_CHAT_FRAME:AddMessage("Portrait: " .. source)
+end
+
+-- Helper: Add portrait to database dynamically
+function PortraitDB_AddNPC(npcName, texturePath)
+  if not npcName or not texturePath then return false end
+  PortraitDB.named[npcName] = texturePath
+  return true
+end
 
 -------------------------
 -- Get Backdrop
@@ -91,7 +224,10 @@ local function ApplyLayout()
   QuestFrame:ClearAllPoints()
   QuestFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", CONFIG.POS_X, CONFIG.POS_Y)
   
-  -- Content width
+  -- Update portrait
+  UpdatePortrait(QuestFrame)
+  
+  -- Content width (accounting for portrait space)
   local contentWidth = CONFIG.WIDTH - CONFIG.MARGIN_LEFT - CONFIG.MARGIN_RIGHT
   
   ------------------------------------------------
@@ -155,8 +291,7 @@ local function ApplyLayout()
   end
   
   ------------------------------------------------
-  -- Buttons - Accept/Complete forced to LEFT (Blizzard resets Complete here)
-  -- Decline/Goodbye on RIGHT for consistency
+  -- Buttons
   ------------------------------------------------
   
   -- Accept button (LEFT)
@@ -165,7 +300,7 @@ local function ApplyLayout()
     QuestFrameAcceptButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
   end
   
-  -- Complete button (LEFT - Blizzard forces this position)
+  -- Complete button (LEFT)
   if QuestFrameCompleteButton then
     QuestFrameCompleteButton:ClearAllPoints()
     QuestFrameCompleteButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
@@ -196,7 +331,7 @@ end
 -- Fix Text Widths
 -------------------------
 local function FixTextWidths()
-  local textWidth = CONFIG.WIDTH - CONFIG.MARGIN_LEFT - CONFIG.MARGIN_RIGHT -10
+  local textWidth = CONFIG.WIDTH - CONFIG.MARGIN_LEFT - CONFIG.MARGIN_RIGHT - 10
   
   local texts = {
     QuestTitleText,
@@ -251,6 +386,7 @@ f:SetScript("OnEvent", function()
     this:SetScript("OnUpdate", nil)
   end)
 end)
+
 -------------------------
 -- Utility
 -------------------------
@@ -258,11 +394,9 @@ local function GetVisualBackdrop(frame, inset)
   if frame and frame.backdrop then
     return frame.backdrop
   end
-
   if inset then
     return inset
   end
-
   return frame
 end
 
@@ -295,7 +429,6 @@ local function ApplyItemTextLayout()
   local backdrop = GetVisualBackdrop(ItemTextFrame, ItemTextFrameInset)
   if not backdrop then return end
 
-  -- Size & position ROOT frame
   ItemTextFrame:SetWidth(WIDE_TEXT_CONFIG.FRAME_WIDTH)
   ItemTextFrame:SetHeight(WIDE_TEXT_CONFIG.FRAME_HEIGHT)
   ItemTextFrame:ClearAllPoints()
@@ -336,43 +469,32 @@ local function ApplyItemTextLayout()
   end
 
   if ItemTextPageText then
-    ItemTextPageText:SetWidth(contentWidth+WIDE_TEXT_CONFIG.TEXT_RIGHT_PADDING)
+    ItemTextPageText:SetWidth(contentWidth + WIDE_TEXT_CONFIG.TEXT_RIGHT_PADDING)
     ItemTextPageText:SetJustifyH("LEFT")
   end
 end
--------------------------------------------------
--- GossipFrame (NPC dialogue text) - Complete Fix
--------------------------------------------------
 
--- Store the original GossipResize function
+-------------------------------------------------
+-- GossipFrame (NPC dialogue text)
+-------------------------------------------------
 local OriginalGossipResize = GossipResize
 
--- Replace Blizzard's GossipResize to handle width AND height
 function GossipResize(titleButton)
   if not titleButton then return end
   
   local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
   
-  -- Set height like Blizzard does
   titleButton:SetHeight(titleButton:GetTextHeight() + 2)
-  
-  -- ALSO set width (this is what Blizzard doesn't do)
   titleButton:SetWidth(contentWidth)
   
-  
-  -- Don't interfere with OnClick handler - it's already set in XML
-  -- Don't touch titleButton.type - Blizzard sets this after calling GossipResize
-  
-  -- Fix the text element inside the button
   local buttonText = getglobal(titleButton:GetName() .. "Text")
   if buttonText then
     buttonText:ClearAllPoints()
-    buttonText:SetPoint("LEFT", titleButton, "LEFT", 25, 0) -- Leave room for icon
+    buttonText:SetPoint("LEFT", titleButton, "LEFT", 25, 0)
     buttonText:SetWidth(contentWidth - 30)
     buttonText:SetJustifyH("LEFT")
   end
   
-  -- Make sure the icon stays in place
   local buttonIcon = getglobal(titleButton:GetName() .. "GossipIcon")
   if buttonIcon then
     buttonIcon:ClearAllPoints()
@@ -383,11 +505,9 @@ end
 local function ApplyGossipLayout()
   if not GossipFrame then return end
 
-  -- Get backdrop (pfUI creates this around the frame)
   local backdrop = GetVisualBackdrop(GossipFrame, GossipFrameInset)
   if not backdrop then backdrop = GossipFrame end
 
-  -- Set root frame dimensions
   GossipFrame:SetWidth(WIDE_TEXT_CONFIG.FRAME_WIDTH)
   GossipFrame:SetHeight(WIDE_TEXT_CONFIG.FRAME_HEIGHT)
   GossipFrame:ClearAllPoints()
@@ -399,10 +519,9 @@ local function ApplyGossipLayout()
     WIDE_TEXT_CONFIG.OFFSET_Y
   )
 
-  local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT-40
-  local contentHeight = WIDE_TEXT_CONFIG.FRAME_HEIGHT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM-90
+  local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT - 40
+  local contentHeight = WIDE_TEXT_CONFIG.FRAME_HEIGHT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM - 90
 
-  -- Size the scroll frame that contains everything
   if GossipGreetingScrollFrame then
     GossipGreetingScrollFrame:ClearAllPoints()
     GossipGreetingScrollFrame:SetPoint(
@@ -414,8 +533,6 @@ local function ApplyGossipLayout()
     )
     GossipGreetingScrollFrame:SetWidth(contentWidth)
     GossipGreetingScrollFrame:SetHeight(contentHeight)
-    
-    -- CRITICAL: Enable mouse on scroll frame so clicks pass through
     GossipGreetingScrollFrame:EnableMouse(true)
     
     if GossipGreetingScrollFrameScrollBar then
@@ -423,18 +540,12 @@ local function ApplyGossipLayout()
     end
   end
 
-  -- Size the greeting panel (child of scroll frame)
-  -- CRITICAL: This must be WIDER than the buttons for clicks to work
   if GossipGreetingScrollChildFrame then
     GossipGreetingScrollChildFrame:SetWidth(contentWidth)
-    
-    -- CRITICAL: Disable mouse on child frame so clicks pass to buttons
     GossipGreetingScrollChildFrame:EnableMouse(true)
-    
   end
 end
 
--- Store original GossipFrameUpdate to hook it
 local OriginalGossipFrameUpdate = GossipFrameUpdate
 local gossipUpdateFrame = CreateFrame("Frame")
 
@@ -449,7 +560,6 @@ function GossipFrameUpdate()
   end)
 end
 
-
 -------------------------
 -- Event Handling
 -------------------------
@@ -457,7 +567,6 @@ local gossipEventFrame = CreateFrame("Frame")
 gossipEventFrame:RegisterEvent("GOSSIP_SHOW")
 gossipEventFrame:SetScript("OnEvent", function()
   if event == "GOSSIP_SHOW" then
-    -- Delay slightly to ensure frame is ready
     this:SetScript("OnUpdate", function()
       ApplyGossipLayout()
       this:SetScript("OnUpdate", nil)
@@ -479,7 +588,7 @@ eventFrame:SetScript("OnEvent", function()
 end)
 
 -------------------------
--- OnShow Hooks (Blizzard resets layout)
+-- OnShow Hooks
 -------------------------
 if ItemTextFrame then
   local originalItemTextOnShow = ItemTextFrame:GetScript("OnShow")
@@ -497,17 +606,6 @@ if GossipFrame then
   end)
 end
 
-for i = 1, NUMGOSSIPBUTTONS do
-  local b = getglobal("GossipTitleButton"..i)
-  if b and b:IsShown() then
-    b:SetScript("OnClick", function()
-      DEFAULT_CHAT_FRAME:AddMessage("Clicked "..b:GetName())
-      SelectGossipOption(b:GetID())
-    end)
-  end
-end
-
-
 -------------------------
 -- Init
 -------------------------
@@ -520,7 +618,7 @@ local function Init()
       ApplyLayout()
       FixTextWidths()
       this:SetScript("OnUpdate", nil)
-      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccBetterQuest|r loaded")
+      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccWideQuestFrame|r loaded with portrait support")
     end
   end)
 end
