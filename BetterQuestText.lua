@@ -342,14 +342,40 @@ local function ApplyItemTextLayout()
 end
 
 -------------------------------------------------
--- GossipFrame (NPC dialogue text)
+-- GossipFrame (NPC dialogue text) - Complete Fix
 -------------------------------------------------
+
+-- Store the original GossipResize function
+local OriginalGossipResize = GossipResize
+
+-- Replace Blizzard's GossipResize to handle width AND height
+function GossipResize(titleButton)
+  if not titleButton then return end
+  
+  local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
+  
+  -- Set height like Blizzard does
+  titleButton:SetHeight(titleButton:GetTextHeight() + 2)
+  
+  -- ALSO set width (this is what Blizzard doesn't do)
+  titleButton:SetWidth(contentWidth)
+  
+  -- Fix the text element inside the button
+  local buttonText = getglobal(titleButton:GetName() .. "Text")
+  if buttonText then
+    buttonText:SetWidth(contentWidth - 30) -- Leave room for icon
+    buttonText:SetJustifyH("LEFT")
+  end
+end
+
 local function ApplyGossipLayout()
   if not GossipFrame then return end
 
+  -- Get backdrop (pfUI creates this around the frame)
   local backdrop = GetVisualBackdrop(GossipFrame, GossipFrameInset)
-  if not backdrop then return end
+  if not backdrop then backdrop = GossipFrame end
 
+  -- Set root frame dimensions
   GossipFrame:SetWidth(WIDE_TEXT_CONFIG.FRAME_WIDTH)
   GossipFrame:SetHeight(WIDE_TEXT_CONFIG.FRAME_HEIGHT)
   GossipFrame:ClearAllPoints()
@@ -361,48 +387,80 @@ local function ApplyGossipLayout()
     WIDE_TEXT_CONFIG.OFFSET_Y
   )
 
-  local contentWidth =
-    backdrop:GetWidth()
-    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT
-    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
+  local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
+  local contentHeight = WIDE_TEXT_CONFIG.FRAME_HEIGHT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM
 
-  local contentHeight =
-    backdrop:GetHeight()
-    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
-    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM
-
-  if GossipScrollFrame then
-    GossipScrollFrame:ClearAllPoints()
-    GossipScrollFrame:SetPoint(
+  -- Size the scroll frame that contains everything
+  if GossipGreetingScrollFrame then
+    GossipGreetingScrollFrame:ClearAllPoints()
+    GossipGreetingScrollFrame:SetPoint(
       "TOPLEFT",
       backdrop,
       "TOPLEFT",
       WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT,
       -WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
     )
-    GossipScrollFrame:SetWidth(contentWidth)
-    GossipScrollFrame:SetHeight(contentHeight)
-
-    ApplyScrollbarLayout(
-      GossipScrollFrame,
-      GossipScrollFrameScrollBar
-    )
+    GossipGreetingScrollFrame:SetWidth(contentWidth)
+    GossipGreetingScrollFrame:SetHeight(contentHeight)
+    
+    if GossipGreetingScrollFrameScrollBar then
+      ApplyScrollbarLayout(GossipGreetingScrollFrame, GossipGreetingScrollFrameScrollBar)
+    end
   end
 
+  -- Size the greeting panel (child of scroll frame)
+  if GossipGreetingScrollChildFrame then
+    GossipGreetingScrollChildFrame:SetWidth(contentWidth)
+  end
+
+  -- Fix the main greeting text (NPC dialogue)
   if GossipGreetingText then
-    GossipGreetingText:SetWidth(contentWidth)
+    GossipGreetingText:SetWidth(contentWidth - 20)
     GossipGreetingText:SetJustifyH("LEFT")
   end
 
-  if GossipTitleText then
-    GossipTitleText:SetWidth(contentWidth+WIDE_TEXT_CONFIG.TEXT_RIGHT_PADDING)
-    GossipTitleText:SetJustifyH("LEFT")
+  -- Fix title/NPC name
+  if GossipFrameNpcNameText then
+    GossipFrameNpcNameText:SetWidth(contentWidth)
   end
+end
+
+-- Store original GossipFrameUpdate to hook it
+local OriginalGossipFrameUpdate = GossipFrameUpdate
+
+function GossipFrameUpdate()
+  -- Call original first (this will call our new GossipResize for each button)
+  if OriginalGossipFrameUpdate then
+    OriginalGossipFrameUpdate()
+  end
+  
+  -- Then apply our layout
+  ApplyGossipLayout()
+end
+
+-- Hook GossipFrame OnShow
+if GossipFrame then
+  local origShow = GossipFrame:GetScript("OnShow")
+  GossipFrame:SetScript("OnShow", function()
+    if origShow then origShow() end
+    ApplyGossipLayout()
+  end)
 end
 
 -------------------------
 -- Event Handling
 -------------------------
+local gossipEventFrame = CreateFrame("Frame")
+gossipEventFrame:RegisterEvent("GOSSIP_SHOW")
+gossipEventFrame:SetScript("OnEvent", function()
+  if event == "GOSSIP_SHOW" then
+    -- Delay slightly to ensure frame is ready
+    this:SetScript("OnUpdate", function()
+      ApplyGossipLayout()
+      this:SetScript("OnUpdate", nil)
+    end)
+  end
+end)
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("ITEM_TEXT_BEGIN")
 eventFrame:RegisterEvent("ITEM_TEXT_READY")
