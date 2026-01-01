@@ -399,8 +399,8 @@ local function ApplyGossipLayout()
     WIDE_TEXT_CONFIG.OFFSET_Y
   )
 
-  local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
-  local contentHeight = WIDE_TEXT_CONFIG.FRAME_HEIGHT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM
+  local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT-40
+  local contentHeight = WIDE_TEXT_CONFIG.FRAME_HEIGHT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM-90
 
   -- Size the scroll frame that contains everything
   if GossipGreetingScrollFrame then
@@ -431,30 +431,6 @@ local function ApplyGossipLayout()
     -- CRITICAL: Disable mouse on child frame so clicks pass to buttons
     GossipGreetingScrollChildFrame:EnableMouse(true)
     
-    -- Also set height dynamically based on content
-    local totalHeight = 0
-    if GossipGreetingText then
-      totalHeight = totalHeight + GossipGreetingText:GetHeight() + 10
-    end
-    -- Add height for all visible buttons
-    for i = 1, NUMGOSSIPBUTTONS do
-      local button = getglobal("GossipTitleButton" .. i)
-      if button and button:IsVisible() then
-        totalHeight = totalHeight + button:GetHeight() + 2
-      end
-    end
-    GossipGreetingScrollChildFrame:SetHeight(math.max(totalHeight, contentHeight))
-  end
-
-  -- Fix the main greeting text (NPC dialogue)
-  if GossipGreetingText then
-    GossipGreetingText:SetWidth(contentWidth - 20)
-    GossipGreetingText:SetJustifyH("LEFT")
-  end
-
-  -- Fix title/NPC name
-  if GossipFrameNpcNameText then
-    GossipFrameNpcNameText:SetWidth(contentWidth)
   end
 end
 
