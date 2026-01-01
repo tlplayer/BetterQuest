@@ -84,39 +84,39 @@ local PORTRAIT_CONFIG = {
 local PortraitDB = {
   -- Named NPCs (use texture paths relative to WoW interface folder)
   named = {
-    ["Thrall"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\thrall",
-    ["Cairne Bloodhoof"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\cairne",
-    ["Vol'jin"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\voljin",
-    ["King Magni Bronzebeard"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\magni",
-    ["Lady Sylvanas Windrunner"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\sylvanas",
-    ["Highlord Bolvar Fordragon"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\bolvar",
-    ["Tyrande Whisperwind"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\tyrande",
+    ["Thrall"] = "Interface\\AddOns\\BetterQuestText\\portraits\\thrall",
+    ["Cairne Bloodhoof"] = "Interface\\AddOns\\BetterQuestText\\portraits\\cairne",
+    ["Vol'jin"] = "Interface\\AddOns\\BetterQuestText\\portraits\\voljin",
+    ["King Magni Bronzebeard"] = "Interface\\AddOns\\BetterQuestText\\portraits\\magni",
+    ["Lady Sylvanas Windrunner"] = "Interface\\AddOns\\BetterQuestText\\portraits\\sylvanas",
+    ["Highlord Bolvar Fordragon"] = "Interface\\AddOns\\BetterQuestText\\portraits\\bolvar",
+    ["Tyrande Whisperwind"] = "Interface\\AddOns\\BetterQuestText\\portraits\\tyrande",
   },
   
   -- Zone-based portraits (guards, citizens)
   zone = {
-    ["Orgrimmar"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\orc_generic",
-    ["Stormwind City"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\human_generic",
-    ["Ironforge"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\dwarf_generic",
-    ["Darnassus"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\nightelf_generic",
-    ["Thunder Bluff"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\tauren_generic",
-    ["Undercity"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\undead_generic",
+    ["Orgrimmar"] = "Interface\\AddOns\\BetterQuestText\\portraits\\orc_generic",
+    ["Stormwind City"] = "Interface\\AddOns\\BetterQuestText\\portraits\\human_generic",
+    ["Ironforge"] = "Interface\\AddOns\\BetterQuestText\\portraits\\dwarf_generic",
+    ["Darnassus"] = "Interface\\AddOns\\BetterQuestText\\portraits\\nightelf_generic",
+    ["Thunder Bluff"] = "Interface\\AddOns\\BetterQuestText\\portraits\\tauren_generic",
+    ["Undercity"] = "Interface\\AddOns\\BetterQuestText\\portraits\\undead_generic",
   },
   
   -- Race-based fallbacks
   race = {
-    ["Human"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\human_generic",
-    ["Orc"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\orc_generic",
-    ["Dwarf"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\dwarf_generic",
-    ["Night Elf"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\nightelf_generic",
-    ["Undead"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\undead_generic",
-    ["Tauren"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\tauren_generic",
-    ["Gnome"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\gnome_generic",
-    ["Troll"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\troll_generic",
+    ["Human"] = "Interface\\AddOns\\BetterQuestText\\portraits\\human_generic",
+    ["Orc"] = "Interface\\AddOns\\BetterQuestText\\portraits\\orc_generic",
+    ["Dwarf"] = "Interface\\AddOns\\BetterQuestText\\portraits\\dwarf_generic",
+    ["Night Elf"] = "Interface\\AddOns\\BetterQuestText\\portraits\\nightelf_generic",
+    ["Undead"] = "Interface\\AddOns\\BetterQuestText\\portraits\\undead_generic",
+    ["Tauren"] = "Interface\\AddOns\\BetterQuestText\\portraits\\tauren_generic",
+    ["Gnome"] = "Interface\\AddOns\\BetterQuestText\\portraits\\gnome_generic",
+    ["Troll"] = "Interface\\AddOns\\BetterQuestText\\portraits\\troll_generic",
   },
   
   -- Default fallback
-  default = "Interface\\AddOns\\BetterQuestTest\\portraits\\default",
+  default = "Interface\\AddOns\\BetterQuestText\\portraits\\default.tga",
 }
 
 -- Get NPC information
@@ -620,7 +620,7 @@ local function Init()
       ApplyLayout()
       FixTextWidths()
       this:SetScript("OnUpdate", nil)
-      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccBetterQuestTest|r loaded with portrait support")
+      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccBetterQuestText|r loaded with portrait support")
     end
   end)
 end
