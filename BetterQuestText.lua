@@ -1,4 +1,4 @@
--- WideQuestFrame.lua
+-- BetterQuestText.lua
 -- pfUI-aware wide quest layout for WoW 1.12.1
 -- With working texture-based portraits
 
@@ -84,39 +84,39 @@ local PORTRAIT_CONFIG = {
 local PortraitDB = {
   -- Named NPCs (use texture paths relative to WoW interface folder)
   named = {
-    ["Thrall"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\thrall",
-    ["Cairne Bloodhoof"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\cairne",
-    ["Vol'jin"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\voljin",
-    ["King Magni Bronzebeard"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\magni",
-    ["Lady Sylvanas Windrunner"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\sylvanas",
-    ["Highlord Bolvar Fordragon"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\bolvar",
-    ["Tyrande Whisperwind"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\tyrande",
+    ["Thrall"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\thrall",
+    ["Cairne Bloodhoof"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\cairne",
+    ["Vol'jin"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\voljin",
+    ["King Magni Bronzebeard"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\magni",
+    ["Lady Sylvanas Windrunner"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\sylvanas",
+    ["Highlord Bolvar Fordragon"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\bolvar",
+    ["Tyrande Whisperwind"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\tyrande",
   },
   
   -- Zone-based portraits (guards, citizens)
   zone = {
-    ["Orgrimmar"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\orc_generic",
-    ["Stormwind City"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\human_generic",
-    ["Ironforge"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\dwarf_generic",
-    ["Darnassus"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\nightelf_generic",
-    ["Thunder Bluff"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\tauren_generic",
-    ["Undercity"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\undead_generic",
+    ["Orgrimmar"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\orc_generic",
+    ["Stormwind City"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\human_generic",
+    ["Ironforge"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\dwarf_generic",
+    ["Darnassus"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\nightelf_generic",
+    ["Thunder Bluff"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\tauren_generic",
+    ["Undercity"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\undead_generic",
   },
   
   -- Race-based fallbacks
   race = {
-    ["Human"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\human_generic",
-    ["Orc"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\orc_generic",
-    ["Dwarf"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\dwarf_generic",
-    ["Night Elf"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\nightelf_generic",
-    ["Undead"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\undead_generic",
-    ["Tauren"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\tauren_generic",
-    ["Gnome"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\gnome_generic",
-    ["Troll"] = "Interface\\AddOns\\WideQuestFrame\\portraits\\troll_generic",
+    ["Human"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\human_generic",
+    ["Orc"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\orc_generic",
+    ["Dwarf"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\dwarf_generic",
+    ["Night Elf"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\nightelf_generic",
+    ["Undead"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\undead_generic",
+    ["Tauren"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\tauren_generic",
+    ["Gnome"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\gnome_generic",
+    ["Troll"] = "Interface\\AddOns\\BetterQuestTest\\portraits\\troll_generic",
   },
   
   -- Default fallback
-  default = "Interface\\AddOns\\WideQuestFrame\\portraits\\default",
+  default = "Interface\\AddOns\\BetterQuestTest\\portraits\\default",
 }
 
 -- Get NPC information
@@ -184,6 +184,8 @@ local function UpdatePortrait(parentFrame)
   -- Update texture to current NPC
   local texturePath, source = FindPortraitTexture()
   portrait.texture:SetTexture(texturePath)
+
+  print(texturePath,source)
   
   -- If texture fails to load, use a fallback
   if not portrait.texture:GetTexture() then
@@ -618,7 +620,7 @@ local function Init()
       ApplyLayout()
       FixTextWidths()
       this:SetScript("OnUpdate", nil)
-      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccWideQuestFrame|r loaded with portrait support")
+      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccBetterQuestTest|r loaded with portrait support")
     end
   end)
 end
