@@ -340,7 +340,6 @@ local function ApplyItemTextLayout()
     ItemTextPageText:SetJustifyH("LEFT")
   end
 end
-
 -------------------------------------------------
 -- GossipFrame (NPC dialogue text) - Complete Fix
 -------------------------------------------------
@@ -360,11 +359,22 @@ function GossipResize(titleButton)
   -- ALSO set width (this is what Blizzard doesn't do)
   titleButton:SetWidth(contentWidth)
   
+  -- Make sure button is mouse-enabled and can receive clicks
+  titleButton:EnableMouse(true)
+  titleButton:SetHitRectInsets(0, 0, 0, 0)
+  
   -- Fix the text element inside the button
   local buttonText = getglobal(titleButton:GetName() .. "Text")
   if buttonText then
     buttonText:SetWidth(contentWidth - 30) -- Leave room for icon
     buttonText:SetJustifyH("LEFT")
+  end
+  
+  -- Make sure the icon is positioned correctly
+  local buttonIcon = getglobal(titleButton:GetName() .. "GossipIcon")
+  if buttonIcon then
+    buttonIcon:ClearAllPoints()
+    buttonIcon:SetPoint("LEFT", titleButton, "LEFT", 0, 0)
   end
 end
 
@@ -409,8 +419,22 @@ local function ApplyGossipLayout()
   end
 
   -- Size the greeting panel (child of scroll frame)
+  -- CRITICAL: This must be WIDER than the buttons for clicks to work
   if GossipGreetingScrollChildFrame then
     GossipGreetingScrollChildFrame:SetWidth(contentWidth)
+    -- Also set height dynamically based on content
+    local totalHeight = 0
+    if GossipGreetingText then
+      totalHeight = totalHeight + GossipGreetingText:GetHeight() + 10
+    end
+    -- Add height for all visible buttons
+    for i = 1, NUMGOSSIPBUTTONS do
+      local button = getglobal("GossipTitleButton" .. i)
+      if button and button:IsVisible() then
+        totalHeight = totalHeight + button:GetHeight() + 2
+      end
+    end
+    GossipGreetingScrollChildFrame:SetHeight(math.max(totalHeight, contentHeight))
   end
 
   -- Fix the main greeting text (NPC dialogue)
@@ -461,6 +485,7 @@ gossipEventFrame:SetScript("OnEvent", function()
     end)
   end
 end)
+
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("ITEM_TEXT_BEGIN")
 eventFrame:RegisterEvent("ITEM_TEXT_READY")
