@@ -84,7 +84,7 @@ local function GetNPCInfo()
   if not name then name = "Unknown" end
 
   print(name)
-  print(GetZoneText)
+  print(GetZoneText())
   print(UnitRace("npc"))
   
   return {
@@ -100,11 +100,13 @@ end
 -- @return string source description for debugging
 local function FindPortraitTexture()
   if not PortraitDB then 
+    print("No portrait db")
     return "Interface\\CharacterFrame\\TempPortrait", "no database" 
   end
   
   local npc = GetNPCInfo()
   if not npc then
+    print(npc)
     return PortraitDB.default, "no npc"
   end
   
