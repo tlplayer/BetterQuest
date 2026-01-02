@@ -1,245 +1,234 @@
 -- BetterQuestText.lua
--- pfUI-aware wide quest layout for WoW 1.12.1
--- With working texture-based portraits
+-- Wide quest frame with NPC portraits for WoW 1.12.1
+-- pfUI-aware layout
+--
+-- File Structure:
+--   BetterQuestText/
+--   ├── BetterQuestText.lua (this file)
+--   ├── BetterQuestText.toc
+--   ├── db/
+--   │   └── portraitdb.lua
+--   └── portraits/
+--       ├── npcs/
+--       ├── books/
+--       └── notes/
 
 -------------------------
--- CONFIG
+-- CONFIGURATION
 -------------------------
-local CONFIG = {
-  -- Frame dimensions
+
+-- Quest frame dimensions and positioning
+local QUEST_CONFIG = {
   WIDTH = 620,
   HEIGHT = 400,
-  
-  -- Frame position
   POS_X = 0,
   POS_Y = -60,
   
-  -- Content margins
-  MARGIN_LEFT = 140,  -- Increased to make room for portrait
+  MARGIN_LEFT = 140,
   MARGIN_RIGHT = 50,
   MARGIN_TOP = 50,
-
-  -- Text Margins
-  TEXT_MARGIN_LEFT = 140,
-  TEXT_MARGIN_RIGHT = 90,
-  TEXT_MARGIN_TOP = 55,
   
-  -- Scroll heights
-  HEIGHT_DETAIL_SCROLL = 220,
-  HEIGHT_PROGRESS_SCROLL = 220,
-  HEIGHT_REWARD_SCROLL = 200,
+  SCROLL_HEIGHT_DETAIL = 220,
+  SCROLL_HEIGHT_PROGRESS = 220,
+  SCROLL_HEIGHT_REWARD = 200,
   
-  -- Button offsets
   BUTTON_OFFSET_X = 20,
   BUTTON_OFFSET_Y = 20,
   
-  -- Close button
   CLOSE_OFFSET_X = 8,
   CLOSE_OFFSET_Y = 8,
   
-  -- Scrollbar
   SCROLLBAR_OFFSET_X = 16,
   SCROLLBAR_OFFSET_TOP = 16,
   SCROLLBAR_OFFSET_BOTTOM = 16,
 }
 
-local WIDE_TEXT_CONFIG = {
-  -- Shared frame size
+-- Portrait display configuration
+local PORTRAIT_CONFIG = {
+  WIDTH = 125,
+  HEIGHT = 220,
+  OFFSET_X = 10,
+  OFFSET_Y = 50,
+}
+
+-- Wide text frames (gossip, books, notes)
+local TEXT_CONFIG = {
   FRAME_WIDTH = 620,
   FRAME_HEIGHT = 350,
-
-  -- Text Padding
-  TEXT_RIGHT_PADDING = -20,
-
-  -- Screen position
+  
   ANCHOR_POINT = "CENTER",
   ANCHOR_RELATIVE = "CENTER",
   OFFSET_X = 0,
   OFFSET_Y = -250,
-
-  -- Content margins
-  CONTENT_MARGIN_LEFT = 15,
-  CONTENT_MARGIN_RIGHT = 20,
-  CONTENT_MARGIN_TOP = 30,
-  CONTENT_MARGIN_BOTTOM = 30,
-
-  -- Scrollbar spacing
+  
+  MARGIN_LEFT = 15,
+  MARGIN_RIGHT = 20,
+  MARGIN_TOP = 30,
+  MARGIN_BOTTOM = 30,
+  
+  TEXT_RIGHT_PADDING = -30,
+  
   SCROLLBAR_OFFSET_X = 16,
   SCROLLBAR_OFFSET_TOP = 16,
   SCROLLBAR_OFFSET_BOTTOM = 16,
 }
 
 -------------------------
--- Portrait System
+-- PORTRAIT SYSTEM
 -------------------------
-local PORTRAIT_CONFIG = {
-  WIDTH = 110,
-  HEIGHT = 110,
-  OFFSET_X = 15,  -- Distance from left edge
-  OFFSET_Y = 60,  -- Distance from top
-}
 
--- Portrait Database - maps NPC names to texture paths
--- You'll need to place portrait images in Interface/AddOns/YourAddonName/portraits/
-local PortraitDB = {
-  -- Named NPCs (use texture paths relative to WoW interface folder)
-  named = {
-    ["Thrall"] = "Interface\\AddOns\\BetterQuestText\\portraits\\thrall",
-    ["Cairne Bloodhoof"] = "Interface\\AddOns\\BetterQuestText\\portraits\\cairne",
-    ["Vol'jin"] = "Interface\\AddOns\\BetterQuestText\\portraits\\voljin",
-    ["King Magni Bronzebeard"] = "Interface\\AddOns\\BetterQuestText\\portraits\\magni",
-    ["Lady Sylvanas Windrunner"] = "Interface\\AddOns\\BetterQuestText\\portraits\\sylvanas",
-    ["Highlord Bolvar Fordragon"] = "Interface\\AddOns\\BetterQuestText\\portraits\\bolvar",
-    ["Tyrande Whisperwind"] = "Interface\\AddOns\\BetterQuestText\\portraits\\tyrande",
-  },
-  
-  -- Zone-based portraits (guards, citizens)
-  zone = {
-    ["Orgrimmar"] = "Interface\\AddOns\\BetterQuestText\\portraits\\orc_generic",
-    ["Stormwind City"] = "Interface\\AddOns\\BetterQuestText\\portraits\\human_generic",
-    ["Ironforge"] = "Interface\\AddOns\\BetterQuestText\\portraits\\dwarf_generic",
-    ["Darnassus"] = "Interface\\AddOns\\BetterQuestText\\portraits\\nightelf_generic",
-    ["Thunder Bluff"] = "Interface\\AddOns\\BetterQuestText\\portraits\\tauren_generic",
-    ["Undercity"] = "Interface\\AddOns\\BetterQuestText\\portraits\\undead_generic",
-  },
-  
-  -- Race-based fallbacks
-  race = {
-    ["Human"] = "Interface\\AddOns\\BetterQuestText\\portraits\\human_generic",
-    ["Orc"] = "Interface\\AddOns\\BetterQuestText\\portraits\\orc_generic",
-    ["Dwarf"] = "Interface\\AddOns\\BetterQuestText\\portraits\\dwarf_generic",
-    ["Night Elf"] = "Interface\\AddOns\\BetterQuestText\\portraits\\nightelf_generic",
-    ["Undead"] = "Interface\\AddOns\\BetterQuestText\\portraits\\undead_generic",
-    ["Tauren"] = "Interface\\AddOns\\BetterQuestText\\portraits\\tauren_generic",
-    ["Gnome"] = "Interface\\AddOns\\BetterQuestText\\portraits\\gnome_generic",
-    ["Troll"] = "Interface\\AddOns\\BetterQuestText\\portraits\\troll_generic",
-  },
-  
-  -- Default fallback
-  default = "Interface\\AddOns\\BetterQuestText\\portraits\\default.tga",
-}
-
--- Get NPC information
+--- Get current NPC information
+-- @return table {name, zone, race} or nil if no NPC available
 local function GetNPCInfo()
+  local name = UnitName("npc") or UnitName("target")
+  if not name then name = "Unknown" end
+
+  print(name)
+  print(GetZoneText)
+  print(UnitRace("npc"))
+  
   return {
-    name = UnitName("npc") or UnitName("target") or "Unknown",
+    name = name,
     zone = GetZoneText(),
     race = UnitRace("npc") or UnitRace("target"),
   }
 end
 
--- Find the appropriate portrait texture
+--- Find appropriate portrait texture for current NPC
+-- Lookup hierarchy: named NPC -> zone -> race -> default
+-- @return string texture path
+-- @return string source description for debugging
 local function FindPortraitTexture()
+  if not PortraitDB then 
+    return "Interface\\CharacterFrame\\TempPortrait", "no database" 
+  end
+  
   local npc = GetNPCInfo()
-  local texture = nil
-  
-  -- 1. Try named NPC lookup (most specific)
-  if npc.name and PortraitDB.named[npc.name] then
-    texture = PortraitDB.named[npc.name]
-    return texture, "named: " .. npc.name
+  if not npc then
+    return PortraitDB.default, "no npc"
   end
   
-  -- 2. Try zone-based lookup
+  -- Priority 1: Named NPC
+  if PortraitDB.named[npc.name] then
+    return PortraitDB.named[npc.name], "named: " .. npc.name
+  end
+  
+  -- Priority 2: Zone-based
   if npc.zone and PortraitDB.zone[npc.zone] then
-    texture = PortraitDB.zone[npc.zone]
-    return texture, "zone: " .. npc.zone
+    return PortraitDB.zone[npc.zone], "zone: " .. npc.zone
   end
   
-  -- 3. Try race-based lookup
+  -- Priority 3: Race-based
   if npc.race and PortraitDB.race[npc.race] then
-    texture = PortraitDB.race[npc.race]
-    return texture, "race: " .. npc.race
+    return PortraitDB.race[npc.race], "race: " .. npc.race
   end
   
-  -- 4. Use default
+  -- Priority 4: Default fallback
   return PortraitDB.default, "default"
 end
 
--- Create or update portrait frame
+--- Create or update portrait frame on quest dialog
+-- @param parentFrame Frame to attach portrait to (typically QuestFrame)
 local function UpdatePortrait(parentFrame)
   if not parentFrame then return end
   
   local portrait = parentFrame.widePortrait
   
-  -- Create portrait frame if it doesn't exist
+  -- Create portrait frame on first call
   if not portrait then
     portrait = CreateFrame("Frame", nil, parentFrame)
     portrait:SetWidth(PORTRAIT_CONFIG.WIDTH)
     portrait:SetHeight(PORTRAIT_CONFIG.HEIGHT)
-    portrait:SetPoint("TOPLEFT", parentFrame, "TOPLEFT", PORTRAIT_CONFIG.OFFSET_X, -PORTRAIT_CONFIG.OFFSET_Y)
+    portrait:SetPoint(
+      "TOPLEFT", 
+      parentFrame, 
+      "TOPLEFT", 
+      PORTRAIT_CONFIG.OFFSET_X, 
+      -PORTRAIT_CONFIG.OFFSET_Y
+    )
     
-    -- Create texture
+    -- Black background
+    portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
+    portrait.bg:SetAllPoints(portrait)
+    portrait.bg:SetTexture(0, 0, 0, 1)
+    
+    -- Portrait texture
     portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
     portrait.texture:SetAllPoints(portrait)
-    
-    -- Create border (optional)
-    portrait.border = portrait:CreateTexture(nil, "OVERLAY")
-    portrait.border:SetAllPoints(portrait)
-    portrait.border:SetTexture("Interface\\DialogFrame\\UI-DialogBox-Border")
-    portrait.border:SetTexCoord(0, 0.8, 0, 0.8)
+    portrait.texture:SetTexCoord(0, 1, 0, 1)
     
     parentFrame.widePortrait = portrait
   end
   
-  -- Update texture to current NPC
+  -- Update to current NPC portrait
   local texturePath, source = FindPortraitTexture()
   portrait.texture:SetTexture(texturePath)
-
-  print(texturePath,source)
   
-  -- If texture fails to load, use a fallback
+  -- Fallback if texture fails to load
   if not portrait.texture:GetTexture() then
     portrait.texture:SetTexture("Interface\\CharacterFrame\\TempPortrait")
   end
   
   portrait:Show()
-  
-  -- Debug output (optional)
-  -- DEFAULT_CHAT_FRAME:AddMessage("Portrait: " .. source)
 end
 
--- Helper: Add portrait to database dynamically
+--- Add portrait to database at runtime
+-- @param npcName string NPC name
+-- @param texturePath string Path to portrait texture
+-- @return boolean Success
 function PortraitDB_AddNPC(npcName, texturePath)
-  if not npcName or not texturePath then return false end
+  if not npcName or not texturePath or not PortraitDB then return false end
   PortraitDB.named[npcName] = texturePath
   return true
 end
 
 -------------------------
--- Get Backdrop
+-- QUEST FRAME LAYOUT
 -------------------------
+
+--- Get backdrop frame (pfUI compatibility)
+-- @return Frame backdrop or QuestFrame
 local function GetBackdrop()
   return QuestFrame.backdrop or QuestFrame
 end
 
--------------------------
--- Apply Layout
--------------------------
-local function ApplyLayout()
+--- Apply wide layout to quest frame
+-- Repositions all scroll frames, buttons, and portrait
+local function ApplyQuestLayout()
   if not QuestFrame then return end
   
   local backdrop = GetBackdrop()
   
-  -- Size and position frame
-  QuestFrame:SetWidth(CONFIG.WIDTH)
-  QuestFrame:SetHeight(CONFIG.HEIGHT)
+  -- Set frame size and position
+  QuestFrame:SetWidth(QUEST_CONFIG.WIDTH)
+  QuestFrame:SetHeight(QUEST_CONFIG.HEIGHT)
   QuestFrame:ClearAllPoints()
-  QuestFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", CONFIG.POS_X, CONFIG.POS_Y)
+  QuestFrame:SetPoint(
+    "BOTTOM", 
+    UIParent, 
+    "BOTTOM", 
+    QUEST_CONFIG.POS_X, 
+    QUEST_CONFIG.POS_Y
+  )
   
-  -- Update portrait
+  -- Update portrait for current NPC
   UpdatePortrait(QuestFrame)
   
-  -- Content width (accounting for portrait space)
-  local contentWidth = CONFIG.WIDTH - CONFIG.MARGIN_LEFT - CONFIG.MARGIN_RIGHT
+  -- Calculate content width (accounting for portrait)
+  local contentWidth = QUEST_CONFIG.WIDTH - QUEST_CONFIG.MARGIN_LEFT - QUEST_CONFIG.MARGIN_RIGHT
   
-  ------------------------------------------------
-  -- Detail Scroll
-  ------------------------------------------------
+  -- Quest Detail (initial quest offer)
   if QuestDetailScrollFrame then
     QuestDetailScrollFrame:ClearAllPoints()
-    QuestDetailScrollFrame:SetPoint("TOPLEFT", QuestFrame, "TOPLEFT", CONFIG.MARGIN_LEFT, -CONFIG.MARGIN_TOP)
+    QuestDetailScrollFrame:SetPoint(
+      "TOPLEFT", 
+      QuestFrame, 
+      "TOPLEFT", 
+      QUEST_CONFIG.MARGIN_LEFT, 
+      -QUEST_CONFIG.MARGIN_TOP
+    )
     QuestDetailScrollFrame:SetWidth(contentWidth)
-    QuestDetailScrollFrame:SetHeight(CONFIG.HEIGHT_DETAIL_SCROLL)
+    QuestDetailScrollFrame:SetHeight(QUEST_CONFIG.SCROLL_HEIGHT_DETAIL)
     
     if QuestDetailScrollChildFrame then
       QuestDetailScrollChildFrame:SetWidth(contentWidth)
@@ -247,19 +236,35 @@ local function ApplyLayout()
     
     if QuestDetailScrollFrameScrollBar then
       QuestDetailScrollFrameScrollBar:ClearAllPoints()
-      QuestDetailScrollFrameScrollBar:SetPoint("TOPRIGHT", QuestDetailScrollFrame, "TOPRIGHT", CONFIG.SCROLLBAR_OFFSET_X, -CONFIG.SCROLLBAR_OFFSET_TOP)
-      QuestDetailScrollFrameScrollBar:SetPoint("BOTTOMRIGHT", QuestDetailScrollFrame, "BOTTOMRIGHT", CONFIG.SCROLLBAR_OFFSET_X, CONFIG.SCROLLBAR_OFFSET_BOTTOM)
+      QuestDetailScrollFrameScrollBar:SetPoint(
+        "TOPRIGHT", 
+        QuestDetailScrollFrame, 
+        "TOPRIGHT", 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_X, 
+        -QUEST_CONFIG.SCROLLBAR_OFFSET_TOP
+      )
+      QuestDetailScrollFrameScrollBar:SetPoint(
+        "BOTTOMRIGHT", 
+        QuestDetailScrollFrame, 
+        "BOTTOMRIGHT", 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_X, 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_BOTTOM
+      )
     end
   end
   
-  ------------------------------------------------
-  -- Progress Scroll
-  ------------------------------------------------
+  -- Quest Progress (turn-in check)
   if QuestProgressScrollFrame then
     QuestProgressScrollFrame:ClearAllPoints()
-    QuestProgressScrollFrame:SetPoint("TOPLEFT", QuestFrame, "TOPLEFT", CONFIG.MARGIN_LEFT, -CONFIG.MARGIN_TOP)
+    QuestProgressScrollFrame:SetPoint(
+      "TOPLEFT", 
+      QuestFrame, 
+      "TOPLEFT", 
+      QUEST_CONFIG.MARGIN_LEFT, 
+      -QUEST_CONFIG.MARGIN_TOP
+    )
     QuestProgressScrollFrame:SetWidth(contentWidth)
-    QuestProgressScrollFrame:SetHeight(CONFIG.HEIGHT_PROGRESS_SCROLL)
+    QuestProgressScrollFrame:SetHeight(QUEST_CONFIG.SCROLL_HEIGHT_PROGRESS)
     
     if QuestProgressScrollChildFrame then
       QuestProgressScrollChildFrame:SetWidth(contentWidth)
@@ -267,19 +272,35 @@ local function ApplyLayout()
     
     if QuestProgressScrollFrameScrollBar then
       QuestProgressScrollFrameScrollBar:ClearAllPoints()
-      QuestProgressScrollFrameScrollBar:SetPoint("TOPRIGHT", QuestProgressScrollFrame, "TOPRIGHT", CONFIG.SCROLLBAR_OFFSET_X, -CONFIG.SCROLLBAR_OFFSET_TOP)
-      QuestProgressScrollFrameScrollBar:SetPoint("BOTTOMRIGHT", QuestProgressScrollFrame, "BOTTOMRIGHT", CONFIG.SCROLLBAR_OFFSET_X, CONFIG.SCROLLBAR_OFFSET_BOTTOM)
+      QuestProgressScrollFrameScrollBar:SetPoint(
+        "TOPRIGHT", 
+        QuestProgressScrollFrame, 
+        "TOPRIGHT", 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_X, 
+        -QUEST_CONFIG.SCROLLBAR_OFFSET_TOP
+      )
+      QuestProgressScrollFrameScrollBar:SetPoint(
+        "BOTTOMRIGHT", 
+        QuestProgressScrollFrame, 
+        "BOTTOMRIGHT", 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_X, 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_BOTTOM
+      )
     end
   end
   
-  ------------------------------------------------
-  -- Reward Scroll  
-  ------------------------------------------------
+  -- Quest Reward (completion screen)
   if QuestRewardScrollFrame then
     QuestRewardScrollFrame:ClearAllPoints()
-    QuestRewardScrollFrame:SetPoint("TOPLEFT", QuestFrame, "TOPLEFT", CONFIG.MARGIN_LEFT, -CONFIG.MARGIN_TOP)
+    QuestRewardScrollFrame:SetPoint(
+      "TOPLEFT", 
+      QuestFrame, 
+      "TOPLEFT", 
+      QUEST_CONFIG.MARGIN_LEFT, 
+      -QUEST_CONFIG.MARGIN_TOP
+    )
     QuestRewardScrollFrame:SetWidth(contentWidth)
-    QuestRewardScrollFrame:SetHeight(CONFIG.HEIGHT_REWARD_SCROLL)
+    QuestRewardScrollFrame:SetHeight(QUEST_CONFIG.SCROLL_HEIGHT_REWARD)
     
     if QuestRewardScrollChildFrame then
       QuestRewardScrollChildFrame:SetWidth(contentWidth)
@@ -287,53 +308,85 @@ local function ApplyLayout()
     
     if QuestRewardScrollFrameScrollBar then
       QuestRewardScrollFrameScrollBar:ClearAllPoints()
-      QuestRewardScrollFrameScrollBar:SetPoint("TOPRIGHT", QuestRewardScrollFrame, "TOPRIGHT", CONFIG.SCROLLBAR_OFFSET_X, -CONFIG.SCROLLBAR_OFFSET_TOP)
-      QuestRewardScrollFrameScrollBar:SetPoint("BOTTOMRIGHT", QuestRewardScrollFrame, "BOTTOMRIGHT", CONFIG.SCROLLBAR_OFFSET_X, CONFIG.SCROLLBAR_OFFSET_BOTTOM)
+      QuestRewardScrollFrameScrollBar:SetPoint(
+        "TOPRIGHT", 
+        QuestRewardScrollFrame, 
+        "TOPRIGHT", 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_X, 
+        -QUEST_CONFIG.SCROLLBAR_OFFSET_TOP
+      )
+      QuestRewardScrollFrameScrollBar:SetPoint(
+        "BOTTOMRIGHT", 
+        QuestRewardScrollFrame, 
+        "BOTTOMRIGHT", 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_X, 
+        QUEST_CONFIG.SCROLLBAR_OFFSET_BOTTOM
+      )
     end
   end
   
-  ------------------------------------------------
-  -- Buttons
-  ------------------------------------------------
-  
-  -- Accept button (LEFT)
+  -- Action Buttons (Accept/Complete on left, Decline/Goodbye on right)
   if QuestFrameAcceptButton then
     QuestFrameAcceptButton:ClearAllPoints()
-    QuestFrameAcceptButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
+    QuestFrameAcceptButton:SetPoint(
+      "BOTTOMLEFT", 
+      backdrop, 
+      "BOTTOMLEFT", 
+      QUEST_CONFIG.BUTTON_OFFSET_X, 
+      QUEST_CONFIG.BUTTON_OFFSET_Y
+    )
   end
   
-  -- Complete button (LEFT)
   if QuestFrameCompleteButton then
     QuestFrameCompleteButton:ClearAllPoints()
-    QuestFrameCompleteButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT", CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
+    QuestFrameCompleteButton:SetPoint(
+      "BOTTOMLEFT", 
+      backdrop, 
+      "BOTTOMLEFT", 
+      QUEST_CONFIG.BUTTON_OFFSET_X, 
+      QUEST_CONFIG.BUTTON_OFFSET_Y
+    )
   end
   
-  -- Decline button (RIGHT)
   if QuestFrameDeclineButton then
     QuestFrameDeclineButton:ClearAllPoints()
-    QuestFrameDeclineButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", -CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
+    QuestFrameDeclineButton:SetPoint(
+      "BOTTOMRIGHT", 
+      backdrop, 
+      "BOTTOMRIGHT", 
+      -QUEST_CONFIG.BUTTON_OFFSET_X, 
+      QUEST_CONFIG.BUTTON_OFFSET_Y
+    )
   end
   
-  -- Goodbye/Cancel button (RIGHT)
   if QuestFrameGoodbyeButton then
     QuestFrameGoodbyeButton:ClearAllPoints()
-    QuestFrameGoodbyeButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT", -CONFIG.BUTTON_OFFSET_X, CONFIG.BUTTON_OFFSET_Y)
+    QuestFrameGoodbyeButton:SetPoint(
+      "BOTTOMRIGHT", 
+      backdrop, 
+      "BOTTOMRIGHT", 
+      -QUEST_CONFIG.BUTTON_OFFSET_X, 
+      QUEST_CONFIG.BUTTON_OFFSET_Y
+    )
   end
   
-  ------------------------------------------------
   -- Close Button
-  ------------------------------------------------
   if QuestFrameCloseButton then
     QuestFrameCloseButton:ClearAllPoints()
-    QuestFrameCloseButton:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", -CONFIG.CLOSE_OFFSET_X, -CONFIG.CLOSE_OFFSET_Y)
+    QuestFrameCloseButton:SetPoint(
+      "TOPRIGHT", 
+      backdrop, 
+      "TOPRIGHT", 
+      -QUEST_CONFIG.CLOSE_OFFSET_X, 
+      -QUEST_CONFIG.CLOSE_OFFSET_Y
+    )
   end
 end
 
--------------------------
--- Fix Text Widths
--------------------------
+--- Fix text widths to match new frame width
+-- Must run after layout to properly wrap text
 local function FixTextWidths()
-  local textWidth = CONFIG.WIDTH - CONFIG.MARGIN_LEFT - CONFIG.MARGIN_RIGHT - 10
+  local textWidth = QUEST_CONFIG.WIDTH - QUEST_CONFIG.MARGIN_LEFT - QUEST_CONFIG.MARGIN_RIGHT - 10
   
   local texts = {
     QuestTitleText,
@@ -351,6 +404,7 @@ local function FixTextWidths()
     end
   end
   
+  -- Objective text lines
   for i = 1, 10 do
     local obj = getglobal("QuestObjectiveText" .. i)
     if obj then
@@ -361,37 +415,13 @@ local function FixTextWidths()
 end
 
 -------------------------
--- Hooks
+-- TEXT FRAME UTILITIES
 -------------------------
-local originalOnShow = QuestFrame:GetScript("OnShow")
-QuestFrame:SetScript("OnShow", function()
-  if originalOnShow then originalOnShow() end
-  ApplyLayout()
-  this:SetScript("OnUpdate", function()
-    FixTextWidths()
-    this:SetScript("OnUpdate", nil)
-  end)
-end)
 
--------------------------
--- Events
--------------------------
-local f = CreateFrame("Frame")
-f:RegisterEvent("QUEST_DETAIL")
-f:RegisterEvent("QUEST_PROGRESS")
-f:RegisterEvent("QUEST_COMPLETE")
-f:RegisterEvent("QUEST_GREETING")
-f:SetScript("OnEvent", function()
-  this:SetScript("OnUpdate", function()
-    ApplyLayout()
-    FixTextWidths()
-    this:SetScript("OnUpdate", nil)
-  end)
-end)
-
--------------------------
--- Utility
--------------------------
+--- Get visual backdrop frame (pfUI compatibility)
+-- @param frame Frame to check
+-- @param inset Inset frame fallback
+-- @return Frame backdrop, inset, or original frame
 local function GetVisualBackdrop(frame, inset)
   if frame and frame.backdrop then
     return frame.backdrop
@@ -402,6 +432,9 @@ local function GetVisualBackdrop(frame, inset)
   return frame
 end
 
+--- Position scrollbar on text frames
+-- @param scrollFrame ScrollFrame to attach to
+-- @param scrollBar Scrollbar to position
 local function ApplyScrollbarLayout(scrollFrame, scrollBar)
   if not scrollFrame or not scrollBar then return end
 
@@ -410,47 +443,42 @@ local function ApplyScrollbarLayout(scrollFrame, scrollBar)
     "TOPRIGHT",
     scrollFrame,
     "TOPRIGHT",
-    WIDE_TEXT_CONFIG.SCROLLBAR_OFFSET_X,
-    -WIDE_TEXT_CONFIG.SCROLLBAR_OFFSET_TOP
+    TEXT_CONFIG.SCROLLBAR_OFFSET_X,
+    -TEXT_CONFIG.SCROLLBAR_OFFSET_TOP
   )
   scrollBar:SetPoint(
     "BOTTOMRIGHT",
     scrollFrame,
     "BOTTOMRIGHT",
-    WIDE_TEXT_CONFIG.SCROLLBAR_OFFSET_X,
-    WIDE_TEXT_CONFIG.SCROLLBAR_OFFSET_BOTTOM
+    TEXT_CONFIG.SCROLLBAR_OFFSET_X,
+    TEXT_CONFIG.SCROLLBAR_OFFSET_BOTTOM
   )
 end
 
--------------------------------------------------
--- ItemTextFrame (Books, Notes, Letters)
--------------------------------------------------
+-------------------------
+-- ITEM TEXT FRAME (Books, Notes, Letters)
+-------------------------
+
+--- Apply wide layout to book/note reader frame
 local function ApplyItemTextLayout()
   if not ItemTextFrame then return end
 
   local backdrop = GetVisualBackdrop(ItemTextFrame, ItemTextFrameInset)
   if not backdrop then return end
 
-  ItemTextFrame:SetWidth(WIDE_TEXT_CONFIG.FRAME_WIDTH)
-  ItemTextFrame:SetHeight(WIDE_TEXT_CONFIG.FRAME_HEIGHT)
+  ItemTextFrame:SetWidth(TEXT_CONFIG.FRAME_WIDTH)
+  ItemTextFrame:SetHeight(TEXT_CONFIG.FRAME_HEIGHT)
   ItemTextFrame:ClearAllPoints()
   ItemTextFrame:SetPoint(
-    WIDE_TEXT_CONFIG.ANCHOR_POINT,
+    TEXT_CONFIG.ANCHOR_POINT,
     UIParent,
-    WIDE_TEXT_CONFIG.ANCHOR_RELATIVE,
-    WIDE_TEXT_CONFIG.OFFSET_X,
-    WIDE_TEXT_CONFIG.OFFSET_Y
+    TEXT_CONFIG.ANCHOR_RELATIVE,
+    TEXT_CONFIG.OFFSET_X,
+    TEXT_CONFIG.OFFSET_Y
   )
 
-  local contentWidth =
-    backdrop:GetWidth()
-    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT
-    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
-
-  local contentHeight =
-    backdrop:GetHeight()
-    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
-    - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM
+  local contentWidth = backdrop:GetWidth() - TEXT_CONFIG.MARGIN_LEFT - TEXT_CONFIG.MARGIN_RIGHT
+  local contentHeight = backdrop:GetHeight() - TEXT_CONFIG.MARGIN_TOP - TEXT_CONFIG.MARGIN_BOTTOM
 
   if ItemTextScrollFrame then
     ItemTextScrollFrame:ClearAllPoints()
@@ -458,33 +486,32 @@ local function ApplyItemTextLayout()
       "TOPLEFT",
       backdrop,
       "TOPLEFT",
-      WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT,
-      -WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
+      TEXT_CONFIG.MARGIN_LEFT,
+      -TEXT_CONFIG.MARGIN_TOP
     )
     ItemTextScrollFrame:SetWidth(contentWidth)
     ItemTextScrollFrame:SetHeight(contentHeight)
 
-    ApplyScrollbarLayout(
-      ItemTextScrollFrame,
-      ItemTextScrollFrameScrollBar
-    )
+    ApplyScrollbarLayout(ItemTextScrollFrame, ItemTextScrollFrameScrollBar)
   end
 
   if ItemTextPageText then
-    ItemTextPageText:SetWidth(contentWidth + WIDE_TEXT_CONFIG.TEXT_RIGHT_PADDING)
+    ItemTextPageText:SetWidth(contentWidth + TEXT_CONFIG.TEXT_RIGHT_PADDING)
     ItemTextPageText:SetJustifyH("LEFT")
   end
 end
 
--------------------------------------------------
--- GossipFrame (NPC dialogue text)
--------------------------------------------------
-local OriginalGossipResize = GossipResize
+-------------------------
+-- GOSSIP FRAME (NPC Dialogue)
+-------------------------
 
+--- Override Blizzard's GossipResize to handle width
+-- Blizzard only sets height, causing text overflow
+-- @param titleButton Button to resize
 function GossipResize(titleButton)
   if not titleButton then return end
   
-  local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT
+  local contentWidth = TEXT_CONFIG.FRAME_WIDTH - TEXT_CONFIG.MARGIN_LEFT - TEXT_CONFIG.MARGIN_RIGHT
   
   titleButton:SetHeight(titleButton:GetTextHeight() + 2)
   titleButton:SetWidth(contentWidth)
@@ -504,25 +531,26 @@ function GossipResize(titleButton)
   end
 end
 
+--- Apply wide layout to gossip dialog frame
 local function ApplyGossipLayout()
   if not GossipFrame then return end
 
   local backdrop = GetVisualBackdrop(GossipFrame, GossipFrameInset)
   if not backdrop then backdrop = GossipFrame end
 
-  GossipFrame:SetWidth(WIDE_TEXT_CONFIG.FRAME_WIDTH)
-  GossipFrame:SetHeight(WIDE_TEXT_CONFIG.FRAME_HEIGHT)
+  GossipFrame:SetWidth(TEXT_CONFIG.FRAME_WIDTH)
+  GossipFrame:SetHeight(TEXT_CONFIG.FRAME_HEIGHT)
   GossipFrame:ClearAllPoints()
   GossipFrame:SetPoint(
-    WIDE_TEXT_CONFIG.ANCHOR_POINT,
+    TEXT_CONFIG.ANCHOR_POINT,
     UIParent,
-    WIDE_TEXT_CONFIG.ANCHOR_RELATIVE,
-    WIDE_TEXT_CONFIG.OFFSET_X,
-    WIDE_TEXT_CONFIG.OFFSET_Y
+    TEXT_CONFIG.ANCHOR_RELATIVE,
+    TEXT_CONFIG.OFFSET_X,
+    TEXT_CONFIG.OFFSET_Y
   )
 
-  local contentWidth = WIDE_TEXT_CONFIG.FRAME_WIDTH - WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_RIGHT - 40
-  local contentHeight = WIDE_TEXT_CONFIG.FRAME_HEIGHT - WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP - WIDE_TEXT_CONFIG.CONTENT_MARGIN_BOTTOM - 90
+  local contentWidth = TEXT_CONFIG.FRAME_WIDTH - TEXT_CONFIG.MARGIN_LEFT - TEXT_CONFIG.MARGIN_RIGHT - 40
+  local contentHeight = TEXT_CONFIG.FRAME_HEIGHT - TEXT_CONFIG.MARGIN_TOP - TEXT_CONFIG.MARGIN_BOTTOM - 90
 
   if GossipGreetingScrollFrame then
     GossipGreetingScrollFrame:ClearAllPoints()
@@ -530,8 +558,8 @@ local function ApplyGossipLayout()
       "TOPLEFT",
       backdrop,
       "TOPLEFT",
-      WIDE_TEXT_CONFIG.CONTENT_MARGIN_LEFT,
-      -WIDE_TEXT_CONFIG.CONTENT_MARGIN_TOP
+      TEXT_CONFIG.MARGIN_LEFT,
+      -TEXT_CONFIG.MARGIN_TOP
     )
     GossipGreetingScrollFrame:SetWidth(contentWidth)
     GossipGreetingScrollFrame:SetHeight(contentHeight)
@@ -548,6 +576,7 @@ local function ApplyGossipLayout()
   end
 end
 
+--- Hook GossipFrameUpdate to apply layout after Blizzard updates
 local OriginalGossipFrameUpdate = GossipFrameUpdate
 local gossipUpdateFrame = CreateFrame("Frame")
 
@@ -563,8 +592,24 @@ function GossipFrameUpdate()
 end
 
 -------------------------
--- Event Handling
+-- EVENT HANDLERS
 -------------------------
+
+-- Quest Frame Events
+local questEventFrame = CreateFrame("Frame")
+questEventFrame:RegisterEvent("QUEST_DETAIL")
+questEventFrame:RegisterEvent("QUEST_PROGRESS")
+questEventFrame:RegisterEvent("QUEST_COMPLETE")
+questEventFrame:RegisterEvent("QUEST_GREETING")
+questEventFrame:SetScript("OnEvent", function()
+  this:SetScript("OnUpdate", function()
+    ApplyQuestLayout()
+    FixTextWidths()
+    this:SetScript("OnUpdate", nil)
+  end)
+end)
+
+-- Gossip Frame Events
 local gossipEventFrame = CreateFrame("Frame")
 gossipEventFrame:RegisterEvent("GOSSIP_SHOW")
 gossipEventFrame:SetScript("OnEvent", function()
@@ -576,22 +621,33 @@ gossipEventFrame:SetScript("OnEvent", function()
   end
 end)
 
-local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("ITEM_TEXT_BEGIN")
-eventFrame:RegisterEvent("ITEM_TEXT_READY")
-eventFrame:RegisterEvent("GOSSIP_SHOW")
-
-eventFrame:SetScript("OnEvent", function()
+-- Item Text Events (Books/Notes)
+local itemTextEventFrame = CreateFrame("Frame")
+itemTextEventFrame:RegisterEvent("ITEM_TEXT_BEGIN")
+itemTextEventFrame:RegisterEvent("ITEM_TEXT_READY")
+itemTextEventFrame:SetScript("OnEvent", function()
   this:SetScript("OnUpdate", function()
     ApplyItemTextLayout()
-    ApplyGossipLayout()
     this:SetScript("OnUpdate", nil)
   end)
 end)
 
 -------------------------
--- OnShow Hooks
+-- ONSHOW HOOKS
 -------------------------
+
+-- Quest Frame OnShow
+local originalQuestOnShow = QuestFrame:GetScript("OnShow")
+QuestFrame:SetScript("OnShow", function()
+  if originalQuestOnShow then originalQuestOnShow() end
+  ApplyQuestLayout()
+  this:SetScript("OnUpdate", function()
+    FixTextWidths()
+    this:SetScript("OnUpdate", nil)
+  end)
+end)
+
+-- Item Text OnShow
 if ItemTextFrame then
   local originalItemTextOnShow = ItemTextFrame:GetScript("OnShow")
   ItemTextFrame:SetScript("OnShow", function()
@@ -600,6 +656,7 @@ if ItemTextFrame then
   end)
 end
 
+-- Gossip Frame OnShow
 if GossipFrame then
   local originalGossipOnShow = GossipFrame:GetScript("OnShow")
   GossipFrame:SetScript("OnShow", function()
@@ -609,18 +666,19 @@ if GossipFrame then
 end
 
 -------------------------
--- Init
+-- INITIALIZATION
 -------------------------
+
 local function Init()
   local timer = 0
   local initFrame = CreateFrame("Frame")
   initFrame:SetScript("OnUpdate", function()
     timer = timer + arg1
     if timer > 0.5 then
-      ApplyLayout()
+      ApplyQuestLayout()
       FixTextWidths()
       this:SetScript("OnUpdate", nil)
-      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccBetterQuestText|r loaded with portrait support")
+      DEFAULT_CHAT_FRAME:AddMessage("|cff33ffccBetterQuestText|r loaded")
     end
   end)
 end
