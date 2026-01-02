@@ -62,11 +62,11 @@ local TEXT_CONFIG = {
   OFFSET_Y = -250,
   
   MARGIN_LEFT = 15,
-  MARGIN_RIGHT = 20,
+  MARGIN_RIGHT = 30,
   MARGIN_TOP = 30,
   MARGIN_BOTTOM = 30,
   
-  TEXT_RIGHT_PADDING = -30,
+  TEXT_RIGHT_PADDING = -100,
   
   SCROLLBAR_OFFSET_X = 16,
   SCROLLBAR_OFFSET_TOP = 16,
@@ -80,16 +80,27 @@ local TEXT_CONFIG = {
 --- Get current NPC information
 -- @return table {name, zone, race} or nil if no NPC available
 local function GetNPCInfo()
-  local name = UnitName("npc") or UnitName("target")
-  if not name then name = "Unknown" end
+  local name = UnitName("npc") or UnitName("target") or "Unknown"
+  local zone = GetZoneText() or "Unknown"
+  local race,raceEn = UnitRace("npc") or UnitRace("target") or "Unknown"
+  local sex = UnitSex("npc") or UnitSex("target") or 2  -- default male
 
-  print(race)
-  
+  -- Debug log
+  DEFAULT_CHAT_FRAME:AddMessage(
+    string.format(
+      "|cff33ffccGetNPCInfo|r -> Name: %s | Zone: %s | Race: %s | Sex: %s",
+      name,
+      zone,
+      race,
+      (sex == 2 and "Male" or sex == 3 and "Female" or "Unknown")
+    )
+  )
+
   return {
     name = name,
-    zone = GetZoneText(),
-    race = UnitRace("npc") or UnitRace("target"),
-    sex =  UnitSex("target"),
+    zone = zone,
+    race = race,
+    sex = sex,
   }
 end
 
@@ -112,12 +123,7 @@ local function FindPortraitTexture()
     return PortraitDB.named[npc.name], "named: " .. npc.name
   end
   
-  -- Priority 2: Zone-based
-  if npc.zone and PortraitDB.zone[npc.zone] then
-    return PortraitDB.zone[npc.zone], "zone: " .. npc.zone
-  end
-  
-  -- Priority 3: Race-based with sex
+    -- Priority 2: Race-based with sex
   if npc.race and PortraitDB.race[npc.race] then
     local raceEntry = PortraitDB.race[npc.race]
     if raceEntry.male and raceEntry.female then
@@ -130,6 +136,12 @@ local function FindPortraitTexture()
       return raceEntry, "race: " .. npc.race
     end
   end
+
+  -- Priority 3: Zone-based
+  if npc.zone and PortraitDB.zone[npc.zone] then
+    return PortraitDB.zone[npc.zone], "zone: " .. npc.zone
+  end
+
   
   -- Priority 4: Default fallback
   return PortraitDB.default, "default"
