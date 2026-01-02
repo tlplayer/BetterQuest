@@ -47,7 +47,7 @@ local QUEST_CONFIG = {
 local PORTRAIT_CONFIG = {
   WIDTH = 125,
   HEIGHT = 220,
-  OFFSET_X = 10,
+  OFFSET_X = 15,
   OFFSET_Y = 50,
 }
 
@@ -83,12 +83,7 @@ local function GetNPCInfo()
   local name = UnitName("npc") or UnitName("target")
   if not name then name = "Unknown" end
 
-  print(name)
-  local sex = UnitSex("npc")
-  print( sex)
-
-  print(GetZoneText())
-  print(UnitRace("target"))
+  print(race)
   
   return {
     name = name,
@@ -104,13 +99,11 @@ end
 -- @return string source description for debugging
 local function FindPortraitTexture()
   if not PortraitDB then 
-    print("No portrait db")
     return "Interface\\CharacterFrame\\TempPortrait", "no database" 
   end
   
   local npc = GetNPCInfo()
   if not npc then
-    print(npc)
     return PortraitDB.default, "no npc"
   end
   
@@ -124,14 +117,24 @@ local function FindPortraitTexture()
     return PortraitDB.zone[npc.zone], "zone: " .. npc.zone
   end
   
-  -- Priority 3: Race-based
+  -- Priority 3: Race-based with sex
   if npc.race and PortraitDB.race[npc.race] then
-    return PortraitDB.race[npc.race], "race: " .. npc.race
+    local raceEntry = PortraitDB.race[npc.race]
+    if raceEntry.male and raceEntry.female then
+      if npc.sex == 3 then         -- female
+        return raceEntry.female, "race/female: " .. npc.race
+      else                        -- default male
+        return raceEntry.male, "race/male: " .. npc.race
+      end
+    else
+      return raceEntry, "race: " .. npc.race
+    end
   end
   
   -- Priority 4: Default fallback
   return PortraitDB.default, "default"
 end
+
 
 --- Create or update portrait frame on quest dialog
 -- @param parentFrame Frame to attach portrait to (typically QuestFrame)
