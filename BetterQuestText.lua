@@ -84,13 +84,17 @@ local function GetNPCInfo()
   if not name then name = "Unknown" end
 
   print(name)
+  local sex = UnitSex("npc")
+  print( sex)
+
   print(GetZoneText())
-  print(UnitRace("npc"))
+  print(UnitRace("target"))
   
   return {
     name = name,
     zone = GetZoneText(),
     race = UnitRace("npc") or UnitRace("target"),
+    sex =  UnitSex("target"),
   }
 end
 
