@@ -3,7 +3,5 @@
 ## Notes: Wide quest frame with NPC portraits for vanilla WoW
 ## Author: Timothy Player 
 ## Version: 1.0
-## SavedVariables: BetterQuestTextDB
 
-db\portraitdb.lua
-BetterQuestText.lua
+BetterQuestText.xml

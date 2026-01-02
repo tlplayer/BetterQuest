@@ -174,16 +174,6 @@ local function UpdatePortrait(parentFrame)
   portrait:Show()
 end
 
---- Add portrait to database at runtime
--- @param npcName string NPC name
--- @param texturePath string Path to portrait texture
--- @return boolean Success
-function PortraitDB_AddNPC(npcName, texturePath)
-  if not npcName or not texturePath or not PortraitDB then return false end
-  PortraitDB.named[npcName] = texturePath
-  return true
-end
-
 -------------------------
 -- QUEST FRAME LAYOUT
 -------------------------
