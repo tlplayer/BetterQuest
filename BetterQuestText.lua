@@ -73,126 +73,136 @@ local TEXT_CONFIG = {
   SCROLLBAR_OFFSET_BOTTOM = 16,
 }
 
+-- BetterQuestText.lua Portrait Integration Patch
+-- Replace the existing UpdatePortrait and FindPortraitTexture functions with these
+
 -------------------------
--- PORTRAIT SYSTEM
+-- PORTRAIT SYSTEM (Updated to use PortraitManager)
 -------------------------
 
---- Get current NPC information
--- @return table {name, zone, race} or nil if no NPC available
-local function GetNPCInfo()
-  local name = UnitName("npc") or UnitName("target") or "Unknown"
-  local zone = GetZoneText() or "Unknown"
-  local race,raceEn = UnitRace("npc") or UnitRace("target") or "Unknown"
-  local sex = UnitSex("npc") or UnitSex("target") or 2  -- default male
-
-  -- Debug log
-  DEFAULT_CHAT_FRAME:AddMessage(
-    string.format(
-      "|cff33ffccGetNPCInfo|r -> Name: %s | Zone: %s | Race: %s | Sex: %s",
-      name,
-      zone,
-      race,
-      (sex == 2 and "Male" or sex == 3 and "Female" or "Unknown")
-    )
-  )
-
-  return {
-    name = name,
-    zone = zone,
-    race = race,
-    sex = sex,
-  }
-end
-
---- Find appropriate portrait texture for current NPC
--- Lookup hierarchy: named NPC -> zone -> race -> default
--- @return string texture path
--- @return string source description for debugging
-local function FindPortraitTexture()
-  if not PortraitDB then 
-    return "Interface\\CharacterFrame\\TempPortrait", "no database" 
-  end
-  
-  local npc = GetNPCInfo()
-  if not npc then
-    return PortraitDB.default, "no npc"
-  end
-  
-  -- Priority 1: Named NPC
-  if PortraitDB.named[npc.name] then
-    return PortraitDB.named[npc.name], "named: " .. npc.name
-  end
-  
-    -- Priority 2: Race-based with sex
-  if npc.race and PortraitDB.race[npc.race] then
-    local raceEntry = PortraitDB.race[npc.race]
-    if raceEntry.male and raceEntry.female then
-      if npc.sex == 3 then         -- female
-        return raceEntry.female, "race/female: " .. npc.race
-      else                        -- default male
-        return raceEntry.male, "race/male: " .. npc.race
-      end
-    else
-      return raceEntry, "race: " .. npc.race
-    end
-  end
-
-  -- Priority 3: Zone-based
-  if npc.zone and PortraitDB.zone[npc.zone] then
-    return PortraitDB.zone[npc.zone], "zone: " .. npc.zone
-  end
-
-  
-  -- Priority 4: Default fallback
-  return PortraitDB.default, "default"
-end
-
-
---- Create or update portrait frame on quest dialog
--- @param parentFrame Frame to attach portrait to (typically QuestFrame)
+--- Update portrait for quest dialog
+-- Now uses centralized PortraitManager
 local function UpdatePortrait(parentFrame)
   if not parentFrame then return end
   
-  local portrait = parentFrame.widePortrait
-  
-  -- Create portrait frame on first call
-  if not portrait then
-    portrait = CreateFrame("Frame", nil, parentFrame)
-    portrait:SetWidth(PORTRAIT_CONFIG.WIDTH)
-    portrait:SetHeight(PORTRAIT_CONFIG.HEIGHT)
-    portrait:SetPoint(
-      "TOPLEFT", 
-      parentFrame, 
-      "TOPLEFT", 
-      PORTRAIT_CONFIG.OFFSET_X, 
-      -PORTRAIT_CONFIG.OFFSET_Y
-    )
+  -- Use PortraitManager if available
+  if PortraitManager then
+    PortraitManager:UpdateNPCPortrait(parentFrame)
+  else
+    -- Fallback to old system if PortraitManager not loaded
+    local portrait = parentFrame.widePortrait
     
-    -- Black background
-    portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
-    portrait.bg:SetAllPoints(portrait)
-    portrait.bg:SetTexture(0, 0, 0, 1)
+    if not portrait then
+      portrait = CreateFrame("Frame", nil, parentFrame)
+      portrait:SetWidth(PORTRAIT_CONFIG.WIDTH)
+      portrait:SetHeight(PORTRAIT_CONFIG.HEIGHT)
+      portrait:SetPoint(
+        "TOPLEFT", 
+        parentFrame, 
+        "TOPLEFT", 
+        PORTRAIT_CONFIG.OFFSET_X, 
+        -PORTRAIT_CONFIG.OFFSET_Y
+      )
+      
+      portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
+      portrait.bg:SetAllPoints(portrait)
+      portrait.bg:SetTexture(0, 0, 0, 1)
+      
+      portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
+      portrait.texture:SetAllPoints(portrait)
+      portrait.texture:SetTexCoord(0, 1, 0, 1)
+      
+      parentFrame.widePortrait = portrait
+    end
     
-    -- Portrait texture
-    portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
-    portrait.texture:SetAllPoints(portrait)
-    portrait.texture:SetTexCoord(0, 1, 0, 1)
+    -- Use basic portrait lookup
+    local texturePath = "Interface\\CharacterFrame\\TempPortrait"
+    if PortraitDB and PortraitDB.default then
+      texturePath = PortraitDB.default
+    end
     
-    parentFrame.widePortrait = portrait
+    portrait.texture:SetTexture(texturePath)
+    portrait:Show()
   end
-  
-  -- Update to current NPC portrait
-  local texturePath, source = FindPortraitTexture()
-  portrait.texture:SetTexture(texturePath)
-  
-  -- Fallback if texture fails to load
-  if not portrait.texture:GetTexture() then
-    portrait.texture:SetTexture("Interface\\CharacterFrame\\TempPortrait")
-  end
-  
-  portrait:Show()
 end
 
+-- Note: You can now remove the GetNPCInfo and FindPortraitTexture functions
+-- as they're handled by PortraitManager
+
+-------------------------
+-- OPTIONAL: Item Text Frame Portrait Support
+-------------------------
+
+-- Add this to the ApplyItemTextLayout function to show portraits for books
+
+--- Apply wide layout to book/note reader frame (Updated with portrait support)
+local function ApplyItemTextLayout()
+  if not ItemTextFrame then return end
+
+  local backdrop = GetVisualBackdrop(ItemTextFrame, ItemTextFrameInset)
+  if not backdrop then return end
+
+  ItemTextFrame:SetWidth(TEXT_CONFIG.FRAME_WIDTH)
+  ItemTextFrame:SetHeight(TEXT_CONFIG.FRAME_HEIGHT)
+  ItemTextFrame:ClearAllPoints()
+  ItemTextFrame:SetPoint(
+    TEXT_CONFIG.ANCHOR_POINT,
+    UIParent,
+    TEXT_CONFIG.ANCHOR_RELATIVE,
+    TEXT_CONFIG.OFFSET_X,
+    TEXT_CONFIG.OFFSET_Y
+  )
+
+  -- Add portrait support for books
+  if PortraitManager then
+    local itemName = ItemTextGetItem()
+    PortraitManager:UpdateBookPortrait(ItemTextFrame, itemName)
+  end
+
+  local contentWidth = backdrop:GetWidth() - TEXT_CONFIG.MARGIN_LEFT - TEXT_CONFIG.MARGIN_RIGHT
+  local contentHeight = backdrop:GetHeight() - TEXT_CONFIG.MARGIN_TOP - TEXT_CONFIG.MARGIN_BOTTOM
+
+  if ItemTextScrollFrame then
+    ItemTextScrollFrame:ClearAllPoints()
+    ItemTextScrollFrame:SetPoint(
+      "TOPLEFT",
+      backdrop,
+      "TOPLEFT",
+      TEXT_CONFIG.MARGIN_LEFT,
+      -TEXT_CONFIG.MARGIN_TOP
+    )
+    ItemTextScrollFrame:SetWidth(contentWidth)
+    ItemTextScrollFrame:SetHeight(contentHeight)
+
+    ApplyScrollbarLayout(ItemTextScrollFrame, ItemTextScrollFrameScrollBar)
+  end
+
+  if ItemTextPageText then
+    ItemTextPageText:SetWidth(contentWidth + TEXT_CONFIG.TEXT_RIGHT_PADDING)
+    ItemTextPageText:SetJustifyH("LEFT")
+  end
+end
+
+-------------------------
+-- INSTRUCTIONS FOR INTEGRATION
+-------------------------
+
+--[[
+  To integrate this patch into your BetterQuestText.lua:
+  
+  1. Replace the existing UpdatePortrait() function with the new version above
+  
+  2. Remove or comment out these functions (now handled by PortraitManager):
+     - GetNPCInfo()
+     - FindPortraitTexture()
+  
+  3. Replace the ApplyItemTextLayout() function to add book portrait support
+  
+  4. The existing code will continue to work, but now uses the centralized
+     PortraitManager system which handles both NPC and book portraits
+  
+  5. No changes needed to ApplyQuestLayout() - it already calls UpdatePortrait()
+]]
 -------------------------
 -- QUEST FRAME LAYOUT
 -------------------------

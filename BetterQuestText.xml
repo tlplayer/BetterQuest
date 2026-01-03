@@ -4,6 +4,9 @@
     <Include file="db\modeldb.lua"/>
     <Include file="db\bookdb.lua"/>
     
+    <!-- Load core systems -->
+    <Include file="PortraitManager.lua"/>
+    
     <!-- Load feature modules -->
     <Include file="Book.lua"/>
     
