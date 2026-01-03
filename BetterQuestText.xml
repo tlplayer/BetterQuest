@@ -1,9 +1,12 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-
-    <!-- Load the portrait database first -->
+    <!-- Load databases first -->
     <Include file="db\portraitdb.lua"/>
     <Include file="db\modeldb.lua"/>
+    <Include file="db\bookdb.lua"/>
     
-    <!-- Load main addon code -->
+    <!-- Load feature modules -->
+    <Include file="Book.lua"/>
+    
+    <!-- Load main addon code last -->
     <Include file="BetterQuestText.lua"/>
 </Ui>
