@@ -1,10 +1,14 @@
-from neuttsair.neutts import NeuTTSAir
-import soundfile as sf
 import io
-from pydub import AudioSegment
 import re
+import pandas as pd
+import soundfile as sf
+from pydub import AudioSegment
+from neuttsair.neutts import NeuTTSAir
 
-# --- Initialize TTS ---
+# =========================
+# INITIALIZE TTS
+# =========================
+
 tts = NeuTTSAir(
     backbone_repo="neuphonic/neutts-air-q4-gguf",
     backbone_device="cpu",
@@ -12,99 +16,146 @@ tts = NeuTTSAir(
     codec_device="cpu"
 )
 
-# --- Input text ---
-input_text = "As a member of the Senate and the Explorers' League, I've taken it upon myself to take care of this part of the trogg infestation that has gripped our lands. They've certainly made a mess of Gol'Bolar quarry, and for no reason. As we dug deep into the earth, they poured out, destroying our equipment and driving the miners out. There's not much for us to do but to exterminate the lot of them, rebuild, then get back to work. If you help me with the troggs, I'll gladly recompense you for your time."
-'''
-(
+# =========================
+# REFERENCE DATA
+# =========================
 
-    "Through study of various fossilized creatures I have deduced that in ancient times, "
-    "a great plague swept through the waters of Lake Lordamere. What caused this? We might never know. "
-    "But the rate of contamination appears to be extremely high based on dense concentrations of remains distributed across the lake bed. "
-    "In an attempt to uncover the past, I have begun to examine the creatures of the present in hopes of finding the missing clue to this mystery. "
-    "The Lake Skulkers and Lake Creepers are ancient beasts who inhabit the islands in the center of Lake Lordamere. "
-    "There is a moss which grows on them that resembles trace materials on some of the fossils. "
-    "More research needs to be done before I can speculate as to what this connection means. "
-    "While trying to collect moss samples I came across the scene of a bloody battle. "
-    "The Vile Fin tribe of Murlocs had come under siege by a marauding band of Gnolls. "
-    "There were both Gnoll and Murloc corpses littering the battlefield. "
-    "As I passed a mangled Murloc body I noticed a strange hardened tumor protruding from the wound. "
-    "As I began to study the tumor it became clear it held similar properties to the moss I was collecting. "
-    "Unfortunately, I could find no other tumors besides the one."
-)
+# Map narrator keys to reference audio/text
+NARRATOR_REFS = {
+    "dwarf": {
+        "audio": "../samples/audio/dwarf/dwarf.wav",
+        "text": "../samples/text/dwarf/dwarf.txt"
+    },
+    "human": {
+        "audio": "../samples/audio/human/human.wav",
+        "text": "../samples/text/human/human.txt"
+    }
+    # Add more narrators as needed
+}
 
-'''
+# Precompute reference codes
+REF_CODES = {}
+for narrator, paths in NARRATOR_REFS.items():
+    ref_text = open(paths["text"], "r", encoding="utf-8").read().strip()
+    ref_codes = tts.encode_reference(paths["audio"])
+    REF_CODES[narrator] = {"codes": ref_codes, "text": ref_text}
 
-# --- Reference audio and text ---
-ref_audio_path = "../samples/audio/dwarf/dwarf.wav"
-ref_text_path = "../samples/text/dwarf/dwarf.txt"
 
-ref_text = open(ref_text_path, "r").read().strip()
-ref_codes = tts.encode_reference(ref_audio_path)
+# =========================
+# UTILITY FUNCTIONS
+# =========================
 
-## --- Robust sentence-based chunking ---
-def chunk_text_robust(text,
-                      min_sentences=1, max_sentences=3,
-                      min_chars=30, max_chars=200):
+def chunk_text_robust(text, min_sentences=1, max_sentences=3, min_chars=30, max_chars=200):
     """
     Split text into sentence-based chunks that satisfy both min/max sentences
     and min/max characters. Combines short sentences and splits long sentences.
     """
-    # Match sentences ending with ., ?, !, ; or ...
     sentence_pattern = r'.*?(?:\.\.\.|[.?!;])'
-    sentences = re.findall(sentence_pattern, text, flags=re.DOTALL)
-    sentences = [s.strip() for s in sentences if s.strip()]
+    sentences = [s.strip() for s in re.findall(sentence_pattern, text, flags=re.DOTALL) if s.strip()]
 
-    chunks = []
-    current_chunk = []
-    current_len = 0
-
+    chunks, current_chunk, current_len = [], [], 0
     for s in sentences:
         s_len = len(s)
-        # If adding this sentence exceeds max_chars or max_sentences, finalize current chunk
         if (len(current_chunk) >= max_sentences or current_len + s_len > max_chars) and current_chunk:
             chunks.append(" ".join(current_chunk))
-            current_chunk = []
-            current_len = 0
-
+            current_chunk, current_len = [], 0
         current_chunk.append(s)
         current_len += s_len
-
-    # Add remaining chunk
     if current_chunk:
         chunks.append(" ".join(current_chunk))
 
-    # Merge very short chunks with previous to meet min_chars/min_sentences
+    # Merge very short chunks with previous
     final_chunks = []
     for chunk in chunks:
         if final_chunks:
-            if len(chunk) < min_chars or chunk.count('.') + chunk.count('!') + chunk.count('?') < min_sentences:
-                # merge with previous
+            if len(chunk) < min_chars or sum(chunk.count(x) for x in ".!?") < min_sentences:
                 final_chunks[-1] += " " + chunk
                 continue
         final_chunks.append(chunk)
-    print(chunks)
     return final_chunks
 
-# --- Split text into robust chunks ---
-chunks = chunk_text_robust(input_text)
 
-# --- Generate TTS for each chunk and write each to a separate WAV ---
-audio_segments = []
-for idx, chunk in enumerate(chunks):
-    print(f"Generating chunk {idx+1}/{len(chunks)}: {chunk[:60]}...")
-    wav_chunk = tts.infer(chunk, ref_codes, ref_text)
+def assign_narrator(row):
+    """
+    Determine narrator based on NPC info (race_mask, sex, dialog_type, etc.)
+    Returns:
+        - narrator key (str) if unambiguous
+        - None if missing/ambiguous
+    """
+    # Simple example: use race_mask or dialog_type
+    race_map = {
+        1: "human",
+        2: "orc",
+        3: "dwarf",
+        # Add more mappings
+    }
+    if row.get("race_mask") in race_map:
+        return race_map[row["race_mask"]]
+    # fallback rules: by dialog_type or custom overrides
+    if row.get("dialog_type") == "item_text":
+        return "narrator"  # default narrator for items
+    return None  # ambiguous
 
-    # Convert NumPy array to pydub AudioSegment for later concatenation
-    buf = io.BytesIO()
-    sf.write(buf, wav_chunk, 24410, format='WAV')
-    buf.seek(0)
-    seg = AudioSegment.from_file(buf, format="wav")
-    audio_segments.append(seg)
 
-# --- Concatenate all segments in order ---
-final_audio = AudioSegment.silent(duration=0)  # start with empty segment
-for seg in audio_segments:
-    final_audio += seg  # append without adding silence
+def generate_tts_for_row(row, output_dir="tts_output"):
+    """
+    Generates TTS for a single row in the dataframe.
+    Returns concatenated AudioSegment.
+    """
+    narrator = assign_narrator(row)
+    if not narrator or narrator not in REF_CODES:
+        return None  # skip or log missing narrator
 
-final_audio.export("narrator.wav", format="wav")
-print("Generated narrator.wav successfully!")
+    ref = REF_CODES[narrator]
+    text_chunks = chunk_text_robust(row["text"])
+    audio_segments = []
+
+    for chunk in text_chunks:
+        wav = tts.infer(chunk, ref["codes"], ref["text"])
+        buf = io.BytesIO()
+        sf.write(buf, wav, 24410, format="WAV")
+        buf.seek(0)
+        audio_segments.append(AudioSegment.from_file(buf, format="wav"))
+
+    # Concatenate all chunks
+    final_audio = AudioSegment.silent(duration=0)
+    for seg in audio_segments:
+        final_audio += seg
+    return final_audio
+
+
+# =========================
+# PROCESS DATAFRAME
+# =========================
+
+def process_dataframe(df, output_dir="tts_output"):
+    """
+    df: pandas DataFrame with columns:
+        ["npc_id", "npc_name", "race_mask", "sex", "dialog_type", "quest_id", "text"]
+    Generates TTS for each row, logs missing/ambiguous narrators.
+    """
+    missing_narrators = []
+    for idx, row in df.iterrows():
+        audio = generate_tts_for_row(row)
+        if audio:
+            filename = f"{output_dir}/{row['npc_id']}_{idx}.wav"
+            audio.export(filename, format="wav")
+        else:
+            missing_narrators.append({
+                "npc_id": row["npc_id"],
+                "npc_name": row["npc_name"],
+                "dialog_type": row["dialog_type"]
+            })
+
+    # Save missing/ambiguous narrators to CSV for later manual assignment
+    if missing_narrators:
+        pd.DataFrame(missing_narrators).to_csv(f"{output_dir}/missing_narrators.csv", index=False)
+        print(f"Saved {len(missing_narrators)} rows with missing/ambiguous narrators.")
+
+
+# =========================
+# EXAMPLE USAGE
+# =========================
+
+# df = pd.read_csv("all_npc_dialog.csv")
+# process_dataframe(df)
