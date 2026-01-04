@@ -20,15 +20,27 @@ tts = NeuTTSAir(
 # REFERENCE DATA
 # =========================
 
-# Map narrator keys to reference audio/text
+# Map narrator keys to reference text
 NARRATOR_REFS = {
     "dwarf": {
-        "audio": "../samples/audio/dwarf/dwarf.wav",
-        "text": "../samples/text/dwarf/dwarf.txt"
+        "audio": "../samples/dwarf/dwarf.wav",
+        "text": "../samples/dwarf/dwarf.txt"
     },
     "human": {
-        "audio": "../samples/audio/human/human.wav",
-        "text": "../samples/text/human/human.txt"
+        "audio": "../samples/human/human.wav",
+        "text": "../samples/human/human.txt"
+    },
+    "narrator": {
+        "audio": "../samples/narrator/narrator.wav",
+        "text": "../samples/narrator/narrator.txt"
+    },
+    "elf_female": {
+    "audio": "../samples/elf_female/elf_female.wav",
+    "text": "../samples/elf_female/elf_female.txt"
+    },
+    "elf": {
+        "audio": "../samples/elf/elf.wav",
+        "text": "../samples/elf/elf.txt"
     }
     # Add more narrators as needed
 }
@@ -97,23 +109,23 @@ def assign_narrator(row):
     return None  # ambiguous
 
 
-def generate_tts_for_row(row, output_dir="tts_output"):
+def generate_tts_for_row(row, output_dir="sounds"):
     """
     Generates TTS for a single row in the dataframe.
     Returns concatenated AudioSegment.
     """
-    narrator = assign_narrator(row)
-    if not narrator or narrator not in REF_CODES:
+    row_narrator = assign_narrator(row)
+    if not row_narrator or row_narrator not in REF_CODES:
         return None  # skip or log missing narrator
 
-    ref = REF_CODES[narrator]
+    ref = REF_CODES[row_narrator]
     text_chunks = chunk_text_robust(row["text"])
     audio_segments = []
 
     for chunk in text_chunks:
         wav = tts.infer(chunk, ref["codes"], ref["text"])
         buf = io.BytesIO()
-        sf.write(buf, wav, 24410, format="WAV")
+        sf.write(buf, wav, 24900, format="WAV")
         buf.seek(0)
         audio_segments.append(AudioSegment.from_file(buf, format="wav"))
 
@@ -128,7 +140,7 @@ def generate_tts_for_row(row, output_dir="tts_output"):
 # PROCESS DATAFRAME
 # =========================
 
-def process_dataframe(df, output_dir="tts_output"):
+def process_dataframe(df, output_dir="sounds"):
     """
     df: pandas DataFrame with columns:
         ["npc_id", "npc_name", "race_mask", "sex", "dialog_type", "quest_id", "text"]

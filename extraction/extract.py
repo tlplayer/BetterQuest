@@ -16,7 +16,7 @@ DB_CONFIG = {
     "use_unicode": True,
 }
 
-OUTPUT_CSV = "all_npc_dialog.csv"
+OUTPUT_CSV = "../data/all_npc_dialog.csv"
 
 # =========================
 # DB CONNECTION
