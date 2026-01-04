@@ -189,6 +189,5 @@ def process_dataframe(df, output_dir="sounds"):
 # =========================
 # EXAMPLE USAGE
 # =========================
-
-# df = pd.read_csv("all_npc_dialog.csv")
-# process_dataframe(df)
+df = pd.read_csv("all_npc_dialog.csv")
+process_dataframe(df.head(4))
