@@ -1,4 +1,5 @@
 import io
+import os
 import re
 import pandas as pd
 import soundfile as sf
@@ -109,23 +110,47 @@ def assign_narrator(row):
     return None  # ambiguous
 
 
+def sanitize_filename(name: str) -> str:
+    """
+    Make a string safe for filenames by removing/replacing problematic characters.
+    """
+    name = name.strip()
+    name = re.sub(r"[^\w\s-]", "", name)  # remove special characters
+    name = re.sub(r"\s+", "_", name)      # replace spaces with underscores
+    return name.lower()
+
+
 def generate_tts_for_row(row, output_dir="sounds"):
     """
-    Generates TTS for a single row in the dataframe.
-    Returns concatenated AudioSegment.
+    Generates TTS for a single row, returns final AudioSegment.
+    Skips generation if file already exists.
     """
-    row_narrator = assign_narrator(row)
-    if not row_narrator or row_narrator not in REF_CODES:
+    narrator = assign_narrator(row)
+    if not narrator or narrator not in REF_CODES:
         return None  # skip or log missing narrator
 
-    ref = REF_CODES[row_narrator]
+    # Determine output path
+    narrator_dir = os.path.join(output_dir, narrator)
+    os.makedirs(narrator_dir, exist_ok=True)
+
+    # Use quest title if available, else npc_name, append quest_id
+    quest_title = row.get("quest_title") or row.get("npc_name") or "unknown"
+    quest_id = row.get("quest_id") or row.get("npc_id") or 0
+    filename_safe = sanitize_filename(f"{quest_title}_{quest_id}.wav")
+    filepath = os.path.join(narrator_dir, filename_safe)
+
+    if os.path.exists(filepath):
+        print(f"Skipping existing file: {filepath}")
+        return filepath  # skip if already exists
+
+    ref = REF_CODES[narrator]
     text_chunks = chunk_text_robust(row["text"])
     audio_segments = []
 
     for chunk in text_chunks:
         wav = tts.infer(chunk, ref["codes"], ref["text"])
         buf = io.BytesIO()
-        sf.write(buf, wav, 24900, format="WAV")
+        sf.write(buf, wav, 24850, format="WAV")
         buf.seek(0)
         audio_segments.append(AudioSegment.from_file(buf, format="wav"))
 
@@ -133,37 +158,33 @@ def generate_tts_for_row(row, output_dir="sounds"):
     final_audio = AudioSegment.silent(duration=0)
     for seg in audio_segments:
         final_audio += seg
-    return final_audio
+
+    final_audio.export(filepath, format="wav")
+    print(f"Generated: {filepath}")
+    return filepath
 
 
 # =========================
 # PROCESS DATAFRAME
 # =========================
-
 def process_dataframe(df, output_dir="sounds"):
     """
-    df: pandas DataFrame with columns:
-        ["npc_id", "npc_name", "race_mask", "sex", "dialog_type", "quest_id", "text"]
-    Generates TTS for each row, logs missing/ambiguous narrators.
+    Process the dataframe row-by-row, generate TTS files.
     """
     missing_narrators = []
     for idx, row in df.iterrows():
-        audio = generate_tts_for_row(row)
-        if audio:
-            filename = f"{output_dir}/{row['npc_id']}_{idx}.wav"
-            audio.export(filename, format="wav")
-        else:
+        result = generate_tts_for_row(row, output_dir=output_dir)
+        if not result:
             missing_narrators.append({
                 "npc_id": row["npc_id"],
                 "npc_name": row["npc_name"],
                 "dialog_type": row["dialog_type"]
             })
 
-    # Save missing/ambiguous narrators to CSV for later manual assignment
     if missing_narrators:
-        pd.DataFrame(missing_narrators).to_csv(f"{output_dir}/missing_narrators.csv", index=False)
-        print(f"Saved {len(missing_narrators)} rows with missing/ambiguous narrators.")
-
+        missing_csv = os.path.join(output_dir, "missing_narrators.csv")
+        pd.DataFrame(missing_narrators).to_csv(missing_csv, index=False)
+        print(f"Saved {len(missing_narrators)} rows with missing/ambiguous narrators → {missing_csv}")
 
 # =========================
 # EXAMPLE USAGE
