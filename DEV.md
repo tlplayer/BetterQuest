@@ -670,9 +670,22 @@ python generator.py --input ../extracted_dialog.csv --output ../sounds/
 **Cause:** Generic creature models  
 **Workaround:** Use narrator voice
 
+## Structure lua to be more modular
+1. Frame code isolated but pulls from join config file 
+2. Portrait code isolated 
+3. Book code isolated 
+4. Soundqueue file for adding/removing quests like wow voiceover
+5. sound queue frame/portrait like wow voiceover but using portraits instead of models
+
+## Reverb in VO 
+lilts and robotic sound in vo tried tradition fft on audio but it's a subtle sound that needs ML to fix
+Needs STO models to fix imo so we'll see about a metric for identifying/fixing them with post processing later. 
+
 ### Issue: Multiple gossip texts for same NPC
 **Cause:** Conditional gossip (quest state, class, etc.)  
 **Workaround:** Extract all, generate all, Lua picks at runtime
+**ideal** create UI button with exclamation to flag incorrectly picking VO and this can be copy pasted into github for overriding but quickly cycles though VOs. 
+
 
 ### Issue: Lua memory usage with 10k+ audio files
 **Cause:** Large db tables loaded at startup  
