@@ -1,5 +1,17 @@
 import io
 import os
+
+
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+NEUTTS_AIR = ROOT / "neutts-air"
+
+sys.path.insert(0, str(NEUTTS_AIR))
+
+
+
 import re
 import pandas as pd
 import soundfile as sf
@@ -10,8 +22,9 @@ from neuttsair.neutts import NeuTTSAir
 # INITIALIZE TTS
 # =========================
 
+
 tts = NeuTTSAir(
-    backbone_repo="neuphonic/neutts-air-q4-gguf",
+    backbone_repo="neuphonic/neutts-air-q8-gguf",
     backbone_device="cpu",
     codec_repo="neuphonic/neucodec",
     codec_device="cpu"
