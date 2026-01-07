@@ -1,0 +1,7 @@
+## Interface: 11200
+## Title: BetterQuestText
+## Notes: Wide quest frame with NPC portraits for vanilla WoW
+## Author: Timothy Player 
+## Version: 1.0
+
+BetterQuestText.xml
