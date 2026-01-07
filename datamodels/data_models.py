@@ -1,51 +1,40 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
+from typing import Optional
 
-# -----------------------------
-# Core NPC / Creature Model
-# -----------------------------
 @dataclass
-class NPC:
-    npc_id: int                       # Unique NPC entry ID
-    name: str                          # NPC name (very important!)
-    race: Optional[str] = None         # Race inferred from model or DB
-    sex: Optional[str] = None          # Male/Female
-    display_ids: Dict[str, int] = field(default_factory=dict)  # e.g. main/secondary/tertiary/quaternary
-    race_mask: Optional[int] = None
-    quests: List["QuestInteraction"] = field(default_factory=list)  # Linked quests
-    gossip_texts: List["GossipText"] = field(default_factory=list)   # Linked gossip texts
+class DialogueEntry:
+    name: str                    # NPC name
+    race: Optional[str] = None   # e.g., "human", "orc"
+    sex: Optional[str] = None    # "male" or "female"
+    dialog_type: str = "gossip" # "gossip", "quest", etc
+    text: str = ""               # The line to be spoken
+    zone: Optional[str] = None   # Zone the NPC is in
+    narrator: Optional[str] = None  # TTS voice/narrator, e.g., "default", "Sean Bean"
+    portrait: Optional[str] = None  # Optional: generic portrait or specific
+    model_id: Optional[int] = None   # Optional: model display id or GUID
 
-# -----------------------------
-# Quest Info
-# -----------------------------
-@dataclass
-class QuestInteraction:
-    quest_id: int
-    source_type: str                  # "accept", "progress", "complete"
-    quest_title: str
-    quest_text: str                   # What the NPC says for this step
-    extra: Dict[str, Any] = field(default_factory=dict)
-
-# -----------------------------
-# Gossip / Broadcast Text Info
-# -----------------------------
-@dataclass
-class GossipText:
-    text_id: int
-    text: str
-    broadcast_type: str               # "male" / "female" / "neutral"
-    related_quest_id: Optional[int] = None
-    extra: Dict[str, Any] = field(default_factory=dict)
-
-# -----------------------------
-# Sample TTS Data Model
-# -----------------------------
-@dataclass
-class TTS_Sample:
-    text: str
-    audio_file: Optional[str] = None     # Path to audio file
-    npc_name: Optional[str] = None
-    npc_race: Optional[str] = None
-    npc_sex: Optional[str] = None
-    quest_id: Optional[int] = None
-    quest_text: Optional[str] = None
+# Example usage
+entries = [
+    DialogueEntry(
+        name="Marshal Dughan",
+        race="human",
+        sex="male",
+        dialog_type="gossip",
+        text="Ach, it's hard enough keeping order around here without all these new troubles popping up!  I hope you have good news, $n...",
+        zone="Elwyn Forest",
+        narrator="default",
+        portrait="human",
+        model_id=1985
+    ),
+    DialogueEntry(
+        name="King of Stormwind",
+        race="human",
+        sex="male",
+        dialog_type="gossip",
+        text="The kingdom counts on your bravery.",
+        zone="Stormwind City",
+        narrator="Sean Bean",
+        portrait="human_king",
+        model_id=1234
+    )
+]
