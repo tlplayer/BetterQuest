@@ -19,6 +19,7 @@ def extract_unique_npcs(csv_path: str):
 
     # Deduplicate by npc_id (authoritative)
     df = df.drop_duplicates(subset=["npc_id"])
+    df = df[df["dialog_type"] != "item_text"]
 
     # Normalize fields
     df["npc_name"] = df["npc_name"].astype(str).str.strip()
@@ -28,7 +29,7 @@ def extract_unique_npcs(csv_path: str):
 
     for _, row in df.iterrows():
         records.append({
-            "npc_id": int(row.npc_id),
+            "npc_id": row.npc_id,
             "name": row.npc_name,
             "id": None,                 # filled later (quest_id, item_id, etc)
             "race": None,               # inferred later
