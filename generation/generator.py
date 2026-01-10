@@ -48,14 +48,6 @@ NARRATOR_REFS = {
         "audio": "../samples/narrator/narrator.wav",
         "text": "../samples/narrator/narrator.txt"
     },
-    "elf_female": {
-    "audio": "../samples/elf_female/elf_female.wav",
-    "text": "../samples/elf_female/elf_female.txt"
-    },
-    "elf": {
-        "audio": "../samples/elf/elf.wav",
-        "text": "../samples/elf/elf.txt"
-    }
     # Add more narrators as needed
 }
 
