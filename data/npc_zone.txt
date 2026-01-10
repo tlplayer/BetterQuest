@@ -1,0 +1,700 @@
+# WoW Classic NPC Zone Mapping
+# Format: zone: [list of NPC names]
+
+Alterac_Mountains:
+- Bath'rah the Windwatcher
+
+Alterac_Valley:
+- Bengor
+- Bloodmage Drazial
+- Bloodmage Lynnore
+- Commander Duffy
+- Commander Karl Philips
+- Commander Louis Philips
+- Commander Mulfort
+- Corporal Thund Splithoof
+- Dispatch Commander Ruag
+- Frostwolf Ambassador Rokhstrom
+- Frostwolf Quartermaster
+- Frostwolf Stable Master
+- Frostwolf Wolf Rider Commander
+- Mountaineer Boombellow
+- Mountaineer Stormpike
+- Muren Stormpike
+- Primalist Thurloga
+- Prospector Stormpike
+- Sergeant Durgen Stormpike
+- Stormpike Quartermaster
+- Stormpike Ram Rider Commander
+- Stormpike Stable Master
+- Wing Commander Guse
+- Wing Commander Ichman
+- Wing Commander Jeztor
+- Wing Commander Mulverick
+- Wing Commander Slidore
+- Wing Commander Vipore
+
+Arathi_Basin:
+- Defilers Emissary
+- Field Marshal Oslight
+
+Arathi_Highlands:
+- Apothecary Lydon
+- Artilleryman Sheldonore
+- Baltus Fowler
+- Bounty Hunter Kolark
+- Brom Killian
+- Captain Stoutfist
+- Deathstalker Lesh
+- Doctor Marsh
+- Drum Fel
+- Skullsplitter Speaker
+- Trelane
+
+Ashenvale:
+- Aayndia Floralwind
+- Ak'Zeloth
+- Anilia
+- Anishar
+- Astarii Starseeker
+- Balthule Shadowstrike
+- Braelyn Firehand
+- Caravaneer Ruzzgot
+- Denatharion
+- Elanaria
+- Illiyana
+- Kayneth Stillwind
+- Raene Wolfrunner
+- Shindrell Swiftfire
+
+Azshara:
+- Ag'tor Bloodfist
+- Ahanu
+- Archmage Xylem
+- Arygos
+- Bashana Runetotem
+- Captain Vanessa Beltis
+- Captain Thalo'thas Brightsun
+- Chemist Cuely
+- Chepi
+- Cyrus Therepentous
+- Duke Hydraxis
+- Jess Rimon
+
+Badlands:
+- Ageron Kargal
+- Apprentice Kryten
+- Archaeologist Flagongut
+- Archaeologist Hollee
+- Doctor Draxlegauge
+- Dorius Stonetender
+- Duhng
+- Dying Archaeologist
+- Foreman Stonebrow
+- Lotwil Veriatus
+- Martek the Exiled
+- Rigglefuzz
+- Thal'trak Proudtusk
+
+Blackrock_Depths:
+- Borgosh Corebender
+- Commander Gor'shak
+- Egan
+- Gloom'rel
+- Lokhtos Darkbargainer
+- Private Rocknot
+- Princess Moira Bronzebeard
+
+Blackrock_Spire:
+- Bodley
+- Vaelastrasz the Corrupt
+
+Blasted_Lands:
+- Kum'isha the Collector
+
+Darnassus:
+- Alyissia
+- Arch Druid Fandral Staghelm
+- Asterion
+- Ayanna Everstride
+- Cerellean Whiteclaw
+- Clarise Gnarltree
+- Corithras Moonrage
+- Darnassus Commendation Officer
+- Dazalar
+- Doras
+- Innkeeper Saelienne
+- Iverron
+- Jandria
+- Lorekeeper Javon
+- Tyrande Whisperwind
+
+Darkshore:
+- Adjutant Tesoran
+- Alanna Raveneye
+- Athridas Bearmantle
+- Denalan
+- Einar Stonegrip
+- Sentinel Glynda Nal'Shea
+
+Desolace:
+- Captain Nials
+- Cork Gizelton
+- Rigger Gizelton
+
+Dire_Maul:
+- Aelthalyste
+- Ancient Equine Spirit
+- Azj'Tordin
+- Bibbly F'utzbuckle
+- Captain Kromcrush
+- Cho'Rush the Observer
+- Daio the Decrepit
+- Derotain Mudsipper
+- Dreadsteed Spirit
+- Shen'dralar Ancient
+
+Dun_Morogh:
+- Balir Frosthammer
+- Beldin Steelgrill
+- Einar Stonegrip (starts here)
+
+Durotar:
+- Chef Grual
+- Cook Torka
+- Devrak
+- Foreman Thazz'ril
+- Innkeeper Grosk
+- Vol'jin
+- Zureetha Fargaze
+
+Duskwood:
+- Abercrombie
+- Alanndarian Nightsong
+- Bailiff Conacher
+- Blind Mary
+- Branstock Khalder
+- Bromos Grummner
+- Brother Neals
+- Brother Paxton
+- Brother Sammuel
+- Brother Wilhelm
+- Calor
+- Caretaker Folsom
+- Commander Althea Ebonlocke
+- Councilman Millstipe
+- Dank Drizzlecut
+- Dannie Fizzwizzle
+- Delfrum Flintbeard
+- Eagan Peltskinner
+- Elaine Carevin
+- Elling Trias (moves here from Stormwind occasionally)
+- Madame Eva
+- Sven Yorgen
+- Viktori Prism'Antras
+
+Dustwallow_Marsh:
+- "Swamp Eye" Jarl
+- Captain Garran Vimes
+- Caz Twosprocket
+- Overlord Mok'Morokk
+- Theramore Lieutenant
+
+Eastern_Plaguelands:
+- Acolyte Dellis
+- Acolyte Magaz
+- Acolyte Wytula
+- Aldris Fourclouds
+- Andron Gant
+- Anthion Harmon
+- Antur Fallow
+- Apothecary Staffron Lerent
+- Archmage Angela Dosantos
+- Argent Guard Manados
+- Argent Guard Thaelrid
+- Argent Outfitter
+- Argent Quartermaster
+- Argent Recruiter
+- Argent Scout
+- Aristan Mottar
+- Augustus the Touched
+- Bloodmage Drazial (in Alterac Valley)
+- Bloodmage Lynnore (in Alterac Valley)
+- Bronn Fitzwrench
+- Bubulo Acerbus
+- Calvin Montague
+- Chronos
+- Clavicus Knavingham
+- Colara Dean
+- Colossus Researcher Eazel
+- Colossus Researcher Nestor
+- Colossus Researcher Sophia
+- Commander Eligor Dawnbringer
+- Commander Thomas Helleran
+- Craftsman Wilhelm
+- Cracked Necrotic Crystal
+- Deathguard Podrig
+- Deathguard Tor
+- Deliana
+- Dirk Thunderwood
+- Dispatch Commander Metz
+- Durik
+- Elenia Haydon
+- Evert Sorisam
+- Faint Necrotic Crystal
+
+Elwynn_Forest:
+- "Auntie" Bernice Stonefield
+- Billy Maclure
+- Branstock Khalder (also Duskwood)
+- Brother Kristoff (moves to Undercity)
+- Deputy Willem
+- Gramma Stonefield
+- Guard Byron
+- Guard Thomas
+- Ma Stonefield
+- Marshal Dughan
+- Marshal McBride
+- Maybell Maclure
+- Remy "Two Times"
+- Tommy Joe Stonefield
+
+Felwood:
+- Agnar Beastamer
+- Arei
+- Arathandris Silversky
+- Captured Arko'narin
+- Dreka'Sur
+- Greta Mosshoof
+- Jessir Moonbow
+- Winna Hazzard
+
+Feralas:
+- Barithras Moonshade
+- Brave Moonhorn
+- Darnath Bladesinger
+- Dink
+- Kindal Moonweaver
+- Latronicus Moonspear
+- Rockbiter
+- Talo Thornhoof
+
+Hillsbrad_Foothills:
+- Apothecary Zamah
+- Bartolo Ginsetti
+- Captured Mountaineer
+- Christoph Jeffcoat
+- Darren Malvew
+- Daryl Stack
+- Deathguard Humbert
+- Deathguard Samsa
+- Derak Nightfall
+- Drull
+- Farmer Getz
+- Krusk
+- Magistrate Henry Maleb
+
+Ironforge:
+- Advisor Belgrum
+- Alexander Calder
+- Alchemist Mallory
+- Arch Druid Hamuul Runetotem (visits)
+- Arthur the Faithful
+- Balos Jacken
+- Bengus Deepforge
+- Brandur Ironhammer
+- Braenna Flintcrag
+- Briarthorn
+- Clarice Foster
+- Clerk Lendry
+- Connor Rivers
+- Curator Thorius
+- Daphne Stilwell
+- Daryl Riknussun
+- Do'gol
+- Doan Karhan
+- Dungar Longdrink
+- Duthorian Rall
+- Einris Brightspear
+- High Tinker Mekkatorque
+- Innkeeper Firebrew
+- Ironforge Commendation Officer
+- King Magni Bronzebeard
+- Tharlidun
+
+Loch_Modan:
+- Angus Stern
+- Ashlan Stonesmirk
+- Azar Stronghammer
+- Bingles Blastenheimer
+- Brock Stoneseeker
+- Chief Engineer Hinderweir VII
+- Deputy Feldon
+- Mountaineer Kadrell
+
+Maraudon:
+- Celebras the Redeemed
+- Centaur Pariah
+
+Molten_Core:
+- Hydraxian Honor Guard (related NPC)
+
+Moonglade:
+- Angelas Moonbreeze
+- Arch Druid Renferal
+- Brother Sarno
+- Daryn Lightwind
+- Dendrite Starblaze
+- Druid of the Grove
+- Erelas Ambersky
+- Loganaar
+- Rabine Saturna
+- Remulos (travels here)
+- Silva Fil'naveth
+
+Mulgore:
+- Bluffwatcher
+- Brave Windfeather
+- Chief Hawkwind
+
+Orgrimmar:
+- Arnok
+- Braug Dimspirit
+- Brewmaster Drohn
+- Commander Samaul (Stormwind)
+- Craven Drok
+- Dalinda Malem
+- Dar
+- Deek Fizzlebizz
+- Denni'ka
+- Doras (Darnassus)
+- Doyo'da
+- Draz'Zilb
+- Ebru
+- Eitrigg
+- Gar'Thok
+- Belgrom Rockmaul
+- High Overlord Saurfang
+- Innkeeper Gryshka
+- Lady Sylvanas Windrunner (travels)
+- Neeru Fireblade
+- Orgrimmar Commendation Officer
+- Rexxar
+- Shenthul
+- Thrall
+- Uthek the Wise
+- Vol'jin
+
+Razorfen_Downs:
+- Belnistrasz
+- Myranda the Hag
+
+Redridge_Mountains:
+- Captain Grayson
+- Corporal Keeshan
+
+Scholomance:
+- Alexi Barov
+- Darkreaver's Fallen Charger
+- Doctor Martin Felben
+- Weldon Barov
+
+Searing_Gorge:
+- Gor'mul
+- Lanie Reed
+- Overseer Oilfist
+
+Silithus:
+- Aboda
+- Al'tabim the All-Seeing
+- Alliance Brigadier General
+- Apothecary Jezel
+- Aurel Goldleaf
+- Awenasa
+- Azzleby
+- Baristolth of the Shifting Sands
+- Batrider Pele'keiki
+- Beetix Ficklespragg
+- Bloodguard Rawtar
+- Bonnie Stoneflayer
+- Bor Wildmane
+- Caelestrasz
+- Calandrath
+- Cenarion Emissary Blackhoof
+- Cenarion Emissary Jademoon
+- Chief Sharpclaw
+- Commander Mar'alith
+- Corporal Carnes
+- Dame Twinbraid
+- Darkcaller Yanka
+- Darnassus Commendation Officer (travels)
+- Deathmaster Dwire
+- Doctor Serratus
+- Drakk Stonehand
+- Exzhal
+- Field Marshal Afrasiabi
+- Huum Wildmane (moves around)
+- Lorekeeper Mykos
+
+Silverpine_Forest:
+- Apothecary Helbrim
+- Deathguard Saltain
+- Deathstalker Erland
+- Deathstalker Faerleia
+
+Stonetalon_Mountains:
+- Cliffwatcher Longhorn
+- Crane Operator Bigglefuzz
+- Gaxim Rustfizzle
+- Maggran Earthbinder
+- Windcaller Proudhorn
+
+Stormwind_City:
+- "Pretty Boy" Duncan
+- Andrew Brownell
+- Archmage Ansirem Runeweaver
+- Archmage Malin
+- Archbishop Benedictus
+- Baros Alexston
+- Barkeep Daniels
+- Bishop DeLavey
+- Brother Anton
+- Cain Firesong
+- Catelyn the Blade
+- Chef Breanna
+- Collin Mauren
+- Commander Samaul
+- Count Remington Ridgewell
+- Crier Goodman
+- Dark Cleric Beryl
+- Dark Cleric Duesten
+- Daryl the Youngling
+- Dashel Stonefist
+- David Trias
+- Deathstalker Vincent
+- Dockmaster Baren
+- Donyal Tovald
+- Dungar Longdrink
+- Elling Trias
+- General Marcus Jonathan
+- Guard Berton
+- Guard Howe
+- Gunther Arcanus
+- High Sorcerer Andromath
+- Highlord Bolvar Fordragon
+- Innkeeper Allison
+- Lady Jaina Proudmoore (travels)
+- Lady Katrana Prestor
+- Llane Beshere
+- Lord Grayson Shadowbreaker
+- Lord Jorach Ravenholdt
+- Lucan Cordell
+- Master Mathias Shaw
+- Nikova Raskol
+- Osric Strang
+- Stormwind Commendation Officer
+
+Stranglethorn_Vale:
+- Ajeck Rouack
+- Barnil Stonepot
+- Baron Longshore
+- Baron Revilgaz
+- Bloodsail Traitor
+- Captain Hecklebury Smotts
+- Crank Fizzlebub
+- Deeg
+- Dizzy One-Eye
+- Drizzlik
+- Fleet Master Firallon
+- Fleet Master Seahorn
+- Hemet Nesingwary
+- Krazek
+- Marin Noggenfogger (moves to Gadgetzan)
+- Whiskey Slim
+
+Stratholme:
+- Aurius
+- Davil Crokford
+
+Swamp_of_Sorrows:
+- Magtoor
+- Tok'Kar
+
+Tanaris:
+- Alchemist Pestlezugg
+- Anachronos
+- Crank Fizzlebub
+- Curgle Cranklehop
+- Drizzlik
+- Fizzle Brassbolts
+- Gadgetzan Bruiser
+- Marin Noggenfogger
+- Narain Soothfancy
+- Security Chief Bilgewhizzle
+- Senior Surveyor Fizzledowser
+- Shreev
+- Sprocketz
+- Steamwheedle Port Authority
+- Stoley
+- Tran'rek
+- Wharfmaster Dizzywig
+- Wharfmaster Lozgil
+- Wizzle Brassbolts
+- Yeh'kinya
+
+Teldrassil:
+- Calor
+- Conservator Ilthalaine
+- Elder Bladeleaf
+- Innkeeper Keldamyr
+- Sentinel Arynia Cloudsbreak
+- Tarindrella
+
+The_Barrens:
+- Apothecary Renferrel
+- Brewmeister Bilger
+- Captain Steelgut
+- Chief Archaeologist Greywhisker
+- Commander Aggro'gosh
+- Deathguard Burgess
+- Dorn Plainstalker
+- Far Seer Mok'thardin
+- Gazlowe
+- Innkeeper Grosk (Crossroads)
+- Jorn Skyseer
+- Mankrik
+- Nara Wildmane
+- Sergra Darkthorn
+- Tonga Runetotem
+- Wharfmaster Dizzywig (Ratchet)
+
+The_Hinterlands:
+- Atal'ai Exile
+- Fraggar Thundermantle
+
+Theramore_Isle:
+- Archmage Tervosh
+- Captain Garran Vimes (Dustwallow)
+- Caz Twosprocket
+- Lady Jaina Proudmoore
+- Theramore Lieutenant
+
+Thunder_Bluff:
+- Ancestral Spirit
+- Arch Druid Hamuul Runetotem
+- Aska Mistrunner
+- Auld Stonespire
+- Baine Bloodhoof
+- Bena Winterhoof
+- Beram Skychaser
+- Brek Stonehoof
+- Cairne Bloodhoof
+- Chepi (travels)
+- Delgo Ragetotem
+- Ebru
+- Etu Ragetotem
+- Eyahn Eagletalon
+- Fyr Mistrunner
+- Gann Stonespire
+- Gennia Runetotem
+- Greatmother Hawkwind
+- Grull Hawkwind
+- Gurda Wildmane
+- Harken Windtotem
+- Innkeeper Pala
+- Kaga Mistrunner
+- Korin Fel
+- Lorekeeper Raintotem
+- Melor Stonehoof
+- Mull Thunderhorn
+- Mura Runetotem
+- Naal Mistrunner
+- Nan Mistrunner
+- Pao'ka Swiftmountain
+- Sewa Mistrunner
+- Shadi Mistrunner
+- Tah Winterhoof
+- Thunder Bluff Commendation Officer
+- Torm Ragetotem
+
+Tirisfal_Glades:
+- "Stinky" Ignatz
+- Apothecary Johaan
+- Brother Crowley
+- Captured Scarlet Zealot
+- Coleman Farthing
+- Dalar Dawnweaver
+- Deathguard Dillinger
+- Deathguard Linnea
+- Doctor Gregory Victor
+- Doctor Gustaf VanHowzen
+- Drulzegar Skraghook
+- Executor Arren
+- Executor Zygand
+
+Uldaman:
+- Baelog
+- Ironaya
+- Lorekeeper Kildrath
+
+Undercity:
+- Alchemist Narett
+- Anastasia Hartwell
+- Apothecary Zinge
+- Bartleby
+- Bethor Iceshard
+- Bishop Farthing
+- Brother Kristoff
+- Carendin Halgar
+- Cylina Darkheart
+- Dane Winslow
+- Dellylah
+- High Executor Darthalia
+- High Executor Derrington
+- High Executor Hadrec
+- Lady Sylvanas Windrunner
+- Master Apothecary Faranell
+- Nathanos Blightcaller
+- Undercity Commendation Officer
+- Undertaker Mordo
+
+Un'Goro_Crater:
+- A-Me 01
+- Homing Robot OOX-09/HL (Hinterlands)
+- Homing Robot OOX-17/TN (Tanaris)
+- Homing Robot OOX-22/FE (Feralas)
+- Linken
+- Torwa Pathfinder
+
+Warsong_Gulch:
+- Darkspear Commendation Officer
+- Darnassus Commendation Officer
+
+Western_Plaguelands:
+- Alchemist Arbington
+- Alexi Barov
+- Andi Lynn
+- Apothecary Dithers
+- Apothecary Faustin
+- Apothecary Zraedus
+- Argent Officer Garush
+- Argent Officer Pureheart
+- Argent Quartermaster Hasana
+- Argent Quartermaster Lightspark
+- Artilleryman Sheldonore (Arathi Highlands)
+- Betina Bigglezink
+- Betty Quin
+- Bluff Runner Windstrider
+- Brohann Caskbelly
+- Bunthen Plainswind
+- Caretaker Alen
+- Carlin Redpath
+- Claire Willower
+- Commander Ashlam Valorfist
+- Corporal Melkins
+- Courier Hammerfall
+- Crusader Lord Valdelmar
+- Darn Talongrip
+- Deathstalker Zraedus
+- Doctor Martin Felben (Scholomance)
+- Duke Nicholas Zverenhoff
