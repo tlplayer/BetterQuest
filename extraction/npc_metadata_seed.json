@@ -6106,7 +6106,7 @@
     "narrator": "default",
     "portrait": null,
     "model_id": 5528
-  }, //stopped here!
+  }, 
   {
     "npc_id": "16531",
     "name": "Faint Necrotic Crystal",
