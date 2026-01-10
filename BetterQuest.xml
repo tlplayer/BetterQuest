@@ -1,15 +1,21 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
-    <!-- Load databases first -->
-    <Include file="db\portraitdb.lua"/>
-    <Include file="db\modeldb.lua"/>
-    <Include file="db\bookdb.lua"/>
     
-    <!-- Load core systems -->
-    <Include file="PortraitManager.lua"/>
-    
-    <!-- Load feature modules -->
-    <Include file="Book.lua"/>
-    
-    <!-- Load main addon code last -->
-    <Include file="BetterQuestText.lua"/>
+    <!-- Config first -->
+    <Script file="Config.lua"/>
+
+    <!-- Databases -->
+    <Script file="db/portraitdb.lua"/>
+    <Script file="db/modeldb.lua"/>
+    <Script file="db/bookdb.lua"/>
+
+    <!-- Core systems -->
+    <Script file="SoundQueue.lua"/>
+    <Script file="PortraitManager.lua"/>
+
+    <!-- UI frames -->
+    <Script file="GossipFrame.lua"/>
+    <Script file="QuestFrame.lua"/>
+
+    <!-- Features -->
+    <Script file="Book.lua"/>
 </Ui>
