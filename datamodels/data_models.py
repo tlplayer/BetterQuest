@@ -28,6 +28,8 @@ class Narrator(Enum):
     ELEMENTAL = "elemental"
     SPIRIT = "spirit"
     DRAGON = "dragon"
+    GOBLIN = "goblin"
+    GOBLIN_FEMALE = "goblin_female"
     ANCIENT = "ancient"
     OGRE = "ogre"
     OGRE_FEMALE = "ogre_female"
