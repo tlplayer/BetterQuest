@@ -134,6 +134,41 @@ def sanitize_filename(name: str) -> str:
     name = re.sub(r"[^\w\s-]", "", name)  # remove special characters
     name = re.sub(r"\s+", "_", name)      # replace spaces with underscores
     return name.lower()
+import re
+
+def normalize_dialog_text(text: str) -> str:
+    """
+    Normalize WoW dialog tokens so TTS output is stable and natural.
+    """
+    if not isinstance(text, str):
+        return text
+
+    # Line breaks ($B, $BB, etc.)
+    text = re.sub(r"\$B+", "\n", text, flags=re.IGNORECASE)
+
+    replacements = [
+        # Gendered address — consume phrase until punctuation
+        (r"\$(lad|lass)\b[^.?!;\n]*", "hero"),
+
+        # Player references
+        (r"\$(n|N|r|R|c|C)\b", "hero"),
+
+        # Gender switch token: $g he:she; etc → hero
+        (r"\$g[^;]*;", "hero"),
+
+        # Any remaining $tokens (failsafe)
+        (r"\$\w+", ""),
+    ]
+
+    for pattern, repl in replacements:
+        text = re.sub(pattern, repl, text, flags=re.IGNORECASE)
+
+    # Cleanup whitespace (preserve paragraph breaks)
+    text = re.sub(r"[ \t]+", " ", text)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+
+    return text.strip()
+
 
 def generate_tts_for_row(row, output_dir="sounds", regenerate=False):
     narrator = get_narrator_from_metadata(row)
@@ -145,7 +180,8 @@ def generate_tts_for_row(row, output_dir="sounds", regenerate=False):
 
     quest_id = row.get("quest_id") or row.get("npc_id") or 0
     npc_name = row.get("npc_name") or "unknown"
-    filename_safe = sanitize_filename(f"{npc_name}_{quest_id}.wav")
+    dialog_type = row.get("dialog_type")
+    filename_safe = sanitize_filename(f"{dialog_type}/{npc_name}")+ ".wav"
     filepath = os.path.join(narrator_dir, filename_safe)
 
     if os.path.exists(filepath) and not regenerate:
@@ -238,6 +274,9 @@ if __name__ == "__main__":
     df = df[df["text"].notna()]
 
     df = filter_dataframe(df, args)
+    df = df.drop_duplicates(subset=["npc_name", "text"])
+    df["text"] = df["text"].apply(normalize_dialog_text)
+    print(df.head(10))
 
     for _, row in df.iterrows():
         generate_tts_for_row(

@@ -107,6 +107,7 @@ def extract_all_dialog():
         SELECT
             cqr.id       AS npc_id,
             qt.entry     AS quest_id,
+            qt.title as title,
             qt.Details,
             qt.RequestItemsText
         FROM creature_questrelation cqr
@@ -122,6 +123,7 @@ def extract_all_dialog():
         if non_empty(row["Details"]):
             rows.append({
                 "npc_id": npc["npc_id"],
+                "title": row["title"],
                 "npc_name": npc["npc_name"],
                 "race_mask": npc["race_mask"],
                 "sex": npc["sex"],
@@ -134,6 +136,7 @@ def extract_all_dialog():
         if non_empty(row["RequestItemsText"]):
             rows.append({
                 "npc_id": npc["npc_id"],
+                "title": row["title"],
                 "npc_name": npc["npc_name"],
                 "race_mask": npc["race_mask"],
                 "sex": npc["sex"],
@@ -150,6 +153,7 @@ def extract_all_dialog():
     cursor.execute("""
         SELECT
             cir.id       AS npc_id,
+            qt.title as title,
             qt.entry     AS quest_id,
             qt.OfferRewardText
         FROM creature_involvedrelation cir
@@ -178,6 +182,7 @@ def extract_all_dialog():
     cursor.execute("""
         SELECT
             cqr.id       AS npc_id,
+            qt.title as title,
             qt.entry     AS quest_id,
             qt.Objectives
         FROM creature_questrelation cqr
