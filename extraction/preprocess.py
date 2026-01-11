@@ -17,10 +17,10 @@ MISSING_ZONE_FILE = "missing_zone.yaml"
 import yaml
 
 # Path to your YAML file
-MISSING_RACE_FILE = "missing_race.yaml"
+MISSING_RACE_FIX_FILE = "missing_race_fix.yaml"
 
 # Read the file as a dictionary
-with open(MISSING_RACE_FILE, "r", encoding="utf-8") as f:
+with open(MISSING_RACE_FIX_FILE, "r", encoding="utf-8") as f:
     missing_race_fixes = yaml.safe_load(f)
 
 # Now missing_race_fixes is a dictionary you can use
@@ -95,7 +95,7 @@ def extract_unique_npcs(csv_path: str, race_lookup, sex_lookup, zone_lookup):
             "dialog_type": row.dialog_type,
             "zone": zone,
             "narrator": narrator,
-            "portrait": None,
+            "portrait": narrator,
             "model_id": int(row.model_id) if not pd.isna(row.model_id) else None,
         })
 

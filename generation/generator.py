@@ -1,27 +1,43 @@
 import io
 import os
-
-
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-NEUTTS_AIR = ROOT / "neutts-air"
-
-sys.path.insert(0, str(NEUTTS_AIR))
-
-
-
+import argparse
 import re
 import pandas as pd
 import soundfile as sf
 from pydub import AudioSegment
+ROOT = Path(__file__).resolve().parents[1]
+NEUTTS_AIR = ROOT / "neutts-air"
+sys.path.insert(0, str(NEUTTS_AIR))
 from neuttsair.neutts import NeuTTSAir
+import json
+
+
+
+
+
 
 # =========================
 # INITIALIZE TTS
 # =========================
 
+
+
+# All quest/gossip/text we narrate and what id is linked to that
+NPC_DIALOG_CSV_PATH = "../data/all_npc_dialog.csv"
+# How we link the npc to narrator traits:race, sex, zone for ambience /refinement
+NPC_METADATA_JSON = "../data/npc_metadata.json"
+
+with open(NPC_METADATA_JSON, "r", encoding="utf-8") as f:
+    NPC_METADATA = json.load(f)
+
+# Fast lookup by npc_name
+NPC_LOOKUP = {
+    npc["name"]: npc
+    for npc in NPC_METADATA
+}
 
 tts = NeuTTSAir(
     backbone_repo="neuphonic/neutts-air-q8-gguf",
@@ -92,27 +108,22 @@ def chunk_text_robust(text, min_sentences=1, max_sentences=3, min_chars=30, max_
         final_chunks.append(chunk)
     return final_chunks
 
+def get_narrator_from_metadata(row):
+    name = row.get("npc_name")
+    meta = NPC_LOOKUP.get(name)
 
-def assign_narrator(row):
-    """
-    Determine narrator based on NPC info (race_mask, sex, dialog_type, etc.)
-    Returns:
-        - narrator key (str) if unambiguous
-        - None if missing/ambiguous
-    """
-    # Simple example: use race_mask or dialog_type
-    race_map = {
-        1: "human",
-        2: "orc",
-        3: "dwarf",
-        # Add more mappings
-    }
-    if row.get("race_mask") in race_map:
-        return race_map[row["race_mask"]]
-    # fallback rules: by dialog_type or custom overrides
-    if row.get("dialog_type") == "item_text":
-        return "narrator"  # default narrator for items
-    return None  # ambiguous
+    if not meta:
+        return None
+
+    narrator = meta.get("narrator")
+    if narrator in REF_CODES:
+        return narrator
+
+    # Fallbacks
+    if meta.get("race") == "human":
+        return "human"
+
+    return "narrator"
 
 
 def sanitize_filename(name: str) -> str:
@@ -124,29 +135,22 @@ def sanitize_filename(name: str) -> str:
     name = re.sub(r"\s+", "_", name)      # replace spaces with underscores
     return name.lower()
 
-
-def generate_tts_for_row(row, output_dir="sounds"):
-    """
-    Generates TTS for a single row, returns final AudioSegment.
-    Skips generation if file already exists.
-    """
-    narrator = assign_narrator(row)
+def generate_tts_for_row(row, output_dir="sounds", regenerate=False):
+    narrator = get_narrator_from_metadata(row)
     if not narrator or narrator not in REF_CODES:
-        return None  # skip or log missing narrator
+        return None
 
-    # Determine output path
     narrator_dir = os.path.join(output_dir, narrator)
     os.makedirs(narrator_dir, exist_ok=True)
 
-    # Use quest title if available, else npc_name, append quest_id
-    quest_title = row.get("quest_title") or row.get("npc_name") or "unknown"
     quest_id = row.get("quest_id") or row.get("npc_id") or 0
-    filename_safe = sanitize_filename(f"{quest_title}_{quest_id}.wav")
+    npc_name = row.get("npc_name") or "unknown"
+    filename_safe = sanitize_filename(f"{npc_name}_{quest_id}.wav")
     filepath = os.path.join(narrator_dir, filename_safe)
 
-    if os.path.exists(filepath):
+    if os.path.exists(filepath) and not regenerate:
         print(f"Skipping existing file: {filepath}")
-        return filepath  # skip if already exists
+        return filepath
 
     ref = REF_CODES[narrator]
     text_chunks = chunk_text_robust(row["text"])
@@ -159,14 +163,47 @@ def generate_tts_for_row(row, output_dir="sounds"):
         buf.seek(0)
         audio_segments.append(AudioSegment.from_file(buf, format="wav"))
 
-    # Concatenate all chunks
-    final_audio = AudioSegment.silent(duration=0)
+    final_audio = AudioSegment.empty()
     for seg in audio_segments:
         final_audio += seg
 
     final_audio.export(filepath, format="wav")
     print(f"Generated: {filepath}")
     return filepath
+
+
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--race", type=str)
+    parser.add_argument("--npc", type=str)
+    parser.add_argument("--zone", type=str)
+    parser.add_argument("--limit", type=int, default=None)
+    parser.add_argument("--regenerate", action="store_true")
+    return parser.parse_args()
+
+
+def filter_dataframe(df, args):
+    if args.npc:
+        df = df[df["npc_name"] == args.npc]
+
+    if args.race:
+        allowed = {
+            name for name, meta in NPC_LOOKUP.items()
+            if meta.get("race") == args.race
+        }
+        df = df[df["npc_name"].isin(allowed)]
+
+    if args.zone:
+        allowed = {
+            name for name, meta in NPC_LOOKUP.items()
+            if meta.get("zone") == args.zone
+        }
+        df = df[df["npc_name"].isin(allowed)]
+
+    if args.limit:
+        df = df.head(args.limit)
+
+    return df
 
 
 # =========================
@@ -194,5 +231,18 @@ def process_dataframe(df, output_dir="sounds"):
 # =========================
 # EXAMPLE USAGE
 # =========================
-df = pd.read_csv("all_npc_dialog.csv")
-process_dataframe(df.head(4))
+if __name__ == "__main__":
+    args = parse_args()
+
+    df = pd.read_csv(NPC_DIALOG_CSV_PATH)
+    df = df[df["text"].notna()]
+
+    df = filter_dataframe(df, args)
+
+    for _, row in df.iterrows():
+        generate_tts_for_row(
+            row,
+            output_dir="sounds",
+            regenerate=args.regenerate
+        )
+
