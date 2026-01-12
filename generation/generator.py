@@ -136,6 +136,48 @@ def sanitize_filename(name: str) -> str:
     return name.lower()
 import re
 
+def remove_audio_cues(text: str) -> str:
+    """
+    Remove non-spoken audio / onomatopoeia cues that break TTS.
+    """
+    if not isinstance(text, str):
+        return text
+
+    patterns = [
+        # Bracketed or parenthetical audio directions
+        r"\[[^\]]*\]",          # [laughs]
+        r"\([^\)]*\)",          # (sighs)
+        r"<[^>]*>",              # <roars>
+        r"\*[^*]+\*",            # *chuckles*
+
+        # Explicit audio labels
+        r"\b(?:sfx|audio|sound)\s*:\s*[^\n]+",
+
+        # Standalone onomatopoeia words (conservative)
+        r"""\b(?: 
+        ah+ | eh+ | uh+ | oh+ | um+ | erm+ | hmm+ | hrr+ |
+        mmm+ | nng+ | ngh+ |
+        ugh+ | agh+ | argh+ | grr+ |
+        ach+ | auch+ | och+ |
+        oof+ | uff+ | pff+ | pfft+ |
+        hah+ | hehe+ | heh+ | hoh+ |
+        huh+ | eek+ | eeek+ |
+        whew+ | wheee+ |
+        sniff+ | snrk+ | snort+ |
+        gasp+ | cough+ | choke+ |
+        groan+ | grunt+ | sigh+
+        )\b[.!?,…]*"""
+    ]
+    # Remove leftover short interjections (1–4 chars) on their own line
+    text = re.sub(r"(?m)^\s*[a-z]{1,4}[.!?…]*\s*$", "", text, flags=re.IGNORECASE)
+
+
+    for pattern in patterns:
+        text = re.sub(pattern, "", text, flags=re.IGNORECASE | re.VERBOSE)
+
+    return text
+
+
 def normalize_dialog_text(text: str) -> str:
     """
     Normalize WoW dialog tokens so TTS output is stable and natural.
@@ -145,6 +187,7 @@ def normalize_dialog_text(text: str) -> str:
 
     # Line breaks ($B, $BB, etc.)
     text = re.sub(r"\$B+", "\n", text, flags=re.IGNORECASE)
+    text = remove_audio_cues(text)
 
     replacements = [
         # Gendered address — consume phrase until punctuation
@@ -169,26 +212,36 @@ def normalize_dialog_text(text: str) -> str:
 
     return text.strip()
 
-
-def generate_tts_for_row(row, output_dir="sounds", regenerate=False):
-    narrator = get_narrator_from_metadata(row)
-    if not narrator or narrator not in REF_CODES:
+def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
+    # Voice model (race)
+    race = get_narrator_from_metadata(row)
+    if not race or race not in REF_CODES:
         return None
 
-    narrator_dir = os.path.join(output_dir, narrator)
-    os.makedirs(narrator_dir, exist_ok=True)
+    # Speaker identity
+    npc_name = row.get("npc_name") or "narrator"
+    npc_dirname = sanitize_filename(npc_name)
 
-    quest_id = row.get("quest_id") or row.get("npc_id") or 0
-    npc_name = row.get("npc_name") or "unknown"
-    dialog_type = row.get("dialog_type")
-    filename_safe = sanitize_filename(f"{dialog_type}/{npc_name}")+ ".wav"
-    filepath = os.path.join(narrator_dir, filename_safe)
+    dialog_type = row.get("dialog_type", "gossip").lower()
+
+    # Base path: sounds/race/npc_name
+    base_dir = os.path.join(output_dir, race, npc_dirname)
+    os.makedirs(base_dir, exist_ok=True)
+
+    # Filename only (no extra dirs)
+    if dialog_type == "gossip":
+        filename = "gossip.wav"
+    else:
+        quest_id = row.get("quest_id") or row.get("npc_id") or "unknown"
+        filename = f"{quest_id}.wav"
+
+    filepath = os.path.join(base_dir, filename)
 
     if os.path.exists(filepath) and not regenerate:
         print(f"Skipping existing file: {filepath}")
         return filepath
 
-    ref = REF_CODES[narrator]
+    ref = REF_CODES[race]
     text_chunks = chunk_text_robust(row["text"])
     audio_segments = []
 
@@ -245,7 +298,7 @@ def filter_dataframe(df, args):
 # =========================
 # PROCESS DATAFRAME
 # =========================
-def process_dataframe(df, output_dir="sounds"):
+def process_dataframe(df, output_dir="../sounds"):
     """
     Process the dataframe row-by-row, generate TTS files.
     """
@@ -276,12 +329,11 @@ if __name__ == "__main__":
     df = filter_dataframe(df, args)
     df = df.drop_duplicates(subset=["npc_name", "text"])
     df["text"] = df["text"].apply(normalize_dialog_text)
-    print(df.head(10))
 
     for _, row in df.iterrows():
         generate_tts_for_row(
             row,
-            output_dir="sounds",
+            output_dir="../sounds",
             regenerate=args.regenerate
         )
 
