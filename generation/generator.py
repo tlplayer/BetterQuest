@@ -51,62 +51,109 @@ tts = NeuTTSAir(
 # =========================
 
 # Map narrator keys to reference text
-NARRATOR_REFS = {
-    "dwarf": {
-        "audio": "../samples/dwarf/dwarf.wav",
-        "text": "../samples/dwarf/dwarf.txt"
-    },
-    "human": {
-        "audio": "../samples/human/human.wav",
-        "text": "../samples/human/human.txt"
-    },
-    "narrator": {
-        "audio": "../samples/narrator/narrator.wav",
-        "text": "../samples/narrator/narrator.txt"
-    },
-    # Add more narrators as needed
-}
+def discover_narrators(samples_root="../samples"):
+    """
+    Discover narrator reference files from the filesystem.
+    """
+    narrators = {}
 
-# Precompute reference codes
-REF_CODES = {}
-for narrator, paths in NARRATOR_REFS.items():
-    ref_text = open(paths["text"], "r", encoding="utf-8").read().strip()
-    ref_codes = tts.encode_reference(paths["audio"])
-    REF_CODES[narrator] = {"codes": ref_codes, "text": ref_text}
+    for name in os.listdir(samples_root):
+        narrator_dir = os.path.join(samples_root, name)
+        if not os.path.isdir(narrator_dir):
+            continue
+
+        audio_path = os.path.join(narrator_dir, f"{name}.wav")
+        text_path = os.path.join(narrator_dir, f"{name}.txt")
+
+        if os.path.isfile(audio_path) and os.path.isfile(text_path):
+            narrators[name] = {
+                "audio": audio_path,
+                "text": text_path,
+            }
+
+    return narrators
+
+def build_ref_codes(samples_root="../samples"):
+    narrator_refs = discover_narrators(samples_root)
+    ref_codes = {}
+
+    for narrator, paths in narrator_refs.items():
+        with open(paths["text"], "r", encoding="utf-8") as f:
+            ref_text = f.read().strip()
+
+        ref_codes[narrator] = {
+            "codes": tts.encode_reference(paths["audio"]),
+            "text": ref_text,
+        }
+
+    return ref_codes
+
+
+REF_CODES = build_ref_codes("../samples")
+
 
 
 # =========================
 # UTILITY FUNCTIONS
 # =========================
 
-def chunk_text_robust(text, min_sentences=1, max_sentences=3, min_chars=30, max_chars=200):
+
+def chunk_text_robust(text, min_chars=150, max_chars=200):
     """
-    Split text into sentence-based chunks that satisfy both min/max sentences
-    and min/max characters. Combines short sentences and splits long sentences.
+    Split text into TTS-friendly chunks of roughly 150-200 characters.
+    - Uses sentence boundaries: .?!; and ...
+    - Handles final sentence without punctuation
+    - Merges short sentences into previous chunk
+    - Splits overly long sentences
     """
-    sentence_pattern = r'.*?(?:\.\.\.|[.?!;])'
+    if not text:
+        return []
+
+    # 1. Split into sentences (including final sentence without punctuation)
+    sentence_pattern = r'.*?(?:\.\.\.|[.?!;]|$)'
     sentences = [s.strip() for s in re.findall(sentence_pattern, text, flags=re.DOTALL) if s.strip()]
 
-    chunks, current_chunk, current_len = [], [], 0
-    for s in sentences:
-        s_len = len(s)
-        if (len(current_chunk) >= max_sentences or current_len + s_len > max_chars) and current_chunk:
-            chunks.append(" ".join(current_chunk))
-            current_chunk, current_len = [], 0
-        current_chunk.append(s)
-        current_len += s_len
-    if current_chunk:
-        chunks.append(" ".join(current_chunk))
+    chunks = []
+    current_chunk = ""
 
-    # Merge very short chunks with previous
+    for sentence in sentences:
+        # If sentence itself is too long, split by whitespace
+        if len(sentence) > max_chars:
+            words = sentence.split()
+            temp = ""
+            for word in words:
+                if len(temp) + len(word) + 1 > max_chars:
+                    if temp:
+                        chunks.append(temp.strip())
+                    temp = word
+                else:
+                    temp += " " + word if temp else word
+            if temp:
+                sentence = temp
+            else:
+                continue
+
+        # Decide whether to append to current chunk or start new
+        if len(current_chunk) + len(sentence) + 1 > max_chars:
+            if current_chunk:
+                chunks.append(current_chunk.strip())
+            current_chunk = sentence
+        else:
+            current_chunk += " " + sentence if current_chunk else sentence
+
+    if current_chunk:
+        chunks.append(current_chunk.strip())
+
+    # Merge too-short chunks with previous (to satisfy min_chars)
     final_chunks = []
     for chunk in chunks:
-        if final_chunks:
-            if len(chunk) < min_chars or sum(chunk.count(x) for x in ".!?") < min_sentences:
-                final_chunks[-1] += " " + chunk
-                continue
-        final_chunks.append(chunk)
+        if final_chunks and len(chunk) < min_chars:
+            final_chunks[-1] += " " + chunk
+        else:
+            final_chunks.append(chunk)
+
     return final_chunks
+
 
 def get_narrator_from_metadata(row):
     name = row.get("npc_name")
@@ -134,7 +181,6 @@ def sanitize_filename(name: str) -> str:
     name = re.sub(r"[^\w\s-]", "", name)  # remove special characters
     name = re.sub(r"\s+", "_", name)      # replace spaces with underscores
     return name.lower()
-import re
 
 def remove_audio_cues(text: str) -> str:
     """
@@ -233,7 +279,7 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
         filename = "gossip.wav"
     else:
         quest_id = row.get("quest_id") or row.get("npc_id") or "unknown"
-        filename = f"{quest_id}.wav"
+        filename = f"{quest_id}_{dialog_type}.wav"
 
     filepath = os.path.join(base_dir, filename)
 
@@ -248,7 +294,7 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     for chunk in text_chunks:
         wav = tts.infer(chunk, ref["codes"], ref["text"])
         buf = io.BytesIO()
-        sf.write(buf, wav, 24850, format="WAV")
+        sf.write(buf, wav, 25500, format="WAV")
         buf.seek(0)
         audio_segments.append(AudioSegment.from_file(buf, format="wav"))
 

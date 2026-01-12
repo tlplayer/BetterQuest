@@ -4,6 +4,87 @@
 **Status:** Active Development  
 **Target:** Classic WoW (cmangos)
 
+## High Level Design
+
+
+### Extraction Compoennt:
+
+Pulls data from cmangos linking 
+For NPCs
+NPC Name, sex, quests, objectives text, gossip, progress, and completion text 
+as well as model display information for generic NPCs alliance guard could be male, human dwarf etc. 
+
+Optional (will fill in later) race
+
+For items
+item description, item name, 
+
+Example:
+npc_id,npc_name,race_mask,sex,model_id,dialog_type,quest_id,text
+240,Marshal Dughan,,0,1985,gossip,,"Ach, it's hard enough keeping order around here without all these new troubles popping up!  I hope you have good news, $n..."
+item_18708,Petrified Bark,,,,item_text,0,Simone the Seductress:$B$BYou will find Simone befouling Un'Goro Crater. Do not be fooled by her disguise. Approach her with caution and challenge her to battle.
+
+### Processing component
+Using llm roughly fill out missing information in a manner to help assign narrator to generator and lookup in game
+Strings should be easy to combine into the information below and not too much context window 
+
+name:Marshal Dughan
+race: "human"
+sex: "male"
+dialog_type: gossip
+text: "foobar"
+zone: "Elwyn Forest"
+narrator: "default"
+portrait: "human" //optional could be fine tuned/generic at first guard, king, wizard etc. 
+
+name:King of Stormwind
+race: "human"
+sex: "male"
+dialog_type: gossip
+text: "foobar"
+narrator: "sean bean"
+model id or guid if needed
+
+etc.
+
+
+This is also mirrored in lua for in game lookup based on name to find voice file location
+
+### Generator
+
+Objectives:
+- given NPC, generate a voice that is stored in an easily lookable table
+- given cli command, regenerate/generate for the first time based on condition
+- uses neurtts to generate the 
+
+
+Two lua components:
+
+## Voice Over
+
+Config.lua
+Houses all numeric constant values which are magic numbers and should be the source of truth for all 
+variable assignments (numbers,strings, etc)
+
+SoundQueue.lua
+push/pop audio with frame to skip and show mini portrait of speaker
+
+QuestFrame.lua 
+
+Better quest frame with portrait of speaker central, wide, already implemented in better quest text 
+Get voice over and add it to the voice queue
+
+GossipFrame.lua
+Same as questframe but for gossip
+
+Book.lua 
+Same for quest frame but for book/openable quest text
+
+db/*.lua
+lookup tables for name-> portrait, voice over information
+
+BetterQuest.xml stores load order and all files loaded in addon
+
 ---
 
 ## 📋 Quick Reference
