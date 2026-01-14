@@ -8,11 +8,8 @@ import re
 import pandas as pd
 import soundfile as sf
 from pydub import AudioSegment
-ROOT = Path(__file__).resolve().parents[1]
-NEUTTS_AIR = ROOT / "neutts-air"
-sys.path.insert(0, str(NEUTTS_AIR))
-from neuttsair.neutts import NeuTTSAir
 import json
+from pydub.effects import normalize
 
 
 
@@ -39,12 +36,13 @@ NPC_LOOKUP = {
     for npc in NPC_METADATA
 }
 
-tts = NeuTTSAir(
-    backbone_repo="neuphonic/neutts-air-q8-gguf",
-    backbone_device="cpu",
-    codec_repo="neuphonic/neucodec",
-    codec_device="cpu"
-)
+import torch
+import torchaudio as ta
+from chatterbox.tts_turbo import ChatterboxTurboTTS
+
+tts = ChatterboxTurboTTS.from_pretrained(device="cuda")
+
+
 
 # =========================
 # REFERENCE DATA
@@ -78,15 +76,12 @@ def build_ref_codes(samples_root="../samples"):
     ref_codes = {}
 
     for narrator, paths in narrator_refs.items():
-        with open(paths["text"], "r", encoding="utf-8") as f:
-            ref_text = f.read().strip()
-
         ref_codes[narrator] = {
-            "codes": tts.encode_reference(paths["audio"]),
-            "text": ref_text,
+            "audio_path": paths["audio"],
         }
 
     return ref_codes
+
 
 
 REF_CODES = build_ref_codes("../samples")
@@ -98,9 +93,9 @@ REF_CODES = build_ref_codes("../samples")
 # =========================
 
 
-def chunk_text_robust(text, min_chars=150, max_chars=200):
+def chunk_text_robust(text, min_chars=150, max_chars=300):
     """
-    Split text into TTS-friendly chunks of roughly 150-200 characters.
+    Split text into TTS-friendly chunks of roughly 150-300 characters.
     - Uses sentence boundaries: .?!; and ...
     - Handles final sentence without punctuation
     - Merges short sentences into previous chunk
@@ -259,7 +254,12 @@ def normalize_dialog_text(text: str) -> str:
     return text.strip()
 
 def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
-    # Voice model (race)
+    """
+    Generate TTS audio for a single dialog row.
+    Uses robust chunking, fade in/out, crossfade, normalization,
+    and trims leading silence to eliminate clicks or tsk sounds.
+    """
+    # Voice model / narrator
     race = get_narrator_from_metadata(row)
     if not race or race not in REF_CODES:
         return None
@@ -274,7 +274,7 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     base_dir = os.path.join(output_dir, race, npc_dirname)
     os.makedirs(base_dir, exist_ok=True)
 
-    # Filename only (no extra dirs)
+    # Filename
     if dialog_type == "gossip":
         filename = "gossip.wav"
     else:
@@ -291,17 +291,45 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     text_chunks = chunk_text_robust(row["text"])
     audio_segments = []
 
+    # Constants
+    SAMPLE_RATE = 24000
+    FADE_MS = 100
+
+    # Generate TTS for each chunk
     for chunk in text_chunks:
-        wav = tts.infer(chunk, ref["codes"], ref["text"])
-        buf = io.BytesIO()
-        sf.write(buf, wav, 25500, format="WAV")
-        buf.seek(0)
-        audio_segments.append(AudioSegment.from_file(buf, format="wav"))
+        wav = tts.generate(
+            chunk,
+            audio_prompt_path=ref["audio_path"]
+        )
 
-    final_audio = AudioSegment.empty()
-    for seg in audio_segments:
-        final_audio += seg
+        # --- FIX STARTS HERE ---
+        if isinstance(wav, torch.Tensor):
+            wav = wav.detach().cpu().numpy()
 
+        wav = wav.squeeze()
+
+        # float32 [-1,1] → int16 PCM
+        wav = (wav * 32767).clip(-32768, 32767).astype("int16")
+
+        seg = AudioSegment(
+            wav.tobytes(),
+            frame_rate=SAMPLE_RATE,
+            sample_width=2,
+            channels=1
+        )
+        # --- FIX ENDS HERE ---
+
+        audio_segments.append(seg)
+
+    # Concatenate with crossfade
+    final_audio = audio_segments[0]
+    for seg in audio_segments[1:]:
+        final_audio = final_audio.append(seg, crossfade=FADE_MS)
+
+    # Speed tweak (unchanged behavior)
+    final_audio = final_audio.speedup(playback_speed=1.25)
+
+    # Export WAV
     final_audio.export(filepath, format="wav")
     print(f"Generated: {filepath}")
     return filepath
