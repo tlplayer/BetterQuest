@@ -61,12 +61,10 @@ def discover_narrators(samples_root="../samples"):
             continue
 
         audio_path = os.path.join(narrator_dir, f"{name}.wav")
-        text_path = os.path.join(narrator_dir, f"{name}.txt")
 
-        if os.path.isfile(audio_path) and os.path.isfile(text_path):
+        if os.path.isfile(audio_path):
             narrators[name] = {
                 "audio": audio_path,
-                "text": text_path,
             }
 
     return narrators
@@ -161,11 +159,7 @@ def get_narrator_from_metadata(row):
     if narrator in REF_CODES:
         return narrator
 
-    # Fallbacks
-    if meta.get("race") == "human":
-        return "human"
-
-    return "narrator"
+    return None
 
 
 def sanitize_filename(name: str) -> str:
@@ -278,7 +272,7 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     if dialog_type == "gossip":
         filename = "gossip.wav"
     else:
-        quest_id = row.get("quest_id") or row.get("npc_id") or "unknown"
+        quest_id = str(int(quest_idrow.get("quest_id"))) or str(int(row.get("npc_id"))) or "unknown"
         filename = f"{quest_id}_{dialog_type}.wav"
 
     filepath = os.path.join(base_dir, filename)
@@ -322,12 +316,17 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
         audio_segments.append(seg)
 
     # Concatenate with crossfade
+    if len(audio_segments) == 0:
+        log_path = os.path.join(output_dir, "missing_audio.log")
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(f"No audio generated for NPC '{npc_name}', dialog_type '{dialog_type}'\n")
+        print(f"No audio for NPC '{npc_name}', logged to {log_path}")
+        return None
+    
     final_audio = audio_segments[0]
     for seg in audio_segments[1:]:
-        final_audio = final_audio.append(seg, crossfade=FADE_MS)
+        final_audio = final_audio.append(seg)
 
-    # Speed tweak (unchanged behavior)
-    final_audio = final_audio.speedup(playback_speed=1.25)
 
     # Export WAV
     final_audio.export(filepath, format="wav")
