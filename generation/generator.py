@@ -246,92 +246,66 @@ def normalize_dialog_text(text: str) -> str:
     text = re.sub(r"\n{3,}", "\n\n", text)
 
     return text.strip()
-
 def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
-    """
-    Generate TTS audio for a single dialog row.
-    Uses robust chunking, fade in/out, crossfade, normalization,
-    and trims leading silence to eliminate clicks or tsk sounds.
-    """
-    # Voice model / narrator
     race = get_narrator_from_metadata(row)
     if not race or race not in REF_CODES:
         return None
 
-    # Speaker identity
     npc_name = row.get("npc_name") or "narrator"
     npc_dirname = sanitize_filename(npc_name)
-
     dialog_type = row.get("dialog_type", "gossip").lower()
 
-    # Base path: sounds/race/npc_name
     base_dir = os.path.join(output_dir, race, npc_dirname)
     os.makedirs(base_dir, exist_ok=True)
 
-    # Filename
     if dialog_type == "gossip":
         filename = "gossip.wav"
     else:
-        quest_id = str(int(quest_idrow.get("quest_id"))) or str(int(row.get("npc_id"))) or "unknown"
+        quest_id = str(int(row.get("quest_id") or row.get("npc_id") or 0))
         filename = f"{quest_id}_{dialog_type}.wav"
 
     filepath = os.path.join(base_dir, filename)
 
     if os.path.exists(filepath) and not regenerate:
-        print(f"Skipping existing file: {filepath}")
         return filepath
 
     ref = REF_CODES[race]
     text_chunks = chunk_text_robust(row["text"])
-    audio_segments = []
-
-    # Constants
     SAMPLE_RATE = 24000
-    FADE_MS = 100
 
-    # Generate TTS for each chunk
-    for chunk in text_chunks:
-        wav = tts.generate(
-            chunk,
-            audio_prompt_path=ref["audio_path"]
-        )
-
-        # --- FIX STARTS HERE ---
-        if isinstance(wav, torch.Tensor):
-            wav = wav.detach().cpu().numpy()
-
-        wav = wav.squeeze()
-
-        # float32 [-1,1] → int16 PCM
-        wav = (wav * 32767).clip(-32768, 32767).astype("int16")
-
-        seg = AudioSegment(
-            wav.tobytes(),
-            frame_rate=SAMPLE_RATE,
-            sample_width=2,
-            channels=1
-        )
-        # --- FIX ENDS HERE ---
-
-        audio_segments.append(seg)
-
-    # Concatenate with crossfade
-    if len(audio_segments) == 0:
-        log_path = os.path.join(output_dir, "missing_audio.log")
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(f"No audio generated for NPC '{npc_name}', dialog_type '{dialog_type}'\n")
-        print(f"No audio for NPC '{npc_name}', logged to {log_path}")
+    if not text_chunks:
         return None
-    
-    final_audio = audio_segments[0]
-    for seg in audio_segments[1:]:
-        final_audio = final_audio.append(seg)
 
+    with sf.SoundFile(
+        filepath,
+        mode="w",
+        samplerate=SAMPLE_RATE,
+        channels=1,
+        subtype="PCM_16",
+    ) as f, torch.no_grad():
 
-    # Export WAV
-    final_audio.export(filepath, format="wav")
-    print(f"Generated: {filepath}")
+        for chunk in text_chunks:
+            wav = tts.generate(
+                chunk,
+                audio_prompt_path=ref["audio_path"]
+            )
+
+            if isinstance(wav, torch.Tensor):
+                wav = wav.detach().cpu().numpy()
+
+            wav = wav.squeeze()
+
+            # float → int16
+            wav = (wav * 32767).clip(-32768, 32767).astype("int16")
+
+            f.write(wav)
+
+            # HARD MEMORY RELEASE
+            del wav
+            torch.cuda.empty_cache()
+
     return filepath
+
 
 
 def parse_args():

@@ -6,6 +6,34 @@
 
 ## High Level Design
 
+#TODO:
+
+human: done
+dwarf: done
+gnome: done
+night_elf:
+orc: done
+troll:
+tauren:
+undead: done
+goblin: done
+blood_elf:
+high_elf:
+dragon: done
+mechanical:
+spirit: done
+elemental:
+centaur:
+qiraji:
+naga:
+ogre:
+demon: done
+wisp:
+furbolg: []
+animal:
+construct:
+object:
+
 
 ### Extraction Compoennt:
 
