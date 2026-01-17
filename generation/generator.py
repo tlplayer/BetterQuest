@@ -246,6 +246,7 @@ def normalize_dialog_text(text: str) -> str:
     text = re.sub(r"\n{3,}", "\n\n", text)
 
     return text.strip()
+
 def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     race = get_narrator_from_metadata(row)
     if not race or race not in REF_CODES:
@@ -261,9 +262,19 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     if dialog_type == "gossip":
         filename = "gossip.wav"
     else:
-        quest_id = str(int(row.get("quest_id") or row.get("npc_id") or 0))
+        qid = row.get("quest_id")
+        nid = row.get("npc_id")
+
+        if pd.notna(qid):
+            quest_id = str(int(qid))
+        elif pd.notna(nid):
+            quest_id = str(int(nid))
+        else:
+            quest_id = "0"
+
         filename = f"{quest_id}_{dialog_type}.wav"
 
+    print(f"Generating {base_dir}/{filename}")
     filepath = os.path.join(base_dir, filename)
 
     if os.path.exists(filepath) and not regenerate:
