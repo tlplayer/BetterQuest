@@ -13,9 +13,6 @@ from pydub.effects import normalize
 
 
 
-
-
-
 # =========================
 # INITIALIZE TTS
 # =========================
@@ -226,13 +223,13 @@ def normalize_dialog_text(text: str) -> str:
 
     replacements = [
         # Gendered address — consume phrase until punctuation
-        (r"\$(lad|lass)\b[^.?!;\n]*", "hero"),
+        (r"\$(lad|lass)\b[^.?!;\n]*", "adventurer"),
 
         # Player references
-        (r"\$(n|N|r|R|c|C)\b", "hero"),
+        (r"\$(n|N|r|R|c|C)\b", "adventurer"),
 
-        # Gender switch token: $g he:she; etc → hero
-        (r"\$g[^;]*;", "hero"),
+        # Gender switch token: $g he:she; etc → adventurer
+        (r"\$g[^;]*;", "adventurer"),
 
         # Any remaining $tokens (failsafe)
         (r"\$\w+", ""),

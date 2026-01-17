@@ -11,28 +11,34 @@
 human: done
 dwarf: done
 gnome: done
-night_elf:
+night_elf: done
 orc: done
-troll:
-tauren:
+troll: done
+tauren: done
 undead: done
 goblin: done
-blood_elf:
-high_elf:
+blood_elf: done
 dragon: done
-mechanical:
+mechanical: done
 spirit: done
-elemental:
-centaur:
-qiraji:
-naga:
-ogre:
+elemental: done
+centaur: centaur
+qiraji: done
+naga: done
+ogre: done
 demon: done
-wisp:
-furbolg: []
-animal:
-construct:
-object:
+wisp: done
+furbolg: 
+animal: done
+construct: done
+object: done
+
+
+### Gossip Frame
+
+Current issues
+padding between the portrait and the npc icon is too big
+
 
 
 ### Extraction Compoennt:

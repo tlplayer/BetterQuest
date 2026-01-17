@@ -40,10 +40,25 @@ local PORTRAIT_CONFIG = {
   OFFSET_X = 15,
   OFFSET_Y = 50,
 
-  DEFAULT_NPC    = "Interface\\CharacterFrame\\TempPortrait",
+  -- Default fallback
+  DEFAULT_NPC    = "Interface\\AddOns\\BetterQuest\\portraits\\default.tga",
   DEFAULT_BOOK   = "Interface\\Icons\\INV_Misc_Book_09",
   DEFAULT_ITEM   = "Interface\\Icons\\INV_Misc_QuestionMark",
   DEFAULT_OBJECT = "Interface\\Icons\\INV_Misc_Gear_01",
+
+  -- Map portrait keys to actual file paths
+  NPC_PORTRAITS = {
+    ["human_male"]     = "Interface\\AddOns\\BetterQuest\\portraits\\human_male.tga",
+    ["human_female"]   = "Interface\\AddOns\\BetterQuest\\portraits\\human_female.tga",
+    ["dwarf_female"]   = "Interface\\AddOns\\BetterQuest\\portraits\\dwarf_female.png",
+    ["dwarf_male"]     = "Interface\\AddOns\\BetterQuest\\portraits\\dwarf_generic.tga",
+    ["gnome_male"]     = "Interface\\AddOns\\BetterQuest\\portraits\\gnome_male.tga",
+    ["tauren_female"]  = "Interface\\AddOns\\BetterQuest\\portraits\\tauren_female.png",
+    ["troll"]          = "Interface\\AddOns\\BetterQuest\\portraits\\troll.jpg",
+    ["iron_golem"]     = "Interface\\AddOns\\BetterQuest\\portraits\\iron_golem.png",
+    ["default"]        = "Interface\\AddOns\\BetterQuest\\portraits\\default.tga",
+    -- Add more as needed
+  },
 }
 
 -------------------------
@@ -58,10 +73,7 @@ end
 
 local function GetOrCreatePortraitFrame(parentFrame)
   if not parentFrame then return nil end
-
-  if parentFrame.widePortrait then
-    return parentFrame.widePortrait
-  end
+  if parentFrame.widePortrait then return parentFrame.widePortrait end
 
   local portrait = CreateFrame("Frame", nil, parentFrame)
   portrait:SetWidth(PORTRAIT_CONFIG.WIDTH)
@@ -100,56 +112,40 @@ function PortraitManager:ClearActiveNPC()
 end
 
 function PortraitManager:GetNPCInfo()
-  local name =
-    activeNPCName or
-    UnitName("npc") or
-    UnitName("target") or
-    "Unknown"
+    local name = activeNPCName or UnitName("npc") or UnitName("target") or "Unknown"
+    print(name)
+    if !NPC_DATA Then
+      return
+    end
+    local npcData = NPC_DATA[name]
+    print(npcData.race)
 
-  local zone = GetZoneText() or "Unknown"
-  local race = UnitRace("npc") or UnitRace("target") or "Unknown"
-  local sex  = UnitSex("npc") or UnitSex("target") or 2
 
-  return {
-    name = name,
-    zone = zone,
-    race = race,
-    sex  = sex,
-  }
+    return {
+        name     = name,
+        race     = npcData and npcData.race or "unknown",
+        sex      = npcData and npcData.sex or "male",
+        portrait = npcData and npcData.portrait or (npcData and npcData.race or "default"),
+        zone     = npcData and npcData.zone or GetZoneText() or "Unknown",
+        model_id = npcData and npcData.model_id or nil,
+    }
 end
 
 function PortraitManager:FindNPCPortrait()
-  if not PortraitDB then
-    return PORTRAIT_CONFIG.DEFAULT_NPC, "no db"
-  end
-
   local npc = self:GetNPCInfo()
   if not npc then
-    return PortraitDB.default or PORTRAIT_CONFIG.DEFAULT_NPC, "no npc"
+    return
+  end
+  local key = npc.portrait or "default"          -- fallback if nil
+  print(npc.name)
+  print(npc.race)
+  print(npc.sex)
+
+  if key and PORTRAIT_CONFIG.NPC_PORTRAITS[key] then
+    return PORTRAIT_CONFIG.NPC_PORTRAITS[key]
   end
 
-  if PortraitDB.named and PortraitDB.named[npc.name] then
-    return PortraitDB.named[npc.name], "named"
-  end
-
-  if npc.race and PortraitDB.race and PortraitDB.race[npc.race] then
-    local r = PortraitDB.race[npc.race]
-    if type(r) == "table" then
-      if npc.sex == 3 and r.female then
-        return r.female, "race/female"
-      elseif r.male then
-        return r.male, "race/male"
-      end
-    else
-      return r, "race"
-    end
-  end
-
-  if npc.zone and PortraitDB.zone and PortraitDB.zone[npc.zone] then
-    return PortraitDB.zone[npc.zone], "zone"
-  end
-
-  return PortraitDB.default or PORTRAIT_CONFIG.DEFAULT_NPC, "default"
+  return PORTRAIT_CONFIG.DEFAULT_NPC
 end
 
 -------------------------
@@ -162,7 +158,6 @@ function PortraitManager:FindBookPortrait(itemName)
       return BookDB.portraits[itemName]
     end
   end
-
   return PORTRAIT_CONFIG.DEFAULT_BOOK
 end
 

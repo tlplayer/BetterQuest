@@ -4,8 +4,8 @@
     <Script file="Config.lua"/>
 
     <!-- Databases -->
-    <Script file="db/portraitdb.lua"/>
     <Script file="db/modeldb.lua"/>
+    <Script file="db/npc_metadata.lua"/>
     <Script file="db/bookdb.lua"/>
 
     <!-- Core systems -->
