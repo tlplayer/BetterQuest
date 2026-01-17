@@ -3,32 +3,117 @@
 -- SoundQueue-integrated
 -- WoW 1.12.1 compatible
 
+---------------------------------------------------------------------
+-- LAYOUT OVERVIEW (ASCII MAP)
+--
+--  +----------------------------------------------------------+
+--  |                                                          |
+--  |  FRAME                                                   |
+--  |  WIDTH x HEIGHT                                          |
+--  |                                                          |
+--  |  +--------------------+  GAP_FROM_PORTRAIT  +----------+|
+--  |  |                    |<------------------>|          ||
+--  |  |    PORTRAIT        |                    | CONTENT  ||
+--  |  |                    |                    | (SCROLL) ||
+--  |  |  WIDTH x HEIGHT    |                    |          ||
+--  |  |                    |                    |          ||
+--  |  +--------------------+                    +----------+|
+--  |      ^                                         ^        |
+--  |      | PORTRAIT.TOP                            | CONTENT.TOP
+--  |                                                          |
+--  |                                      EXTRA_BOTTOM_RESERVED
+--  |                                      (Blizzard buttons) |
+--  +----------------------------------------------------------+
+--
+-- Horizontal positioning:
+--
+-- FRAME.LEFT
+--   + PORTRAIT.LEFT
+--   + PORTRAIT.WIDTH
+--   + CONTENT.GAP_FROM_PORTRAIT
+--   = CONTENT.LEFT
+--
+---------------------------------------------------------------------
+
 -------------------------
--- CONFIGURATION
+-- CONFIG (AUTHOR INTENT)
 -------------------------
 
-local GOSSIP_CONFIG = {
-    WIDTH = 620,
-    HEIGHT = 350,
+local CONFIG = {
+    FRAME = {
+        WIDTH = 620,     -- overall gossip frame width
+        HEIGHT = 350,    -- overall gossip frame height
+        OFFSET_X = 0,    -- screen center offset X
+        OFFSET_Y = -250, -- screen center offset Y
+    },
 
-    OFFSET_X = 0,
-    OFFSET_Y = -250,
+    PORTRAIT = {
+        WIDTH = 125,     -- portrait frame width
+        HEIGHT = 220,    -- portrait frame height
+        LEFT = 15,       -- distance from frame left edge
+        TOP = 50,        -- distance from frame top edge
+    },
 
-    MARGIN_LEFT = 140,
-    MARGIN_RIGHT = 40,
-    MARGIN_TOP = 40,
-    MARGIN_BOTTOM = 40,
+    CONTENT = {
+        GAP_FROM_PORTRAIT = -10, -- horizontal gap between portrait and text
+        RIGHT = 40,             -- right margin inside frame
+        TOP = 40,               -- top margin inside frame
+        BOTTOM = 40,            -- bottom margin inside frame
+        EXTRA_BOTTOM_RESERVED = 80, -- Blizzard buttons/footer space
+    },
 
-    SCROLLBAR_OFFSET_X = 16,
-    SCROLLBAR_OFFSET_TOP = 16,
-    SCROLLBAR_OFFSET_BOTTOM = 16,
+    BUTTON = {
+        HEIGHT_PADDING = 4, -- extra vertical padding per button
+        TEXT_LEFT = 25,     -- text left inset inside button
+        TEXT_RIGHT = 5,     -- text right inset
+        ICON_LEFT = 3,      -- icon left inset
+    },
+
+    SCROLLBAR = {
+        OFFSET_X = 16,      -- scrollbar horizontal offset
+        OFFSET_TOP = 16,    -- scrollbar top offset
+        OFFSET_BOTTOM = 16,-- scrollbar bottom offset
+    },
 }
 
-local PORTRAIT_CONFIG = {
-    WIDTH = 125,
-    HEIGHT = 220,
-    OFFSET_X = 15,
-    OFFSET_Y = 50,
+-------------------------
+-- DERIVED LAYOUT
+-- (ALL RELATIONSHIPS LIVE HERE)
+-------------------------
+
+local LAYOUT = {
+    FRAME = {
+        WIDTH  = CONFIG.FRAME.WIDTH,
+        HEIGHT = CONFIG.FRAME.HEIGHT,
+    },
+
+    PORTRAIT = {
+        LEFT  = CONFIG.PORTRAIT.LEFT,
+        TOP   = CONFIG.PORTRAIT.TOP,
+        RIGHT = CONFIG.PORTRAIT.LEFT + CONFIG.PORTRAIT.WIDTH,
+    },
+
+    CONTENT = {
+        LEFT =
+            CONFIG.PORTRAIT.LEFT
+            + CONFIG.PORTRAIT.WIDTH
+            + CONFIG.CONTENT.GAP_FROM_PORTRAIT,
+
+        WIDTH =
+            CONFIG.FRAME.WIDTH
+            - (
+                CONFIG.PORTRAIT.LEFT
+                + CONFIG.PORTRAIT.WIDTH
+                + CONFIG.CONTENT.GAP_FROM_PORTRAIT
+              )
+            - CONFIG.CONTENT.RIGHT,
+
+        HEIGHT =
+            CONFIG.FRAME.HEIGHT
+            - CONFIG.CONTENT.TOP
+            - CONFIG.CONTENT.BOTTOM
+            - CONFIG.CONTENT.EXTRA_BOTTOM_RESERVED,
+    },
 }
 
 -------------------------
@@ -39,14 +124,14 @@ local function EnsurePortrait(parent)
     if parent.widePortrait then return parent.widePortrait end
 
     local portrait = CreateFrame("Frame", nil, parent)
-    portrait:SetWidth(PORTRAIT_CONFIG.WIDTH)
-    portrait:SetHeight(PORTRAIT_CONFIG.HEIGHT)
+    portrait:SetWidth(CONFIG.PORTRAIT.WIDTH)
+    portrait:SetHeight(CONFIG.PORTRAIT.HEIGHT)
     portrait:SetPoint(
         "TOPLEFT",
         parent,
         "TOPLEFT",
-        PORTRAIT_CONFIG.OFFSET_X,
-        -PORTRAIT_CONFIG.OFFSET_Y
+        LAYOUT.PORTRAIT.LEFT,
+        -LAYOUT.PORTRAIT.TOP
     )
 
     portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
@@ -93,94 +178,79 @@ local function ApplyGossipLayout()
 
     local backdrop = GetBackdrop()
 
-    GossipFrame:SetWidth(GOSSIP_CONFIG.WIDTH)
-    GossipFrame:SetHeight(GOSSIP_CONFIG.HEIGHT)
+    GossipFrame:SetWidth(LAYOUT.FRAME.WIDTH)
+    GossipFrame:SetHeight(LAYOUT.FRAME.HEIGHT)
     GossipFrame:ClearAllPoints()
     GossipFrame:SetPoint(
         "CENTER",
         UIParent,
         "CENTER",
-        GOSSIP_CONFIG.OFFSET_X,
-        GOSSIP_CONFIG.OFFSET_Y
+        CONFIG.FRAME.OFFSET_X,
+        CONFIG.FRAME.OFFSET_Y
     )
+
 
     UpdateNPCPortrait()
 
-    local contentWidth =
-        GOSSIP_CONFIG.WIDTH -
-        GOSSIP_CONFIG.MARGIN_LEFT -
-        GOSSIP_CONFIG.MARGIN_RIGHT
+    GossipGreetingScrollFrame:ClearAllPoints()
+    GossipGreetingScrollFrame:SetPoint(
+        "TOPLEFT",
+        backdrop,
+        "TOPLEFT",
+        LAYOUT.CONTENT.LEFT,
+        -CONFIG.CONTENT.TOP
+    )
+    GossipGreetingScrollFrame:SetWidth(LAYOUT.CONTENT.WIDTH)
+    GossipGreetingScrollFrame:SetHeight(LAYOUT.CONTENT.HEIGHT)
 
-    local contentHeight =
-        GOSSIP_CONFIG.HEIGHT -
-        GOSSIP_CONFIG.MARGIN_TOP -
-        GOSSIP_CONFIG.MARGIN_BOTTOM -
-        80
+    GossipGreetingScrollChildFrame:SetWidth(LAYOUT.CONTENT.WIDTH)
 
-    if GossipGreetingScrollFrame then
-        GossipGreetingScrollFrame:ClearAllPoints()
-        GossipGreetingScrollFrame:SetPoint(
-            "TOPLEFT",
-            backdrop,
-            "TOPLEFT",
-            GOSSIP_CONFIG.MARGIN_LEFT,
-            -GOSSIP_CONFIG.MARGIN_TOP
-        )
-        GossipGreetingScrollFrame:SetWidth(contentWidth)
-        GossipGreetingScrollFrame:SetHeight(contentHeight)
-    end
-
-    if GossipGreetingScrollChildFrame then
-        GossipGreetingScrollChildFrame:SetWidth(contentWidth)
-    end
-
-    if GossipGreetingScrollFrameScrollBar then
-        GossipGreetingScrollFrameScrollBar:ClearAllPoints()
-        GossipGreetingScrollFrameScrollBar:SetPoint(
-            "TOPRIGHT",
-            GossipGreetingScrollFrame,
-            "TOPRIGHT",
-            GOSSIP_CONFIG.SCROLLBAR_OFFSET_X,
-            -GOSSIP_CONFIG.SCROLLBAR_OFFSET_TOP
-        )
-        GossipGreetingScrollFrameScrollBar:SetPoint(
-            "BOTTOMRIGHT",
-            GossipGreetingScrollFrame,
-            "BOTTOMRIGHT",
-            GOSSIP_CONFIG.SCROLLBAR_OFFSET_X,
-            GOSSIP_CONFIG.SCROLLBAR_OFFSET_BOTTOM
-        )
-    end
+    GossipGreetingScrollFrameScrollBar:ClearAllPoints()
+    GossipGreetingScrollFrameScrollBar:SetPoint(
+        "TOPRIGHT",
+        GossipGreetingScrollFrame,
+        "TOPRIGHT",
+        CONFIG.SCROLLBAR.OFFSET_X,
+        -CONFIG.SCROLLBAR.OFFSET_TOP
+    )
+    GossipGreetingScrollFrameScrollBar:SetPoint(
+        "BOTTOMRIGHT",
+        GossipGreetingScrollFrame,
+        "BOTTOMRIGHT",
+        CONFIG.SCROLLBAR.OFFSET_X,
+        CONFIG.SCROLLBAR.OFFSET_BOTTOM
+    )
 end
 
 -------------------------
 -- BUTTON WIDTH FIX
 -------------------------
 
--- Blizzard only adjusts height; width must be fixed manually
 function GossipResize(titleButton)
     if not titleButton then return end
 
-    local contentWidth =
-        GOSSIP_CONFIG.WIDTH -
-        GOSSIP_CONFIG.MARGIN_LEFT -
-        GOSSIP_CONFIG.MARGIN_RIGHT
-
-    titleButton:SetHeight(titleButton:GetTextHeight() + 4)
-    titleButton:SetWidth(contentWidth)
+    titleButton:SetWidth(LAYOUT.CONTENT.WIDTH)
+    titleButton:SetHeight(
+        titleButton:GetTextHeight()
+        + CONFIG.BUTTON.HEIGHT_PADDING
+    )
 
     local text = getglobal(titleButton:GetName() .. "Text")
     if text then
         text:ClearAllPoints()
-        text:SetPoint("LEFT", titleButton, "LEFT", 25, 0)
-        text:SetWidth(contentWidth - 30)
+        text:SetPoint("LEFT", titleButton, "LEFT", CONFIG.BUTTON.TEXT_LEFT, 0)
+        text:SetWidth(
+            LAYOUT.CONTENT.WIDTH
+            - CONFIG.BUTTON.TEXT_LEFT
+            - CONFIG.BUTTON.TEXT_RIGHT
+        )
         text:SetJustifyH("LEFT")
     end
 
     local icon = getglobal(titleButton:GetName() .. "GossipIcon")
     if icon then
         icon:ClearAllPoints()
-        icon:SetPoint("LEFT", titleButton, "LEFT", 3, 0)
+        icon:SetPoint("LEFT", titleButton, "LEFT", CONFIG.BUTTON.ICON_LEFT, 0)
     end
 end
 
@@ -237,7 +307,6 @@ function GossipFrameUpdate()
         OriginalGossipFrameUpdate()
     end
 
-    -- Delay so Blizzard creates buttons first
     local f = CreateFrame("Frame")
     f:SetScript("OnUpdate", function()
         ApplyGossipLayout()
