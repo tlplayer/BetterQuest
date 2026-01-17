@@ -55,10 +55,10 @@ local CONFIG = {
     },
 
     CONTENT = {
-        GAP_FROM_PORTRAIT = -10, -- horizontal gap between portrait and text
-        RIGHT = 40,             -- right margin inside frame
-        TOP = 40,               -- top margin inside frame
-        BOTTOM = 40,            -- bottom margin inside frame
+        GAP_FROM_PORTRAIT = -10, -- horizontal gap between portrait and content (can be negative)
+        RIGHT = 60,              -- right margin inside frame
+        TOP = 40,                -- top margin inside frame
+        BOTTOM = 40,             -- bottom margin inside frame
         EXTRA_BOTTOM_RESERVED = 80, -- Blizzard buttons/footer space
     },
 
@@ -72,13 +72,12 @@ local CONFIG = {
     SCROLLBAR = {
         OFFSET_X = 16,      -- scrollbar horizontal offset
         OFFSET_TOP = 16,    -- scrollbar top offset
-        OFFSET_BOTTOM = 16,-- scrollbar bottom offset
+        OFFSET_BOTTOM = 16, -- scrollbar bottom offset
     },
 }
 
 -------------------------
 -- DERIVED LAYOUT
--- (ALL RELATIONSHIPS LIVE HERE)
 -------------------------
 
 local LAYOUT = {
@@ -189,37 +188,43 @@ local function ApplyGossipLayout()
         CONFIG.FRAME.OFFSET_Y
     )
 
-
     UpdateNPCPortrait()
 
-    GossipGreetingScrollFrame:ClearAllPoints()
-    GossipGreetingScrollFrame:SetPoint(
-        "TOPLEFT",
-        backdrop,
-        "TOPLEFT",
-        LAYOUT.CONTENT.LEFT,
-        -CONFIG.CONTENT.TOP
-    )
-    GossipGreetingScrollFrame:SetWidth(LAYOUT.CONTENT.WIDTH)
-    GossipGreetingScrollFrame:SetHeight(LAYOUT.CONTENT.HEIGHT)
+    -- Anchor scroll frame and content inside backdrop
+    if GossipGreetingScrollFrame then
+        GossipGreetingScrollFrame:ClearAllPoints()
+        GossipGreetingScrollFrame:SetPoint(
+            "TOPLEFT",
+            backdrop,
+            "TOPLEFT",
+            LAYOUT.CONTENT.LEFT,
+            -CONFIG.CONTENT.TOP
+        )
+        GossipGreetingScrollFrame:SetWidth(LAYOUT.CONTENT.WIDTH)
+        GossipGreetingScrollFrame:SetHeight(LAYOUT.CONTENT.HEIGHT)
+    end
 
-    GossipGreetingScrollChildFrame:SetWidth(LAYOUT.CONTENT.WIDTH)
+    if GossipGreetingScrollChildFrame then
+        GossipGreetingScrollChildFrame:SetWidth(LAYOUT.CONTENT.WIDTH)
+    end
 
-    GossipGreetingScrollFrameScrollBar:ClearAllPoints()
-    GossipGreetingScrollFrameScrollBar:SetPoint(
-        "TOPRIGHT",
-        GossipGreetingScrollFrame,
-        "TOPRIGHT",
-        CONFIG.SCROLLBAR.OFFSET_X,
-        -CONFIG.SCROLLBAR.OFFSET_TOP
-    )
-    GossipGreetingScrollFrameScrollBar:SetPoint(
-        "BOTTOMRIGHT",
-        GossipGreetingScrollFrame,
-        "BOTTOMRIGHT",
-        CONFIG.SCROLLBAR.OFFSET_X,
-        CONFIG.SCROLLBAR.OFFSET_BOTTOM
-    )
+    if GossipGreetingScrollFrameScrollBar then
+        GossipGreetingScrollFrameScrollBar:ClearAllPoints()
+        GossipGreetingScrollFrameScrollBar:SetPoint(
+            "TOPRIGHT",
+            GossipGreetingScrollFrame,
+            "TOPRIGHT",
+            CONFIG.SCROLLBAR.OFFSET_X,
+            -CONFIG.SCROLLBAR.OFFSET_TOP
+        )
+        GossipGreetingScrollFrameScrollBar:SetPoint(
+            "BOTTOMRIGHT",
+            GossipGreetingScrollFrame,
+            "BOTTOMRIGHT",
+            CONFIG.SCROLLBAR.OFFSET_X,
+            CONFIG.SCROLLBAR.OFFSET_BOTTOM
+        )
+    end
 end
 
 -------------------------
