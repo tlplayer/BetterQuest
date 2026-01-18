@@ -4,4 +4,5 @@
 ## Author: Timothy Player 
 ## Version: 1.0
 
+embeds.xml
 BetterQuest.xml

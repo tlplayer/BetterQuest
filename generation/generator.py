@@ -27,11 +27,16 @@ NPC_METADATA_JSON = "../data/npc_metadata.json"
 with open(NPC_METADATA_JSON, "r", encoding="utf-8") as f:
     NPC_METADATA = json.load(f)
 
-# Fast lookup by npc_name
-NPC_LOOKUP = {
-    npc["name"]: npc
-    for npc in NPC_METADATA
-}
+# Normalize metadata to dict[name → meta]
+if isinstance(NPC_METADATA, list):
+    NPC_LOOKUP = {npc["name"]: npc for npc in NPC_METADATA}
+elif isinstance(NPC_METADATA, dict):
+    NPC_LOOKUP = {
+        name: {"name": name, **meta}
+        for name, meta in NPC_METADATA.items()
+    }
+else:
+    raise ValueError("npc_metadata.json has an unsupported format")
 
 import torch
 import torchaudio as ta
@@ -144,19 +149,33 @@ def chunk_text_robust(text, min_chars=150, max_chars=300):
 
     return final_chunks
 
-
 def get_narrator_from_metadata(row):
     name = row.get("npc_name")
     meta = NPC_LOOKUP.get(name)
 
     if not meta:
+        print(f"[SKIP] No metadata for NPC: {name}")
         return None
 
-    narrator = meta.get("narrator")
+    race = meta.get("race")
+    sex = meta.get("sex")
+
+    if not race or not sex:
+        print(f"[SKIP] Missing race/sex for NPC: {name}")
+        return None
+
+    narrator = f"{race}_{sex}".lower()
+
     if narrator in REF_CODES:
         return narrator
 
+    # fallback: race-only narrator (e.g. 'human')
+    if race.lower() in REF_CODES:
+        return race.lower()
+
+    print(f"[SKIP] No voice sample for narrator '{narrator}' ({name})")
     return None
+
 
 
 def sanitize_filename(name: str) -> str:
@@ -247,6 +266,7 @@ def normalize_dialog_text(text: str) -> str:
 def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     race = get_narrator_from_metadata(row)
     if not race or race not in REF_CODES:
+        print(f"[SKIP] No narrator metadata for NPC: {row['npc_name']}")
         return None
 
     npc_name = row.get("npc_name") or "narrator"

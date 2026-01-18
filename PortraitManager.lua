@@ -132,6 +132,9 @@ end
 
 function PortraitManager:FindNPCPortrait()
   local npc = self:GetNPCInfo()
+  if not npc then
+    return
+  end
   local key = npc.portrait or "default"          -- fallback if nil
 
 
@@ -232,6 +235,166 @@ end
 
 function PortraitManager:GetCurrentPortrait()
   return currentPortrait
+end
+-- Utils.lua
+-- Utility functions for sound queue
+
+Utils = {}
+
+-------------------------------------------------
+-- Sound Functions
+-------------------------------------------------
+
+function Utils:IsSoundEnabled()
+    -- Check if master sound is enabled
+    local masterVolume = GetCVar("Sound_MasterVolume")
+    if not masterVolume or tonumber(masterVolume) == 0 then
+        return false
+    end
+    
+    -- Check if dialog/sfx is enabled
+    local sfxVolume = GetCVar("Sound_SFXVolume")
+    if not sfxVolume or tonumber(sfxVolume) == 0 then
+        return false
+    end
+    
+    return true
+end
+
+function Utils:PlaySound(soundData)
+    if not soundData or not soundData.filePath then
+        return false
+    end
+    
+    local success, handle = PlaySoundFile(
+        soundData.filePath,
+        Config.SOUND_CHANNEL or "Dialog"
+    )
+    
+    if success and handle then
+        soundData.handle = handle
+        return true
+    end
+    
+    return false
+end
+
+function Utils:StopSound(soundData)
+    if soundData and soundData.handle then
+        StopSound(soundData.handle)
+        soundData.handle = nil
+    end
+end
+
+-------------------------------------------------
+-- Text Processing
+-------------------------------------------------
+
+function Utils:NormalizeDialogText(text)
+    if not text then return "" end
+    
+    -- Remove WoW tokens
+    text = string.gsub(text, "%$B+", " ")
+    text = string.gsub(text, "%$[nNrRcC]", "adventurer")
+    text = string.gsub(text, "%$g[^;]*;", "adventurer")
+    text = string.gsub(text, "%$%w+", "")
+    
+    -- Remove audio cues
+    text = string.gsub(text, "%b[]", "")
+    text = string.gsub(text, "%b()", "")
+    text = string.gsub(text, "%b<>", "")
+    text = string.gsub(text, "%*[^%*]+%*", "")
+    
+    -- Remove punctuation
+    text = string.gsub(text, "[^%w%s]", "")
+    
+    -- Normalize whitespace
+    text = string.gsub(text, "%s+", " ")
+    text = string.lower(text)
+    text = string.gsub(text, "^%s*(.-)%s*$", "%1")
+    
+    return text
+end
+
+-------------------------------------------------
+-- NPC Functions
+-------------------------------------------------
+
+function Utils:GetNPCName()
+    return  UnitName("npc") or UnitName("target") or "Unknown"
+end
+
+function Utils:GetNPCData(npcName)
+    if not NPC_DATA then
+        return nil
+    end
+    
+    return NPC_DATA[npcName]
+end
+
+-------------------------------------------------
+-- Quest Functions
+-------------------------------------------------
+
+function Utils:GetQuestData()
+    local questTitle = GetTitleText()
+    local questText = GetQuestText()
+    local questID = GetQuestID() -- May not work in 1.12.1
+    
+    return {
+        title = questTitle,
+        text = questText,
+        questID = questID,
+    }
+end
+
+-------------------------------------------------
+-- Gossip Functions
+-------------------------------------------------
+
+function Utils:GetGossipData()
+    local gossipText = GetGossipText()
+    
+    return {
+        text = gossipText,
+    }
+end
+
+-------------------------------------------------
+-- Color Helpers
+-------------------------------------------------
+
+function Utils:ColorizeText(text, colorCode)
+    return colorCode .. text .. "|r"
+end
+
+-------------------------------------------------
+-- Debug
+-------------------------------------------------
+
+function Utils:Debug(msg)
+    if Config and Config.DEBUG then
+        print("|cff88ccff[Utils]|r " .. tostring(msg))
+    end
+end
+
+-------------------------------------------------
+-- Portrait Manager Helper Extension
+-------------------------------------------------
+
+-- Add this helper to PortraitManager if not already present
+if PortraitManager then
+    function PortraitManager:FindNPCPortraitByKey(key)
+        if not key or key == "" then
+            return PORTRAIT_CONFIG.DEFAULT_NPC
+        end
+        
+        if PORTRAIT_CONFIG.NPC_PORTRAITS and PORTRAIT_CONFIG.NPC_PORTRAITS[key] then
+            return PORTRAIT_CONFIG.NPC_PORTRAITS[key]
+        end
+        
+        return PORTRAIT_CONFIG.DEFAULT_NPC
+    end
 end
 
 -------------------------
