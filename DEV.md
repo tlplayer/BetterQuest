@@ -4,6 +4,303 @@
 **Status:** Active Development  
 **Target:** Classic WoW (cmangos)
 
+# BetterQuest Development Guide
+
+## System Overview
+
+BetterQuest is a WoW 1.12.1 (Vanilla) addon that adds voice-over narration and enhanced NPC portraits to quest and gossip dialogs.
+
+---
+
+## Core Components
+
+### 1. **QuestFrame.lua** - Quest Dialog Handler
+**Purpose:** Handles all quest-related UI interactions
+
+**Responsibilities:**
+1. Format quest window layout and styling
+2. Look up NPC portrait and call PortraitManager to display it
+3. Extract NPC name and dialog text
+4. Call SoundQueue to play voice-over audio for quest dialog
+
+**Entry Points:**
+- `QUEST_GREETING` - Quest giver shows available quests
+- `QUEST_DETAIL` - Player views quest details before accepting
+- `QUEST_PROGRESS` - Player returns with incomplete quest
+- `QUEST_COMPLETE` - Player turns in completed quest
+
+---
+
+### 2. **GossipFrame.lua** - Gossip Dialog Handler
+**Purpose:** Handles NPC gossip/conversation UI
+
+**Responsibilities:**
+1. Format gossip window layout and styling
+2. Look up NPC portrait and call PortraitManager to display it
+3. Extract NPC name and gossip text
+4. Call SoundQueue to play voice-over audio for gossip dialog
+
+**Entry Points:**
+- `GOSSIP_SHOW` - NPC gossip window opens
+
+---
+
+### 3. **Book.lua** - Item Dialog Handler
+**Purpose:** Handles readable item/book UI (letters, notes, books)
+
+**Responsibilities:**
+1. Format item reading window layout and styling
+2. Look up NPC portrait (if applicable) and call PortraitManager to display it
+3. Extract item name and text content
+4. Call SoundQueue to play voice-over audio for item text
+
+**Entry Points:**
+- Item use events for readable objects
+
+---
+
+### 4. **PortraitManager.lua** - Portrait Display System
+**Purpose:** Central portrait management and rendering
+
+**Responsibilities:**
+1. Load portrait configuration from `portrait_config.lua`
+2. Map NPC names to portrait file paths
+3. Provide `FindNPCPortraitByKey(npcName)` function
+4. Return portrait texture path or default fallback
+5. Handle missing/invalid portraits gracefully
+
+**Key Function:**
+```lua
+FindNPCPortraitByKey(key) → returns texture path
+```
+
+**Data Sources:**
+- `data/portrait_config.lua` - Portrait file mappings
+- `portraits/` directory - Actual portrait image files
+
+---
+
+### 5. **SoundQueue.lua** - Audio Playback System
+**Purpose:** Manage voice-over audio playback
+
+**Responsibilities:**
+1. Accept `(npcName, dialogText)` from UI handlers
+2. Look up sound file path in `npc_dialog_map.lua`
+3. Play audio file using WoW's `PlaySoundFile()` API
+4. Handle sound not found gracefully (silent fallback)
+5. Manage currently playing sound state
+
+**Key Function:**
+```lua
+AddSound(npcName, dialogText) → looks up and plays sound
+```
+
+**Data Sources:**
+- `data/npc_dialog_map.lua` - Maps (NPC + text) to sound file paths
+- `sounds/` directory - Actual audio files (.ogg format)
+
+**Current Issues (BROKEN):**
+- Sound lookup from `npc_dialog_map.lua` is not functioning
+- Text normalization may not match dictionary keys correctly
+- Sound playback may fail silently
+
+---
+
+## Data Files
+
+### 6. **data/npc_dialog_map.lua**
+**Purpose:** Dictionary mapping dialog to sound files
+
+**Format:**
+```lua
+NPC_DIALOG_MAP = {
+    ["npc_name + normalized_text_hash"] = "sounds/path/to/file.ogg"
+}
+```
+
+**Usage:** SoundQueue uses this to find audio files
+
+---
+
+### 7. **data/npc_data.lua**
+**Purpose:** NPC metadata storage
+
+**Contains:**
+- NPC names
+- Portrait references
+- Quest associations
+- Other NPC-specific data
+
+---
+
+### 8. **data/portrait_config.lua**
+**Purpose:** Portrait file path mappings
+
+**Format:**
+```lua
+PORTRAIT_CONFIG = {
+    NPC_PORTRAITS = {
+        ["npc_key"] = "Interface\\AddOns\\BetterQuest\\portraits\\npc.tga",
+        ...
+    },
+    DEFAULT_NPC = "Interface\\Icons\\INV_Misc_QuestionMark"
+}
+```
+
+---
+
+## System Flow
+
+### Quest Dialog Flow
+1. Player talks to quest NPC
+2. WoW fires `QUEST_DETAIL` event
+3. **QuestFrame.lua** captures event:
+   - Extracts NPC name via `UnitName("npc")`
+   - Extracts quest text via `GetQuestText()`
+   - Calls `PortraitManager:FindNPCPortraitByKey(npcName)`
+   - Displays portrait in UI
+   - Calls `SoundQueue:AddSound(npcName, questText)`
+4. **SoundQueue.lua** processes:
+   - Normalizes dialog text
+   - Looks up `npcName + normalizedText` in `npc_dialog_map.lua`
+   - Plays sound file if found
+
+### Gossip Dialog Flow
+(Same as Quest, but triggered by `GOSSIP_SHOW` event and uses `GetGossipText()`)
+
+### Item Dialog Flow
+(Same pattern, but for readable items)
+
+---
+
+## Simplification Plan
+
+### Problems with Current Architecture
+1. **Utils.lua** - Utility functions scattered, adds complexity
+2. **SoundQueueUI.lua** - UI layer too early, complicates debugging
+3. **VOIntegration.lua** - Extra abstraction layer, not needed
+
+### Recommended Simplification
+
+**SoundQueue.lua should be self-contained:**
+```lua
+-- SoundQueue.lua (simplified)
+SoundQueue = {}
+
+function SoundQueue:AddSound(npcName, dialogText)
+    -- 1. Normalize text
+    local normalizedText = self:NormalizeText(dialogText)
+    
+    -- 2. Create lookup key
+    local key = npcName .. "_" .. normalizedText
+    
+    -- 3. Find sound file in NPC_DIALOG_MAP
+    local soundPath = NPC_DIALOG_MAP[key]
+    
+    -- 4. Play sound if found
+    if soundPath then
+        PlaySoundFile(soundPath, "Dialog")
+    end
+end
+
+function SoundQueue:NormalizeText(text)
+    -- Remove WoW tokens, punctuation, normalize whitespace
+    -- Return lowercase normalized string
+end
+```
+
+**Remove these files:**
+- `Utils.lua` - Move needed functions into SoundQueue
+- `SoundQueueUI.lua` - Add UI later once core works
+- `VOIntegration.lua` - Event handling already in Frame files
+
+---
+
+## Current Status
+
+### Working ✅
+- Quest window formatting
+- Gossip window formatting
+- Portrait display system
+- Portrait file loading
+
+### Broken ❌
+- Sound file lookup in `npc_dialog_map.lua`
+- Audio playback from sound queue
+- Text normalization matching
+
+### Not Implemented ⏸️
+- Sound queue UI
+- Pause/resume functionality
+- Multiple sound queuing
+
+---
+
+## Development Priorities
+
+1. **Fix sound lookup** - Ensure `npc_dialog_map.lua` keys match normalized text
+2. **Simplify SoundQueue** - Remove dependencies on Utils/UI/VOIntegration
+3. **Debug audio playback** - Add logging to track file paths and playback success
+4. **Add UI later** - Once core audio works, add visual queue display
+
+---
+
+## Debugging Tips
+
+### Check if sound files exist:
+```lua
+print("Sound path: " .. soundPath)
+local exists = PlaySoundFile(soundPath, "Dialog")
+print("Play success: " .. tostring(exists))
+```
+
+### Verify npc_dialog_map lookup:
+```lua
+print("Looking up key: " .. key)
+print("Found path: " .. tostring(NPC_DIALOG_MAP[key]))
+```
+
+### Test text normalization:
+```lua
+local original = GetQuestText()
+local normalized = SoundQueue:NormalizeText(original)
+print("Original: " .. original)
+print("Normalized: " .. normalized)
+```
+
+---
+
+## File Structure
+```
+BetterQuest/
+├── BetterQuest.toc          # Addon manifest
+├── BetterQuest.xml          # UI XML definitions
+├── Config.lua               # Addon configuration
+├── QuestFrame.lua           # Quest dialog handler ⭐
+├── GossipFrame.lua          # Gossip dialog handler ⭐
+├── Book.lua                 # Item dialog handler ⭐
+├── PortraitManager.lua      # Portrait system ⭐
+├── SoundQueue.lua           # Audio playback system ⭐
+├── data/
+│   ├── npc_dialog_map.lua   # Sound file lookup table
+│   ├── npc_data.lua         # NPC metadata
+│   └── portrait_config.lua  # Portrait file paths
+├── portraits/               # Portrait images
+└── sounds/                  # Voice-over audio files
+```
+
+⭐ = Core component
+
+---
+
+## Next Steps
+
+1. Simplify `SoundQueue.lua` - remove all dependencies
+2. Add debug logging to track sound lookup
+3. Verify `npc_dialog_map.lua` key format matches normalized text
+4. Test with single NPC/quest to confirm audio plays
+5. Once working, re-add UI components
+
 ## High Level Design
 
 #TODO:

@@ -9,9 +9,6 @@
 
     <!-- Core systems -->
     <Script file="SoundQueue.lua"/>
-    <Script file="Utils.lua"/>
-    <Script file="SoundQueueUI.lua"/>
-    <Script file="VOIntegration.lua"/>
     <Script file="PortraitManager.lua"/>
 
     <!-- UI frames -->
