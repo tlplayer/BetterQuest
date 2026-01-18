@@ -246,18 +246,6 @@ Utils = {}
 -------------------------------------------------
 
 function Utils:IsSoundEnabled()
-    -- Check if master sound is enabled
-    local masterVolume = GetCVar("Sound_MasterVolume")
-    if not masterVolume or tonumber(masterVolume) == 0 then
-        return false
-    end
-    
-    -- Check if dialog/sfx is enabled
-    local sfxVolume = GetCVar("Sound_SFXVolume")
-    if not sfxVolume or tonumber(sfxVolume) == 0 then
-        return false
-    end
-    
     return true
 end
 

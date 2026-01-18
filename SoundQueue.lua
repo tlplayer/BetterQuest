@@ -70,7 +70,6 @@ function SoundQueue:PrepareSound(soundData)
     print(questID)
     
     soundData.filePath = soundPath
-    soundData.fileName = soundPath:match("([^\\]+)$") or "unknown.wav"
     soundData.dialogType = dialogType
     soundData.questID = questID
     
