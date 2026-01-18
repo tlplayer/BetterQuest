@@ -63,6 +63,12 @@ for _, row in df.iterrows():
     else:
         portrait = "default"
 
+    if not sex:
+        sex = "male"
+
+    if not zone:
+        zone = ""
+
     npc_data[name] = {
         "race": race,
         "sex": sex,

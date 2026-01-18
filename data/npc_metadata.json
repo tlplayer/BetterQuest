@@ -11726,7 +11726,7 @@
   },
   "Thurman Schneider": {
     "race": "human",
-    "sex": NaN,
+    "sex": "male",
     "portrait": "human",
     "zone": null,
     "model_id": 221
