@@ -1,7 +1,6 @@
 -- SoundQueue.lua
 -- Responsible for sequential voice-over playback and speaker metadata
 
-local ADDON_NAME = ...
 SoundQueue = {}
 
 -------------------------------------------------
@@ -52,7 +51,7 @@ end
 
 function SoundQueue:PlayNext()
     if self.isPlaying then return end
-    if #self.queue == 0 then
+    if self.queue == 0 then
         self:ClearCurrent()
         return
     end

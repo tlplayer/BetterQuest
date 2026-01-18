@@ -49,8 +49,8 @@ local PORTRAIT_CONFIG = {
   -- Map portrait keys to actual file paths
   NPC_PORTRAITS = {
     ["human_male"]     = "Interface\\AddOns\\BetterQuest\\portraits\\human_male.tga",
-    ["human_female"]   = "Interface\\AddOns\\BetterQuest\\portraits\\human_female.tga",
-    ["dwarf_female"]   = "Interface\\AddOns\\BetterQuest\\portraits\\dwarf_female.png",
+    ["human"]   = "Interface\\AddOns\\BetterQuest\\portraits\\human_female",
+    ["dwarf_female"]   = "Interface\\AddOns\\BetterQuest\\portraits\\dwarf_female.tga",
     ["dwarf_male"]     = "Interface\\AddOns\\BetterQuest\\portraits\\dwarf_generic.tga",
     ["gnome_male"]     = "Interface\\AddOns\\BetterQuest\\portraits\\gnome_male.tga",
     ["tauren_female"]  = "Interface\\AddOns\\BetterQuest\\portraits\\tauren_female.png",
@@ -110,36 +110,30 @@ end
 function PortraitManager:ClearActiveNPC()
   activeNPCName = nil
 end
-
 function PortraitManager:GetNPCInfo()
     local name = activeNPCName or UnitName("npc") or UnitName("target") or "Unknown"
-    print(name)
-    if !NPC_DATA Then
-      return
+    local npcData = NPC_DATA and NPC_DATA[name]
+
+    if not npcData then
+      print("No NPC data found for: " .. name)
+      return nil
     end
-    local npcData = NPC_DATA[name]
-    print(npcData.race)
 
 
     return {
         name     = name,
-        race     = npcData and npcData.race or "unknown",
-        sex      = npcData and npcData.sex or "male",
-        portrait = npcData and npcData.portrait or (npcData and npcData.race or "default"),
-        zone     = npcData and npcData.zone or GetZoneText() or "Unknown",
-        model_id = npcData and npcData.model_id or nil,
+        race     = npcData.race or "unknown",
+        sex      = npcData.sex or "male",
+        portrait = npcData.portrait or npcData.race or "default",
+        zone     = npcData.zone or GetZoneText() or "Unknown",
+        model_id = npcData.model_id,
     }
 end
 
 function PortraitManager:FindNPCPortrait()
   local npc = self:GetNPCInfo()
-  if not npc then
-    return
-  end
   local key = npc.portrait or "default"          -- fallback if nil
-  print(npc.name)
-  print(npc.race)
-  print(npc.sex)
+
 
   if key and PORTRAIT_CONFIG.NPC_PORTRAITS[key] then
     return PORTRAIT_CONFIG.NPC_PORTRAITS[key]
@@ -165,40 +159,55 @@ end
 -- DISPLAY
 -------------------------
 
-function PortraitManager:SetPortrait(parentFrame, portraitType, customTexture)
-  local portrait = GetOrCreatePortraitFrame(parentFrame)
-  if not portrait then return false end
+function PortraitManager:SetPortrait(parentFrame, portraitType)
+    local portrait = GetOrCreatePortraitFrame(parentFrame)
+    if not portrait then return false end
+    
+    local texturePath
+    
+    if portraitType == self.Type.NPC then
+        texturePath = self:FindNPCPortrait()
+    elseif portraitType == self.Type.BOOK then
+        texturePath = PORTRAIT_CONFIG.DEFAULT_BOOK
+    elseif portraitType == self.Type.ITEM then
+        texturePath = PORTRAIT_CONFIG.DEFAULT_ITEM
+    elseif portraitType == self.Type.OBJECT then
+        texturePath = PORTRAIT_CONFIG.DEFAULT_OBJECT
+    else
+        texturePath = PORTRAIT_CONFIG.DEFAULT_NPC
+    end
+    
+    
+    -- SetTexture doesn't return a useful value in 1.12.1
+    portrait.texture:SetTexture(texturePath)
+    
+    -- Instead of checking GetTexture(), verify the path exists
+    if not texturePath or texturePath == "" then
+        print("Invalid texture path, using default")
+        portrait.texture:SetTexture(PORTRAIT_CONFIG.DEFAULT_NPC)
+    end
+    
+    portrait.texture:SetTexture(texturePath)
+    
+    
+    -- Wrap Show() in pcall to catch errors
+    local success, err = pcall(function()
+        portrait:Show()
+    end)
+    
+    if not success then
+        print("ERROR showing portrait: " .. tostring(err))
+        return false
+    end
+    
+    
+    currentPortrait.type = portraitType
+    currentPortrait.texture = texturePath
+    currentPortrait.frame = parentFrame
 
-  local texturePath
-
-  if customTexture then
-    texturePath = customTexture
-  elseif portraitType == self.Type.NPC then
-    texturePath = self:FindNPCPortrait()
-  elseif portraitType == self.Type.BOOK then
-    texturePath = PORTRAIT_CONFIG.DEFAULT_BOOK
-  elseif portraitType == self.Type.ITEM then
-    texturePath = PORTRAIT_CONFIG.DEFAULT_ITEM
-  elseif portraitType == self.Type.OBJECT then
-    texturePath = PORTRAIT_CONFIG.DEFAULT_OBJECT
-  else
-    texturePath = PORTRAIT_CONFIG.DEFAULT_NPC
-  end
-
-  portrait.texture:SetTexture(texturePath)
-
-  if not portrait.texture:GetTexture() then
-    portrait.texture:SetTexture(PORTRAIT_CONFIG.DEFAULT_NPC)
-  end
-
-  portrait:Show()
-
-  currentPortrait.type = portraitType
-  currentPortrait.texture = texturePath
-  currentPortrait.frame = parentFrame
-
-  DebugLog("Portrait set: " .. portraitType)
-  return true
+portrait.texture:SetTexture(texturePath)
+    
+    return true
 end
 
 function PortraitManager:UpdateNPCPortrait(parentFrame)

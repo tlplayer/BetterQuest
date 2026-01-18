@@ -2,3 +2,9 @@
 
 
 This addon assumes and requires PFUI https://github.com/shagu/pfUI
+
+
+To make portraits from images run this in portraits dir:
+```sh
+for file in *.tga; do     ffmpeg -i "$file" -c:v targa -pix_fmt bgr24 -y "temp_$file";     mv "temp_$file" "$file";     echo "Fixed: $file"; done
+```
