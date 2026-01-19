@@ -1,12 +1,17 @@
 import pandas as pd
 import json
 import re
+import wave
+import contextlib
 from pathlib import Path
 
 # ---------- Configuration ----------
 CSV_PATH = "../data/all_npc_dialog.csv"
 NPC_METADATA_JSON = "../data/npc_metadata.json"
 OUTPUT_LUA = "../db/npc_dialog_map.lua"
+
+# Script runs from: Interface/AddOns/BetterQuest/extraction/
+# Sounds live in:   Interface/AddOns/BetterQuest/sounds/
 
 # ---------- Helpers ----------
 def normalize_name(name):
@@ -42,53 +47,68 @@ def create_text_hash(text: str) -> str:
     normalized = normalize_text_for_matching(text)
     return normalized[:50] if normalized else ""
 
+# ---------- Path + audio helpers ----------
+def sound_path_to_fs(sound_path: str) -> Path | None:
+    """
+    Converts:
+      Interface\\AddOns\\BetterQuest\\sounds\\human\\npc\\file.wav
+    To:
+      ../sounds/human/npc/file.wav
+    """
+    parts = sound_path.split("BetterQuest\\", 1)
+    if len(parts) != 2:
+        return None
+    return Path("..") / parts[1].replace("\\", "/")
+
+def get_wav_duration_seconds(path: Path) -> float | None:
+    try:
+        with contextlib.closing(wave.open(str(path), "rb")) as wf:
+            return round(wf.getnframes() / wf.getframerate(), 3)
+    except Exception:
+        return None
+
 # ---------- Load NPC metadata ----------
 with open(NPC_METADATA_JSON, "r", encoding="utf-8") as f:
     npc_metadata = json.load(f)
 
-# Build narrator lookup (RACE + SEX)
 npc_to_narrator = {}
 for npc_name, data in npc_metadata.items():
     race = data.get("race")
-    sex  = data.get("sex")  # "male" / "female"
+    sex = data.get("sex")
 
     if not race:
         continue
 
-    if sex == "female":
-        narrator = f"{race}_female"
-    else:
-        narrator = race
-
+    narrator = f"{race}_female" if sex == "female" else race
     npc_to_narrator[npc_name] = narrator
 
 # ---------- Load CSV ----------
 df = pd.read_csv(CSV_PATH)
 df = df[df["text"].notna()]
 
-# ---------- Merge all item_text per item ----------
+# ---------- Merge item_text blocks ----------
 item_text_rows = df[df["dialog_type"].str.lower() == "item_text"]
 merged_rows = []
-
 seen_text_blocks = set()
-for item_id, group in item_text_rows.groupby("npc_id"):
-    merged_texts = []
+
+for _, group in item_text_rows.groupby("npc_id"):
+    merged = []
     for text in group["text"]:
         if text not in seen_text_blocks:
-            merged_texts.append(text)
+            merged.append(text)
             seen_text_blocks.add(text)
-    if not merged_texts:
+
+    if not merged:
         continue
-    merged_text = " ".join(merged_texts).strip()
+
     row = group.iloc[0].copy()
-    row["text"] = merged_text
+    row["text"] = " ".join(merged).strip()
     merged_rows.append(row)
 
-# Remove original item_text rows
 df = df[df["dialog_type"].str.lower() != "item_text"]
-# Add merged rows
 if merged_rows:
     df = pd.concat([df, pd.DataFrame(merged_rows)], ignore_index=True)
+
 # ---------- Build dialog map ----------
 dialog_map = {}
 
@@ -97,33 +117,48 @@ for _, row in df.iterrows():
     if not npc_name:
         continue
 
-    # Use the text name as NPC for books/items
-    narrator = npc_to_narrator.get(npc_name, "narrator")  # fallback narrator
-
+    narrator = npc_to_narrator.get(npc_name, "narrator")
     npc_dirname = sanitize_filename(npc_name)
     dialog_type = str(row.get("dialog_type", "gossip")).lower()
     text = row.get("text", "")
 
     if dialog_type == "gossip":
-        filename = "gossip.wav"
         quest_id = None
-        sound_path = f"Interface\\AddOns\\BetterQuest\\sounds\\{narrator}\\{npc_dirname}\\{filename}"
+        sound_path = (
+            f"Interface\\AddOns\\BetterQuest\\sounds\\"
+            f"{narrator}\\{npc_dirname}\\gossip.wav"
+        )
+
     elif dialog_type == "item_text":
-        # For item_text/books, point directly to the TTS file we generated
-        filename = f"{npc_dirname}.wav"   # <-- matches generator: senirs_report.wav
-        sound_path = f"Interface\\AddOns\\BetterQuest\\sounds\\narrator\\{filename}"
         quest_id = None
+        sound_path = (
+            f"Interface\\AddOns\\BetterQuest\\sounds\\narrator\\"
+            f"{npc_dirname}.wav"
+        )
+
     else:
         qid = row.get("quest_id")
         nid = row.get("npc_id")
+
         if pd.notna(qid):
-            quest_id = str(int(qid))
+            quest_id = int(qid)
         elif pd.notna(nid):
-            quest_id = str(int(nid))
+            quest_id = int(nid)
         else:
-            quest_id = "0"
-        filename = f"{quest_id}_{dialog_type}.wav"
-        sound_path = f"Interface\\AddOns\\BetterQuest\\sounds\\{narrator}\\{npc_dirname}\\{filename}"
+            quest_id = 0
+
+        sound_path = (
+            f"Interface\\AddOns\\BetterQuest\\sounds\\"
+            f"{narrator}\\{npc_dirname}\\{quest_id}_{dialog_type}.wav"
+        )
+
+    fs_path = sound_path_to_fs(sound_path)
+    if not fs_path or not fs_path.exists():
+        continue
+
+    seconds = get_wav_duration_seconds(fs_path)
+    if seconds is None:
+        continue
 
     text_hash = create_text_hash(text)
     if not text_hash:
@@ -132,9 +167,9 @@ for _, row in df.iterrows():
     dialog_map.setdefault(npc_name, {})[text_hash] = {
         "path": sound_path,
         "dialog_type": dialog_type,
-        "quest_id": quest_id
+        "quest_id": quest_id,
+        "seconds": seconds,
     }
-
 
 # ---------- Write Lua ----------
 with open(OUTPUT_LUA, "w", encoding="utf-8") as f:
@@ -146,12 +181,15 @@ with open(OUTPUT_LUA, "w", encoding="utf-8") as f:
         f.write(f'  ["{npc_name}"] = {{\n')
         for text_hash, info in sorted(entries.items()):
             path = info["path"].replace("\\", "\\\\")
-            dialog_type = info["dialog_type"]
-            quest_id = info["quest_id"] if info["quest_id"] else "nil"
+            quest_id = info["quest_id"] if info["quest_id"] is not None else "nil"
 
             f.write(
                 f'    ["{text_hash}"] = {{ '
-                f'path="{path}", dialog_type="{dialog_type}", quest_id={quest_id} }},\n'
+                f'path="{path}", '
+                f'dialog_type="{info["dialog_type"]}", '
+                f'quest_id={quest_id}, '
+                f'seconds={info["seconds"]} '
+                f'}},\n'
             )
         f.write("  },\n")
 
@@ -183,7 +221,7 @@ function FindDialogSound(npcName, dialogText)
 
   local entry = npc[key]
   if entry then
-    return entry.path, entry.dialog_type, entry.quest_id
+    return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
   end
 end
 """)
