@@ -109,7 +109,6 @@ end)
 --------------------------------------------------
 local function PlayBookVoiceFromTooltip()
 
-    PlaySoundFile("Interface\\AddOns\\BetterQuest\\sounds\\narrator\\berards_journal.wav")
     if not ItemTextFrame or not ItemTextFrame:IsShown() then return end
 
     -- Get the book/note title
