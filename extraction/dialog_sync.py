@@ -1,6 +1,7 @@
 import pandas as pd
 import json
 import re
+from pathlib import Path
 
 # ---------- Configuration ----------
 CSV_PATH = "../data/all_npc_dialog.csv"
@@ -45,7 +46,7 @@ def create_text_hash(text: str) -> str:
 with open(NPC_METADATA_JSON, "r", encoding="utf-8") as f:
     npc_metadata = json.load(f)
 
-# ---------- Build narrator lookup (RACE + SEX) ----------
+# Build narrator lookup (RACE + SEX)
 npc_to_narrator = {}
 for npc_name, data in npc_metadata.items():
     race = data.get("race")
@@ -61,10 +62,34 @@ for npc_name, data in npc_metadata.items():
 
     npc_to_narrator[npc_name] = narrator
 
-# ---------- Build dialog map ----------
+# ---------- Load CSV ----------
 df = pd.read_csv(CSV_PATH)
 df = df[df["text"].notna()]
 
+# ---------- Merge all item_text per item ----------
+item_text_rows = df[df["dialog_type"].str.lower() == "item_text"]
+merged_rows = []
+
+seen_text_blocks = set()
+for item_id, group in item_text_rows.groupby("npc_id"):
+    merged_texts = []
+    for text in group["text"]:
+        if text not in seen_text_blocks:
+            merged_texts.append(text)
+            seen_text_blocks.add(text)
+    if not merged_texts:
+        continue
+    merged_text = " ".join(merged_texts).strip()
+    row = group.iloc[0].copy()
+    row["text"] = merged_text
+    merged_rows.append(row)
+
+# Remove original item_text rows
+df = df[df["dialog_type"].str.lower() != "item_text"]
+# Add merged rows
+if merged_rows:
+    df = pd.concat([df, pd.DataFrame(merged_rows)], ignore_index=True)
+# ---------- Build dialog map ----------
 dialog_map = {}
 
 for _, row in df.iterrows():
@@ -72,9 +97,8 @@ for _, row in df.iterrows():
     if not npc_name:
         continue
 
-    narrator = npc_to_narrator.get(npc_name)
-    if not narrator:
-        continue
+    # Use the text name as NPC for books/items
+    narrator = npc_to_narrator.get(npc_name, "narrator")  # fallback narrator
 
     npc_dirname = sanitize_filename(npc_name)
     dialog_type = str(row.get("dialog_type", "gossip")).lower()
@@ -83,23 +107,23 @@ for _, row in df.iterrows():
     if dialog_type == "gossip":
         filename = "gossip.wav"
         quest_id = None
+        sound_path = f"Interface\\AddOns\\BetterQuest\\sounds\\{narrator}\\{npc_dirname}\\{filename}"
+    elif dialog_type == "item_text":
+        # For item_text/books, point directly to the TTS file we generated
+        filename = f"{npc_dirname}.wav"   # <-- matches generator: senirs_report.wav
+        sound_path = f"Interface\\AddOns\\BetterQuest\\sounds\\narrator\\{filename}"
+        quest_id = None
     else:
         qid = row.get("quest_id")
         nid = row.get("npc_id")
-
         if pd.notna(qid):
             quest_id = str(int(qid))
         elif pd.notna(nid):
             quest_id = str(int(nid))
         else:
             quest_id = "0"
-
         filename = f"{quest_id}_{dialog_type}.wav"
-
-    sound_path = (
-        f"Interface\\AddOns\\BetterQuest\\sounds\\"
-        f"{narrator}\\{npc_dirname}\\{filename}"
-    )
+        sound_path = f"Interface\\AddOns\\BetterQuest\\sounds\\{narrator}\\{npc_dirname}\\{filename}"
 
     text_hash = create_text_hash(text)
     if not text_hash:
@@ -110,6 +134,7 @@ for _, row in df.iterrows():
         "dialog_type": dialog_type,
         "quest_id": quest_id
     }
+
 
 # ---------- Write Lua ----------
 with open(OUTPUT_LUA, "w", encoding="utf-8") as f:

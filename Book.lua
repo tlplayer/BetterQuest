@@ -105,6 +105,59 @@ eventFrame:SetScript("OnEvent", function()
 end)
 
 --------------------------------------------------
+-- PLAY BOOK VOICE (WITH DEBUG)
+--------------------------------------------------
+local function PlayBookVoiceFromTooltip()
+    if not GameTooltip then return end
+    if not ItemTextFrame or not ItemTextFrame:IsShown() then return end
+
+    -- Get the book/note title
+    local title = ItemTextTitleText:GetText()
+    if not title or title == "" then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r No title found")
+        return
+    end
+
+    DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r Book title: " .. title)
+
+    -- Get the text of the book/note
+    local text = ItemTextGetText()
+    if not text or text == "" then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r No text in ItemTextGetText()")
+        return
+    end
+
+    local key = NormalizeDialogText(text)
+    DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r Normalized key: " .. key)
+
+    -- Use the title as the NPC/Item key
+    local npcEntry = NPC_DIALOG_MAP[title]
+    if not npcEntry then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r No NPC_DIALOG_MAP entry for: " .. title)
+        return
+    end
+
+    local entry = npcEntry[key]
+    if entry then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r Found entry! Path: " .. entry.path)
+        if SoundQueue then
+            SoundQueue:AddSound(title, text, title)
+        else
+            PlaySoundFile(entry.path, "Master")
+        end
+    else
+        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r No matching entry for normalized key")
+    end
+end
+
+-- Hook to ITEM_TEXT_READY
+local bookEventFrame = CreateFrame("Frame")
+bookEventFrame:RegisterEvent("ITEM_TEXT_READY")
+bookEventFrame:SetScript("OnEvent", function()
+    PlayBookVoiceFromTooltip()
+end)
+
+--------------------------------------------------
 -- ONSHOW HOOK
 --------------------------------------------------
 
