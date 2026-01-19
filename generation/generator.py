@@ -280,26 +280,35 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
         return None
 
     npc_name = row.get("npc_name") or "narrator"
-    npc_dirname = sanitize_filename(npc_name)
     dialog_type = row.get("dialog_type", "gossip").lower()
 
-    base_dir = os.path.join(output_dir, race, npc_dirname)
-    os.makedirs(base_dir, exist_ok=True)
+    # ✅ BOOKS
+    if dialog_type in ("book", "item_text"):
+        base_dir = os.path.join(output_dir, race)
+        os.makedirs(base_dir, exist_ok=True)
+        filename = f"{sanitize_filename(npc_name)}.wav"
 
-    if dialog_type == "gossip":
-        filename = "gossip.wav"
+    # ---------- NPCs ----------
     else:
-        qid = row.get("quest_id")
-        nid = row.get("npc_id")
+        npc_dirname = sanitize_filename(npc_name)
+        base_dir = os.path.join(output_dir, race, npc_dirname)
+        os.makedirs(base_dir, exist_ok=True)
 
-        if pd.notna(qid):
-            quest_id = str(int(qid))
-        elif pd.notna(nid):
-            quest_id = str(int(nid))
+        if dialog_type == "gossip":
+            filename = "gossip.wav"
         else:
-            quest_id = "0"
+            qid = row.get("quest_id")
+            nid = row.get("npc_id")
 
-        filename = f"{quest_id}_{dialog_type}.wav"
+            if pd.notna(qid):
+                quest_id = str(int(qid))
+            elif pd.notna(nid):
+                quest_id = str(int(nid))
+            else:
+                quest_id = "0"
+
+            filename = f"{quest_id}_{dialog_type}.wav"
+
 
     print(f"Generating {base_dir}/{filename}")
     filepath = os.path.join(base_dir, filename)
@@ -383,6 +392,46 @@ def filter_dataframe(df, args):
 # =========================
 # PROCESS DATAFRAME
 # =========================
+
+# df = original dataframe loaded from CSV
+# Only merge item_text rows
+def merge_item_text_rows(df):
+    # Only keep item_text rows
+    item_rows = df[df["dialog_type"].str.lower() == "item_text"]
+
+    merged_rows = []
+    seen_text_blocks = set()
+
+    # Group by item ID (or item_name if available)
+    for item_id, group in item_rows.groupby("npc_id"):
+        merged_texts = []
+        for text in group["text"]:
+            # Deduplicate exact repeated blocks
+            if text not in seen_text_blocks:
+                merged_texts.append(text)
+                seen_text_blocks.add(text)
+
+        if not merged_texts:
+            continue
+
+        # Merge into a single block, first-come-first-serve
+        merged_text = " ".join(merged_texts).strip()
+
+        # Create a single row representing the entire book/item_text
+        row = group.iloc[0].copy()
+        row["text"] = merged_text
+        merged_rows.append(row)
+
+    # Remove the original item_text rows from df
+    df = df[df["dialog_type"].str.lower() != "item_text"]
+
+    # Append merged rows
+    if merged_rows:
+        df = pd.concat([df, pd.DataFrame(merged_rows)], ignore_index=True)
+
+    return df
+
+
 def process_dataframe(df, output_dir="../sounds"):
     """
     Process the dataframe row-by-row, generate TTS files.
@@ -414,6 +463,7 @@ if __name__ == "__main__":
     df = filter_dataframe(df, args)
     df = df.drop_duplicates(subset=["npc_name", "text"])
     df["text"] = df["text"].apply(normalize_dialog_text)
+    df = merge_item_text_rows(df)
 
     for _, row in df.iterrows():
         generate_tts_for_row(

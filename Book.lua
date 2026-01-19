@@ -16,11 +16,11 @@ local BOOK_TEXT_CONFIG = {
     OFFSET_Y = -60,
 
     MARGIN_LEFT   = 30,
-    MARGIN_RIGHT  = 30,
+    MARGIN_RIGHT  = 50,
     MARGIN_TOP    = 40,
-    MARGIN_BOTTOM = 40,
+    MARGIN_BOTTOM = 120,
 
-    TEXT_RIGHT_PADDING = 20,
+    TEXT_RIGHT_PADDING = 40,
 }
 
 --------------------------------------------------
