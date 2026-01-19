@@ -1550,8 +1550,8 @@ NPC_DIALOG_MAP = {
     ["long has it been since you were last tested advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\beram_skychaser\\1523_quest_accept.wav", dialog_type="quest_accept", quest_id=1523 },
     ["what you got for me adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\beram_skychaser\\8410_quest_progress.wav", dialog_type="quest_progress", quest_id=8410 },
   },
-  ["Berards Journal"] = {
-    ["through study of various fossilized creatures i ha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\narrator\\berards_journal.wav", dialog_type="item_text", quest_id=nil },
+  ["Berard's Journal"] = {
+    ["through study of various fossilized creatures i ha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\narrator\\berards_journal.wav", dialog_type="item_text", quest_id=1 },
   },
   ["Bethaine Flinthammer"] = {
     ["greetings adventurer i can assist you in recoverin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\bethaine_flinthammer\\gossip.wav", dialog_type="gossip", quest_id=nil },
