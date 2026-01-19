@@ -148,8 +148,18 @@ def chunk_text_robust(text, min_chars=150, max_chars=300):
             final_chunks.append(chunk)
 
     return final_chunks
-
 def get_narrator_from_metadata(row):
+    dialog_type = str(row.get("dialog_type", "")).lower()
+
+    # ✅ BOOKS / ITEM TEXT
+    if dialog_type in ("book", "item_text"):
+        # must exist in ../samples/narrator/narrator.wav
+        if "narrator" in REF_CODES:
+            return "narrator"
+        print("[SKIP] No narrator voice sample found")
+        return None
+
+    # ---------- existing NPC logic ----------
     name = row.get("npc_name")
     meta = NPC_LOOKUP.get(name)
 
@@ -169,12 +179,12 @@ def get_narrator_from_metadata(row):
     if narrator in REF_CODES:
         return narrator
 
-    # fallback: race-only narrator (e.g. 'human')
     if race.lower() in REF_CODES:
         return race.lower()
 
     print(f"[SKIP] No voice sample for narrator '{narrator}' ({name})")
     return None
+
 
 
 
