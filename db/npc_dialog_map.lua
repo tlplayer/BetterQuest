@@ -6307,8 +6307,19 @@ function NormalizeDialogText(text)
   return string.sub(text, 1, 50)
 end
 
+local function NormalizeNPCName(name)
+  if not name then return nil end
+  name = string.gsub(name, "['’]", "")
+  return name
+end
+
 function FindDialogSound(npcName, dialogText)
-  local npc = NPC_DIALOG_MAP[npcName]
+  if not npcName or not dialogText then return nil end
+
+  -- Normalize NPC name for map lookup
+  local lookupName = NormalizeNPCName(npcName)
+
+  local npc = NPC_DIALOG_MAP[lookupName]
   if not npc then return nil end
 
   local key = NormalizeDialogText(dialogText)
