@@ -67,8 +67,8 @@ function SoundQueue:FindSound(npcName, dialogText)
     end
     
     Debug("Calling FindDialogSound...")
-    local soundPath, dialogType, questID = FindDialogSound(npcName, dialogText)
-    
+    local soundPath, dialogType, questID, seconds = FindDialogSound(npcName, dialogText)    
+
     Debug("Result: path=" .. tostring(soundPath) .. ", type=" .. tostring(dialogType) .. ", qid=" .. tostring(questID))
     
     if not soundPath then
@@ -76,7 +76,7 @@ function SoundQueue:FindSound(npcName, dialogText)
         return nil
     end
     
-    return soundPath, dialogType, questID
+    return soundPath, dialogType, questID, seconds
 end
 
 -------------------------------------------------
@@ -89,7 +89,7 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     Debug("NPC: " .. tostring(npcName))
     Debug("Title: " .. tostring(title))
     
-    local soundPath, dialogType, questID = self:FindSound(npcName, dialogText)
+    local soundPath, dialogType, questID,seconds = self:FindSound(npcName, dialogText)
     
     if not soundPath then
         Debug("FindSound returned nil, aborting")
@@ -104,6 +104,7 @@ function SoundQueue:AddSound(npcName, dialogText, title)
         filePath = soundPath,
         dialogType = dialogType,
         questID = questID,
+        duration  = seconds or 15,  -- fallback safety
     }
     
     Debug("soundData.filePath = " .. soundData.filePath)
@@ -165,13 +166,12 @@ function SoundQueue:PlaySound(soundData)
     Debug("PlaySoundFile called (no return value checked)")
     
     soundData.startTime = GetTime()
-    soundData.duration = 15 -- Default duration in seconds
     
     self.currentSound = soundData
     self.isPlaying = true
     
     Debug("Set as current sound")
-    Debug("Duration: 15 seconds")
+    Debug("Duration seconds:" .. tostring(soundData.duration))
     Debug("NPC: " .. soundData.npcName)
     
     -- Start timer to auto-advance queue

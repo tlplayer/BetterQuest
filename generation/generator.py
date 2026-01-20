@@ -161,6 +161,7 @@ def get_narrator_from_metadata(row):
 
     # ---------- existing NPC logic ----------
     name = row.get("npc_name")
+    name = string.gsub(name, "['’]", "")
     meta = NPC_LOOKUP.get(name)
 
     if not meta:

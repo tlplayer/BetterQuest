@@ -198,6 +198,7 @@ with open(OUTPUT_LUA, "w", encoding="utf-8") as f:
     f.write("""
 function NormalizeDialogText(text)
   if not text then return "" end
+
   text = string.gsub(text, "%$B+", " ")
   text = string.gsub(text, "%$[nNrRcC]", "adventurer")
   text = string.gsub(text, "%$g[^;]*;", "adventurer")
@@ -208,7 +209,14 @@ function NormalizeDialogText(text)
   text = string.gsub(text, "%*[^%*]+%*", "")
   text = string.gsub(text, "[^%w%s]", "")
   text = string.gsub(text, "%s+", " ")
+
+  -- TRIM (this was missing)
+  text = string.gsub(text, "^%s+", "")
+  text = string.gsub(text, "%s+$", "")
+
   text = string.lower(text)
+
+  -- BYTE-BASED slice (matches Lua reality)
   return string.sub(text, 1, 50)
 end
 
@@ -221,20 +229,32 @@ end
 function FindDialogSound(npcName, dialogText)
   if not npcName or not dialogText then return nil end
 
-  -- Normalize NPC name for map lookup
   local lookupName = NormalizeNPCName(npcName)
-
-  local npc = NPC_DIALOG_MAP[lookupName]
-  if not npc then return nil end
-
   local key = NormalizeDialogText(dialogText)
   if key == "" then return nil end
 
-  local entry = npc[key]
-  if entry then
+  -- 1) Normal lookup (expected case)
+  local npc = NPC_DIALOG_MAP[lookupName]
+  if npc and npc[key] then
+    local entry = npc[key]
     return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
   end
+
+  -- 2) Fallback: search all NPCs by text hash
+  for otherNpcName, entries in pairs(NPC_DIALOG_MAP) do
+    local entry = entries[key]
+    if entry then
+      DEFAULT_CHAT_FRAME:AddMessage(
+        "|cffff8800[SoundQueue]|r NPC mismatch: '" ..
+        lookupName .. "' → '" .. otherNpcName .. "'"
+      )
+      return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+    end
+  end
+
+  return nil
 end
+
 """)
 
 print(f"Generated dialog map for {len(dialog_map)} NPCs")
