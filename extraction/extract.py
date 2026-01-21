@@ -64,7 +64,50 @@ def extract_all_dialog():
     npc_meta = {r["npc_id"]: r for r in cursor.fetchall()}
 
     # -------------------------------------------------
-    # GOSSIP TEXT (npc_text)
+    # BROADCAST TEXT (via gossip_menu)
+    # -------------------------------------------------
+
+    cursor.execute("""
+        SELECT DISTINCT
+            ct.Entry AS npc_id,
+            bt.Text AS text
+        FROM creature_template ct
+        JOIN gossip_menu gm
+            ON gm.entry = ct.GossipMenuId
+        JOIN npc_text_broadcast_text ntbt
+            ON ntbt.Id = gm.text_id
+        JOIN broadcast_text bt
+            ON bt.Id IN (
+                ntbt.BroadcastTextId0,
+                ntbt.BroadcastTextId1,
+                ntbt.BroadcastTextId2,
+                ntbt.BroadcastTextId3,
+                ntbt.BroadcastTextId4,
+                ntbt.BroadcastTextId5,
+                ntbt.BroadcastTextId6,
+                ntbt.BroadcastTextId7
+            )
+        WHERE bt.Text IS NOT NULL 
+            AND bt.Text != ''
+            AND bt.Id > 0
+    """)
+
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        if npc and non_empty(row["text"]):
+            rows.append({
+                "npc_id": npc["npc_id"],
+                "npc_name": npc["npc_name"],
+                "race_mask": npc["race_mask"],
+                "sex": npc["sex"],
+                "model_id": npc["model_id"],
+                "dialog_type": "gossip_broadcast",
+                "quest_id": None,
+                "text": row["text"].strip(),
+            })
+
+    # -------------------------------------------------
+    # GOSSIP TEXT (npc_text - legacy format)
     # -------------------------------------------------
 
     cursor.execute("""
@@ -107,7 +150,7 @@ def extract_all_dialog():
         SELECT
             cqr.id       AS npc_id,
             qt.entry     AS quest_id,
-            qt.title as title,
+            qt.title     AS title,
             qt.Details,
             qt.RequestItemsText
         FROM creature_questrelation cqr
@@ -123,7 +166,6 @@ def extract_all_dialog():
         if non_empty(row["Details"]):
             rows.append({
                 "npc_id": npc["npc_id"],
-                "title": row["title"],
                 "npc_name": npc["npc_name"],
                 "race_mask": npc["race_mask"],
                 "sex": npc["sex"],
@@ -136,7 +178,6 @@ def extract_all_dialog():
         if non_empty(row["RequestItemsText"]):
             rows.append({
                 "npc_id": npc["npc_id"],
-                "title": row["title"],
                 "npc_name": npc["npc_name"],
                 "race_mask": npc["race_mask"],
                 "sex": npc["sex"],
@@ -153,7 +194,6 @@ def extract_all_dialog():
     cursor.execute("""
         SELECT
             cir.id       AS npc_id,
-            qt.title as title,
             qt.entry     AS quest_id,
             qt.OfferRewardText
         FROM creature_involvedrelation cir
@@ -182,7 +222,6 @@ def extract_all_dialog():
     cursor.execute("""
         SELECT
             cqr.id       AS npc_id,
-            qt.title as title,
             qt.entry     AS quest_id,
             qt.Objectives
         FROM creature_questrelation cqr
@@ -206,13 +245,46 @@ def extract_all_dialog():
             })
 
     # -------------------------------------------------
+    # OBJECT TEXT (plaques, graves, books on the ground etc)
+    # -------------------------------------------------
+
+    cursor.execute("""
+        SELECT
+            got.entry AS go_id,
+            got.name  AS go_name,
+            got.data0 AS page_id
+        FROM gameobject_template got
+        WHERE got.type = 9
+        AND got.data0 IS NOT NULL
+    """)
+
+    gameobjects = cursor.fetchall()
+
+    # page_text lookup (reuse existing dict)
+    cursor.execute("SELECT entry, text, next_page FROM page_text")
+    page_dict = {r["entry"]: r for r in cursor.fetchall()}
+
+    for go in gameobjects:
+        page_id = go["page_id"]
+        while page_id and page_id in page_dict:
+            page = page_dict[page_id]
+            if non_empty(page["text"]):
+                rows.append({
+                    "npc_id": f"go_{go['go_id']}",
+                    "npc_name": go["go_name"],
+                    "race_mask": None,
+                    "sex": None,
+                    "model_id": None,
+                    "dialog_type": "item_text",
+                    "quest_id": None,
+                    "text": page["text"].strip(),
+                })
+            page_id = page["next_page"] if page["next_page"] != 0 else None
+
+    # -------------------------------------------------
     # ITEM TEXT (letters, books, quest items)
     # -------------------------------------------------
-    """
-    Extract text from readable items (PageText), including multi-page content.
-    Treats the item as a pseudo-NPC for dialog purposes.
-    """
-    # Step 1: get all items with PageText
+
     cursor.execute("""
         SELECT
             it.entry AS item_id,
@@ -225,11 +297,6 @@ def extract_all_dialog():
 
     items = cursor.fetchall()
 
-    # Step 2: fetch all page_text into a dict for quick lookup
-    cursor.execute("SELECT entry, text, next_page FROM page_text")
-    page_dict = {r["entry"]: r for r in cursor.fetchall()}
-
-    # Step 3: iterate items and follow page chains
     for item in items:
         page_id = item["page_id"]
         while page_id and page_id in page_dict:
@@ -237,12 +304,13 @@ def extract_all_dialog():
             text = page["text"]
             if non_empty(text):
                 rows.append({
-                    "npc_id": f"item_{item['item_id']}",  # pseudo-NPC ID
+                    "npc_id": f"item_{item['item_id']}",
                     "npc_name": item["item_name"],
                     "race_mask": None,
                     "sex": None,
+                    "model_id": None,
                     "dialog_type": "item_text",
-                    "quest_id": item["quest_id"],  # optional quest started by item
+                    "quest_id": item["quest_id"],
                     "text": text.strip(),
                 })
             page_id = page["next_page"] if page["next_page"] != 0 else None
@@ -267,6 +335,30 @@ def extract_all_dialog():
                 "sex": npc["sex"],
                 "model_id": npc["model_id"],
                 "dialog_type": "quest_greeting",
+                "quest_id": None,
+                "text": row["text"].strip(),
+            })
+
+    # -------------------------------------------------
+    # TRAINER GREETINGS
+    # -------------------------------------------------
+    cursor.execute("""
+        SELECT
+            Entry AS npc_id,
+            Text  AS text
+        FROM trainer_greeting
+    """)
+
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        if npc and non_empty(row["text"]):
+            rows.append({
+                "npc_id": npc["npc_id"],
+                "npc_name": npc["npc_name"],
+                "race_mask": npc["race_mask"],
+                "sex": npc["sex"],
+                "model_id": npc["model_id"],
+                "dialog_type": "trainer_greeting",
                 "quest_id": None,
                 "text": row["text"].strip(),
             })
