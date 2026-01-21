@@ -93,7 +93,7 @@ REF_CODES = build_ref_codes("../samples")
 # =========================
 
 
-def chunk_text_robust(text, min_chars=150, max_chars=300):
+def chunk_text_robust(text, min_chars=200, max_chars=300):
     """
     Split text into TTS-friendly chunks of roughly 150-300 characters.
     - Uses sentence boundaries: .?!; and ...
