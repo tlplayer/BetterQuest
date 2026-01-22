@@ -1,6 +1,175 @@
-bloodelf:
+
+animal:
+- Chicken
+- Mist
+- Precious
+- Tamed Kodo
+- Tooga
+
+blood_elf:
+- Captain Thalo'thas Brightsun
 - Lady Sylvanas Windrunner
+
+
+centaur:
+- Centaur Pariah
+- Zaetar's Spirit
+
+child:
+- Billy Maclure
+- Human Orphan
+- Orcish Orphan
+
+construct:
+- Cracked Necrotic Crystal
+- Faint Necrotic Crystal
+- Fishbot 5000
+- Homing Robot OOX-09/HL
+- Homing Robot OOX-17/TN
+- Homing Robot OOX-22/FE
+- Lore Keeper of Norgannon
+- Stone Watcher of Norgannon
+- Vendor-Tron 1000
+- Wrenix's Gizmotronic Apparatus
+
+demon:
+- Lord Banehollow
+- Varimathras
+
+dragon:
+- Anachronos
+- Azuregos
+- Cyrus Therepentous
+- Emberstrife
+- Itharius
+- Lord Arkkoroc
+- Vaelastrasz the Corrupt
+
+elemental:
+- Duke Hydraxis
+- Hydraxian Honor Guard
+- Minor Manifestation of Earth
+- Minor Manifestation of Water
+- Rockbiter
+
+furbolg:
+- Grazle
+- Gorn One Eye
+- Kernda
+- Meilosh
+- Salfa
+
+human:
+- Aurora Skycaller
+- Baron Longshore
+- Bloodmage Drazial
+- Bloodmage Lynnore
+- Boyle
+- Braelyn Firehand
+- Captain Grayson
+- Captain Hecklebury Smotts
+- Dadanga
+- Fiora Longears
+- Fleet Master Firallon
+- Gilthares Firebough
+- Gilveradin Sunchaser
+- Grizzle Halfmane
+- Jesper
+- Lorax
+- Lothos Riftwaker
+- Mathredis Firestar
+- Pamela Redpath
+- Red Jack Flint
+- Rethiel the Greenwarden
+- Sanath Lim-yo
+- Sayge
+- Scholomance Student
+- Shakes O'Breen
+- Stanley
+- The Abominable Greench
+- Thomas
+- Thurman Schneider
+- Vectus
+
+mechanical:
+- A-Me 01
+
+naga:
+- Sah'rhee
+
+
+
+object:
+- Flik's Frog
+- Metzen the Reindeer
+- Strange Snowman
+- Winter Reveler
+
+ogre:
+- Cho'Rush the Observer
+- Gordok Brute
+- Gordok Bushwacker
+- Gordok Captain
+- Gordok Mage-Lord
+- Gordok Reaver
+- Gordok Warlock
+- Stomper Kreeg
+
+orc:
+- Bragok
+- Captain Kromcrush
+- Draz'Zilb
+- Garek
+- Krolg
+- Mangletooth
+- Miblon Snarltooth
+- Mudcrush Durtfeet
+- Ogron
+- Overlord Mok'Morokk
+- Tharg
+- Warug
+
+qiraji:
+- Kum'isha the Collector
+
+spirit:
+- Ancient Equine Spirit
+- Darkreaver's Fallen Charger
+- Dreadsteed Spirit
+- Forest Wisp
+- Great Bear Spirit
+- Hastat the Ancient
+- Lunaclaw Spirit
+- Nightmare
+- Screecher Spirit
+- Spirit of Azuregos
+- Spirit of Lord Valthalak
+- Stoma the Ancient
+- Tarindrella
+- Vartrus the Ancient
+
+tauren:
+- Do'gol
+- Earthcaller Franzahl
+- Magtoor
+- Onu
+- Tsunaman
+- Uthek the Wise
+- Warosh
+
+
+
+undead:
+- Aelthalyste
+- Algernon
+- Ambassador Ardalan
+- Blind Mary
+- Guard Fengus
+- Guard Mol'dar
+- Guard Slip'kik
+- Undercity Guardian
 dwarf:
+- Ironbark the Redeemed
 - Advisor Belgrum
 - Aedis Brom
 - Agnar Beastamer
@@ -365,6 +534,9 @@ dwarf:
 - Yori Crackhelm
 - Yorus Barleybrew
 gnome:
+- Hilary
+- Mizzle the Crafty
+- Shawn
 - Alamar Grimm
 - Andi Lynn
 - Andorgos
@@ -480,6 +652,7 @@ gnome:
 - Wizzle Brassbolts
 - Yebb Neblegear
 goblin:
+- Impsy
 - Alchemist Pestlezugg
 - Azzleby
 - Baron Revilgaz
@@ -1124,6 +1297,30 @@ human:
 - Zaldimar Wefhellt
 - Zardeth of the Black Claw
 nightelf:
+- Anilia
+- Cavindra
+- Celebras the Redeemed
+- Deathly Usher
+- Elsharin
+- Haleh
+- Illiyana
+- Johnny McWeaksauce
+- Kaelystia Hatebringer
+- Keeper Albagorm
+- Keeper Marandis
+- Keeper Remulos
+- Lolo the Lookout
+- Melisara
+- Meridith the Mermaiden
+- Nafien
+- Old Ironbark
+- Remorseful Highborne
+- Selendra
+- Shael'dryn
+- Sharlindra
+- Therylune
+- Therysil
+- Vyrin Swiftwind
 - Aayndia Floralwind
 - Aendel Windspear
 - Aethalas
@@ -1954,7 +2151,7 @@ orc:
 - Zor Lonetree
 - Zudd
 - Zureetha Fargaze
-scourge:
+undead:
 - Abigail Sawyer
 - Acolyte Wytula
 - Adrian Bartlett
@@ -2511,6 +2708,27 @@ tauren:
 - Zangen Stonehoof
 - Zarlman Two-Moons
 troll:
+- Awbee
+- Burth
+- Flik
+- Gordo
+- Gryfe
+- Jeziba
+- Jin'rokh the Breaker
+- Kwee Q. Peddlefeet
+- Lard
+- Mistress Nagmara
+- Myrokos Silentform
+- Ogtinc
+- Phalanx
+- Pusillin
+- Raze
+- Slave Worker
+- Spoops
+- Torta
+- Umpi
+- Vi'el
+- Zggi
 - Al'tabim the All-Seeing
 - Argent Outfitter
 - Argent Quartermaster Hasana
