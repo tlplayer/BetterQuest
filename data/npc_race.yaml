@@ -1,2805 +1,1888 @@
 # WoW Classic NPC Race Mapping
 # Format: race: [list of NPC names]
 
-human:
-- Master Craftsman Omarion
-- Gwennyth BlyLeggonde
-- Korfax, Champion of the Light
-- Kwee Q. Peddlefeet
-- Master Sergeant Maclure
-- Nat Pagle
-- Ravenholdt Assassin
-- Ravenholdt Guard
-- Razzeric
-- Sage Truthseeker
-- Talvash del Kissel
-- Willix the Importer
-- Aldris Fourclouds
-- Billibub Cogspinner
+bloodelf:
+- Anthion Harmon
+- Apothecary Jezel
+- Arch Druid Renferal
+- Argent Emissary
+- Argent Medic
+- Artilleryman Sheldonore
+- Awenasa
+- Azj'Tordin
+- Azuregos
+- Azzleby
+- Baritanas Skyriver
+- Bibbly F'utzbuckle
+- Bodley
+- Caer Darrow Guardsman
+- Caer Darrow Horseman
+- Captain Kromcrush
+- Cenarion Emissary Blackhoof
+- Cenarion Scout Azenel
+- Cenarion Scout Jalia
+- Cenarion Scout Landion
+- Cho'Rush the Observer
+- Chronos
 - Commander Duffy
-- Doctor Draxlegauge
-- Elenia Haydon
-- Erma
-- Felix Whindlebolt
+- Commander Louis Philips
+- Commander Mulfort
+- Corporal Carnes
+- Corporal Noreg Stormpike
+- Daio the Decrepit
+- Darkreaver's Fallen Charger
+- Darnassus Commendation Officer
+- Darnassus Sentinel
+- Draz'Zilb
+- Druid of the Grove
+- Elder Bellowrage
+- Elder Bladeleaf
+- Elder Bladesing
+- Elder Bladeswift
+- Elder Bloodhoof
+- Elder Brightspear
+- Elder Darkcore
+- Elder Darkhorn
+- Elder Dawnstrider
+- Elder Dreamseer
+- Elder Goldwell
+- Elder High Mountain
+- Elder Ironband
+- Elder Meadowrun
+- Elder Silvervein
+- Elder Skygleam
+- Elder Snowcrown
+- Elder Starglade
+- Elder Windrun
+- Elder Windtotem
 - Felnok Steelspring
-- Felzerul
-- Festival Flamekeeper
-- Festival Loremaster
-- Festival Talespinner
-- Field Marshal Snowfall
-- Fimble Finespindle
-- First Mate Crazz
-- First Mate Nilzlix
-- Fleet Master Firallon
-- General Kirika
-- Gnoarn
+- Flik
+- Frostwolf Quartermaster
+- Frostwolf Stable Master
+- Frostwolf Wolf Rider Commander
+- Gnomeregan Commendation Officer
+- Gordok Captain
+- Gordok Mage-Lord
+- Gorzeeki Wildeyes
 - Great-father Winter
 - Greatfather Winter
-- Gryan Stoutmantle
-- Hgarth
-- High Explorer Magellas
-- High Priestess Laurena
-- High Priestess MacDonnell
-- High Sorcerer Andromath
-- Innkeeper Kauth
-- Innkeeper Keldamyr
-- Innkeeper Pala
+- Greshka
+- Grish Longrunner
+- Guard Fengus
+- Guard Mol'dar
+- Guard Slip'kik
+- Gurda Ragescar
+- Gyll
+- Hansel Heavyhands
+- Harlo Wigglesworth
+- Hastat the Ancient
+- Illiyana Moonblaze
+- Innkeeper Abeqwa
+- Innkeeper Vizzie
+- Ironforge Commendation Officer
+- Ivy Leafrunner
 - Janela Stouthammer
-- Jennea Cannon
-- Jenova Stoneshield
-- Jaron Stoneshaper
-- Javnir Nashak
-- Juli Stormkettle
-- Kara Deepwater
-- Karl Boran
-- Katoom the Angler
-- Kaymard Copperpinch
+- Jareth Wildwoods
+- Je'neu Sancrea
+- Jessica Redpath
+- Jeziba
+- Jinar'Zillen
+- Kali Remik
 - Keeper of the Rolls
 - Kelek Skykeeper
-- Kibler
-- Killium Bouldertoe
+- Kerri Hicks
+- Khur Hornstriker
 - Kirsta Deepshadow
-- Korfax Champion of the Light
-- Lars
+- Kum'isha the Collector
+- Kuray'bin
+- Lady Sylvanas Windrunner
 - Lavinia Crowe
-- Laziphus
-- Lexlort
-- Lieutenant Beitha
-- Lieutenant Dagel
-- Lieutenant Lisande
-- Lohatu
-- Lolo the Lookout
-- Loramus Thalipedes
+- Lieutenant General Andorov
+- Locke Okarr
 - Lorax
-- Lorekeeper Javon
-- Lorekeeper Mykos
-- Lothos Riftwaker
-- Magus Tirth
-- Magus Wordeen Voidglare
-- Mazen MacNadir
-- Merrin Rockweaver
-- Midsummer Celebrant
+- Lunar Festival Emissary
+- Lunar Festival Harbinger
+- Lunar Festival Herald
+- Macey Jinglepocket
+- Maethrya
+- Magtoor
+- Marukai
+- Master Engineer Zinfizzlex
+- Master Smith Burninate
+- Mastok Wrilehiss
+- Maur Grimtotem
+- Miblon Snarltooth
+- Minor Manifestation of Earth
 - Mistina Steelshield
-- Mistress Nagmara
-- Morgonus
-- Motley Garmason
-- Mudcrush Durtfeet
-- Muiredon Battleforge
-- Myranda the Hag
-- Nardstrum Copperpinch
+- Mitsuwa
+- Mor'vek
+- Mor'zul Bloodbringer
+- Muglash
+- Myriam Moonsinger
+- Nataka Longhorn
 - Niby the Almighty
-- Nori Pridedrift
-- Pretty Boy Duncan
-- Priestess Josetta
-- Privateer Groy
-- Rhag Garmason
-- Shakes OBreen
-- Shaky Phillipe
-- Shanda
-- Senior Sergeant Taiga
-- Senior Sergeant Tkelah
-- Shoni the Shilent
-- Shreev
-- Sir S. J. Erlgadin
-- Sirra VonIndi
-- Sister Aquinne
-- Slicky Gastronome
-- Smith Argus
+- Officer Areyn
+- Olivia Burnside
+- Orcish Orphan
+- Orgrimmar Commendation Officer
+- Overseer Oilfist
+- Packmaster Stonebruiser
+- Primalist Thurloga
+- Prospector Stonehewer
+- Rexxar
+- Rifleman Torrig
+- Rigger Gizelton
+- Sah'rhee
+- Sarin Starlight
+- Seeker Thompson
+- Seersa Copperpinch
+- Selendra
+- Sentinel Aynasha
+- Sergeant Ba'sha
+- Sergeant Carnes
+- Sergeant Durgen Stormpike
+- Spoops
+- Stoma the Ancient
 - Stomper Kreeg
-- Strange Snowman
-- Swamp Eye Jarl
+- Stormpike Quartermaster
+- Stormpike Stable Master
+- Stormwind Commendation Officer
 - Syndicate Master Ryson
-- Tapoke Slim Jahn
-- Tavernkeep Smitts
-- Temma of the Wells
-- Thadius Grimshade
-- Thalia Amberhide
-- Tharek Blackstone
-- The Defias Traitor
-- Theldurin the Lost
-- Theodore Mont Claire
-- Thurman Schneider
-- Thurston Xane
-- Tymor
-- Ulaelek
-- Ursyn Ghull
-- Verna Furlbrow
-- Vesprystus
-- Vinchaxa
-- Vizzklick
-- Vorrel Sengutz
-- Vosur Brakthel
+- Talendria
+- Taskmaster Scrange
+- The Abominable Greench
+- Thunder Bluff Commendation Officer
+- Thunder Bluff Reveler
+- Ulathek
+- Valadar Starsong
+- Varimathras
+- Vartrus the Ancient
+- Whulwert Copperpinch
+- Willow
 - Wing Commander Guse
 - Wing Commander Ichman
+- Winter Reveler
+- Wonderform Operator
+- Wulmort Jinglepocket
+- Wynd Nightchaser
+- Yugrek
+broken:
+- Derotain Mudsipper
+- Dreadsteed Spirit
+- Glordrum Steelbeard
+- Lokhtos Darkbargainer
+- Lunaclaw Spirit
+- Meggi Peppinrocker
+- Scout Manslayer
+- Scout Stronghand
+- Sergeant Umala
+- Shen'dralar Zealot
+- Thief Catcher Shadowdelve
+- Torek
+- Zorbin Fandazzle
+draenei:
+- Andi Lynn
+- Anilia
+- Ansekhwa
+- Archibald
+- Argent Recruiter
+- Artist Renfray
+- Bounty Hunter Kolark
+- Buliwyf Stonehand
+- Bunthen Plainswind
+- Claire Willower
+- Cork Gizelton
+- Darkspear Commendation Officer
+- Drulzegar Skraghook
+- Elder Mistwalker
+- Elder Skychaser
+- Elder Skyseer
+- Elder Splitrock
+- Elder Starsong
+- Evonice Sootsmoker
+- Foreman Thazz'ril
+- Gnomeregan Commendation Officer
+- Goli Krumn
+- Great Bear Spirit
+- Gringer
+- Guchie Jinglepocket
+- High Priest Thel'danis
+- Hin Denburg
+- Huntress Leafrunner
+- Huntress Ravenoak
+- Kandrostrasz
+- Keeper Remulos
+- Kelly Grant
+- Khole Jinglepocket
+- Kil'Hiwana
+- Krug Skullsplit
+- Kwee Q. Peddlefeet
+- Lieutenant Haggerdin
+- Loganaar
+- Lui'Mala
+- Magga
+- Maggran Earthbinder
+- Mai'Lahii
+- Malux
+- Malvor
+- Master Craftsman Omarion
+- Melizza Brimbuzzle
+- Melnan Darkstone
+- Merissa Stilwell
+- Merok Longstride
+- Myranda the Hag
+- Narain Soothfancy
+- Nat Pagle
+- Officer Ironbeard
+- Officer Lunalight
+- Officer Maloof
+- Officer Thunderstrider
+- Officer Vu'Shalay
+- Orenthil Whisperwind
+- Overlord Mok'Morokk
+- Prince Tortheldrin
+- Rabine Saturna
+- Rinling
+- Shadow Priestess Shai
+- Shardi
+- Shen'dralar Zealot
+- Silva Fil'naveth
+- Squire Rowe
+- Taiga Wisemane
+- Tajarri
+- Tharl Stonebleeder
+- Thunder Bluff Reveler
+- Umber
+- Vorn Skyseer
+- Warsong Outrider
+- Warsong Scout
 - Wing Commander Jeztor
 - Wing Commander Mulverick
 - Wing Commander Slidore
 - Wing Commander Vipore
-- Wrenix the Wretched
-- Wu Shen
-- Wulmort Jinglepocket
-- Wynne Larson
-- Xantish
-- Xento
-- Xizk Goodstitch
-- Xorjuul
-- Ysida Harmon
-- Yvette Farthing
-- Zaldimar Wefhellt
-- Zamael Lunthistle
-- Zardeth of the Black Claw
-- Zarrin
-- Zendojian
-- Zenn Foulhoof
-- Zilzibin Drumlore
-- Zorbin Fandazzle
-- Aayndia Floralwind
-- Adjutant Tesoran
-- Alanna Raveneye
-- Alanndarian Nightsong
-- Alchemist Pestlezugg
-- Alyissia
-- Angelas Moonbreeze
-- Anishar
-- Annora
-- Antarius
-- Apprentice Kryten
-- Arathandris Silversky
-- Arcanist Nozzlespring
-- Argos Nightwhisper
-- Artist Renfray
-- Astarii Starseeker
-- Asterion
-- Athridas Bearmantle
-- Auntie Bernice Stonefield
-- Aurius
-- Ayanna Everstride
-- Azzleby
-- Baelog
-- Balir Frosthammer
-- Barnil Stonepot
-- Beetix Ficklespragg
-- Betina Bigglezink
-- Bibbly Futzbuckle
-- Bingles Blastenheimer
-- Bluff Runner Windstrider
-- Bluffwatcher
-- Bodley
-- Branstock Khalder
-- Briarthorn
-- Brine
-- Bulrug
-- Cain Firesong
-- Calandrath
-- Calor
-- Captain Danuvin
-- Captain Stoutfist
-- Captured Arkonarin
-- Caryssia Moonhunter
-- Cenarion Emissary Jademoon
-- Cerellean Whiteclaw
-- Clarise Gnarltree
-- Cook Torka
-- Corithras Moonrage
-- Crane Operator Bigglefuzz
-- Dadanga
-- Dannie Fizzwizzle
-- Darnath Bladesinger
-- Daryn Lightwind
-- Dazalar
-- Deek Fizzlebizz
-- Delgren the Purifier
-- Deliana
-- Denalan
-- Denatharion
-- Dendrite Starblaze
-- Dirania Silvershine
-- Dirk Thunderwood
-- Dispatch Commander Metz
-- Doras
-- Dorion
-- Drusilla La Salle
-- Elania Haydon
-- \"Auntie\" Bernice Stonefield
-- \"Pretty Boy\" Duncan
-- \"Sea Wolf\" MacKinley
-- \"Shaky\" Phillipe
-- \"Stinky\" Ignatz
-- \"Swamp Eye\" Jarl
-- Abercrombie
-- Acolyte Dellis
-- Adele Fielder
-- Agent Kearnen
-- Ageron Kargal
+- Wizzlecrank's Shredder
+- Yori Crackhelm
+- Zaetar's Spirit
+dwarf:
+- Advisor Belgrum
 - Ajeck Rouack
-- Alamar Grimm
 - Alchemist Arbington
-- Alchemist Mallory
-- Alessandro Luca
-- Alexander Calder
-- Alexi Barov
-- Alliance Brigadier General
-- Anastasia Hartwell
-- Andi Lynn
-- Andrew Brownell
+- Alenndaar Lapidaar
+- Alma Jainrose
+- Anadyia
+- Androl Oakhand
 - Andron Gant
-- Angus Stern
-- Anthion Harmon
-- Antur Fallow
-- Anya Maulray
-- Archmage Angela Dosantos
-- Archmage Ansirem Runeweaver
-- Archmage Malin
-- Archmage Tervosh
-- Archmage Xylem
-- Argent Guard Manados
-- Argent Guard Thaelrid
-- Argent Officer Pureheart
-- Argent Outfitter
-- Argent Quartermaster
-- Argent Quartermaster Hasana
-- Argent Quartermaster Lightspark
-- Argent Recruiter
+- Apothecary Dithers
+- Apothecary Zamah
+- Arcanist Nozzlespring
+- Arch Druid Fandral Staghelm
+- Archaeologist Flagongut
+- Argent Messenger
 - Argent Scout
-- Aristan Mottar
-- Arthur the Faithful
+- Arnok
 - Ashlan Stonesmirk
-- Bailiff Conacher
-- Balos Jacken
-- Baltus Fowler
-- Barkeep Daniels
-- Baron Longshore
-- Baron Revilgaz
+- Asoran
+- Balir Frosthammer
+- Baristolth of the Shifting Sands
 - Baros Alexston
-- Bartleby
 - Bartolo Ginsetti
-- Betty Quin
-- Billy Maclure
-- Bishop DeLavey
-- Bishop Farthing
-- Blind Mary
-- Bloodsail Traitor
-- Brom Killian
-- Bromos Grummner
-- Brother Anton
-- Brother Crowley
-- Brother Joshua
-- Brother Kristoff
-- Brother Neals
-- Brother Nimetz
-- Brother Paxton
+- Bingles Blastenheimer
+- Bombus Finespindle
+- Borgus Steelhand
+- Borstan
+- Brakgul Deathbringer
+- Brewmeister Bilger
+- Briarthorn
 - Brother Sammuel
-- Brother Sarno
-- Brother Wilhelm
-- Calvin Montague
-- Captain Blackanvil
-- Captain Grayson
-- Captain Garran Vimes
-- Captain Hecklebury Smotts
-- Captain Nials
-- Captain Pentigast
-- Captain Rugelfuss
-- Captain Steelgut
-- Captain Vanessa Beltis
-- Captured Mountaineer
-- Captured Scarlet Zealot
-- Caretaker Alen
-- Caretaker Folsom
-- Carlin Redpath
-- Catelyn the Blade
-- Chef Breanna
+- Calandrath
+- Chef Grual
 - Chef Jessen
-- Christoph Jeffcoat
-- Christoph Walker
-- Claire Willower
-- Clarice Foster
-- Clavicus Knavingham
-- Clerk Daltry
-- Clerk Lendry
-- Colara Dean
+- Chemist Fuely
+- Chicken
+- Chief Archaeologist Greywhisker
+- Chief Engineer Hinderweir VII
+- Clarise Gnarltree
+- Cloud Skydancer
 - Collin Mauren
 - Colossus Researcher Eazel
 - Colossus Researcher Nestor
 - Colossus Researcher Sophia
-- Commander Althea Ebonlocke
-- Commander Ashlam Valorfist
-- Commander Eligor Dawnbringer
-- Commander Karl Philips
-- Commander Louis Philips
-- Commander Mulfort
-- Commander Samaul
-- Commander Thomas Helleran
-- Connor Rivers
-- Corporal Carnes
-- Corporal Kaleb
-- Corporal Keeshan
-- Corporal Melkins
-- Corporal Sethman
-- Councilman Millstipe
-- Count Remington Ridgewell
-- Craftsman Wilhelm
-- Crier Goodman
-- Crusader Lord Valdelmar
-- Curator Thorius
-- Dane Winslow
-- Dannal Stern
-- Daphne Stilwell
-- Darcy
-- Darren Malvew
-- Daryl Stack
-- Daryl the Youngling
-- Dashel Stonefist
-- David Trias
-- Davil Crokford
-- Dellylah
-- Demisette Cloyce
-- Deputy Feldon
-- Deputy Rainer
-- Deputy Willem
-- Dockmaster Baren
+- Commander Aggro'gosh
+- Commander Gor'shak
+- Conservator Ilthalaine
+- Dame Twinbraid
+- Dane Lindgren
+- Darkcaller Yanka
+- Darkmoon Faire Carnie
+- Darnath Bladesinger
+- David Langston
+- Deathguard Burgess
+- Deathguard Cyrus
+- Deathguard Dillinger
+- Deathguard Gavin
+- Deathguard Humbert
+- Deathguard Lawrence
+- Deathguard Samsa
+- Deathguard Simmer
+- Deathly Usher
+- Deathstalker Faerleia
+- Devrak
+- Dink
 - Doctor Gregory Victor
 - Doctor Gustaf VanHowzen
-- Doctor Marsh
-- Doctor Martin Felben
-- Donova Snowden
-- Donyal Tovald
-- Duke Nicholas Zverenhoff
 - Eagan Peltskinner
-- Elaine Carevin
-- Elling Trias
-- Enyo
-- Eunice Burch
+- Elfarran
+- Elynna
+- Elysa
+- Erich Lohan
+- Erika Tate
 - Eva Sarkhoff
-- Evert Sorisam
-- Fahrad
-- Farmer Furlbrow
-- Farmer Saldean
-- Father Cobb
-- Father Inigo Montoy
-- Father Lankester
-- Father Lazarus
-- Fenstad Argyle
+- Executor Zygand
+- Faldron
+- Felika
 - Field Marshal Afrasiabi
 - Field Marshal Oslight
-- Field Marshal Teravaine
-- First Mate Fitzsimmons
-- Flint Shadowmore
+- Fleet Master Seahorn
 - Foggy MacKreel
 - Foreman Oslow
-- Franklin Lloyd
-- Galen Goodward
+- Gaerolas Talvethren
+- Gan'rul Bloodeye
+- Garon Hutchins
+- Gearcutter Cogspinner
+- Gelvas Grimegate
 - General Marcus Jonathan
-- Gerard Tiller
-- Gina Lang
+- Ghak Healtouch
+- Glorin Steelbrow
+- Gnoarn
 - Godrick Farsan
-- Gordon Wendham
-- Graham Van Talen
-- Gramma Stonefield
-- Gregor Greystone
-- Gretchen Dedmar
-- Grimand Elmore
-- Guard Berton
-- Guard Byron
-- Guard Didier
-- Guard Howe
-- Guard Parker
-- Guard Thomas
-- Gubber Blump
-- Gunther Arcanus
-- Hank the Hammer
-- Hansel Heavyhands
-- Harlan Bagley
+- Golhine the Hooded
+- Goli Krumn
+- Gor'mul
+- Gordok Bushwacker
+- Gordok Reaver
+- Gorina
+- Gornek
+- Gotri
+- Grelin Whitebeard
+- Gretta Finespindle
+- Grezz Ragefist
+- Gryan Stoutmantle
+- Hadoken Swiftstrider
+- Hagrus
 - Harlo Barnaby
-- Harlo Wigglesworth
-- Harry Burlguard
-- Haughty Modiste
+- Herbalist Proudfeather
+- Hewa
+- Hgarth
+- High Executor Darthalia
+- Hulfdan Blackbeard
+- Human Orphan
+- Impsy
+- Infiltrator Marksen
+- Innkeeper Boorand Plainswind
+- Innkeeper Farley
+- Jarrodenus
+- Javnir Nashak
+- Jesper
+- Jocaste
+- Jotek
+- Kanati Greycloud
+- Kardris Dreamseeker
+- Karolek
+- Kartra Bloodsnarl
+- Katie Hunter
+- Keeper Albagorm
+- Keeper Marandis
+- Keeper Moonshade
+- Kelgruk Bloodaxe
+- Kerlonian Evershade
+- Keryn Sylvius
+- Kiro
+- Kithas
+- Komin Winterhoof
+- Kor'geld
+- Kor'jus
+- Koru
+- Kurm Stonehoof
+- Kyra Windblade
+- Lee Brown
+- Lieutenant Beitha
+- Lilith the Lithe
+- Lissyphus Finespindle
+- Longbraid the Grim
+- Loremaster Dibbs
+- Lyria Du Lac
+- Mahu
+- Mak
+- Mardant Strongoak
+- Marshal Haggard
+- Master Apothecary Faranell
+- Master Mathias Shaw
+- Master Sergeant Maclure
+- Mathredis Firestar
+- Maximillian Crowe
+- Me'lynn
+- Merelyssa
+- Michelle Belle
+- Minor Manifestation of Water
+- Moon Priestess Amara
+- Mot Dawnstrider
+- Motley Garmason
+- Mura Runetotem
+- Naal Mistrunner
+- Nara Wildmane
+- Narv Hidecrafter
+- Nathaniel Dumah
+- Nazeer Bloodpike
+- Nori Pridedrift
+- Nurse Stonefield
+- Officer Brady
+- Ogromm
+- Ogron
+- Ogunaro Wolfrunner
+- Ol' Emma
+- Ophek
+- Ormok
+- Pithwick
+- Pixel
+- Priestess Alathea
+- Priestess Josetta
+- Professor Phizzlethorpe
+- Professor Thaddeus Paleo
+- Quae
+- Ragnar Thunderbrew
+- Randal Hunter
+- Rane Yorick
+- Rekkul
+- Remy "Two Times"
+- Renzik "The Shiv"
+- Rethiel the Greenwarden
+- Rhag Garmason
+- Rudra Amberstill
+- Runk Windtamer
+- Rupert Boch
+- Ruul Snowhoof
+- Sage Truthseeker
+- Salma Saldean
+- Sara Balloo
+- Sara Timberlain
+- Sark Ragetotem
+- Saru Steelfury
+- Sayge
+- Senani Thunderheart
+- Senir Whitebeard
+- Sentinel Arynia Cloudsbreak
+- Sentinel Thenysil
+- Seril Scourgebane
+- Servant of the Hand
+- Shaina Fuller
+- Shan'ti
+- Shanda
+- Shankys
+- Shayis Steelfury
+- Shim'la
+- Shoma
+- Shoni the Shilent
+- Short John Mithril
+- Sian'dur
+- Sikwa
+- Silas Darkmoon
+- Sir S. J. Erlgadin
+- Skullsplitter Speaker
+- Slave Worker
+- Slicky Gastronome
+- Sorek
+- Spirit of Azuregos
+- Sten Stoutarm
+- Stormwind City Guard
+- Stormwind Guard
+- Stormwind Reveler
+- Suzanne
+- Sven Yorgen
+- Sylista
+- Tabetha
+- Talin Keeneye
+- Tamar
+- Tamaro
+- Tavernkeep Smitts
+- Thamarian
+- Thistleheart
+- Thomas Miller
+- Tink Sprocketwhistle
+- Tomas
+- Tundra MacGrann
+- Tynnus Venomsprout
+- Tyrande Whisperwind
+- Ukra'nor
+- Ursula Deline
+- Uthrar Threx
+- Vaelastrasz the Corrupt
+- Vahgruk
+- Var'jun
+- Veren Tallstrider
+- Verna Furlbrow
+- Vesprystus
+- Vi'el
+- Vyrin Swiftwind
+- Warg Deepwater
+- Wilder Thistlenettle
+- Williden Marshal
+- Yama Snowhoof
+- Yelmak
+- Zarise
+- Zggi
+- Zor Lonetree
+felorc:
+- Bibilfaz Featherwhistle
+- Brother Crowley
+- Eris Havenfire
+- Hunter Ragetotem
+- Hunter Sagewind
+- Kaya Flathoof
+- Makaba Flathoof
+- Orphan Matron Battlewail
+- Orphan Matron Nightingale
+- Snurk Bucksquick
+- Squibby Overspeck
+- Tran'rek
+- Warsong Runner
+foresttroll:
+- Aendel Windspear
+- Festival Loremaster
+- Festival Talespinner
+- League of Arathor Emissary
+- Servant of the Hand
+- Silverwing Emissary
+- Stormpike Emissary
+- Windcaller Proudhorn
+- Zandalarian Emissary
+- Zas'Tysh
+gnome:
+- Alanndarian Nightsong
+- Alassin
+- Ancient Equine Spirit
+- Anya Maulray
+- Apothecary Staffron Lerent
+- Archmage Angela Dosantos
+- Arygos
+- Bingus
+- Birgitte Cranston
+- Borya
+- Brock Stoneseeker
+- Brother Paxton
+- Brother Wilhelm
+- Bulrug
+- Caelestrasz
+- Catelyn the Blade
+- Cenarion Emissary Jademoon
+- Commander Eligor Dawnbringer
+- Corporal Teeka Bloodsnarl
+- Darianna
+- Drakk Stonehand
+- Elissa Dumas
+- Evert Sorisam
+- Falrin Treeshaper
+- Father Inigo Montoy
+- Frostwolf Ambassador Rokhstrom
+- Galgar
+- General Kirika
+- Gerrig Bonegrip
+- Gest
+- Gimble Thistlefuzz
+- Godan
+- Herbalist Pomeroy
+- High Overlord Saurfang
+- Historian Karnik
+- Kali Healtouch
+- Kitha
+- Korfax, Champion of the Light
+- Kray
+- Kruban Darkblade
+- Lieutenant Rotimer
+- Lunar Festival Emissary
+- Lunar Festival Herald
+- Magar
+- Magatha Grimtotem
+- Magenius
+- Magus Tirth
+- Makaru
+- Malosh
+- Maluressian
+- Mangletooth
+- Marshal Bluewall
+- Marshal Redpath
+- Mathiel
+- Merrin Rockweaver
+- Morganus
+- Mountaineer Boombellow
+- Mux Manascrambler
+- Officer Pomeroy
+- Ormak Grimshot
+- Ormer Ironbraid
+- Pilot Longbeard
+- Private Thorsen
+- Prospector Whelgar
+- Quinn Yorick
+- Raene Wolfrunner
+- Rayne
+- Ribbly's Crony
+- Rohan the Assassin
+- Saern Priderunner
+- Salfa
+- Sarlek
+- Scholomance Student
+- Scout Bloodfist
+- Senator Barin Redstone
+- Seoman Griffith
+- Seriadne
+- Steven Lohan
+- Strange Snowman
+- Sumi
+- Suzetta Gallina
+- Tharnariun Treetender
+- Torta
+- Ur'kyo
+- Urtrun Clanbringer
+- Vark Battlescar
+- Vethsera
+- Vhulgra
+- Voggah Deathgrip
+- Warmaster Laggrond
+- Watcher Biggs
+- Yenniku
+- Zaldimar Wefhellt
+goblin:
+- '"Stinky" Ignatz'
+- Acolyte Magaz
+- Acolyte Wytula
+- Alchemist Narett
+- Bailiff Conacher
+- Bailor Stonehand
+- Bor Wildmane
+- Brant Jasperbloom
+- Bubulo Acerbus
+- Byancie
+- Caer Darrow Citizen
+- Captured Arko'narin
+- Chief Sharpclaw
+- Commander Mar'alith
+- Daphne Stilwell
+- Dellylah
+- Doan Karhan
+- Duke Nicholas Zverenhoff
+- Duthorian Rall
+- Elder Graveborn
+- Fahrad
+- Field Marshal Snowfall
+- Field Marshal Teravaine
+- Fisherman Lin'do
+- Frankal Stonebridge
+- Gakin the Darkbinder
+- Gazin Tenorm
+- General Zog
+- Geologist Larksbane
+- Gregor MacVince
+- Hammertoe Grez
 - Henze Faulk
 - Hermit Ortell
-- Hierophant Theodora Mulvadania
-- Highlord Bolvar Fordragon
-- Highlord Demitrian
-- Highlord Taelan Fordring
-- Hilary
-- Human Orphan
-- Huntsman Leopold
-- Ilsa Corbin
-- Infiltrator Marksen
-- Innkeeper Allison
-- Innkeeper Farley
-- Innkeeper Norman
-- Innkeeper Renee
-- Isabella
-- J.D. Collie
-- James Halloran
-- Janice Felstone
-- Jeremiah Payson
-- Jessica Redpath
-- Jitters
-- Joanna Whitehall
+- Hunter Thunderhorn
+- Jemma Quikswitch
 - John Turner
-- Jonathan Carevin
-- Jorah Annison
 - Jordan Stilwell
-- Jorgen
-- Jorik Kerridan
-- Josef Gregorian
-- Joseph Redpath
-- Katie Hunter
-- Kayla Smithe
-- Kerri Hicks
-- Keryn Sylvius
-- Khelden Bremen
-- Kirk Maxwell
-- Klannoc Macleod
-- Lady Callow
-- Lady Jaina Proudmoore
-- Lady Katrana Prestor
-- Laird
-- Landro Longshot
-- Lard
-- Lawrence Schneider
-- Leonid Barthalomew the Revered
-- Lieutenant Doren
-- Lieutenant Farren Orinelle
-- Lieutenant Haggerdin
-- Lieutenant Jocryn Heldric
+- Kaymard Copperpinch
+- Knot Thimblejack
+- Kurdram Stonehammer
+- Lago Blackwrench
+- Lau'Tiki
 - Lieutenant Nevell
-- Lieutenant Orrin
-- Lieutenant Rotimer
-- Lina Hearthstove
-- Linken
-- Llane Beshere
-- Locke Okarr
-- Lord Baurles K. Wishock
-- Lord Ello Ebonlocke
-- Lord Grayson Shadowbreaker
-- Lord Jorach Ravenholdt
 - Lord Maxwell Tyrosus
-- Lord Tirion Fordring
 - Lord Tony Romano
-- Loslor Rudge
-- Lucan Cordell
-- Lucius
-- Luther Pickman
-- Lyria Du Lac
-- Ma Stonefield
-- Madame Eva
-- Magistrate Henry Maleb
-- Magistrate Marduke
-- Magistrate Sevren
-- Magistrate Solomon
-- Major Mattingly
-- Major Samuelson
-- Malakai Cross
-- Malcomb Wynn
-- Mara Rennick
-- Marion Call
-- Marlene Redpath
-- Marshal Bluewall
-- Marshal Dughan
-- Marshal Haggard
-- Marshal Marris
-- Marshal Maxwell
-- Marshal McBride
-- Marshal Redpath
-- Marshal Windsor
-- Marta Finespindle
-- Martha Strain
-- Martie Jainrose
-- Master Mathias Shaw
-- Matt Johnson
-- Maximillion
-- Maybell Maclure
-- McGavan
-- Merill Pleasance
-- Merideth Carlson
-- Merissa Stilwell
-- Michael
-- Michael Garrett
-- Mickey Levine
-- Mikhail
-- Miles Dexter
-- Miles Welsh
-- Milly Osworth
-- Milton Sheaf
-- Miner Cromwell
-- Mokvar
-- Monika Sengutz
-- Monty
-- Morgan Pestle
+- Lotwil Veriatus
+- Lucien Tosselwrench
+- Martek the Exiled
+- Martin Lindsey
 - Morgan Stern
+- Muiredon Battleforge
+- Nardstrum Copperpinch
+- Narm Faulk
+- Nathaniel Dumah
+- Neeka Bloodscar
+- Nipsy
+- Old Ironbark
+- Private Draxlegauge
+- Prospector Ryedol
+- Remen Marcot
+- Ruga Ragetotem
+- Sagorne Creststrider
+- Senior Sergeant Grimsford
+- Senior Sergeant Kai'jin
+- Senior Sergeant Taiga
+- Sentinel Onaeya
+- Smith Regzar
+- Sprite Jumpsprocket
+- Squire Leoren Mal'derath
+- Stamp Thunderhorn
+- Stephanie Turner
+- Stoneguard Clayhoof
+- Strahad Farsan
+- Takar the Seer
+- Teldrassil Sentinel
+- Theldurin the Lost
+- Tinkee Steamboil
+- Tiza Battleforge
+- Tog Rustsprocket
+- Uthek the Wise
+- Vaelan
+- Warlord Gorchuk
+- Yorus Barleybrew
+human:
+- '"Swamp Eye" Jarl'
+- Aboda
+- Adam Lind
+- Aedis Brom
+- Ag'tor Bloodfist
+- Ainethil
+- Alanna Raveneye
+- Alchemist Mallory
+- Alexandra Bolero
+- Allan Hafgan
+- Alliance Brigadier General
+- Alyissia
+- Andorgos
+- Andrew Brownell
+- Andruk
+- Apothecary Helbrim
+- Apprentice Kryten
+- Archmage Ansirem Runeweaver
+- Ardwyn Cailen
+- Arei
+- Argent Quartermaster
+- Arnold Leland
+- Arthur the Faithful
+- Astaia
+- Athridas Bearmantle
+- Augustus the Touched
+- Aurel Goldleaf
+- Austil de Mon
+- Ayanna Everstride
+- Azar Stronghammer
+- Azore Aldamort
+- Batrider Pele'keiki
+- Beetix Ficklespragg
+- Beram Skychaser
+- Bilban Tosslespanner
+- Billy Maclure
+- Bink
+- Blind Mary
+- Booty Bay Reveler
+- Borgus Stoutarm
+- Bowen Brisboise
+- Boyle
+- Brave Dawneagle
+- Brek Stonehoof
+- Brother Joshua
+- Brother Karman
+- Burth
+- Caer Darrow Citizen
+- Caer Darrow Guardsman
+- Captain Grayson
+- Captain Rugelfuss
+- Captain Shatterskull
+- Captain Steelgut
+- Captured Mountaineer
+- Captured Scarlet Zealot
+- Caravaneer Ruzzgot
+- Carla Granger
+- Carolai Anise
+- Cedrik Prose
+- Celebras the Redeemed
+- Chloe Curthas
+- Christoph Walker
+- Clavicus Knavingham
+- Clerk Daltry
+- Colara Dean
+- Commander Thomas Helleran
+- Corithras Moonrage
+- Corporal Keeshan
+- Councilman Millstipe
+- Crier Goodman
+- Cylania
+- Cyndra Kindwhisper
+- Dalar Dawnweaver
+- Dan Golthas
+- Dannal Stern
+- Darian Singh
+- Dark Cleric Beryl
+- Dark Cleric Duesten
+- Darkmoon Faire Carnie
+- Darren Malvew
+- Dashel Stonefist
+- David Trias
+- Dazalar
+- Deathguard Abraham
+- Deathguard Morris
+- Deathstalker Vincent
+- Deeg
+- Deek Fizzlebizz
+- Deino
+- Delfrum Flintbeard
+- Delgo Ragetotem
+- Dendrythis
+- Derotain Mudsipper
+- Dirge Quikcleave
+- Disciple of Naralex
+- Do'gol
+- Dockmaster Baren
+- Doctor Marsh
+- Donald Rabonne
+- Drull
+- Drum Fel
+- Drusilla La Salle
+- Duhng
+- Duke Hydraxis
+- Dun Morogh Mountaineer
+- Duncan Cullen
+- Dungar Longdrink
+- Ealyshia Dewwhisper
+- Edna Mullby
+- Eitrigg
+- Eladriel
+- Elaine Carevin
+- Elder Farwhisper
+- Elder Grimtotem
+- Elder Torntusk
+- Eldrin
+- Eleanor Rusk
+- Elizabeth Van Talen
+- Elling Trias
+- Elsharin
+- Enyo
+- Eunice Burch
+- Evan Larson
+- Executor Arren
+- Eyahn Eagletalon
+- Faelyssa
+- Falkhaan Isenstrider
+- Falla Sagewind
+- Farmer Furlbrow
+- Farmer Saldean
+- Faustron
+- Feero Ironhand
+- Felicia Gump
+- Fimble Finespindle
+- Fiora Longears
+- Foreman Stonebrow
+- Frahun Shadewhisper
+- Frang
+- Furl Scornbrow
+- Fyrenna
+- Gadgetzan Bruiser
+- Garel Redrock
+- Gaxim Rustfizzle
+- Gennia Runetotem
+- Gereck
+- Gol'dir
+- Gorn One Eye
+- Grimbooze Thunderbrew
+- Grizzle Halfmane
+- Grol'dar
+- Guard Byron
+- Gwenna Firebrew
+- Haggrum Bloodfist
+- Hammered Patron
+- Hands Springsprocket
+- Hannah Akeley
+- Harken Windtotem
+- Healer Longrunner
+- Heinrich Stone
+- Hekkru
+- Helene Peltskinner
+- Henry Stern
+- Heralath Fallowbrook
+- High Inquisitor Fairbanks
+- High Priest Rohan
+- High Priestess Laurena
+- Hjoldir Stoneblade
+- Hogor Thunderhoof
+- Holt Thunderhorn
+- Horde Warbringer
+- Idriana
+- Ilsa Corbin
+- Innkeeper Adegwa
+- Innkeeper Allison
+- Innkeeper Anderson
+- Innkeeper Fizzgrimble
+- Innkeeper Heather
+- Innkeeper Lyshaerya
+- Ironforge Mountaineer
+- Isabella
+- Itharius
+- Jaeana
+- Jahan Hawkwing
+- Jandria
+- Janey Anship
+- Jannok Breezesong
+- Jannos Lighthoof
+- Jarel Moor
+- Jasper Fel
+- Jaycrue Copperpinch
+- Jediga
+- Jen'shan
+- Jennea Cannon
+- Jeremiah Payson
+- Jern Hornhelm
+- Jes'rimon
+- Jessara Cordell
+- Joachim Brenlow
+- John Burnside
+- Jorik Kerridan
+- Joseph Dirte
+- Josephine Lister
+- Julia Gallina
+- Kaela Shadowspear
+- Kaerbrus
+- Kah Mistrunner
+- Kal
+- Kard Ragetotem
+- Kareth
+- Karlee Chaddis
+- Katherine the Pure
+- Katrina Alliestar
+- Keeper Bel'varil
+- Keldas
+- Keldric Boucher
+- Kelstrum Stonebreaker
+- Kelv Sternhammer
+- Keyl Swiftclaw
+- Khaelyn Steelwing
+- Kinelory
+- King Magni Bronzebeard
+- Kirk Maxwell
+- Krazek
+- Krolg
+- Krusk
+- Kurden Bloodclaw
+- Kyra Boucher
+- Kyrai
+- Lalina Summermoon
+- Landria
+- Lara Moore
+- Larimaine Purdue
+- Laris Geardawdle
+- Lauren Newcomb
+- Laurna Morninglight
+- Lieutenant Dagel
+- Lieutenant Doren
+- Lieutenant Lisande
+- Lieutenant Rukag
+- Lina Stover
+- Lisan Pierce
+- Lisbeth Schneider
+- Lizbeth Cromwell
+- Llane Beshere
+- Loh'atu
+- Lokhtos Darkbargainer
+- Lomac Gearstrip
+- Lord Arkkoroc
+- Lotherias
+- Lucan Cordell
+- Lucille Castleton
+- Lumak
+- Lunar Festival Emissary
+- Lunar Festival Herald
+- Lysheana
+- Maginor Dumas
+- Magistrate Bluntnose
+- Magus Wordeen Voidglare
+- Major Mattingly
+- Maldryn
+- Malfurion Stormrage
+- Malorne Bladeleaf
+- Malyfous Darkhammer
+- Mara Rennick
+- Marek Ironheart
+- Maria Lumere
+- Marion Call
+- Marla Fowler
+- Marta Finespindle
+- Martie Jainrose
+- Master Sergeant Moonshadow
+- Maximillion
+- Meilosh
+- Melea
+- Melisara
+- Mennet Carkad
+- Merideth Carlson
+- Meridith the Mermaiden
+- Michael
+- Mickey Levine
+- Milla Fairancora
+- Miner Cromwell
+- Mirket
+- Mor'rogal
+- Morin Cloudstalker
+- Morris Lawry
 - Mountaineer Barleybrew
-- Mountaineer Boombellow
 - Mountaineer Cobbleflint
-- Mountaineer Gravelgaw
 - Mountaineer Kadrell
-- Mountaineer Pebblebitty
 - Mountaineer Rockgar
 - Mountaineer Stormpike
 - Mountaineer Thalos
 - Mountaineer Wallbang
+- Mounted Ironforge Mountaineer
+- Mudcrush Durtfeet
+- Mull Thunderhorn
+- Muragus
+- Myra Tyrngaarde
+- Nadyia Maneweaver
+- Nalesette Wildbringer
 - Nara Meideros
-- Nathaniel Dumah
+- Nartok
+- Nathanos Blightcaller
+- Nazgrel
+- Newton Burnside
+- Nez'raz
 - Nikova Raskol
+- Nittlebur Sparkfizzle
+- Nixx Sprocketspring
 - Novice Elreth
-- Novice Thaivand
-- Nurse Stonefield
-- Officer Gothena
-- Officer Maloof
-- Officer Porterhouse
-- Ol' Emma
-- Oran Snakewrithe
-- Orphan Matron Nightingale
+- Nyrill
+- Officer Jaxon
+- Officer Redblade
+- Ogtinc
+- Ohanko
+- Orgnil Soulscar
+- Orm Stonehoof
+- Ormyr Flinteye
+- Orwin Gizzmick
 - Osric Strang
-- Patrick Garrett
-- Penny
-- Peter Galen
-- Phin Odelic
-- Pierce Shackleton
-- Private Draxlegauge
-- Private Hendel
-- Private Porter
-- Private Rocknot
-- Private Thorsen
-- Privateer Bloads
-- Professor Phizzlethorpe
-- Professor Thaddeus Paleo
-- Quartermaster Lewis
-- Quartermaster Lungertz
+- Owen Vaughn
+- Pamela Redpath
+- Penney Copperpinch
+- Phalanx
+- Pikkle
+- Prate Cloudseer
+- Precious
+- Princess Poobah
+- Prospector Remtravel
 - Quartermaster Miranda Breechlock
-- Quentin
-- Quinn Yorick
-- Quintis Jonespyre
-- Ragged John
-- Raleigh Andrean
-- Raleigh the Devout
+- Raena Flinthammer
 - Ralston Farnsley
-- Rane Yorick
 - Ransin Donner
-- Rayne
-- Red Jack Flint
-- Reginald Windsor
-- Rellian Greenspyre
-- Rema Schneider
-- Remains of Trey Lightforge
-- Remains of a Paladin
-- Remen Marcot
-- Remy "Two Times"
-- Renato Gallina
-- Renzik "The Shiv"
+- Rashona Straglash
+- Reese Langston
+- Reyna Stonebranch
+- Rhapsody Shindigger
 - Rhiannon Davis
-- Richard Kerwin
-- Ringo
-- Rohan the Assassin
-- Rory
-- Royal Factor Bathrilor
+- Ribbly's Crony
+- Richard Van Brunt
+- Rin'ji
+- Robert Gossom
 - Royal Historian Archesonus
-- Royal Overseer Bauhaus
+- Rumstag Proudstrider
 - Rutherford Twing
-- Salma Saldean
-- Samuel Hawke
-- Sara Balloo
-- Sara Timberlain
-- Sarah Goode
-- Sarah Sadwhistle
-- Sarah Tanner
-- Scooty
-- Serge Hinott
-- Sergeant Hartman
-- Sergeant Major Germaine
-- Sergeant Stonebrow
+- Ruul Eagletalon
+- Rwag
+- Sanath Lim-yo
+- Sandahl
+- Sayoc
+- Screecher Spirit
+- Security Chief Bilgewhizzle
+- Seikwa
+- Senator Mehr Stonehallow
+- Sentinel Melyria Frostshadow
+- Sentinel Selarin
+- Sentinel Silversky
+- Sentinel Tysha Moonblade
 - Shadow Priest Allister
 - Shadow Priest Sarvis
+- Shakes O'Breen
 - Shawn
-- Shelby Stoneflint
-- Short John Mithril
-- Smokey LaRue
-- Squire Maltrake
-- Stanley
-- Stephanie Turner
-- Steven Black
-- Stoley
-- Stormwind Commendation Officer
-- Supervisor Raelen
-- Suzetta Gallina
-- Sven Yorgen
-- Tammra Windfield
-- Theramore Lieutenant
-- Thomas
-- Timothy Worthington
-- Tirion Fordring
-- Tommy Joe Stonefield
-- Trackmaster Zherin
-- Trenton Lighthammer
-- Trixie Quikswitch
-- Tundra MacGrann
-- Ursula Deline
-- Vance Undergloom
-- Venya Marthand
-- Verner Osgood
-- Veron Amberstill
-- Vidra Hearthstove
-- Vincent Hyal
-- Wagner Hammerstrike
-- Watcher Backus
-- Watcher Biggs
-- Watcher Brownell
-- Watcher Dodds
-- Watcher Ladimore
-- Weldon Barov
-- Wesley
-- Whiskey Slim
-- Wiley the Black
-- William Pestle
-- Williden Marshal
-- Willow
-- Winna Hazzard
-
-dwarf:
-- Elder Obsidian
-- Magistrate Bluntnose
-- Nissa Firestone
-- Sage Korolusk
-- Wizbang Cranktoggle
-- Wizlo Bearingshiner
-- Archaeologist Flagongut
-- Artilleryman Sheldonore
-- Austil de Mon
-- Azore Aldamort
-- Bailor Stonehand
-- Beldin Steelgrill
-- Bengus Deepforge
-- Beram Skychaser
-- Bethaine Flinthammer
-- Bonnie Stoneflayer
-- Braenna Flintcrag
-- Brandur Ironhammer
-- Brewmaster Drohn
-- Brewmeister Bilger
-- Brock Stoneseeker
-- Brohann Caskbelly
-- Chief Archaeologist Greywhisker
-- Chief Engineer Hinderweir VII
-- Commander Duffy
-- Courier Hammerfall
-- Curgle Cranklehop
-- Dame Twinbraid
-- Dank Drizzlecut
-- Darn Talongrip
-- Darnassus Commendation Officer
-- Daryl Riknussun
-- Delfrum Flintbeard
-- Dinita Stonemantle
-- Doran Plainstalker
-- Dorius Stonetender
-- Drakk Stonehand
-- Dungar Longdrink
-- Durnan Furcutter
-- Egan
-- Einar Stonegrip
-- Einris Brightspear
-- Elder Bellowrage
-- Elder Bronzebeard
-- Elder Goldwell
-- Elder Hammershout
-- Elder Ironband
-- Elder Primestone
-- Elder Silvervein
-- Elder Snowcrown
-- Elder Splitrock
-- Elder Stonefort
-- Elder Stormbrow
-- Eldrin
-- Elysa
-- Emmisary Whitebeard
-- Enohar Thunderbrew
-- Falstad Wildhammer
-- Falthir the Sightless
-- Feero Ironhand
-- Fela
-- Finbus Geargrind
-- Finkle Einhorn
-- Fisherman Lindo
-- Foreman Stonebrow
-- Fraggar Thundermantle
-- Franclorn Forgewright
-- Frankal Stonebridge
-- Furen Longbeard
-- Geofram Bouldertoe
-- Geologist Larksbane
-- Gerrig Bonegrip
-- Gimble Thistlefuzz
-- Gloomrel
-- Glorin Steelbrow
-- Gnoarn
-- Golnir Bouldertoe
-- Grand Mason Marblesten
-- Granis Swiftaxe
-- Grelin Whitebeard
-- Grimbooze Thunderbrew
-- Grimestack
-- Grimnur Stonebrand
-- Groum Stonebeard
-- Grumnus Steelshaper
-- Gryphon Master Talonaxe
-- Gryth Thurden
-- Hammertoe Grez
-- Helgrum the Swift
-- High Priest Rohan
-- High Priest Theldanis
-- Historian Karnik
-- Hulfdan Blackbeard
-- Innkeeper Firebrew
-- Ironforge Commendation Officer
-- Ironus Coldsteel
-- Jarven Thunderbrew
-- Jern Hornhelm
-- Kathrum Axehand
-- Keeper Beldugur
-- Kelv Sternhammer
-- King Magni Bronzebeard
-- Kirge Sternhorn
-- Klockmort Spannerspan
-- Knot Thimblejack
-- Kranal Fiss
-- Krinkle Goodsteel
-- Krom Stoutarm
-- Longbraid the Grim
-- Lookout Captain Lolo Longstriker
-- Lorekeeper Kildrath
-- Magmar Fellhew
-- Mardant Strongoak
-- Marek Ironheart
-- Marleth Barleybrew
-- Marryk Nurribit
-- Master Sergeant Fizzlebolt
-- Master Smith Burninate
-- Maxan Anvol
-- Merok Longstride
-- Muradin Bronzebeard
-- Murgot Deepforge
-- Myolor Sunderfury
-- Narm Skychaser
-- Onin MacHammar
-- Ormer Ironbraid
-- Ormyr Flinteye
-- Packmaster Stonebruiser
-- Pilot Bellowfiz
-- Pilot Hammerfoot
-- Pilot Longbeard
-- Pilot Stonegear
-- Princess Moira Bronzebeard
-- Prospector Ironband
-- Prospector Ironboot
-- Prospector Remtravel
-- Prospector Ryedol
-- Prospector Stonehewer
-- Prospector Stormpike
-- Prospector Whelgar
-- Ragnar Thunderbrew
-- Reggifuz
-- Regnus Thundergranite
-- Rejold Barleybrew
-- Rethiel the Greenwarden
-- Rifleman Torrig
-- Rimblat Earthshatter
-- Roetten Stonehammer
-- Rotgath Stonebeard
-- Rudra Amberstill
-- Rutgar Glyphshaper
-- Sagorne Creststrider
-- Sandahl
-- Sea Wolf MacKinley
-- Seereth Stonebreak
-- Senator Barin Redstone
-- Senator Mehr Stonehallow
-- Senior Sergeant Kaijin
-- Senior Surveyor Fizzledowser
-- Senir Whitebeard
-- Sergeant Durgen Stormpike
-- Sigrun Ironhew
-- Solm Hargrin
-- Sten Stoutarm
-- Stinky Ignatz
-- Tannok Frosthammer
-- Tarrel Rockweaver
-- Tatternack Steelforge
-- Theodrus Frostbeard
-- Thonys Pillarstone
-- Thor
-- Thorgas Grimson
-- Thorgrum Borrelson
-- Thorkaf Dragoneye
-- Thorvald Deepforge
-- Thungrim Firegaze
-- Tinkmaster Overspark
-- Tiza Battleforge
-- Tognus Flintfire
-- Toldren Deepiron
-- Tormek Stoneriver
-- Tormus Deepforge
-- Trull Failbane
-- Ulbrek Firehand
-- Ulfir Ironbeard
-- Valstag Ironjaw
-- Vargus
-- Wilder Thistlenettle
-- Yarr Hammerstone
-- Yori Crackhelm
-- Yorus Barleybrew
-- Greth
-- Hemet Nesingwary
-- Holt Thunderhorn
-- Wilder Thistlenettle
-- Advisor Belgrum
-- Agnar Beastamer
-- Alassin
-- Archaeologist Flagongut
-- Archaeologist Hollee
-- Artilleryman Sheldonore
-- Azar Stronghammer
-- Baelor
-- Bailir Frosthammer
-- Bailor Stonehand
-- Beldin Steelgrill
-- Belia Thundergranite
-- Bengus Deepforge
-- Bengor
-- Bethaine Flinthammer
-- Bink
-- Bonnie Stoneflayer
-- Braenna Flintcrag
-- Brandur Ironhammer
-- Brock Stoneseeker
-- Brohann Caskbelly
-- Bronk Guzzlegear
-- Captain Rugelfuss
-- Commander Duffy
-- Corporal Thund Splithoof
-- Courier Hammerfall
-- Dame Twinbraid
-- Dank Drizzlecut
-- Darn Talongrip
-- Daryl Riknussun
-- Delfrum Flintbeard
-- Dinita Stonemantle
-- Doctor Draxlegauge
-- Dorius Stonetender
-- Dungar Longdrink
-- Durnan Furcutter
-- Duthorian Rall
-- Dying Archaeologist
-- Egan
-- Einar Stonegrip
-- Einris Brightspear
-- Erma
-- Feero Ironhand
-- Fimble Finespindle
-- Fraggar Thundermantle
-- Furen Longbeard
-- Furl Scornbrow
-- Furmund
-- Geofram Bouldertoe
-- Gnoarn
-- Golnir Bouldertoe
-- Grand Mason Marblesten
-- Granis Swiftaxe
-- Grelin Whitebeard
-- Gretta Finespindle
-- Grimbooze Thunderbrew
-- Grimnur Stonebrand
-- Groum Stonebeard
-- Gryphon Master Talonaxe
-- Gryth Thurden
-- Haggrum Bloodfist
-- Hammertoe Grez
-- Hegnar Rumbleshot
-- Historian Karnik
-- Huldar
-- Hulfdan Blackbeard
-- Ironforge Commendation Officer
-- Ironus Coldsteel
-- Janela Stouthammer
-- Jaron Stoneshaper
-- Jarven Thunderbrew
-- Jenova Stoneshield
-- Jern Hornhelm
-- Killium Bouldertoe
-- King Magni Bronzebeard
-- Maxwort Uberglint
-- Mudcrush Durtfeet
-- Muren Stormpike
-- Murgot Deepforge
-- Olmin Burningbeard
-- Onin MacHammar
-- Ormer Ironbraid
-- Pilot Bellowfiz
-- Pilot Hammerfoot
-- Pilot Longbeard
-- Pilot Stonegear
-- Princess Moira Bronzebeard
-- Prospector Ironband
-- Prospector Ironboot
-- Prospector Remtravel
-- Prospector Ryedol
-- Prospector Stonehewer
-- Prospector Stormpike
-- Prospector Whelgar
-- Ragnar Thunderbrew
-- Regnus Thundergranite
-- Rejold Barleybrew
-- Roetten Stonehammer
-- Rotgath Stonebeard
-- Rudra Amberstill
-- Rumsen Fizzlebrack
-- Rumstag Proudstrider
-- Rutgar Glyphshaper
-- Senir Whitebeard
-- Sergeant Durgen Stormpike
-- Sigrun Ironhew
-- Sten Stoutarm
-- Stormpike Quartermaster
-- Stormpike Ram Rider Commander
-- Stormpike Stable Master
-- Tannok Frosthammer
-- Theodrus Frostbeard
-- Thonys Pillarstone
-- Thorgas Grimson
-- Thorgrum Borrelson
-- Thorvald Deepforge
-- Tormus Deepforge
-- Ulfir Ironbeard
-- Yarr Hammerstone
-- Yori Crackhelm
-- Yorus Barleybrew
-
-gnome:
-- Laris Geardawdle
-- Flame Eater
-- Pilot Xiggs Fuselighter
-- Tinkmaster Overspark
-- Bink
-- Bronk Guzzlegear
-- Bronn Fitzwrench
-- Chief Engineer Hinderweir VII
-- Fin Fizracket
-- Gaxim Rustfizzle
-- Gelkak Gyromast
-- Genavie Callow
-- Georgio Bolero
-- Ginro Hearthkindle
-- Grarnik Goodstitch
-- Gregan Brewspewer
-- Gretta Finespindle
-- Hands Springsprocket
-- High Tinker Mekkatorque
-- Hornizz Brimbuzzle
-- Jannos Lighthoof
-- Kablam
-- Klockmort Spannerspan
-- Librarian Mae Paledust
-- Lilliam Sparkspindle
-- Liv Rizzlefix
-- Lomac Gearstrip
-- Lucien Tosselwrench
-- Master Engineer Zinfizzlex
-- Master Mechanic Castpipe
-- Maxwort Uberglint
-- Melizza Brimbuzzle
-- Mupsi Shacklefridd
-- Mux Manascrambler
-- Nipsy
-- Orwin Gizzmick
-- Pilot Xiggs Fuselighter
-- Pixie
-- Pixel
-- Piznik
-- Pratt McGrubben
-- Princess Poobah
-- Razzle Sprysprocket
-- Rhapsody Shindigger
-- Riggle Bassbait
-- Rinling
-- Smeed Scrabblescrew
-- Spackle Thornberry
-- Spark Nilminer
-- Spigot Operator Luglunket
-- Spoops
-- Sprinkle
-- Sprogger
-- Tally Berryfizz
-- Thistleheart
-- Tinkee Steamboil
-- Tinkerwiz
-- Vazario Linkgrease
-- Wenikee Boltbucket
-- Whulwert Copperpinch
-- Xiggs Fuselighter
-- Yenniku
-- Yorba Screwspigot
-- Yuka Screwspigot
-- Gnome Pit Boss
-- Gnomeregan Commendation Officer
-- Magis Sparkmantle
-- Meggi Peppinrocker
-- Milli Featherwhistle
-- Nixx Sprocketspring
-- Nogg
-- Noggle Ficklespragg
-- Oglethorpe Obnoticus
-- Ozzie Togglevolt
-- Pozzik
-- Rigglefuzz
-- Spraggle Frock
-- Springspindle Fizzlegear
-- Sprite Jumpsprocket
-- Twizwick Sprocketgrind
-- Winkey
-- Wizzle Brassbolts
-- Tyrion
-- Alchemist Pestlezugg
-- Arcanist Nozzlespring
-- Betina Bigglezink
-- Bibbly F'utzbuckle
-- Bingles Blastenheimer
-- Chief Engineer Hinderweir VII
-- Crane Operator Bigglefuzz
-- Curgle Cranklehop
-- Dannie Fizzwizzle
-- Deek Fizzlebizz
-- Finkle Einhorn
-- Finbus Geargrind
-- Gelkak Gyromast
-- Gimble Thistlefuzz
-- Gnome Pit Boss
-- Gnomeregan Commendation Officer
-- High Tinker Mekkatorque
-- Kernobee
-- Klockmort Spannerspan
-- Knot Thimblejack
-- Kreldig Ungor
-- Krinkle Goodsteel
-- Lilliam Sparkspindle
-- Liv Rizzlefix
-- Lomac Gearstrip
-- Lucien Tosselwrench
-- Magis Sparkmantle
-- Meggi Peppinrocker
-- Milli Featherwhistle
-- Mupsi Shacklefridd
-- Mux Manascrambler
-- Nixx Sprocketspring
-- Nogg
-- Noggle Ficklespragg
-- Nori Pridedrift
-- Oglethorpe Obnoticus
-- Ozzie Togglevolt
-- Pilot Xiggs Fuselighter
-- Pixel
-- Pozzik
-- Razzle Sprysprocket
-- Rigglefuzz
-- Rinling
-- Spackle Thornberry
-- Spark Nilminer
-- Spigot Operator Luglunket
-- Springspindle Fizzlegear
-- Sprinkle
-- Sprite Jumpsprocket
-- Sprogger
-- Sputtervalve
-- Tinkee Steamboil
-- Tinkerwiz
-- Tinkmaster Overspark
-- Twizwick Sprocketgrind
-- Umi Rumplesnicker
-- Wenikee Boltbucket
-- Winkey
-- Wizzle Brassbolts
-- Xiggs Fuselighter
-- Xizk Goodstitch
-- Yebb Neblegear
-- Yorba Screwspigot
-- Yuka Screwspigot
-- Zorbin Fandazzle
-
-night_elf:
-- Gazin Tenorm
-- Helendis Riverhorn
-- Searn Firewarder
-- Torwa Pathfinder
-- Arch Druid Fandral Staghelm
-- Arch Druid Renferal
-- Archaeologist Hollee
-- Aurel Goldleaf
-- Aurora Skycaller
-- Barithras Moonshade
-- Conservator Ilthalaine
-- Dennika
-- Druid of the Grove
-- Elanaria
-- Elder Bladeleaf
-- Elder Bladesing
-- Elder Bladeswift
-- Elder Brightspear
-- Elder Darkcore
-- Elder Dreamseer
-- Elder Farwhisper
-- Elder Graveborn
-- Elder Meadowrun
-- Elder Mistwalker
-- Elder Moonstrike
-- Elder Moonwarden
-- Elder Nightwind
-- Elder Riversong
-- Elder Starglade
-- Elder Starsong
-- Elder Starweave
-- Elenia Haydon
-- Elki
-- Elsharin
-- Elu
-- Erelas Ambersky
-- Eridan Bluewind
-- Erion Shadewhisper
-- Erma
-- Faldreas GoethShael
-- Falfindel Waywarder
-- Falkhaan Isenstrider
-- Falla Sagewind
-- Falrin Treeshaper
-- Fariel Starsong
-- Feegly the Exiled
-- Fiora Longears
-- Fleet Master Seahorn
-- Frahun Shadewhisper
-- Gaeriyan
-- Gaerolas Talvethren
-- Galvan the Ancient
-- Gilshalan Windwalker
-- Gilthares Firebough
-- Gilveradin Sunchaser
-- Grondal Moonbreeze
-- Hastat the Ancient
-- Heralath Fallowbrook
-- Herald Moonstalker
-- Huntress Swiftriver
-- Idriana
-- Illiyana
-- Illiyana Moonblaze
-- Innkeeper Saelienne
-- Innkeeper Shyria
-- Iverron
-- Ivy Leafrunner
-- Jaelysia
-- Jalinda Sprig
-- Jandria
-- Jannok Breezesong
-- Jarkal Mossmeld
-- Jeneu Sancrea
-- Jenna Lemkenilli
-- Jerkai Moonweaver
-- Jesper
-- Jesrimon
-- Jessir Moonbow
-- Jocaste
-- Kalaran Windblade
-- Kayneth Stillwind
-- Keeper Albagorm
-- Keeper Belvaril
-- Keeper Marandis
-- Keeper Moonshade
-- Keeper Remulos
-- Keldran
-- Kerlonian Evershade
-- Kernobee
-- Kindal Moonweaver
-- Kinelory
-- Lariia
-- Larion
-- Latronicus Moonspear
-- Laurna Morninglight
-- Layo Starstrike
-- Lelanai
-- Liladris Moonriver
-- Lilyssia Nightbreeze
-- Loganaar
-- Lotherias
-- Lotwil Veriatus
-- Lunar Festival Emissary
-- Lunar Festival Harbinger
-- Lunar Festival Herald
-- Lysheana
-- Malfurion Stormrage
-- Maluressian
-- Marli Wishrunner
-- Master Nightsong
-- Master Sergeant Moonshadow
-- Mathiel
-- Mathrengyl Bearwalker
-- Mayara Brightwing
-- Maybess Riverbreeze
-- Meilosh
-- Melisara
-- Melithar Staghelm
-- Melynn
-- Meridith the Mermaiden
-- Miran
-- Moon Priestess Amara
-- Mydrannul
-- Myriam Moonsinger
-- Nadyia Maneweaver
-- Nafien
-- Nessa Shadowsong
-- Nyoma
-- Nyrill
-- Officer Lunalight
-- Orendil Broadleaf
-- Orenthil Whisperwind
-- Pelturas Whitemoon
-- Porthannius
-- Priestess Alathea
-- Priestess Amoora
-- Pyall Silentstride
-- Quae
-- Rabine Saturna
-- Raedon Duskstriker
-- Raene Wolfrunner
-- Ranshalla
-- Rexxar
-- Rivern Frostwind
-- Ruul Eagletalon
-- Saern Priderunner
-- Scholar Runethorn
-- Scout Galiaan
-- Scout Riell
-- Selendra
-- Sellandus
-- Sentinel Arynia Cloudsbreak
-- Sentinel Aynasha
-- Sentinel Elissa Starbreeze
-- Sentinel Glynda NalShea
-- Sentinel Melyria Frostshadow
-- Sentinel Onaeya
-- Sentinel Selarin
-- Sentinel Silversky
-- Sentinel Thenysil
-- Sentinel Tysha Moonblade
-- Sentinel Velene Starstrike
-- Seriadne
-- Shaeldryn
-- Shandris Feathermoon
-- Sharlindra
-- Shay Leafrunner
 - Sheldras Moontree
-- Shelgrayn
-- Shendralar Ancient
-- Shindrell Swiftfire
-- Shyrka Wolfrunner
-- Siandur
-- Siantsu
-- Silva Filnaveth
-- Stoma the Ancient
-- Sylista
-- Syral Bladeleaf
-- Syurna
-- Tabetha
-- Taladan
-- Talen
-- Talendria
-- Talin Keeneye
-- Tallonkai Swiftroot
-- Tallow
-- Tannysa
-- Tarindrella
-- Taronn Redfeather
-- Telonis
-- Tenaron Stormgrip
-- Terenthis
-- Terl Arakor
-- Teronis Corpse
-- Thalidun
-- Tharnariun Treetender
-- Theocritus
-- Therylune
-- Therysil
-- Thersa Windsong
-- Thundris Windweaver
-- Thyntel Bladeweaver
-- Treshala Fallowbrook
-- Trianna
-- Troyas Moonbreeze
-- Tyrande Whisperwind
-- Tyrion
-- Uthelnay
-- Vaelan
-- Vahlarriel Demonslayer
-- Valadar Starsong
-- Varg Windwhisper
-- Vartrus the Ancient
-- Vehena
-- Velora Nitely
-- Velrin Fang
-- Veren Tallstrider
-- Vestia Moonspear
-- Viktori PrismAntras
-- Vyrin Swiftwind
-- Warden Thelwater
-- Windcaller Kaldon
-- Windcaller Yessendra
-- Wonderform Operator
-- Wynd Nightchaser
-- Xanis Flameweaver
-- Xyera
-- Xylinnia Starshine
-- Angelas Moonbreeze
-- Arathandris Silversky
-- Bluff Runner Windstrider
-- Bluffwatcher
-- Briarthorn
-- Deliana
-- Druid of the Grove
-- Exzhal
-- Falfindel Waywarder
-- Falkhaan Isenstrider
-- Falthir the Sightless
-- Fela
-- Fleet Master Firallon
-- Fleet Master Seahorn
-- Garyl
-- Gilthares Firebough
-- Grif Wildheart
-- Grish Longrunner
-- Healer Longrunner
-- Herald Moonstalker
-- Herbalist Proudfeather
-- Huntsman Markhor
-- Innkeeper Keldamyr
-- Innkeeper Saelienne
-- Islen Waterseer
-- Jarkal Mossmeld
-- Jorn Skyseer
-- Kelek Skykeeper
-- Kernda
-- Keyl Swiftclaw
-- Kitha
-- Kitta Firewind
-- Lilith the Lithe
-- Lolo the Lookout
-- Lookout Captain Lolo Longstriker
-- Loramus Thalipedes
-- Lorekeeper Kildrath
-- Maluressian
-- Marli Wishrunner
-- Mathiel
-- Meela Dawnstrider
-- Meilosh
-- Melisara
-- Melynn
-- Meridith the Mermaiden
-- Merok Longstride
-- Merrin Rockweaver
-- Miaozan
-- Miran
-- Mist
-- Moon Priestess Amara
-- Morja
-- Muigin
-- Mydrannul
-- Myranda the Hag
-- Nafien
-- Narm Faulk
-- Narm Skychaser
-- Nyrill
-- Officer Thunderstrider
-- Oralius
-- Ormyr Flinteye
-- Rashona Straglash
-- Rethiel the Greenwarden
-- Sagorne Creststrider
-- Salfa
-- Seer Graytongue
-- Seer Ravenfeather
-- Seer Wiserunner
-- Shalumon
-- Shanda
-- Shelgrayn
-- Shenthul
-- Shindrell Swiftfire
-- Shoni the Shilent
-- Shyrka Wolfrunner
-- Skorn Whitecloud
-- Stoma the Ancient
-- Sylista
-- Syurna
-- Tagain
-- Takrin Pathseeker
-- Tal
-- Tannysa
-- Taronn Redfeather
-- Telf Joolam
-- Telonis
-- Temma of the Wells
-- Tenaron Stormgrip
-- Thalia Amberhide
-- Tharlidun
-- Tharnariun Treetender
-- Valaen
-- Varg Windwhisper
-- Vehena
-- Velora Nitely
-- Veren Tallstrider
-- Vesprystus
-- Watcher Mahar Ba
-- Windcaller Proudhorn
-- Wynd Nightchaser
-- Xanis Flameweaver
-- Xyera
-- Yaw Sharpmane
-- Valaen
-- Lanka Farshot
-- Lalina Summermoon
-- Kylanna
-- Kyra Windblade
-- Laris Geardawdle
-- Laris Geardawdle
-- Laris Geardawdle
-- Aayndia Floralwind
-- Adjutant Tesoran
-- Aelthalyste
-- Alanna Raveneye
-- Alanndarian Nightsong
-- Alyissia
-- Anilia
-- Anishar
-- Annora
-- Antarius
-- Arch Druid Fandral Staghelm
-- Arch Druid Renferal
-- Argos Nightwhisper
-- Arygos
-- Astarii Starseeker
-- Asterion
-- Athridas Bearmantle
-- Aurel Goldleaf
-- Aurora Skycaller
-- Ayanna Everstride
-- Balthule Shadowstrike
-- Barithras Moonshade
-- Brine
-- Calandrath
-- Calor
-- Captain Danuvin
-- Captured Arko'narin
-- Caryssia Moonhunter
-- Cenarion Emissary Jademoon
-- Cerellean Whiteclaw
-- Clarise Gnarltree
-- Conservator Ilthalaine
-- Corithras Moonrage
-- Darnassus Commendation Officer
-- Darnath Bladesinger
-- Daryn Lightwind
-- Dazalar
-- Delgren the Purifier
-- Denalan
-- Denatharion
-- Dendrite Starblaze
-- Dirania Silvershine
-- Doras
-- Dorion
-- Elanaria
-- Elder Bladeleaf
-- Elder Bladesing
-- Elder Bladeswift
-- Elder Brightspear
-- Elder Dawnstrider
-- Elder Dreamseer
-- Elder Farwhisper
-- Elder Meadowrun
-- Elder Mistwalker
-- Elder Moonstrike
-- Elder Moonwarden
-- Elder Morningdew
-- Elder Nightwind
-- Elder Riversong
-- Elder Skygleam
-- Elder Skyseer
-- Elder Starglade
-- Elder Starsong
-- Elder Starweave
-- Erelas Ambersky
-- Eridan Bluewind
-- Erion Shadewhisper
-- Falla Sagewind
-- Falrin Treeshaper
-- Fariel Starsong
-- Feegly the Exiled
-- Fiora Longears
-- Forest Wisp
-- Gaeriyan
-- Gaerolas Talvethren
-- Gershala Nightwhisper
-- Gilshalan Windwalker
-- Gilveradin Sunchaser
-- Huntress Swiftriver
-- Idriana
-- Illiyana
-- Illiyana Moonblaze
-- Iverron
-- Ivy Leafrunner
-- Jaelysia
-- Jahan Hawkwing
-- Jalinda Sprig
-- Jandria
-- Jannok Breezesong
-- Jer'kai Moonweaver
-- Jessir Moonbow
-- Jocaste
-- Kalaran Windblade
-- Kayneth Stillwind
-- Keeper Marandis
-- Keeper Moonshade
-- Keeper Remulos
-- Kerlonian Evershade
-- Kindal Moonweaver
-- Kinelory
-- Lariia
-- Larion
-- Latronicus Moonspear
-- Laurna Morninglight
-- Layo Starstrike
-- Lelanai
-- Liladris Moonriver
-- Lilyssia Nightbreeze
-- Loganaar
-- Lorekeeper Javon
-- Lorekeeper Lydros
-- Lorekeeper Mykos
-- Lotherias
-- Lysheana
-- Malfurion Stormrage
-- Mardant Strongoak
-- Master Nightsong
-- Master Sergeant Moonshadow
-- Mathrengyl Bearwalker
-- Mayara Brightwing
-- Maybess Riverbreeze
-- Melithar Staghelm
-- Merithra of the Dream
-- Myriam Moonsinger
-- Nessa Shadowsong
-- Officer Lunalight
-- Orendil Broadleaf
-- Orenthil Whisperwind
-- Parqual Fintallas
-- Pelturas Whitemoon
-- Porthannius
-- Priestess A'moora
-- Priestess Alathea
-- Priestess Anetta
-- Priestess Josetta
-- Pyall Silentstride
-- Quae
-- Rabine Saturna
-- Raedon Duskstriker
-- Raene Wolfrunner
-- Ranshalla
-- Remorseful Highborne
-- Rivern Frostwind
-- Saern Priderunner
-- Scholar Runethorn
-- Scout Galiaan
-- Scout Riell
-- Selendra
-- Sellandus
-- Senani Thunderheart
-- Sentinel Arynia Cloudsbreak
-- Sentinel Aynasha
-- Sentinel Elissa Starbreeze
-- Sentinel Glynda Nal'Shea
-- Sentinel Melyria Frostshadow
-- Sentinel Onaeya
-- Sentinel Selarin
-- Sentinel Silversky
-- Sentinel Thenysil
-- Sentinel Tysha Moonblade
-- Sentinel Velene Starstrike
-- Seriadne
-- Shael'dryn
-- Shandris Feathermoon
-- Sharlindra
-- Shay Leafrunner
-- Sheldras Moontree
-- Shen'dralar Ancient
-- Silva Fil'naveth
-- Syral Bladeleaf
-- Tabetha
-- Taladan
-- Talen
-- Talendria
-- Talin Keeneye
-- Tallonkai Swiftroot
-- Tarindrella
-- Tepa
-- Terenthis
-- Theridran
-- Thersa Windsong
-- Therylune
-- Therysil
-- Thistleheart
-- Thundris Windweaver
-- Thyn'tel Bladeweaver
-- Treshala Fallowbrook
-- Trianna
-- Troyas Moonbreeze
-- Tyrande Whisperwind
-- Valadar Starsong
-- Vestia Moonspear
-- Vyrin Swiftwind
-- Windcaller Kaldon
-- Windcaller Yessendra
-- Xylinnia Starshine
-
-orc:
-- Emmisary Gormok
-- Lago Blackwrench
-- Torek
-- Fallen Hero of the Horde
-- Ganrul Bloodeye
-- Garek
-- Gorzeeki Wildeyes
-- Grark Lorkrub
-- Kharan Mighthammer
-- Rokh Orhan
-- "Grol'dar"
-- Ag'tor Bloodfist
-- Ak'Zeloth
-- Argent Officer Garush
-- Arnok
-- Aturk the Anvil
-- Belgrom Rockmaul
-- Braug Dimspirit
-- Brewmaster Drohn
-- Chef Grual
-- Commander Aggro'gosh
-- Commander Gor'shak
-- Corporal Teeka Bloodsnarl
-- Craven Drok
-- Dar
-- Darkcaller Yanka
-- Darsok Swiftdagger
-- Defilers Emissary
-- Dirge Quikcleave
-- Doan Karhan
-- Drum Fel
-- Drull
-- Duhng
-- Durik
-- Ebru
-- Eitrigg
-- Galamav the Marksman
-- Galgar
-- Gart Mistrunner
-- Gazrog
-- Gol'dir
-- Gorbold Steelhand
-- Gordo
-- Gorn
-- Gorn One Eye
-- Gornek
-- Gor'mul
-- Grarnak Goodstitch
-- Greshka
-- Grimtak
-- Grod
-- Grondal Moonbreeze
-- Grunt Dogran
-- Grunt Logmar
-- Grunt Maug
-- Gurda Ragescar
-- Haromm
-- Hekkru
-- High Overlord Saurfang
-- Innkeeper Grosk
-- Innkeeper Gryshka
-- Kadrak
-- Kaltunk
-- Kaplak
-- Kargal Battlescar
-- Karl Boran
-- Kartosh
-- Karus
-- Kelm Hargunth
-- Ker'zigla
-- Kray
-- Krog
-- Krolg
-- Kruban Darkblade
-- Krusk
-- Lieutenant Rukag
-- Magga
-- Magtoor
-- Moktar Krin
-- Molthor
-- Morganus
-- Morgg Stormshot
-- Mukdrak
-- Nalpak
-- Narkk
-- Nartok
-- Nazgrel
-- Neeru Fireblade
-- Oben Rageclaw
-- Officer Redblade
-- Ogron
-- Ogtinc
-- Okothos Ironrager
-- Ophek
-- Orgnil Soulscar
-- Orgrimmar Commendation Officer
-- Ormak Grimshot
-- Ormok
-- Orok Deathbane
-- Orokk Omosh
-- Orphan Matron Battlewail
-- Orcish Orphan
-- Overlord Runthak
-- Regthar Deathgate
-- Rok Orhan
-- Rogvar
-- Sergeant Umala
-- Sergra Darkthorn
-- Smith Regzar
-- Smith Slagtree
-- Snang
-- Sorek
-- Sovik
-- Tarshaw Jaggedscar
-- Taskmaster Fizzule
-- Tharg
-- Therzok
-- Thotar
-- Thrall
-- Thund
-- Thunder Bluff Commendation Officer
-- Tog'thar
-- Ukor
-- Uthek the Wise
-- Varimathras
-- Vark Battlescar
-- Voggah Deathgrip
-- Vol'jin
-- Vorn Skyseer
-- Warcaller Gorlach
-- Warlord Gorchuk
-- Warlord Goretooth
-- Warmaster Garrick
-- Warmaster Laggrond
-- Warosh
-- Warsong Outrider
-- Warsong Runner
-- Warsong Scout
-- Warug
-- Zamek
-
-troll:
-- Elder Torntusk
-- Skinner Jamani
-- Atalai Exile
-- Batrider Pelekeiki
-- Chef Grual
-- Darkcaller Yanka
-- Doctor Serratus
-- Gadgetzan Bruiser
-- Ghede
-- Hadoken Swiftstrider
-- Hahrana Ironhide
-- Haleh
-- Healer Longrunner
-- Holanyee Marshal
-- Islen Waterseer
-- Jahan Hawkwing
-- Jang
-- Jangdor Swiftstrider
-- Jaxin Chong
-- Jediga
-- Jenal
-- Jenshan
-- Jeziba
-- Jhag
-- JinarZillen
-- Jinrokh the Breaker
-- Jinsora
-- Jotek
-- Jubahl Corpseseeker
-- Kali Remik
-- Karos Razok
-- Kenjai
-- Kenzigla
-- Kilhala
-- Kimjael
-- Kinweelay
-- Kitha
-- Korghan
-- Krakle
-- Kray
-- Kuraybin
-- MaiLahii
-- Maiah
-- Master Vornal
-- Maywiki of Zuldazar
-- Mebok Mizzyrix
-- Miaozan
-- Mirket
-- Misha Torkren
-- Mist
-- Mitsuwa
-- Muglash
-- Muigin
-- Mulgris Deepriver
-- Mystic Yayojin
-- Narkk
-- Nimboya
-- Officer VuShalay
-- Otho Mojiko
-- Primal Torntusk
-- Primalist Thurloga
-- Qeeju
-- Rashona Straglash
-- Rinwosho the Trader
-- Roxxik
-- Rumsen Fizzlebrack
-- Salfa
-- Sanath Lim-yo
-- SeJib
-- Seer Graytongue
-- Sergeant Yohwa
-- Shalumon
-- Shojamy
-- Skullsplitter Speaker
-- Slave Worker
-- Taijin
-- Tajarri
-- Takar the Seer
-- Takata Steelblade
-- Telf Joolam
-- Vish Kozus
-- Witch Doctor JinZil
-- Witch Doctor Mauari
-- Witch Doctor Unbagwa
-- Witch Doctor Uzeri
-- XenZilla
-- Xoncha
-- Yebb Neblegear
-- Yehkinya
-- Yenniku
-- Zamja
-- Zandozan
-- Zankaja
-- Zanza the Restless
-- Zarlman Two-Moons
-- Zayus
-- Zealaya
-- Zengu
-- Zevrost
-- Ziz Fizziks
-- Zjolnir
-- Zureetha Fargaze
-- Grish Longrunner
-- Atal'ai Exile
-- Bath'rah the Windwatcher
-- Batrider Pele'keiki
-- Bloodguard Rawtar
-- Captain Hecklebury Smotts
-- Cazul
-- Chief Sharpclaw
-- Darkspear Commendation Officer
-- Denni'ka
-- Derotain Mudsipper
-- Devrak
-- Dispatch Commander Ruag
-- Do'gol
-- Doctor Serratus
-- Doyo'da
-- Draz'Zilb
-- Dreka'Sur
-- Far Seer Mok'thardin
-- Gadgetzan Bruiser
-- Hewa
-- Hol'anyee Marshal
-- Innkeeper Kauth
-- Jang
-- Javnir Nashak
-- Jediga
-- Jen'shan
-- Jenal
-- Jes'rimon
-- Jeziba
-- Jhag
-- Jin'rokh the Breaker
-- Jin'sora
-- Jinar'Zillen
-- Jotek
-- Jubahl Corpseseeker
-- Jyn Stonehoof
-- Kaja'mite
-- Kelsuwa
-- Ken'jai
-- Kin'weelay
-- Lar Prowltusk
-- Loh'atu
-- Magar
-- Mahu
-- Mai'Lahii
-- Mai'ah
-- Mystic Yayo'jin
-- Nimboya
-- Officer Vu'Shalay
-- Ogunaro Wolfrunner
-- Ohanko
-- Onu
-- Otho Moji'ko
-- Pakwa
-- Rin'ji
-- Rin'wosho the Trader
-- Se'Jib
-- Senior Sergeant Kai'jin
-- Senior Sergeant T'kelah
-- Sergeant Yohwa
-- Sha'ni Proudtusk
-- Shim'la
-- Shoja'my
-- Sian'dur
-- Sian'tsu
-- Sida
-- Skullsplitter Speaker
-- Tai'jin
-- Tajarri
-- Thal'trak Proudtusk
-- Tsunaman
-- Un'Thuwa
-- Una
-- Ur'kyo
-- Uthel'nay
-- Var'jun
-- Vel'rin Fang
-- Vhan
-- Vi'el
-- Witch Doctor Jin'Zil
-- Witch Doctor Mau'ari
-- Witch Doctor Unbagwa
-- Witch Doctor Uzer'i
-- Wu Shen
-- Xan'tish
-- Xar'Ti
-- Xen'Zilla
-- Xen'to
-- Xon'cha
-- Xor'juul
-- Yeh'kinya
-- Yenniku
-- Zando'zan
-- Zanza the Restless
-- Zarlman Two-Moons
-- Zarrin
-- Zaruk
-- Zas'Tysh
-- Zayus
-- Zeal'aya
-- Zendo'jian
-- Zengu
-- Zevrost
-- Zggi
-- Zjolnir
-- Zor Lonetree
-
-tauren:
-- Hanazua
-- Maurin Bonesplitter
-- Aboda
-- Ahanu
-- Arch Druid Hamuul Runetotem
-- Aska Mistrunner
-- Auld Stonespire
-- Awenasa
-- Baine Bloodhoof
-- Bashana Runetotem
-- Bathrah the Windwatcher
-- Bena Winterhoof
-- Bor Wildmane
-- Brave Moonhorn
-- Brave Windfeather
-- Brek Stonehoof
-- Brumn Winterhoof
-- Bunthen Plainswind
-- Cairne Bloodhoof
-- Canaga Earthcaller
-- Cenarion Emissary Blackhoof
-- Chepi
-- Chief Hawkwind
-- Cliffwatcher Longhorn
-- Corporal Thund Splithoof
-- Delgo Ragetotem
-- Dorn Plainstalker
-- Elder Bloodhoof
-- Elder Darkhorn
-- Elder Dawnstrider
-- Elder Grimtotem
-- Elder High Mountain
-- Elder Highpeak
-- Elder Morndeep
-- Elder Morningdew
-- Elder Proudhorn
-- Elder Ragetotem
-- Elder Rumblerock
-- Elder Runetotem
-- Elder Skychaser
-- Elder Skygleam
-- Elder Skyseer
-- Elder Stonespire
-- Elder Thunderhorn
-- Elder Wildmane
-- Elder Windrun
-- Elder Windtotem
-- Elder Winterhoof
-- Etu Ragetotem
-- Eyahn Eagletalon
-- Fyr Mistrunner
-- Gann Stonespire
-- Gart Mistrunner
-- Gennia Runetotem
-- Greatmother Hawkwind
-- Greta Mosshoof
-- Grull Hawkwind
-- Gurda Wildmane
-- Hagar Lightninghoof
-- Harb Clawhoof
-- Harken Windtotem
-- Harutt Thunderhorn
-- Hewa
-- Holt Thunderhorn
-- Huum Wildmane
-- Jorn Skyseer
-- Jyn Stonehoof
-- Kaga Mistrunner
-- Kanati Greycloud
-- Kard Ragetotem
-- Kardris Dreamseeker
-- Kary Thunderhorn
-- Kaya Flathoof
-- Krang Stonehoof
-- Kuna Thunderhorn
-- Kurm Stonehoof
-- Lakota Windsong
-- Lorekeeper Raintotem
-- Magatha Grimtotem
-- Mahren Skyseer
-- Makaba Flathoof
-- Mani Winterhoof
-- Maur Grimtotem
-- Maur Raincaller
-- Meela Dawnstrider
-- Melor Stonehoof
-- Morin Cloudstalker
-- Motega Firemane
-- Mull Thunderhorn
-- Mura Runetotem
-- Naal Mistrunner
-- Nan Mistrunner
-- Nara Wildmane
-- Nata Dawnstrider
-- Nataka Longhorn
-- Nida Winterhoof
-- Orm Stonehoof
-- Pakwa
-- Paoka Swiftmountain
-- Pawe Mistrunner
-- Prate Cloudseer
-- Rahauro
-- Rau Cliffrunner
-- Roon Wildmane
-- Ruga Ragetotem
-- Ruul Snowhoof
-- Seikwa
-- Seer Ravenfeather
-- Seer Wiserunner
-- Senani Thunderheart
-- Sewa Mistrunner
-- Shadi Mistrunner
-- Sheal Runetotem
-- Sheza Wildmane
-- Sida
-- Sikwa
-- Siln Skychaser
-- Skorn Whitecloud
-- Stoneguard Clayhoof
-- Storm Shadowhoof
-- Sunn Ragetotem
-- Sura Wildmane
-- Tah Winterhoof
-- Taiga Wisemane
-- Talo Thornhoof
-- Taur Stonehoof
-- Teg Dawnstrider
-- Tepa
-- Thunder Bluff Commendation Officer
-- Thunderheart
-- Tigor Skychaser
-- Tonga Runetotem
-- Torm Ragetotem
-- Turak Runetotem
-- Una
-- Vorn Skyseer
-- Watcher Mahar Ba
-- Windcaller Proudhorn
-- Yama Snowhoof
-- Zangen Stonehoof
-- Bluff Runner Windstrider
-- Hogor Thunderhoof
-- Hgarth
- - Advisor Belgrum
-- Agnar Beastamer
-- Agtor Bloodfist
-- AkZeloth
-- Argent Officer Garush
-- Arnok
-- Aturk the Anvil
-- Azar Stronghammer
-- Belgrom Rockmaul
-- Bengor
-- Bloodguard Rawtar
-- Borgosh Corebender
-- Bounty Hunter Kolark
-- Braug Dimspirit
-- Caravaneer Ruzzgot
-- Cazul
-- Commander Aggrogosh
-- Commander Gorshak
-- Corporal Teeka Bloodsnarl
-- Craven Drok
-- Dar
-- Darkspear Commendation Officer
-- Darsok Swiftdagger
-- Devrak
-- Dispatch Commander Ruag
-- Doan Karhan
-- Dogol
-- Doyoda
-- DrazZilb
-- DrekaSur
-- Drull
-- Drum Fel
-- Duhng
-- Durik
-- Ebru
-- Eitrigg
-- Ertog Ragetusk
-- Exzhal
-- Far Seer Mokthardin
-- Felgur Twocuts
-- Foreman Thazzril
-- Frang
-- Frostwolf Ambassador Rokhstrom
-- Frostwolf Quartermaster
-- Frostwolf Stable Master
-- Frostwolf Wolf Rider Commander
-- Furl Scornbrow
-- Furmund
-- Galamav the Marksman
-- Galgar
-- GarThok
-- Garel Redrock
-- Garyl
-- Gazrog
-- General Kirika
-- Gereck
-- Ghak Healtouch
-- Godan
-- Goldir
-- Goli Krumn
-- Gorbold Steelhand
-- Gordo
-- Gormul
-- Gorn
-- Gorn One Eye
-- Gornek
-- Grazle
-- Greshka
-- Grimtak
-- Grod
-- Groldar
-- Grub
-- Grunt Dogran
-- Grunt Logmar
-- Grunt Maug
-- Gurda Ragescar
-- Haggrum Bloodfist
-- Haromm
-- Hegnar Rumbleshot
-- Hekkru
-- Henchman Valik
-- High Overlord Saurfang
-- Hogral Bakkan
-- Horde Warbringer
-- Hraug
-- Huldar
-- Kadrak
-- Kal
-- Kaltunk
-- Kaplak
-- Karang Amakkar
-- Kargal Battlescar
-- Kartosh
-- Karus
-- Katar
-- Kebok
-- Kelm Hargunth
-- Kelsuwa
-- Kernda
-- Kilram
-- Korin Fel
-- Korran
-- Kozish
-- Kreldig Ungor
-- Krog
-- Krolg
-- Kruban Darkblade
-- Krueg Skullsplitter
-- Krug Skullsplit
-- Krusk
-- Kurgul
-- Kuruk
-- Lar Prowltusk
-- Lieutenant Rukag
-- Lokhtos Darkbargainer
-- Lorekeeper Kildrath
-- Lumak
-- Magar
-- Magga
-- Magtoor
-- Mahu
-- Makaru
-- Mankrik
-- Margoz
-- Marukai
-- Master Gadrin
-- Mastok Wrilehiss
-- Mataus the Wrathcaster
-- Moktar Krin
-- Molthor
-- Morgg Stormshot
-- Morja
-- Morrogal
-- Morvek
-- Morzul Bloodbringer
-- Mosarn
-- Mudduk
-- Mukdrak
-- Muren Stormpike
-- Nalpak
-- Nartok
-- Nazeer Bloodpike
-- Nazgrel
-- Neeka Bloodscar
-- Neeru Fireblade
-- Niby the Almighty
-- Oben Rageclaw
-- Officer Redblade
-- Ogron
-- Ogtinc
-- Ogunaro Wolfrunner
-- Ohanko
-- Okothos Ironrager
-- Onu
-- Ophek
-- Oralius
-- Orcish Orphan
-- Orgnil Soulscar
-- Orgrimmar Commendation Officer
-- Ormak Grimshot
-- Ormok
-- Orok Deathbane
-- Orokk Omosh
-- Orphan Matron Battlewail
-- Overlord MokMorokk
-- Overlord Runthak
-- Overseer Oilfist
-- Ox
-- Raggifuz
-- Regthar Deathgate
-- Rezlak
-- Rhinag
-- Rockbiter
-- Rogvar
-- Rok Orhan
-- Ruzan
-- Rwag
-- Scout Bloodfist
-- Sergeant Durgen Stormpike
-- Sergeant Umala
-- Sergra Darkthorn
-- Shani Proudtusk
+- Shelene Rhobart
+- Shen'dralar Zealot
 - Shikrik
-- Slagg
-- Snang
-- Sorek
-- Sovik
-- Stormpike Quartermaster
+- Shylenai
+- Shyn
+- Sildanair
+- Skinner Jamani
+- Skorn Whitecloud
+- Skuerto
+- Sloan McCoy
+- Spirit of Lord Valthalak
+- Spraggle Frock
+- Stanley
+- Stormpike Emissary
 - Stormpike Ram Rider Commander
-- Stormpike Stable Master
-- Swart
-- Tagain
+- Stormwind City Guard
+- Stormwind City Patroller
+- Stormwind Reveler
+- Supervisor Raelen
+- Susan Tillinghast
+- Syurna
+- Tai'jin
 - Takrin Pathseeker
-- Tal
-- Tarshaw Jaggedscar
-- Taskmaster Fizzule
-- Taskmaster Scrange
-- Thaltrak Proudtusk
-- Tharg
-- Tharl Stonebleeder
-- Thark
+- Tallonkai Swiftroot
+- Tamed Kodo
+- Tammra Windfield
+- Tannok Frosthammer
+- Tansy Puddlefizz
+- Tel'Athir
+- Telurinon Moonshadow
+- Tenaron Stormgrip
+- Teronis' Corpse
+- Theocritus
 - Theridran
-- Therzok
-- Thork
-- Thotar
+- Therysil
+- Thor
 - Thrall
-- Thran Khorman
-- Thrumn
-- Thund
-- Togthar
-- TokKar
-- Torgan
-- Tranrek
-- Ukor
-- Umber
-- Umpi
-- UnThuwa
-- Urkyo
-- Uthek the Wise
-- Uzzek
-- Vark Battlescar
-- Vhan
-- Viel
-- Voggah Deathgrip
-- Volcor
-- Voljin
-- Warcaller Gorlach
-- Warden Haro
-- Warlord Gorchuk
-- Warlord Goretooth
-- Warmaster Garrick
-- Warmaster Laggrond
-- Warosh
-- Warsong Outrider
-- Warsong Runner
-- Warsong Scout
-- Warug
-- Watchmaster Sorigal
-- XarTi
-- Yaw Sharpmane
-- Zamek
-- Zangen Stonehoof
-- Zargh
-- Zaruk
-- ZasTysh
-- Zggi
-- Zor Lonetree
-- Auld Stonespire
-- Aboda
-- Ahanu
-- Aldris Fourclouds
-- Ancestral Spirit
-- Aska Mistrunner
-- Awenasa
-- Baine Bloodhoof
-- Bena Winterhoof
-- Beram Skychaser
-- Bor Wildmane
-- Brek Stonehoof
-- Brave Moonhorn
-- Brave Windfeather
-- Brumn Winterhoof
-- Bunthen Plainswind
-- Cairne Bloodhoof
-- Canaga Earthcaller
-- Cenarion Emissary Blackhoof
-- Chepi
-- Chief Hawkwind
-- Cliffwatcher Longhorn
-- Delgo Ragetotem
-- Deino
-- Dorn Plainstalker
-- Elder Bloodhoof
-- Elder Darkhorn
-- Elder Grimtotem
-- Elder High Mountain
-- Elder Proudhorn
-- Elder Ragetotem
-- Elder Runetotem
-- Elder Skychaser
-- Elder Skyseer
-- Elder Stonespire
-- Elder Thunderhorn
-- Elder Wildmane
-- Elder Windtotem
-- Elder Winterhoof
-- Etu Ragetotem
-- Eyahn Eagletalon
-- Fyr Mistrunner
-- Gann Stonespire
-- Gennia Runetotem
-- Ghak Healtouch
-- Greatmother Hawkwind
-- Grull Hawkwind
-- Gurda Wildmane
-- Hadoken Swiftstrider
-- Hagar Lightninghoof
-- Hahrana Ironhide
-- Harb Clawhoof
-- Harken Windtotem
-- Harutt Thunderhorn
-- Huum Wildmane
-- Innkeeper Pala
-- Jangdor Swiftstrider
-- Jannos Lighthoof
-- Kaga Mistrunner
-- Kanati Greycloud
-- Kard Ragetotem
-- Kardris Dreamseeker
-- Kary Thunderhorn
-- Katar
-- Kaya Flathoof
-- Korin Fel
-- Krang Stonehoof
-- Kuna Thunderhorn
-- Kurm Stonehoof
-- Kuruk
-- Lakota Windsong
-- Lorekeeper Raintotem
-- Maggran Earthbinder
-- Mahani
-- Mahren Skyseer
-- Makaba Flathoof
-- Mani Winterhoof
-- Mankrik
-- Maur Grimtotem
-- Maur Raincaller
-- Melor Stonehoof
-- Morin Cloudstalker
-- Mull Thunderhorn
-- Mura Runetotem
-- Naal Mistrunner
-- Nadyia Maneweaver
-- Nan Mistrunner
-- Nara Wildmane
-- Nata Dawnstrider
-- Nataka Longhorn
-- Nida Winterhoof
-- Nyoma
-- Orm Stonehoof
-- Pao'ka Swiftmountain
-- Pawe Mistrunner
-- Prate Cloudseer
-- Rau Cliffrunner
-- Roon Wildmane
-- Ruga Ragetotem
-- Ruul Eagletalon
-- Ruul Snowhoof
-- Ruzan
-- Seikwa
-- Sewa Mistrunner
-- Shadi Mistrunner
-- Sheal Runetotem
-- Sheza Wildmane
-- Sikwa
-- Siln Skychaser
-- Storm Shadowhoof
-- Stoneguard Clayhoof
-- Sunn Ragetotem
-- Sura Wildmane
-- Tah Winterhoof
-- Taiga Wisemane
-- Takar the Seer
-- Talo Thornhoof
-- Tand
-- Taur Stonehoof
-- Teg Dawnstrider
-- Thunder Bluff Commendation Officer
-- Thunderheart
-- Tigor Skychaser
-- Tonga Runetotem
-- Torm Ragetotem
-- Tormek Stoneriver
-- Turak Runetotem
-- Yama Snowhoof
-
-undead:
-- Golhine the Hooded
-- Alassin
-- Apothecary Zamah
-- Archbishop Benedictus
-- Balthule Shadowstrike
-- Belia Thundergranite
-- Courier Hammerfall
-- Defilers Emissary
-- Deino
-- Derotain Mudsipper
-- Dirge Quikcleave
-- Doctor Draxlegauge
-- Dran Droffers
-- Duthorian Rall
-- Dying Archaeologist
-- Gakin the Darkbinder
-- Gershala Nightwhisper
-- Gracina Spiritmight
-- Griniblix the Spectator
-- Grish Longrunner
-- Harbinger Balthazad
-- Junior Apothecary Holland
-- Kaal Soulreaper
-- Kaela Shadowspear
-- Karna Remtravel
-- Lillith the Lithe
-- Lorekeeper Lydros
-- Loremaster Dibbs
-- Malton Droffers
-- Mangletooth
-- Martek the Exiled
-- Master Apothecary Faranell
-- Melnan Darkstone
-- Mennet Carkad
-- Morganus
-- Narm Faulk
-- Nilith Lokrav
-- Officer Ironbeard
-- Pamela Redpath
-- Priestess Anetta
-- Remorseful Highborne
-- Rumstag Proudstrider
-- Senior Sergeant Grimsford
-- Seril Scourgebane
-- Shenthul
-- Strahad Farsan
-- Thadius Grimshade
-- The Abominable Greench
-- The Defias Traitor
-- Tiev Mordune
-- Torta
-- Umbranse the Spiritspeaker
-- Varimathras
-- Acolyte Magaz
-- Acolyte Wytula
-- Al'tabim the All-Seeing
-- Alchemist Narett
-- Anastasia Hartwell
-- Apothecary Dithers
-- Apothecary Faustin
-- Apothecary Helbrim
-- Apothecary Jezel
-- Apothecary Johaan
-- Apothecary Lydon
-- Apothecary Renferrel
-- Apothecary Staffron Lerent
-- Apothecary Zamah
-- Apothecary Zinge
-- Arantir
-- Augustus the Touched
-- Bethor Iceshard
-- Bishop Farthing
-- Bubulo Acerbus
-- Carendin Halgar
-- Coleman Farthing
-- Cylina Darkheart
-- Daio the Decrepit
-- Dalar Dawnweaver
-- Dark Cleric Beryl
-- Dark Cleric Duesten
-- Darkreaver's Fallen Charger
-- Deathguard Burgess
-- Deathguard Dillinger
-- Deathguard Humbert
-- Deathguard Linnea
-- Deathguard Podrig
-- Deathguard Saltain
-- Deathguard Samsa
-- Deathguard Simmer
-- Deathguard Tor
-- Deathmaster Dwire
-- Deathstalker Erland
-- Deathstalker Faerleia
-- Deathstalker Lesh
-- Deathstalker Vincent
-- Deathstalker Zraedus
-- Derak Nightfall
-- Drulzegar Skraghook
-- Eris Havenfire
-- Evonice Sootsmoker
-- Executor Arren
-- Executor Zygand
-- High Executor Darthalia
-- High Executor Derrington
-- High Executor Hadrec
-- Lady Sylvanas Windrunner
-- Malyfous Darkhammer
-- Menara Voidrender
-- Nathanos Blightcaller
-- Shadow Priestess Shai
-- Shadow Priestess Vandis
-- Shadowmage Vivian Lagrave
+- Thunder Bluff Reveler
+- Thurman Schneider
+- Thyn'tel Bladeweaver
+- Thysta
+- Tilli Thistlefuzz
+- Tog'thar
+- Tooga
+- Topper McNabb
+- Trackmaster Zherin
+- Traugh
+- Turian
+- Twizwick Sprocketgrind
+- Ulthir
 - Undercity Commendation Officer
 - Undertaker Mordo
-
-goblin:
-- Kumisha the Collector
-- Blizrik Buckshot
-- Drizzlik
-- Feegly the Exiled
-- Fuzruckle
-- Gazlowe
-- Grinkle
-- Grizzlowe
-- Kebok
-- Lexlort
-- Martek the Exiled
-- Marvon Rivetseeker
-- Mupsi Shacklefridd
-- Narain Soothfancy
-- Narkk
-- Nogg
-- Piznik
-- Rinji
-- Shizzle
-- Skuerto
-- Sputtervalve
-- Wrenix the Wretched
-- Xizk Goodstitch
-- Ziz Fizziks
-- Bijou
-- Caz Twosprocket
-- Chemist Cuely
-- Chemist Fuely
-- Chief Engineer Bilgewhizzle
-- Cork Gizelton
-- Crank Fizzlebub
-- Deeg
-- Dink
-- Dizzy One-Eye
-- Doc Mixilpixil
-- Drizzlik
-- Fizzle Brassbolts
-- Gazlowe
-- Gelvas Grimegate
-- Goblin Pit Boss
-- Kravel Koalbeard
-- Krazek
-- Marin Noggenfogger
-- Rigger Gizelton
-- Rilli Greasygob
-- Security Chief Bilgewhizzle
-- Sputtervalve
-- Stoley
-- Wharfmaster Dizzywig
-- Wharfmaster Lozgil
-
-blood_elf:
-- Loramus Thalipedes
-- Mathredis Firestar
-- Parqual Fintallas
-- Aendel Windspear
+- Vaean
+- Vectus
+- Vehena
+- Venya Marthand
+- Vinasia
+- Vish Kozus
+- Volcor
+- Voloren
+- Warden Haro
+- Warden Thelwater
+- Warug
+- Watcher Dodds
+- Watchmaster Sorigal
+- Wiley the Black
+- Wilhelm Strang
+- Willow
+- Winna Hazzard
+- Witch Doctor Uzer'i
+- Wu Shen
+- Wynne Larson
+- Xen'to
+- Yebb Neblegear
+- Yorba Screwspigot
+- Zargh
+- Zayus
+- Zevrost
+- Zureetha Fargaze
+naga:
+- Cavindra
+- Gordok Warlock
+- Lorekeeper Javon
+- Lorekeeper Mykos
+- Overlord Runthak
+- Sage Korolusk
+- Scholar Runethorn
+nightelf:
 - Aelthalyste
-- Azj'Tordin
-- Belnistrasz
+- Ahanu
+- Algernon
+- Alyssa Griffith
+- Annora
+- Argent Guard Thaelrid
+- Baldruc
+- Barim Jurgenstaad
+- Baron Longshore
+- Bonnie Stoneflayer
+- Brenwyn Wintersteel
+- Bretta Goldfury
+- Bromiir Ormsen
+- Brother Benjamin
+- Bryllia Ironbrand
+- Caelyb
+- Captain Evencane
+- Captain Hecklebury Smotts
+- Catherine Leland
+- Cazul
+- Courier Hammerfall
+- Cyrus Therepentous
+- Daera Brightspear
+- Daniel Bartlett
+- Dargh Trueaim
+- Darn Talongrip
+- Deathguard Linnea
+- Deathstalker Erland
+- Dispatch Commander Metz
+- Doctor Herbert Halsey
+- Doctor Martin Felben
+- Dolman Steelfury
+- Elder Bronzebeard
+- Elder Morningdew
+- Elder Nightwind
+- Elder Obsidian
+- Elder Primestone
+- Elder Proudhorn
+- Elder Ragetotem
+- Elder Riversong
+- Elder Rumblerock
+- Elder Runetotem
+- Elder Starweave
+- Elder Stonefort
+- Elder Stonespire
+- Elder Stormbrow
+- Elder Thunderhorn
+- Elder Wildmane
+- Elder Winterhoof
+- Eldraeith
+- Elki
+- Elly Langston
+- Ezekiel Graves
+- Faruza
+- Fel'zerul
+- Fillius Fizzlespinner
+- Fleet Master Firallon
+- Ganoosh
+- Grenil Steelfury
+- Guard Parker
+- Hahrana Ironhide
+- High Explorer Magellas
+- High Priestess MacDonnell
+- Huntress Skymane
+- Huntsman Leopold
+- Innkeeper Brianna
+- Innkeeper Faralia
+- Innkeeper Firebrew
+- Innkeeper Shul'kar
+- Innkeeper Sikewa
+- Innkeeper Wiley
+- Jhag
+- Johnny McWeaksauce
+- Kaal Soulreaper
+- Kaelystia Hatebringer
+- Karrina Mekenda
+- Kitta Firewind
+- Kuruk
+- Lady Katrana Prestor
+- Lard
+- Lawrence Schneider
+- Lexlort
+- Lieutenant Orrin
+- Lilyssia Nightbreeze
+- Lolo the Lookout
+- Lorekeeper Lydros
+- Magistrate Marduke
+- Mangorn Flinthammer
+- Martha Alliestar
+- Mary Edras
+- Master Nightsong
+- Mataus the Wrathcaster
+- Maur Raincaller
+- Mayda Thane
+- Merithra of the Dream
+- Millie Gregorian
+- Milly Osworth
+- Milstaff Stormeye
+- Nessa Shadowsong
+- Nyse
+- Pakwa
+- Private Porter
+- Prospector Stormpike
+- Randal Worth
+- Red Jack Flint
+- Ribbly's Crony
+- Rilli Greasygob
+- Sarah Killian
+- Scout Tharr
+- Sergeant Bly
+- Sergeant Major Germaine
+- Shadow Priestess Vandis
+- Sharlindra
+- Shellene
+- Shen'dralar Ancient
+- Shylamiir
+- Smeed Scrabblescrew
+- Stephen Ryback
+- Sydney Upton
+- Sylvanna Forestmoon
+- Tarn
+- Taronn Redfeather
+- Tarrel Rockweaver
+- Tawny Grisette
+- Tharg
+- Tharlidun
+- Tharm
+- Therzok
+- Thief Catcher Farmountain
+- Thief Catcher Thunderbrew
+- Thonys Pillarstone
+- Thyssiana
+- Timothy Worthington
+- Trianna
+- Victor Ward
+- Warmaster Garrick
+- Warosh
+- Wenikee Boltbucket
+- Whiskey Slim
+- Windcaller Kaldon
+- Winter Reveler
+- World Alchemy Trainer
+- World Enchanting Trainer
+- World Engineering Trainer
+- World Leatherworking Trainer
+- World Tailoring Trainer
+- Wrenix the Wretched
+- Wrenix's Gizmotronic Apparatus
+- Zamja
+- Zangen Stonehoof
+northrendskeleton:
+- Zanza the Restless
+orc:
+- Abercrombie
+- Abigail Sawyer
+- Alaindia
+- Anastasia Hartwell
+- Angela Curthas
+- Antarius
+- Arch Druid Hamuul Runetotem
+- Argent Outfitter
+- Aska Mistrunner
+- Aturk the Anvil
+- Bardu Sharpeye
+- Belgrom Rockmaul
+- Bera Stonehammer
+- Bijou
+- Bishop DeLavey
 - Bloodmage Drazial
 - Bloodmage Lynnore
-- Braelyn Firehand
-- Captain Thalo'thas Brightsun
-- Dalar Dawnweaver
-- Dawnwatcher Selgorm
-- Dawnwatcher Shaedlass
-- Ambassador Ardalan
-- Dalinda Malem
-
-
-dragon:
-- Anachronos
-- Andorgos
-- Arygos
-- Baristolth of the Shifting Sands
-- Caelestrasz
-- Chromie
-- Chronos
-- Cyrus Therepentous
-- Emberstrife
-- Itharius
-- Kandrostrasz
-- Merithra of the Dream
-- Vaelastrasz the Corrupt
-- Vethsera
-
-mechanical:
-- A-Me 01
-- Awbee
-- Fishbot 5000
+- Bloodsail Traitor
+- Bluffwatcher
+- Borgosh Corebender
+- Brave Darksky
+- Brave Rockhorn
+- Brine
+- Brombar Higgleby
+- Bulkrek Ragefist
+- Burbik Gearspanner
+- Canaga Earthcaller
+- Captain Nials
+- Clyde Kellen
+- Commander Karl Philips
+- Crusader Lord Valdelmar
+- Curgle Cranklehop
+- Darnassus Reveler
+- Darrowshire Spirit
+- Davil Crokford
+- Deathguard Bartholomew
+- Deathguard Mort
+- Deathguard Royann
+- Deathstalker Adamant
+- Deliana
+- Doctor Serratus
+- Edrick Killian
+- Elder Hammershout
+- Elder Highpeak
+- Eridan Bluewind
+- Ertog Ragetusk
+- Falfindel Waywarder
+- Father Lankester
+- Fela
+- Fenstad Argyle
+- Fenthwick
+- Festival Flamekeeper
+- Finkle Einhorn
+- Francis Eliot
+- Frezza
+- Fyldren Moonfeather
+- Fyr Mistrunner
+- Galvan the Ancient
+- Genavie Callow
+- Geoffrey Hartwell
+- Georgia
+- Gilshalan Windwalker
+- Gordok Brute
+- Gordon Wendham
+- Gorn
+- Graham Van Talen
+- Gregor Greystone
+- Gregory Charles
+- Greta Mosshoof
+- Grimestack
+- Grizzlowe
+- Guard Thomas
+- Gubber Blump
+- Guthrum Thunderfist
+- Hank the Hammer
+- Helena Atwood
+- High Executor Derrington
+- Hol'anyee Marshal
 - Homing Robot OOX-09/HL
 - Homing Robot OOX-17/TN
 - Homing Robot OOX-22/FE
-- Wizzlecrank's Shredder
-
-spirit:
-- Ancestral Spirit
-- Ancient Equine Spirit
-- Arei
-- Forest Wisp
+- Hraug
+- Huum Wildmane
+- Illiyana
+- Innkeeper Gryshka
+- Innkeeper Kaylisk
+- Ironforge Guard
+- Ironforge Reveler
+- Jaelysia
+- Jalane Ayrole
+- James Van Brunt
+- Jangdor Swiftstrider
+- Jeen'ra Nightrunner
+- Jonathan Chambers
+- Josef Gregorian
+- Joseph Moore
+- Kaga Mistrunner
+- Karos Razok
+- Kary Thunderhorn
+- Kelm Hargunth
+- Ker Ragetotem
+- Kernda
+- Killium Bouldertoe
+- Kimberly Grant
+- Kindal Moonweaver
+- Krueg Skullsplitter
+- Kuna Thunderhorn
+- Laird
+- Lariia
+- Lars
+- Layo Starstrike
+- Loramus Thalipedes
+- Louis Warren
+- Malakai Cross
+- Marin Noggenfogger
+- Marshal Dughan
+- Marshal McBride
+- Marvon Rivetseeker
+- Mattie Alred
+- McGavan
+- Midsummer Celebrant
+- Mikhail
+- Miles Welsh
+- Mist
+- Mistress Nagmara
+- Moktar Krin
+- Muigin
+- Mukdrak
+- Murgot Deepforge
+- Myrokos Silentform
+- Narkk
+- Nathaniel Steenwick
+- Nicholas Atwood
+- Officer Gothena
+- Officer Porterhouse
+- Oglethorpe Obnoticus
+- Orgrimmar Reveler
+- Orokk Omosh
+- Otho Moji'ko
+- Ox
+- Paxton Ganter
+- Penny
+- Pephredo
+- Peria Lamenur
+- Pratt McGrubben
+- Raleigh Andrean
+- Rau Cliffrunner
+- Raze
+- Reginald Windsor
+- Ribbly's Crony
+- Ronald Burch
+- Samuel Van Brunt
+- Scholomance Student
+- Sentinel Elissa Starbreeze
+- Sha'ni Proudtusk
+- Shael'dryn
+- Sheal Runetotem
+- Shelby Stoneflint
+- Sheza Wildmane
+- Silas Zimmer
+- Smith Slagtree
 - Spirit of Kirith
-- Spirit of Lord Valthalak
-- Zaetar's Spirit
-
-elemental:
-- Duke Hydraxis
-- Hydraxian Honor Guard
-- Minor Manifestation of Earth
-- Minor Manifestation of Water
-
-centaur:
-- Barrus
-- Celebras the Redeemed
-- Centaur Pariah
-- Chief Sharpclaw
-- Gizelton Caravan Kodo
-
-qiraji:
-- Commander Mar'alith
-
-naga:
-- Cavindra
-
-ogre:
-- Captain Kromcrush
-- Cho'Rush the Observer
-
-demon:
-- Dreadsteed Spirit
-- Impsy
+- Springspindle Fizzlegear
+- Sunn Ragetotem
+- Sura Wildmane
+- Syral Bladeleaf
+- Tagain
+- Takata Steelblade
+- Tapoke "Slim" Jahn
+- Teg Dawnstrider
+- Telf Joolam
+- Thaddeus Webb
+- Thalon
+- Theodore Griffs
+- Theodore Mont Claire
+- Thomas Mordan
+- Thorgrum Borrelson
+- Thurman Mullby
+- Thuul
+- Timothy Weldon
+- Tor'gan
+- Torm Ragetotem
+- Torwa Pathfinder
+- Trenton Lighthammer
+- Turak Runetotem
+- Tyrion
+- Ula'elek
+- Una
+- Undercity Guardian
+- Undercity Reveler
+- Urek Thunderhorn
+- Veron Amberstill
+- Walter Ellingson
+- Wesley
+- William Kielar
+- Willix the Importer
+- Woo Ping
+- Xanis Flameweaver
+- Zachariah Post
+- Zapetta
+- Zardeth of the Black Claw
+- Zengu
+- Ziz Fizziks
+scourge:
+- '"Sea Wolf" MacKinley'
+- '"Shaky" Phillipe'
+- Aethalas
+- Alamar Grimm
+- Alexi Barov
+- Archaeologist Hollee
+- Archmage Shymm
+- Arias'ta Bladesinger
+- Ariyell Skyshadow
+- Astarii Starseeker
+- Asterion
+- Bena Winterhoof
+- Betina Bigglezink
+- Brikk Keencraft
+- Caer Darrow Guardsman
+- Caer Darrow Horseman
+- Captain Danuvin
+- Daelyshia
+- Darnassus Reveler
+- Darnassus Sentinel
+- Deathmaster Dwire
+- Deathstalker Mortis
+- Donal Osgood
+- Dorn Plainstalker
+- Elanaria
+- Etu Ragetotem
+- Fariel Starsong
+- Fin Fizracket
+- Fishbot 5000
+- Flik's Frog
+- Fylerian Nightwing
+- Glorandiir
+- Gremnik Rizzlesprang
+- Greth
+- Grimble
+- Gwennyth Bly'Leggonde
+- Haromm
+- Hilary
+- Huntsman Markhor
+- Innkeeper Grosk
+- Islen Waterseer
+- J.D. Collie
+- Jhordy Lapforge
+- Jyn Stonehoof
+- Katoom the Angler
+- Kebok
+- Ken'jai
+- Kieran
+- Kulleg Stonehorn
+- Kym Wildmane
+- Leonid Barthalomew the Revered
+- Lieutenant Farren Orinelle
+- Lyon Mountainheart
+- Magistrate Solomon
+- Mani Winterhoof
+- Marduk Blackpool
+- Mathrengyl Bearwalker
+- Melor Stonehoof
+- Mokvar
+- Mountaineer Gravelgaw
+- Mountaineer Pebblebitty
+- Mydrannul
+- Mystic Yayo'jin
+- Mythidan
+- Mythrin'dir
+- Nan Mistrunner
+- Nata Dawnstrider
+- Nida Winterhoof
+- Noggle Ficklespragg
+- Pand Stonebinder
+- Primal Torntusk
+- Privateer Bloads
+- Privateer Groy
+- Qeeju
+- Razzeric
+- Razzle Sprysprocket
+- Reggifuz
+- Remains of Trey Lightforge
+- Remorseful Highborne
+- Richard Kerwin
+- Roberto Pupellyverbos
+- Rockbiter
+- Roon Wildmane
+- Roxxik
+- Rumsen Fizzlebrack
+- Ruw
+- Salazar Bloch
+- Sarah Goode
+- Scout Galiaan
+- Scout Riell
+- Searn Firewarder
+- Seer Ravenfeather
+- Sergeant Hartman
+- Sewa Mistrunner
+- Shelgrayn
+- Smokey LaRue
+- Steven Black
+- Tal
+- Taladan
+- Talaelar
+- Teloren
+- Thal'trak Proudtusk
+- The Defias Traitor
+- Thomas
+- Thun'grim Firegaze
+- Thundris Windweaver
+- Thurston Xane
+- Undercity Reveler
+- Vargus
+- Vhan
+- Vinchaxa
+- Watcher Backus
+- Watcher Brownell
+- Watcher Ladimore
+- Weldon Barov
+- X'yera
+- Yldan
+- Zap Farflinger
+skeleton:
+- Elder Moonstrike
+- Elder Moonwarden
+- Forest Wisp
+- Lorekeeper Kildrath
+taunka:
+- Captain Blackanvil
+- Dirk Thunderwood
+- Guard Didier
+- Keras Wolfheart
+- Lady Hoteshem
+- Midsummer Celebrant
+- Rin'wosho the Trader
+- Rutgar Glyphshaper
+tauren:
+- A-Me 01
+- Aayndia Floralwind
+- Ageron Kargal
+- Baelog
+- Balthule Shadowstrike
+- Betty Quin
+- Breyk
+- Brother Anton
+- Cain Firesong
+- Caretaker Alen
+- Chepi
+- Commander Samaul
+- Danlaar Nightstride
+- Dannie Fizzwizzle
+- Darrowshire Spirit
+- Deathguard Terrence
+- Deathstalker Lesh
+- Delgren the Purifier
+- Deputy Feldon
+- Deputy Willem
+- Drizzlik
+- Earthcaller Franzahl
+- Elder Morndeep
+- Emmisary Gormok
+- Estelle Gendry
+- Father Cobb
+- Felicia Doan
+- First Mate Crazz
+- First Mate Fitzsimmons
+- Franklin Lloyd
+- Galamav the Marksman
+- Gorbold Steelhand
+- Grod
+- Grunt Logmar
+- Hana'zua
+- Hanashi
+- Haughty Modiste
+- Helgrum the Swift
+- Hierophant Theodora Mulvadania
+- Highlord Demitrian
+- Innkeeper Bates
+- Innkeeper Karakul
+- Ironforge Guard
+- Janice Felstone
+- Jenna Lemkenilli
+- Kartosh
+- Kelsuwa
+- Kendor Kabonka
+- Kilram
+- Lady Callow
+- Lexington Mortaim
+- Librarian Mae Paledust
+- Liladris Moonriver
+- Lookout Captain Lolo Longstriker
+- Mai'ah
+- Malcomb Wynn
+- Midsummer Celebrant
+- Mishellena
+- Mizzle the Crafty
+- Monika Sengutz
+- Nimboya
+- Orgrimmar Reveler
+- Pierce Shackleton
+- Piznik
+- Quentin
+- Raleigh the Devout
+- Ravenholdt Assassin
+- Rimblat Earthshatter
+- Rory
+- Seeker Cromwell
+- Seeker Nahr
+- Sergeant Stonebrow
+- Shadi Mistrunner
+- Shandris Feathermoon
+- Siln Skychaser
+- Smith Argus
+- Spark Nilminer
+- Tand
+- Taur Stonehoof
+- Tepa
+- Thadius Grimshade
+- Thorkaf Dragoneye
+- Tigor Skychaser
+- Treshala Fallowbrook
+- Trixie Quikswitch
+- Undercity Reveler
+- Vorrel Sengutz
+- Vosur Brakthel
+- Whuut
+- William Pestle
+- Wizlo Bearingshiner
+- Xan'tish
+- Zankaja
+troll:
+- Agent Kearnen
+- Alegorn
+- Alexandra Constantine
+- Andrus
+- Anishar
+- Aristan Mottar
+- Atal'ai Exile
+- Auld Stonespire
+- Brave Wildrunner
+- Bryan Cross
+- Buzzek Bracketswing
+- Cairne Bloodhoof
+- Captain Stoutfist
+- Carlin Redpath
+- Caynrus
+- Chardryn
+- Claude Erksine
+- Commander Ashlam Valorfist
+- Cyridan
+- Cyroen
+- Dannelor
+- Darkmoon Faire Carnie
+- Deathguard Podrig
+- Deathguard Saltain
+- Denatharion
+- Dinita Stonemantle
+- Dorion
+- Ebru
+- Egan
+- Erion Shadewhisper
+- Firodren Mooncaller
+- Fyldan
+- Galen Goodward
+- Gerik Koen
+- Gordo
+- Gorkas
+- Grunt Dogran
+- Hagar Lightninghoof
+- Ironforge Guard
+- Ironforge Reveler
+- Ironus Coldsteel
+- Jenova Stoneshield
+- Jorgen
+- Kadrak
+- Karna Remtravel
+- Kildar
+- Kranal Fiss
+- Krathok Moltenfist
+- Kroum
+- Lelanai
+- Lina Hearthstove
+- Linken
+- Liv Rizzlefix
 - Lord Banehollow
-- Lord Arkkoroc
-- Varimathras
-
-wisp:
-- Anilia
-- Arei
-
-furbolg:
-- Kernobee
-
-animal:
-- Chicken
-- Tooga
-
-construct:
+- Lore Keeper of Norgannon
+- Master Sergeant Fizzlebolt
+- Melithar Staghelm
+- Metzen the Reindeer
+- Miles Dexter
+- Morridune
+- Myolor Sunderfury
+- Nalpak
+- Naralex
+- Nightmare
+- Okothos Ironrager
+- Orgrimmar Grunt
+- Orgrimmar Reveler
+- Outfitter Eric
+- Royal Factor Bathrilor
+- Royal Overseer Bauhaus
+- Ruzan
+- Scholomance Student
+- Sentinel Velene Starstrike
+- Shadowmage Vivian Lagrave
+- Sian'tsu
+- Smiling Jim
 - Stone Watcher of Norgannon
-
-object:
-- Cracked Necrotic Crystal
-- Faint Necrotic Crystal
-- Wanted Poster
+- Telonis
+- Therylune
+- Vazario Linkgrease
+- Vol'jin
+- Waldor
+- Warlord Goretooth
+- Wizbang Cranktoggle
+- Xor'juul
+- Yeh'kinya
+- Ysida Harmon
+- Zaruk
+vrykul:
+- Al'tabim the All-Seeing
+- Aldris Fourclouds
+- Barrus
+- Booty Bay Reveler
+- Darkmoon Faire Carnie
+- Deathguard Tor
+- Defilers Emissary
+- Elenia Haydon
+- Exzhal
+- Falthir the Sightless
+- Frostwolf Emissary
+- Grinkle
+- Jang
+- Jin'rokh the Breaker
+- League of Arathor Emissary
+- Lieutenant Jocryn Heldric
+- Maywiki of Zuldazar
+- Molthor
+- Morja
+- Orok Deathbane
+- Samuel Hawke
+- Senior Sergeant T'kelah
+- Temma of the Wells
+- Tormek Stoneriver
+- Wagner Hammerstrike
+- Warsong Emissary
+- Windcaller Yessendra

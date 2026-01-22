@@ -93,7 +93,7 @@ REF_CODES = build_ref_codes("../samples")
 # =========================
 
 
-def chunk_text_robust(text, min_chars=200, max_chars=300):
+def chunk_text_robust(text, min_chars=150, max_chars=300):
     """
     Split text into TTS-friendly chunks of roughly 150-300 characters.
     - Uses sentence boundaries: .?!; and ...
@@ -148,6 +148,7 @@ def chunk_text_robust(text, min_chars=200, max_chars=300):
             final_chunks.append(chunk)
 
     return final_chunks
+
 def get_narrator_from_metadata(row):
     dialog_type = str(row.get("dialog_type", "")).lower()
 
@@ -161,7 +162,7 @@ def get_narrator_from_metadata(row):
 
     # ---------- existing NPC logic ----------
     name = row.get("npc_name")
-    name = name.replace("'", "").replace("’", "")
+    name = name.replace("'", "").replace("'", "")
     meta = NPC_LOOKUP.get(name)
 
     if not meta:
@@ -274,6 +275,29 @@ def normalize_dialog_text(text: str) -> str:
 
     return text.strip()
 
+
+def get_next_gossip_index(base_dir):
+    """
+    Find the next available gossip_N.wav index.
+    Returns 0 if no gossip files exist.
+    """
+    if not os.path.exists(base_dir):
+        return 0
+    
+    existing = [f for f in os.listdir(base_dir) if f.startswith("gossip")]
+    if not existing:
+        return 0
+    
+    # Extract indices from gossip_N.wav files
+    indices = []
+    for f in existing:
+        match = re.match(r"gossip_(\d+)\.wav", f)
+        if match:
+            indices.append(int(match.group(1)))
+    
+    return max(indices) + 1 if indices else 0
+
+
 def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     race = get_narrator_from_metadata(row)
     if not race or race not in REF_CODES:
@@ -295,8 +319,10 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
         base_dir = os.path.join(output_dir, race, npc_dirname)
         os.makedirs(base_dir, exist_ok=True)
 
-        if dialog_type == "gossip":
-            filename = "gossip.wav"
+        if dialog_type == "gossip" or dialog_type == "gossip_broadcast":
+            # Use numbered suffix for multiple gossip entries
+            idx = get_next_gossip_index(base_dir)
+            filename = f"gossip_{idx}.wav"
         else:
             qid = row.get("quest_id")
             nid = row.get("npc_id")
@@ -315,6 +341,7 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
     filepath = os.path.join(base_dir, filename)
 
     if os.path.exists(filepath) and not regenerate:
+        print(f"[SKIP] File already exists: {filepath}")
         return filepath
 
     ref = REF_CODES[race]
@@ -359,10 +386,13 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--race", type=str)
+    parser.add_argument("--sex", type=str, help="Filter by NPC sex (male/female)")
     parser.add_argument("--npc", type=str)
     parser.add_argument("--zone", type=str)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--regenerate", action="store_true")
+    parser.add_argument("--clean-orphans", action="store_true", 
+                        help="Delete sound files for NPCs not in metadata or with wrong race/sex")
     return parser.parse_args()
 
 
@@ -377,6 +407,13 @@ def filter_dataframe(df, args):
         }
         df = df[df["npc_name"].isin(allowed)]
 
+    if args.sex:
+        allowed = {
+            name for name, meta in NPC_LOOKUP.items()
+            if meta.get("sex") == args.sex
+        }
+        df = df[df["npc_name"].isin(allowed)]
+
     if args.zone:
         allowed = {
             name for name, meta in NPC_LOOKUP.items()
@@ -388,6 +425,53 @@ def filter_dataframe(df, args):
         df = df.head(args.limit)
 
     return df
+
+
+def clean_orphaned_files(output_dir="../sounds"):
+    """
+    Delete sound files for NPCs that:
+    1. Don't exist in NPC_LOOKUP
+    2. Are in the wrong race/sex folder
+    """
+    deleted_count = 0
+    
+    for race_sex in os.listdir(output_dir):
+        race_sex_dir = os.path.join(output_dir, race_sex)
+        if not os.path.isdir(race_sex_dir):
+            continue
+        
+        # Skip narrator directory
+        if race_sex == "narrator":
+            continue
+        
+        for npc_dirname in os.listdir(race_sex_dir):
+            npc_dir = os.path.join(race_sex_dir, npc_dirname)
+            if not os.path.isdir(npc_dir):
+                continue
+            
+            # Reconstruct original NPC name (reverse sanitization is imperfect but close enough)
+            npc_name = npc_dirname.replace("_", " ").title()
+            
+            # Check all possible name variations
+            found = False
+            for lookup_name in NPC_LOOKUP.keys():
+                if sanitize_filename(lookup_name) == npc_dirname:
+                    meta = NPC_LOOKUP[lookup_name]
+                    expected_race_sex = f"{meta.get('race', '')}_{meta.get('sex', '')}".lower()
+                    
+                    # Check if in correct folder
+                    if race_sex == expected_race_sex or race_sex == meta.get('race', '').lower():
+                        found = True
+                        break
+            
+            if not found:
+                # Delete the entire NPC directory
+                import shutil
+                print(f"[DELETE] Orphaned NPC directory: {npc_dir}")
+                shutil.rmtree(npc_dir)
+                deleted_count += 1
+    
+    print(f"Deleted {deleted_count} orphaned NPC directories")
 
 
 # =========================
@@ -458,6 +542,10 @@ def process_dataframe(df, output_dir="../sounds"):
 if __name__ == "__main__":
     args = parse_args()
 
+    if args.clean_orphans:
+        clean_orphaned_files("../sounds")
+        sys.exit(0)
+
     df = pd.read_csv(NPC_DIALOG_CSV_PATH)
     df = df[df["text"].notna()]
 
@@ -472,4 +560,3 @@ if __name__ == "__main__":
             output_dir="../sounds",
             regenerate=args.regenerate
         )
-
