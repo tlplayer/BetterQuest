@@ -59,37 +59,6 @@ furbolg:
 - Meilosh
 - Salfa
 
-human:
-- Aurora Skycaller
-- Baron Longshore
-- Bloodmage Drazial
-- Bloodmage Lynnore
-- Boyle
-- Braelyn Firehand
-- Captain Grayson
-- Captain Hecklebury Smotts
-- Dadanga
-- Fiora Longears
-- Fleet Master Firallon
-- Gilthares Firebough
-- Gilveradin Sunchaser
-- Grizzle Halfmane
-- Jesper
-- Lorax
-- Lothos Riftwaker
-- Mathredis Firestar
-- Pamela Redpath
-- Red Jack Flint
-- Rethiel the Greenwarden
-- Sanath Lim-yo
-- Sayge
-- Scholomance Student
-- Shakes O'Breen
-- Stanley
-- The Abominable Greench
-- Thomas
-- Thurman Schneider
-- Vectus
 
 mechanical:
 - A-Me 01
@@ -115,19 +84,6 @@ ogre:
 - Gordok Warlock
 - Stomper Kreeg
 
-orc:
-- Bragok
-- Captain Kromcrush
-- Draz'Zilb
-- Garek
-- Krolg
-- Mangletooth
-- Miblon Snarltooth
-- Mudcrush Durtfeet
-- Ogron
-- Overlord Mok'Morokk
-- Tharg
-- Warug
 
 qiraji:
 - Kum'isha the Collector
@@ -148,26 +104,7 @@ spirit:
 - Tarindrella
 - Vartrus the Ancient
 
-tauren:
-- Do'gol
-- Earthcaller Franzahl
-- Magtoor
-- Onu
-- Tsunaman
-- Uthek the Wise
-- Warosh
 
-
-
-undead:
-- Aelthalyste
-- Algernon
-- Ambassador Ardalan
-- Blind Mary
-- Guard Fengus
-- Guard Mol'dar
-- Guard Slip'kik
-- Undercity Guardian
 dwarf:
 - Ironbark the Redeemed
 - Advisor Belgrum
@@ -791,6 +728,36 @@ goblin:
 - Ziz Fizziks
 - Zorbin Fandazzle
 human:
+- Aurora Skycaller
+- Baron Longshore
+- Bloodmage Drazial
+- Bloodmage Lynnore
+- Boyle
+- Braelyn Firehand
+- Captain Grayson
+- Captain Hecklebury Smotts
+- Dadanga
+- Fiora Longears
+- Fleet Master Firallon
+- Gilthares Firebough
+- Gilveradin Sunchaser
+- Grizzle Halfmane
+- Jesper
+- Lorax
+- Lothos Riftwaker
+- Mathredis Firestar
+- Pamela Redpath
+- Red Jack Flint
+- Rethiel the Greenwarden
+- Sanath Lim-yo
+- Sayge
+- Scholomance Student
+- Shakes O'Breen
+- Stanley
+- The Abominable Greench
+- Thomas
+- Thurman Schneider
+- Vectus
 - '"Auntie" Bernice Stonefield'
 - '"Pretty Boy" Duncan'
 - '"Sea Wolf" MacKinley'
@@ -1843,6 +1810,18 @@ none:
 - Zenn Foulhoof
 - Zggi
 orc:
+- Bragok
+- Captain Kromcrush
+- Draz'Zilb
+- Garek
+- Krolg
+- Mangletooth
+- Miblon Snarltooth
+- Mudcrush Durtfeet
+- Ogron
+- Overlord Mok'Morokk
+- Tharg
+- Warug
 - Acolyte Magaz
 - Ag'tor Bloodfist
 - Ak'Zeloth
@@ -2152,6 +2131,14 @@ orc:
 - Zudd
 - Zureetha Fargaze
 undead:
+- Aelthalyste
+- Algernon
+- Ambassador Ardalan
+- Blind Mary
+- Guard Fengus
+- Guard Mol'dar
+- Guard Slip'kik
+- Undercity Guardian
 - Abigail Sawyer
 - Acolyte Wytula
 - Adrian Bartlett
@@ -2432,6 +2419,13 @@ undead:
 - Zane Bradford
 - Zarise
 tauren:
+- Do'gol
+- Earthcaller Franzahl
+- Magtoor
+- Onu
+- Tsunaman
+- Uthek the Wise
+- Warosh
 - Aboda
 - Ahanu
 - Ancestral Spirit
