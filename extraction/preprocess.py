@@ -39,7 +39,7 @@ def read_mapping(file_path):
     return data
 
 CSV_PATH = "/home/tplayer/Applications/Wow/Interface/AddOns/BetterQuest/data/all_npc_dialog.csv"
-OUTPUT_JSON = "npc_metadata_seed.json"
+OUTPUT_JSON = "../data/npc_metadata.json"
 
 SEX_MAP = {
     0: "male",
@@ -55,7 +55,7 @@ def extract_unique_npcs(csv_path: str, race_lookup, sex_lookup, zone_lookup):
     df = df[df["dialog_type"] != "item_text"]  # remove item_text entries
 
     df["npc_name"] = df["npc_name"].astype(str)
-    df["sex"] = df["sex"].map(SEX_MAP)
+    df["sex"] = df["sex"].map(lambda x: SEX_MAP.get(x, None))
 
     records = []
 
