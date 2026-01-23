@@ -1,6 +1,10 @@
 female:
+- Therylune
+- Therysil
+- Cavindra
 - Vyrin Swiftwind
 - Blind Mary
+- Meridith the Mermaiden
 - Tarindrella
 - Sharlindra
 - Melisara
@@ -12,7 +16,6 @@ female:
 - Arei
 - Mathredis Firestar
 - Aurora Skycaller
-- Emberstrife
 - Remorseful Highborne
 - Pamela Redpath
 - Haleh
@@ -23,8 +26,6 @@ female:
 - Great Bear Spirit
 - Lunaclaw Spirit
 - Zaetar’s Spirit
-- Vendor‑Tron 1000 (voice by female model typically)
-- Super‑Seller 680 (voice by female model typically)
 - Vaelastrasz the Corrupt (dragon wyrm mother figure)
 - Myrokos Silentform
 - Selendra
@@ -33,10 +34,7 @@ female:
 - Selendra
 - Human Orphan
 - Orcish Orphan
-- Sayge (ambiguous but uses female model)
-- Anachronos (entity presented in both forms; listed male above as primary)
 - Meridith the Mermaiden
-- Impsy
 - Hilary
 - '"Auntie" Bernice Stonefield'
 - Aayndia Floralwind
@@ -728,6 +726,7 @@ female:
 - Zarise
 - Zeal'aya
 - Zureetha Fargaze
+- Spoops
 male:
 - A-Me 01
 - Aelthalyste
@@ -737,12 +736,10 @@ male:
 - Ancient Equine Spirit
 - Anilia
 - Arei
-- Aurora Skycaller
 - Awbee
 - Azuregos
 - Baron Longshore
 - Billy Maclure
-- Blind Mary
 - Bloodmage Drazial
 - Bloodmage Lynnore
 - Boyle
@@ -753,7 +750,6 @@ male:
 - Captain Hecklebury Smotts
 - Captain Kromcrush
 - Captain Thalo'thas Brightsun
-- Cavindra
 - Celebras the Redeemed
 - Centaur Pariah
 - Chicken
@@ -831,7 +827,6 @@ male:
 - Mangletooth
 - Mathredis Firestar
 - Meilosh
-- Meridith the Mermaiden
 - Metzen the Reindeer
 - Miblon Snarltooth
 - Minor Manifestation of Earth
@@ -871,7 +866,6 @@ male:
 - Slave Worker
 - Spirit of Azuregos
 - Spirit of Lord Valthalak
-- Spoops
 - Stanley
 - Stoma the Ancient
 - Stomper Kreeg
@@ -882,8 +876,6 @@ male:
 - Tarindrella
 - Tharg
 - The Abominable Greench
-- Therylune
-- Therysil
 - Thomas
 - Thurman Schneider
 - Tooga
@@ -922,9 +914,7 @@ male:
 - Flik
 - Flik’s Frog
 - Precocious (pets/minions)
-- Ancient Equine Spirit
 - Darkreaver’s Fallen Charger
-- Fishbot 5000
 - Cracked Necrotic Crystal
 - Faint Necrotic Crystal
 - Keeper Remulos

@@ -6,8 +6,35 @@ animal:
 - Tamed Kodo
 - Tooga
 - Umpi
+- Metzen the Reindeer
+- Flik's Frog
+
+gnoll:
+- Sayge
+
+abomination:
+- Gordo
+
+ancients:
+- Onu
+- Hastat the Ancient
+- Old Ironbark
+- Stoma the Ancient
+- Vartrus the Ancient
+
+#deer people
+keepers:
+- Illiyana Moonblaze
+- Cavindra
+- Therylune
+- Illiyana
+- Therysil
+- Tarindrella 
 
 blood_elf:
+- Lothos Riftwaker
+- Mathredis Firestar
+- Aurora Skycaller
 - Captain Thalo'thas Brightsun
 - Vyrin Swiftwind
 - Lady Sylvanas Windrunner
@@ -20,6 +47,10 @@ centaur:
 - Zaetar's Spirit
 
 child:
+- Flik
+- Spoops
+- Hilary
+- Jesper
 - Thurman Schneider
 - Billy Maclure
 - Human Orphan
@@ -62,6 +93,8 @@ elemental:
 - Rethiel the Greenwarden
 
 furbolg:
+- Krolg
+- Nafien
 - Grazle
 - Gorn One Eye
 - Kernda
@@ -75,15 +108,19 @@ mechanical:
 naga:
 - Sah'rhee
 
+imp:
+- Impsy
+
 
 
 object:
-- Flik's Frog
-- Metzen the Reindeer
 - Strange Snowman
 - Winter Reveler
 
 ogre:
+- Lolo the Lookout
+- Lard
+- Burth
 - Cho'Rush the Observer
 - Gordok Brute
 - Gordok Bushwacker
@@ -104,14 +141,12 @@ spirit:
 - Dreadsteed Spirit
 - Forest Wisp
 - Great Bear Spirit
-- Hastat the Ancient
 - Lunaclaw Spirit
 - Nightmare
 - Screecher Spirit
 - Spirit of Azuregos
 - Spirit of Lord Valthalak
-- Stoma the Ancient
-- Vartrus the Ancient
+- Vectus
 
 
 dwarf:
@@ -480,7 +515,6 @@ dwarf:
 - Yori Crackhelm
 - Yorus Barleybrew
 gnome:
-- Hilary
 - Mizzle the Crafty
 - Shawn
 - Alamar Grimm
@@ -598,10 +632,10 @@ gnome:
 - Wizzle Brassbolts
 - Yebb Neblegear
 goblin:
+- Kwee Q. Peddlefeet
 - Gryfe
 - Bragok
 - Wizzlecrank's Shredder
-- Impsy
 - Zggi
 - Alchemist Pestlezugg
 - Azzleby
@@ -741,7 +775,6 @@ goblin:
 - Ziz Fizziks
 - Zorbin Fandazzle
 human:
-- Aurora Skycaller
 - Baron Longshore
 - Bloodmage Drazial
 - Bloodmage Lynnore
@@ -753,20 +786,15 @@ human:
 - Fleet Master Firallon
 - Gilthares Firebough
 - Gilveradin Sunchaser
-- Jesper
 - Lorax
-- Lothos Riftwaker
-- Mathredis Firestar
 - Pamela Redpath
 - Red Jack Flint
 - Sanath Lim-yo
-- Sayge
 - Scholomance Student
 - Shakes O'Breen
 - Stanley
 - The Abominable Greench
 - Thomas
-- Vectus
 - '"Auntie" Bernice Stonefield'
 - '"Pretty Boy" Duncan'
 - '"Sea Wolf" MacKinley'
@@ -1273,7 +1301,6 @@ human:
 - Zaldimar Wefhellt
 - Zardeth of the Black Claw
 night_elf:
-- Tarindrella #deer lady
 - Arei
 - Anilia
 - Cavindra
@@ -1281,17 +1308,13 @@ night_elf:
 - Deathly Usher
 - Elsharin
 - Haleh
-- Illiyana
 - Johnny McWeaksauce
 - Kaelystia Hatebringer
 - Keeper Albagorm
 - Keeper Marandis
 - Keeper Remulos
-- Lolo the Lookout
 - Melisara
 - Meridith the Mermaiden
-- Nafien
-- Old Ironbark
 - Remorseful Highborne
 - Selendra
 - Shael'dryn
@@ -1439,7 +1462,6 @@ night_elf:
 - Huntress Skymane
 - Huntress Swiftriver
 - Idriana
-- Illiyana Moonblaze
 - Innkeeper Faralia
 - Innkeeper Keldamyr
 - Innkeeper Kimlya
@@ -1644,7 +1666,6 @@ orc:
 - Captain Kromcrush
 - Draz'Zilb
 - Garek
-- Krolg
 - Mangletooth
 - Miblon Snarltooth
 - Mudcrush Durtfeet
@@ -2251,7 +2272,6 @@ undead:
 tauren:
 - Do'gol
 - Earthcaller Franzahl
-- Onu
 - Tsunaman
 - Uthek the Wise
 - Warosh
@@ -2532,13 +2552,8 @@ tauren:
 - Zarlman Two-Moons
 troll:
 - Awbee
-- Burth
-- Flik
-- Gordo
 - Jeziba
 - Jin'rokh the Breaker
-- Kwee Q. Peddlefeet
-- Lard
 - Mistress Nagmara
 - Myrokos Silentform
 - Ogtinc
@@ -2546,7 +2561,6 @@ troll:
 - Pusillin
 - Raze
 - Slave Worker
-- Spoops
 - Torta
 - Al'tabim the All-Seeing
 - Argent Outfitter
