@@ -16,16 +16,8 @@ MISSING_ZONE_FILE = "missing_zone.yaml"
 
 import yaml
 
-# Path to your YAML file
-MISSING_RACE_FIX_FILE = "missing_race_fix.yaml"
-
-# Read the file as a dictionary
-with open(MISSING_RACE_FIX_FILE, "r", encoding="utf-8") as f:
-    missing_race_fixes = yaml.safe_load(f)
 
 # Now missing_race_fixes is a dictionary you can use
-print(type(missing_race_fixes))  # <class 'dict'>
-print(missing_race_fixes.get("Angelas Moonbreeze"))  # night_elf
 
 # Example: update your main race lookup
 
@@ -151,7 +143,6 @@ def write_yaml(data, output_path):
 if __name__ == "__main__":
      # Read and invert mappings for easy lookup
     npc_race = invert_mapping(read_mapping(RACE_FILE))
-    npc_race.update(missing_race_fixes)
     npc_sex = invert_mapping(read_mapping(SEX_FILE))
     npc_zone = invert_mapping(read_mapping(ZONE_FILE))
 
