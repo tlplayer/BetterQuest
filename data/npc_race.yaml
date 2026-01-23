@@ -5,17 +5,22 @@ animal:
 - Precious
 - Tamed Kodo
 - Tooga
+- Umpi
 
 blood_elf:
 - Captain Thalo'thas Brightsun
+- Vyrin Swiftwind
 - Lady Sylvanas Windrunner
 
+draenei:
+- Magtoor
 
 centaur:
 - Centaur Pariah
 - Zaetar's Spirit
 
 child:
+- Thurman Schneider
 - Billy Maclure
 - Human Orphan
 - Orcish Orphan
@@ -34,6 +39,7 @@ construct:
 - Super-Seller 680
 
 demon:
+- Vi'el
 - Lord Banehollow
 - Varimathras
 - Zenn Foulhoof
@@ -53,6 +59,7 @@ elemental:
 - Minor Manifestation of Earth
 - Minor Manifestation of Water
 - Rockbiter
+- Rethiel the Greenwarden
 
 furbolg:
 - Grazle
@@ -91,6 +98,7 @@ qiraji:
 - Kum'isha the Collector
 
 spirit:
+- Captain Grayson
 - Ancient Equine Spirit
 - Darkreaver's Fallen Charger
 - Dreadsteed Spirit
@@ -103,7 +111,6 @@ spirit:
 - Spirit of Azuregos
 - Spirit of Lord Valthalak
 - Stoma the Ancient
-- Tarindrella
 - Vartrus the Ancient
 
 
@@ -591,6 +598,8 @@ gnome:
 - Wizzle Brassbolts
 - Yebb Neblegear
 goblin:
+- Gryfe
+- Bragok
 - Wizzlecrank's Shredder
 - Impsy
 - Zggi
@@ -738,21 +747,18 @@ human:
 - Bloodmage Lynnore
 - Boyle
 - Braelyn Firehand
-- Captain Grayson
 - Captain Hecklebury Smotts
 - Dadanga
 - Fiora Longears
 - Fleet Master Firallon
 - Gilthares Firebough
 - Gilveradin Sunchaser
-- Grizzle Halfmane
 - Jesper
 - Lorax
 - Lothos Riftwaker
 - Mathredis Firestar
 - Pamela Redpath
 - Red Jack Flint
-- Rethiel the Greenwarden
 - Sanath Lim-yo
 - Sayge
 - Scholomance Student
@@ -760,7 +766,6 @@ human:
 - Stanley
 - The Abominable Greench
 - Thomas
-- Thurman Schneider
 - Vectus
 - '"Auntie" Bernice Stonefield'
 - '"Pretty Boy" Duncan'
@@ -1268,6 +1273,7 @@ human:
 - Zaldimar Wefhellt
 - Zardeth of the Black Claw
 night_elf:
+- Tarindrella #deer lady
 - Arei
 - Anilia
 - Cavindra
@@ -1292,7 +1298,6 @@ night_elf:
 - Sharlindra
 - Therylune
 - Therysil
-- Vyrin Swiftwind
 - Aayndia Floralwind
 - Aendel Windspear
 - Aethalas
@@ -1635,7 +1640,7 @@ night_elf:
 - Zarrin
 
 orc:
-- Bragok
+- Grizzle Halfmane
 - Captain Kromcrush
 - Draz'Zilb
 - Garek
@@ -2246,7 +2251,6 @@ undead:
 tauren:
 - Do'gol
 - Earthcaller Franzahl
-- Magtoor
 - Onu
 - Tsunaman
 - Uthek the Wise
@@ -2531,7 +2535,6 @@ troll:
 - Burth
 - Flik
 - Gordo
-- Gryfe
 - Jeziba
 - Jin'rokh the Breaker
 - Kwee Q. Peddlefeet
@@ -2545,9 +2548,6 @@ troll:
 - Slave Worker
 - Spoops
 - Torta
-- Umpi
-- Vi'el
-- Zggi
 - Al'tabim the All-Seeing
 - Argent Outfitter
 - Argent Quartermaster Hasana
