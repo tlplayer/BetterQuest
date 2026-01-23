@@ -1,19 +1,10 @@
 npc_id,npc_name
-2546,Fleet Master Firallon
-2610,Shakes O'Breen
-2766,Lolo the Lookout
-2888,Garek
 3339,Captain Thalo'thas Brightsun
 3430,Mangletooth
 3439,Wizzlecrank's Shredder
 3465,Gilthares Firebough
 3467,Baron Longshore
 3568,Mist
-3584,Therylune
-3585,Therysil
-3616,Onu
-3897,Krolg
-3901,Illiyana
 3916,Shael'dryn
 3920,Anilia
 3994,Keeper Albagorm
@@ -70,13 +61,6 @@ npc_id,npc_name
 9500,Mistress Nagmara
 9502,Phalanx
 9598,Arei
-9623,A-Me 01
-9836,Mathredis Firestar
-10304,Aurora Skycaller
-10321,Emberstrife
-10432,Vectus
-10475,Scholomance Student
-10666,Gordo
 10684,Remorseful Highborne
 10740,Awbee
 10799,Warosh
@@ -84,12 +68,6 @@ npc_id,npc_name
 10926,Pamela Redpath
 10929,Haleh
 10976,Jeziba
-11441,Gordok Brute
-11444,Gordok Mage-Lord
-11445,Gordok Captain
-11448,Gordok Warlock
-11450,Gordok Reaver
-11491,Old Ironbark
 11554,Grazle
 11555,Gorn One Eye
 11556,Salfa

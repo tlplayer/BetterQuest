@@ -1,4 +1,9 @@
 female:
+- Uthek the Wise
+- Braelyn Firehand
+- Bloodmage Lynnore
+- Anilia
+- Shael'dryn
 - Therylune
 - Therysil
 - Cavindra
@@ -13,24 +18,14 @@ female:
 - Aelthalyste
 - Elsharin
 - Mistress Nagmara
-- Arei
 - Mathredis Firestar
 - Aurora Skycaller
 - Remorseful Highborne
 - Pamela Redpath
 - Haleh
-- Jeziba
-- Salfa
-- Meilosh
-- Kernda
 - Great Bear Spirit
 - Lunaclaw Spirit
 - Zaetar’s Spirit
-- Vaelastrasz the Corrupt (dragon wyrm mother figure)
-- Myrokos Silentform
-- Selendra
-- Celebras the Redeemed
-- Keeper Marandis
 - Selendra
 - Human Orphan
 - Orcish Orphan
@@ -281,6 +276,7 @@ female:
 - Huntress Swiftriver
 - Idriana
 - Illiyana Moonblaze
+- Illiyana
 - Ilsa Corbin
 - Ingrys Stonebrow
 - Innkeeper Allison
@@ -729,21 +725,17 @@ female:
 - Spoops
 male:
 - A-Me 01
-- Aelthalyste
 - Algernon
 - Ambassador Ardalan
 - Anachronos
 - Ancient Equine Spirit
-- Anilia
 - Arei
 - Awbee
 - Azuregos
 - Baron Longshore
 - Billy Maclure
 - Bloodmage Drazial
-- Bloodmage Lynnore
 - Boyle
-- Braelyn Firehand
 - Bragok
 - Burth
 - Captain Grayson
@@ -764,10 +756,8 @@ male:
 - Dreadsteed Spirit
 - Duke Hydraxis
 - Earthcaller Franzahl
-- Elsharin
 - Emberstrife
 - Faint Necrotic Crystal
-- Fiora Longears
 - Fishbot 5000
 - Fleet Master Firallon
 - Flik
@@ -791,15 +781,12 @@ male:
 - Guard Fengus
 - Guard Mol'dar
 - Guard Slip'kik
-- Haleh
 - Hastat the Ancient
-- Hilary
 - Homing Robot OOX-09/HL
 - Homing Robot OOX-17/TN
 - Homing Robot OOX-22/FE
 - Human Orphan
 - Hydraxian Honor Guard
-- Illiyana
 - Impsy
 - Ironbark the Redeemed
 - Itharius
@@ -807,10 +794,8 @@ male:
 - Jeziba
 - Jin'rokh the Breaker
 - Johnny McWeaksauce
-- Kaelystia Hatebringer
 - Keeper Albagorm
 - Keeper Marandis
-- Keeper Remulos
 - Kernda
 - Krolg
 - Kum'isha the Collector
@@ -832,7 +817,6 @@ male:
 - Minor Manifestation of Earth
 - Minor Manifestation of Water
 - Mist
-- Mistress Nagmara
 - Mizzle the Crafty
 - Mudcrush Durtfeet
 - Myrokos Silentform
@@ -844,7 +828,6 @@ male:
 - Onu
 - Orcish Orphan
 - Overlord Mok'Morokk
-- Pamela Redpath
 - Phalanx
 - Precious
 - Pusillin
@@ -859,8 +842,6 @@ male:
 - Sayge
 - Scholomance Student
 - Screecher Spirit
-- Selendra
-- Shael'dryn
 - Shakes O'Breen
 - Shawn
 - Slave Worker
@@ -883,7 +864,6 @@ male:
 - Tsunaman
 - Umpi
 - Undercity Guardian
-- Uthek the Wise
 - Vaelastrasz the Corrupt
 - Varimathras
 - Vartrus the Ancient
@@ -905,12 +885,7 @@ male:
 - Minor Manifestation of Earth
 - Minor Manifestation of Water
 - Tooga
-- Torta
-- Baron Longshore (if beast or unnamed minion)
-- Homing Robot entries (not gendered in data)
-- Bloodmage Drazial
-- Bloodmage Lynnore (NPC with ambiguous data)
-- Rockbiter
+- Baron Longshore
 - Flik
 - Flik’s Frog
 - Precocious (pets/minions)

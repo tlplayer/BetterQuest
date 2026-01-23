@@ -1,5 +1,7 @@
 
 animal:
+- Dadanga
+- Torta
 - Chicken
 - Mist
 - Precious
@@ -10,13 +12,20 @@ animal:
 - Flik's Frog
 
 gnoll:
+- Miblon Snarltooth
+- Mangletooth
 - Sayge
 
 abomination:
+- Algernon
+- Undercity Guardian
+- Boyle
 - Gordo
 
 ancients:
+- Arei
 - Onu
+- Ironbark the Redeemed
 - Hastat the Ancient
 - Old Ironbark
 - Stoma the Ancient
@@ -24,6 +33,14 @@ ancients:
 
 #deer people
 keepers:
+- Fiora Longears
+- Anilia
+- Selendra
+- Shael'dryn
+- Celebras the Redeemed
+- Keeper Albagorm
+- Keeper Marandis
+- Keeper Remulos
 - Illiyana Moonblaze
 - Cavindra
 - Therylune
@@ -31,24 +48,48 @@ keepers:
 - Therysil
 - Tarindrella 
 
+succubus:
+- Mistress Nagmara
+
 blood_elf:
+- Gilthares Firebough
+- Elsharin
+- Gilveradin Sunchaser
+- Ambassador Ardalan
+- Earthcaller Franzahl
+- Braelyn Firehand
+- Bloodmage Drazial
+- Garek
 - Lothos Riftwaker
 - Mathredis Firestar
 - Aurora Skycaller
 - Captain Thalo'thas Brightsun
 - Vyrin Swiftwind
 - Lady Sylvanas Windrunner
+- Haleh
+- Baron Longshore
+- Red Jack Flint
+- Sanath Lim-yo
+- Jeziba
+- Raze
+- Itharius
+- Myrokos Silentform
 
 draenei:
+- Kum'isha the Collector
 - Magtoor
 
 centaur:
 - Centaur Pariah
-- Zaetar's Spirit
+- Uthek the Wise
+- Warug
 
 child:
+- Thomas
 - Flik
+- Pamela Redpath
 - Spoops
+- Shawn
 - Hilary
 - Jesper
 - Thurman Schneider
@@ -56,7 +97,11 @@ child:
 - Human Orphan
 - Orcish Orphan
 
+giant:
+- Lord Arkkoroc
+
 construct:
+- Phalanx
 - Cracked Necrotic Crystal
 - Faint Necrotic Crystal
 - Fishbot 5000
@@ -66,25 +111,28 @@ construct:
 - Lore Keeper of Norgannon
 - Stone Watcher of Norgannon
 - Vendor-Tron 1000
+- Wizzlecrank's Shredder
 - Wrenix's Gizmotronic Apparatus
 - Super-Seller 680
 
 demon:
+- Raze
 - Vi'el
 - Lord Banehollow
 - Varimathras
 - Zenn Foulhoof
+- Lorax
 
 dragon:
+- Awbee
 - Anachronos
 - Azuregos
 - Cyrus Therepentous
 - Emberstrife
-- Itharius
-- Lord Arkkoroc
 - Vaelastrasz the Corrupt
 
 elemental:
+- Rockbiter
 - Duke Hydraxis
 - Hydraxian Honor Guard
 - Minor Manifestation of Earth
@@ -93,6 +141,7 @@ elemental:
 - Rethiel the Greenwarden
 
 furbolg:
+- Ogtinc
 - Krolg
 - Nafien
 - Grazle
@@ -106,35 +155,51 @@ mechanical:
 - A-Me 01
 
 naga:
-- Sah'rhee
 
 imp:
+- Pusillin
 - Impsy
-
 
 
 object:
 - Strange Snowman
 - Winter Reveler
 
+trogg:
+- Warosh
+
 ogre:
+- Tharg
+- Draz'Zilb
+- Mizzle the Crafty
+- Do'gol
+- Ogtinc
 - Lolo the Lookout
 - Lard
 - Burth
-- Cho'Rush the Observer
 - Gordok Brute
 - Gordok Bushwacker
 - Gordok Captain
 - Gordok Mage-Lord
 - Gordok Reaver
 - Gordok Warlock
+- Overlord Mok'Morokk
+- Mudcrush Durtfeet
+- Ogron
+- Cho'Rush the Observer
 - Stomper Kreeg
+- Guard Fengus
+- Guard Slip'kik
+- Guard Mol'dar
+- Captain Kromcrush
+- Gordok Bushwacker
+- Sah'rhee
 
 
 qiraji:
-- Kum'isha the Collector
 
 spirit:
+- Aelthalyste
 - Captain Grayson
 - Ancient Equine Spirit
 - Darkreaver's Fallen Charger
@@ -147,10 +212,13 @@ spirit:
 - Spirit of Azuregos
 - Spirit of Lord Valthalak
 - Vectus
+- Kaelystia Hatebringer
+- Remorseful Highborne
+- Deathly Usher
+- Zaetar's Spirit
 
 
 dwarf:
-- Ironbark the Redeemed
 - Advisor Belgrum
 - Aedis Brom
 - Agnar Beastamer
@@ -515,7 +583,6 @@ dwarf:
 - Yori Crackhelm
 - Yorus Barleybrew
 gnome:
-- Mizzle the Crafty
 - Shawn
 - Alamar Grimm
 - Andi Lynn
@@ -635,7 +702,6 @@ goblin:
 - Kwee Q. Peddlefeet
 - Gryfe
 - Bragok
-- Wizzlecrank's Shredder
 - Zggi
 - Alchemist Pestlezugg
 - Azzleby
@@ -776,20 +842,11 @@ goblin:
 - Zorbin Fandazzle
 human:
 - Baron Longshore
-- Bloodmage Drazial
 - Bloodmage Lynnore
-- Boyle
-- Braelyn Firehand
 - Captain Hecklebury Smotts
-- Dadanga
-- Fiora Longears
 - Fleet Master Firallon
-- Gilthares Firebough
-- Gilveradin Sunchaser
 - Lorax
-- Pamela Redpath
 - Red Jack Flint
-- Sanath Lim-yo
 - Scholomance Student
 - Shakes O'Breen
 - Stanley
@@ -1302,22 +1359,14 @@ human:
 - Zardeth of the Black Claw
 night_elf:
 - Arei
-- Anilia
 - Cavindra
 - Celebras the Redeemed
 - Deathly Usher
-- Elsharin
 - Haleh
 - Johnny McWeaksauce
-- Kaelystia Hatebringer
-- Keeper Albagorm
-- Keeper Marandis
-- Keeper Remulos
 - Melisara
 - Meridith the Mermaiden
 - Remorseful Highborne
-- Selendra
-- Shael'dryn
 - Sharlindra
 - Therylune
 - Therysil
@@ -1663,16 +1712,6 @@ night_elf:
 
 orc:
 - Grizzle Halfmane
-- Captain Kromcrush
-- Draz'Zilb
-- Garek
-- Mangletooth
-- Miblon Snarltooth
-- Mudcrush Durtfeet
-- Ogron
-- Overlord Mok'Morokk
-- Tharg
-- Warug
 - Acolyte Magaz
 - Ag'tor Bloodfist
 - Ak'Zeloth
@@ -1982,14 +2021,10 @@ orc:
 - Zudd
 - Zureetha Fargaze
 undead:
-- Aelthalyste
-- Algernon
-- Ambassador Ardalan
 - Blind Mary
 - Guard Fengus
 - Guard Mol'dar
 - Guard Slip'kik
-- Undercity Guardian
 - Abigail Sawyer
 - Acolyte Wytula
 - Adrian Bartlett
@@ -2271,7 +2306,6 @@ undead:
 - Zarise
 tauren:
 - Do'gol
-- Earthcaller Franzahl
 - Tsunaman
 - Uthek the Wise
 - Warosh
@@ -2551,17 +2585,9 @@ tauren:
 - Zangen Stonehoof
 - Zarlman Two-Moons
 troll:
-- Awbee
-- Jeziba
 - Jin'rokh the Breaker
 - Mistress Nagmara
-- Myrokos Silentform
-- Ogtinc
-- Phalanx
-- Pusillin
-- Raze
 - Slave Worker
-- Torta
 - Al'tabim the All-Seeing
 - Argent Outfitter
 - Argent Quartermaster Hasana
