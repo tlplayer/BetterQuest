@@ -54,19 +54,18 @@ tts = ChatterboxTurboTTS.from_pretrained(device="cuda")
 def discover_narrators(samples_root="../samples"):
     """
     Discover narrator reference files from the filesystem.
+    Now supports flat structure where .wav files are directly in samples_root.
     """
     narrators = {}
 
-    for name in os.listdir(samples_root):
-        narrator_dir = os.path.join(samples_root, name)
-        if not os.path.isdir(narrator_dir):
-            continue
-
-        audio_path = os.path.join(narrator_dir, f"{name}.wav")
-
-        if os.path.isfile(audio_path):
-            narrators[name] = {
-                "audio": audio_path,
+    for filename in os.listdir(samples_root):
+        filepath = os.path.join(samples_root, filename)
+        
+        # Check if it's a .wav file directly in the samples directory
+        if os.path.isfile(filepath) and filename.endswith('.wav'):
+            narrator_name = filename[:-4]  # Remove .wav extension
+            narrators[narrator_name] = {
+                "audio": filepath,
             }
 
     return narrators
@@ -217,6 +216,7 @@ def remove_audio_cues(text: str) -> str:
         r"\b(?:sfx|audio|sound)\s*:\s*[^\n]+",
 
         # Standalone onomatopoeia words (conservative)
+        '''
         r"""\b(?: 
         ah+ | eh+ | uh+ | oh+ | um+ | erm+ | hmm+ | hrr+ |
         mmm+ | nng+ | ngh+ |
@@ -230,6 +230,7 @@ def remove_audio_cues(text: str) -> str:
         gasp+ | cough+ | choke+ |
         groan+ | grunt+ | sigh+
         )\b[.!?,…]*"""
+        '''
     ]
     # Remove leftover short interjections (1–4 chars) on their own line
     text = re.sub(r"(?m)^\s*[a-z]{1,4}[.!?…]*\s*$", "", text, flags=re.IGNORECASE)
@@ -276,29 +277,38 @@ def normalize_dialog_text(text: str) -> str:
     return text.strip()
 
 
-def get_next_gossip_index(base_dir):
+# Build gossip index map from CSV
+def build_gossip_index_map(df):
     """
-    Find the next available gossip_N.wav index.
-    Returns 0 if no gossip files exist.
+    Pre-index all gossip lines per NPC from the CSV.
+    Returns dict: {npc_name: [text1, text2, ...]}
     """
-    if not os.path.exists(base_dir):
-        return 0
+    gossip_map = {}
     
-    existing = [f for f in os.listdir(base_dir) if f.startswith("gossip")]
-    if not existing:
-        return 0
+    for _, row in df.iterrows():
+        npc_name = row.get("npc_name")
+        if not npc_name:
+            continue
+        
+        dialog_type = str(row.get("dialog_type", "")).lower()
+        if "gossip" not in dialog_type:
+            continue
+        
+        text = row.get("text", "")
+        if not text:
+            continue
+        
+        if npc_name not in gossip_map:
+            gossip_map[npc_name] = []
+        
+        # Only add unique texts
+        if text not in gossip_map[npc_name]:
+            gossip_map[npc_name].append(text)
     
-    # Extract indices from gossip_N.wav files
-    indices = []
-    for f in existing:
-        match = re.match(r"gossip_(\d+)\.wav", f)
-        if match:
-            indices.append(int(match.group(1)))
-    
-    return max(indices) + 1 if indices else 0
+    return gossip_map
 
 
-def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
+def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_map=None):
     race = get_narrator_from_metadata(row)
     if not race or race not in REF_CODES:
         print(f"[SKIP] No narrator metadata for NPC: {row['npc_name']}")
@@ -319,9 +329,15 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False):
         base_dir = os.path.join(output_dir, race, npc_dirname)
         os.makedirs(base_dir, exist_ok=True)
 
-        if dialog_type == "gossip" or dialog_type == "gossip_broadcast":
-            # Use numbered suffix for multiple gossip entries
-            idx = get_next_gossip_index(base_dir)
+        if "gossip" in dialog_type:
+            # Find index for this gossip text
+            idx = 0
+            if gossip_map and npc_name in gossip_map:
+                try:
+                    idx = gossip_map[npc_name].index(row["text"])
+                except ValueError:
+                    idx = len(gossip_map[npc_name])
+            
             filename = f"gossip_{idx}.wav"
         else:
             qid = row.get("quest_id")
@@ -553,10 +569,14 @@ if __name__ == "__main__":
     df = df.drop_duplicates(subset=["npc_name", "text"])
     df["text"] = df["text"].apply(normalize_dialog_text)
     df = merge_item_text_rows(df)
+    
+    # Build gossip index map once at start
+    gossip_map = build_gossip_index_map(df)
 
     for _, row in df.iterrows():
         generate_tts_for_row(
             row,
             output_dir="../sounds",
-            regenerate=args.regenerate
+            regenerate=args.regenerate,
+            gossip_map=gossip_map
         )

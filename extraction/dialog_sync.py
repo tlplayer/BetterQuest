@@ -72,11 +72,13 @@ with open(NPC_METADATA_JSON, "r", encoding="utf-8") as f:
     npc_metadata = json.load(f)
 
 npc_to_narrator = {}
-for npc_name, data in npc_metadata.items():
-    race = data.get("race")
-    sex = data.get("sex")
 
-    if not race:
+for entry in npc_metadata:  # iterate list
+    npc_name = entry.get("name")
+    race = entry.get("race")
+    sex = entry.get("sex")
+
+    if not race or not npc_name:
         continue
 
     narrator = f"{race}_female" if sex == "female" else race
