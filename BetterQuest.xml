@@ -4,8 +4,7 @@
     <Script file="Config.lua"/>
 
     <!-- Databases -->
-    <Include file="db\npc_metadata.lua"/>
-    <Include file="db\npc_dialog_map.lua"/>
+    <Include file="db\npc_database.lua"/>
 
     <!-- Core systems -->
     <Script file="SoundQueue.lua"/>
