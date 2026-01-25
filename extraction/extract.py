@@ -99,7 +99,7 @@ def extract_all_dialog():
                 "npc_name": npc["npc_name"],
                 "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "dialog_type": "gossip_broadcast",
+                "dialog_type": "gossip",
                 "quest_id": None,
                 "text": row["text"].strip(),
             })
@@ -316,7 +316,7 @@ def extract_all_dialog():
                 "npc_name": npc["npc_name"],
                 "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "dialog_type": "quest_greeting",
+                "dialog_type": "gossip",
                 "quest_id": None,
                 "text": row["text"].strip(),
             })
@@ -338,7 +338,69 @@ def extract_all_dialog():
                 "npc_name": npc["npc_name"],
                 "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "dialog_type": "trainer_greeting",
+                "dialog_type": "gossip",
+                "quest_id": None,
+                "text": row["text"].strip(),
+            })
+
+    # -------------------------------------------------
+    # SCRIPT TEXTS (ScriptDev2 / C++ AI)
+    # -------------------------------------------------
+    cursor.execute("""
+        SELECT entry, content_default, comment FROM script_texts
+    """)
+    
+    for row in cursor.fetchall():
+        text = row["content_default"]
+        comment = row["comment"] or ""
+        
+        # Logic: CMaNGOS comments usually look like 'Aynasha SAY_OUT_OF_ARROWS'
+        # or 'npc_name: Text Description'. We'll clean this up.
+        npc_name_guess = "Scripted NPC"
+        if comment:
+            # Take the first word, then strip common prefixes like 'npc_'
+            npc_name_guess = comment.split(' ')[0].replace('npc_', '').replace('_', ' ').title()
+
+        if non_empty(text):
+            rows.append({
+                "npc_id": f"script_{row['entry']}",
+                "npc_name": npc_name_guess,
+                "race_mask": None,
+                "sex": None,
+                "model_id": None,
+                "dialog_type": "gossip",
+                "quest_id": None,
+                "text": text.strip(),
+            })
+
+    # -------------------------------------------------
+    # CREATURE AI TEXTS (EventAI / ACID) - With NPC Name Linking
+    # -------------------------------------------------
+    # EventAI texts (creature_ai_texts) are called by creature_ai_scripts.
+    # We join them here to find out WHICH NPC is assigned to say WHICH text.
+    cursor.execute("""
+        SELECT DISTINCT
+            ct.Entry AS npc_id,
+            ct.Name  AS npc_name,
+            ct.DisplayId1 AS model_id,
+            cait.content_default AS text
+        FROM creature_ai_scripts cas
+        JOIN creature_template ct ON cas.creature_id = ct.Entry
+        JOIN creature_ai_texts cait ON (
+            cait.entry = cas.action1_param1 OR 
+            cait.entry = cas.action2_param1 OR 
+            cait.entry = cas.action3_param1
+        )
+        WHERE cas.action1_type = 1 OR cas.action2_type = 1 OR cas.action3_type = 1
+    """)
+
+    for row in cursor.fetchall():
+        if non_empty(row["text"]):
+            rows.append({
+                "npc_name": row["npc_name"],
+                "npc_id": row["npc_id"],
+                "sex": None,
+                "dialog_type": "gossip",
                 "quest_id": None,
                 "text": row["text"].strip(),
             })
