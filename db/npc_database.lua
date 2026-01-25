@@ -41142,10 +41142,6 @@ function GetNPCMetadata(npcName)
   print("[DEBUG] Raw npcName:", npcName)
   print("[DEBUG] Normalized npcName:", lookupName)
 
-  print("[DEBUG] Available NPC keys:")
-  for k in pairs(NPC_DATABASE) do
-    print("  -", k)
-  end
 
   local npc = NPC_DATABASE[lookupName]
 

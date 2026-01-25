@@ -96,11 +96,9 @@ def extract_all_dialog():
         npc = npc_meta.get(row["npc_id"])
         if npc and non_empty(row["text"]):
             rows.append({
-                "npc_id": npc["npc_id"],
                 "npc_name": npc["npc_name"],
-                "race_mask": npc["race_mask"],
+                "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "model_id": npc["model_id"],
                 "dialog_type": "gossip_broadcast",
                 "quest_id": None,
                 "text": row["text"].strip(),
@@ -132,11 +130,9 @@ def extract_all_dialog():
                 text = row.get(field)
                 if non_empty(text):
                     rows.append({
-                        "npc_id": npc["npc_id"],
                         "npc_name": npc["npc_name"],
-                        "race_mask": npc["race_mask"],
+                        "npc_id": npc["npc_id"],
                         "sex": npc["sex"],
-                        "model_id": npc["model_id"],
                         "dialog_type": "gossip",
                         "quest_id": None,
                         "text": text.strip(),
@@ -165,11 +161,9 @@ def extract_all_dialog():
 
         if non_empty(row["Details"]):
             rows.append({
-                "npc_id": npc["npc_id"],
                 "npc_name": npc["npc_name"],
-                "race_mask": npc["race_mask"],
+                "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "model_id": npc["model_id"],
                 "dialog_type": "quest_accept",
                 "quest_id": row["quest_id"],
                 "text": row["Details"].strip(),
@@ -177,11 +171,9 @@ def extract_all_dialog():
 
         if non_empty(row["RequestItemsText"]):
             rows.append({
-                "npc_id": npc["npc_id"],
                 "npc_name": npc["npc_name"],
-                "race_mask": npc["race_mask"],
+                "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "model_id": npc["model_id"],
                 "dialog_type": "quest_progress",
                 "quest_id": row["quest_id"],
                 "text": row["RequestItemsText"].strip(),
@@ -205,11 +197,9 @@ def extract_all_dialog():
         npc = npc_meta.get(row["npc_id"])
         if npc and non_empty(row["OfferRewardText"]):
             rows.append({
-                "npc_id": npc["npc_id"],
                 "npc_name": npc["npc_name"],
-                "race_mask": npc["race_mask"],
+                "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "model_id": npc["model_id"],
                 "dialog_type": "quest_complete",
                 "quest_id": row["quest_id"],
                 "text": row["OfferRewardText"].strip(),
@@ -234,11 +224,9 @@ def extract_all_dialog():
         npc = npc_meta.get(row["npc_id"])
         if npc and non_empty(row["Objectives"]):
             rows.append({
-                "npc_id": npc["npc_id"],
                 "npc_name": npc["npc_name"],
-                "race_mask": npc["race_mask"],
+                "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "model_id": npc["model_id"],
                 "dialog_type": "quest_objectives",
                 "quest_id": row["quest_id"],
                 "text": row["Objectives"].strip(),
@@ -270,11 +258,9 @@ def extract_all_dialog():
             page = page_dict[page_id]
             if non_empty(page["text"]):
                 rows.append({
-                    "npc_id": f"go_{go['go_id']}",
                     "npc_name": go["go_name"],
-                    "race_mask": None,
+                    "npc_id": f"go_{go['go_id']}",
                     "sex": None,
-                    "model_id": None,
                     "dialog_type": "item_text",
                     "quest_id": None,
                     "text": page["text"].strip(),
@@ -304,11 +290,9 @@ def extract_all_dialog():
             text = page["text"]
             if non_empty(text):
                 rows.append({
-                    "npc_id": f"item_{item['item_id']}",
                     "npc_name": item["item_name"],
-                    "race_mask": None,
+                    "npc_id": f"item_{item['item_id']}",
                     "sex": None,
-                    "model_id": None,
                     "dialog_type": "item_text",
                     "quest_id": item["quest_id"],
                     "text": text.strip(),
@@ -329,11 +313,9 @@ def extract_all_dialog():
         npc = npc_meta.get(row["npc_id"])
         if npc and non_empty(row["text"]):
             rows.append({
-                "npc_id": npc["npc_id"],
                 "npc_name": npc["npc_name"],
-                "race_mask": npc["race_mask"],
+                "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "model_id": npc["model_id"],
                 "dialog_type": "quest_greeting",
                 "quest_id": None,
                 "text": row["text"].strip(),
@@ -353,11 +335,9 @@ def extract_all_dialog():
         npc = npc_meta.get(row["npc_id"])
         if npc and non_empty(row["text"]):
             rows.append({
-                "npc_id": npc["npc_id"],
                 "npc_name": npc["npc_name"],
-                "race_mask": npc["race_mask"],
+                "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
-                "model_id": npc["model_id"],
                 "dialog_type": "trainer_greeting",
                 "quest_id": None,
                 "text": row["text"].strip(),
@@ -379,11 +359,9 @@ if __name__ == "__main__":
         writer = csv.DictWriter(
             f,
             fieldnames=[
-                "npc_id",
                 "npc_name",
-                "race_mask",
+                "npc_id",
                 "sex",
-                "model_id",
                 "dialog_type",
                 "quest_id",
                 "text",

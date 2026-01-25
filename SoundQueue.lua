@@ -6,32 +6,67 @@ SoundQueue = {
     sounds = {},
     currentSound = nil,
     isPlaying = false,
+    isPaused = false, -- NEW: Track pause state
     updateFrame = nil,
 }
 
 -------------------------------------------------
--- DEBUG (ALWAYS ON)
+-- DEBUG & UTILS
 -------------------------------------------------
 
 local function Debug(msg)
     DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[SoundQueue]|r " .. tostring(msg))
 end
 
--------------------------------------------------
--- PATH NORMALIZATION
--------------------------------------------------
+-- Vanilla lacks a StopSound command for PlaySoundFile.
+-- Toggling the Sound CVar is the only way to force instant silence.
+local function KillSoundEngine()
+    SetCVar("Sound_EnableAllSound", 0)
+    SetCVar("Sound_EnableAllSound", 1)
+end
 
 local function NormalizePath(path)
     if not path then return nil end
-
-    -- Convert any forward slashes to backslashes
-
-    -- Collapse double backslashes just in case
-    path = string.gsub(path, "\\+", "\\")
-
-    return path
+    return string.gsub(path, "/+", "\\")
 end
 
+-------------------------------------------------
+-- CONTROLS
+-------------------------------------------------
+
+function SoundQueue:SkipCurrent()
+    Debug("SkipCurrent clicked")
+    KillSoundEngine()
+    if self.currentSound then
+        -- Remove the first item (current) and trigger next
+        self:RemoveSound(self.sounds[1])
+    end
+end
+
+function SoundQueue:TogglePause()
+    if not self.currentSound then return end
+
+    self.isPaused = not self.isPaused
+    
+    if self.isPaused then
+        Debug("Paused - Killing Sound")
+        KillSoundEngine()
+        
+        -- Store how far we were into the track
+        self.currentSound.pauseOffset = GetTime() - self.currentSound.startTime
+        self.frame.status:SetText("|cffff0000PAUSED|r")
+    else
+        Debug("Resuming - Restarting File")
+        -- 1.12.1 cannot seek. We restart the file.
+        local path = NormalizePath(self.currentSound.filePath)
+        PlaySoundFile(path)
+        
+        -- Reset startTime so the timer doesn't expire too early
+        -- It treats the resume as a fresh start for the remaining duration
+        self.currentSound.startTime = GetTime() - (self.currentSound.pauseOffset or 0)
+        self.frame.status:SetText("Playing...")
+    end
+end
 
 -------------------------------------------------
 -- QUEUE MANAGEMENT
@@ -41,62 +76,20 @@ function SoundQueue:GetQueueSize()
     return table.getn(self.sounds)
 end
 
-function SoundQueue:IsEmpty()
-    return self:GetQueueSize() == 0
-end
-
 function SoundQueue:GetCurrentSound()
     return self.sounds[1]
 end
 
--------------------------------------------------
--- SOUND LOOKUP
--------------------------------------------------
-
 function SoundQueue:FindSound(npcName, dialogText)
-    Debug("FindSound - NPC: " .. tostring(npcName))
-    
-    if not npcName or not dialogText then
-        Debug("ERROR: Missing npcName or dialogText")
-        return nil
-    end
-    
-    if not FindDialogSound then
-        Debug("ERROR: FindDialogSound not available")
-        return nil
-    end
-    
-    Debug("Calling FindDialogSound...")
-    local soundPath, dialogType, questID, seconds = FindDialogSound(npcName, dialogText)    
-
-    Debug("Result: path=" .. tostring(soundPath) .. ", type=" .. tostring(dialogType) .. ", qid=" .. tostring(questID))
-    
-    if not soundPath then
-        Debug("No sound found")
-        return nil
-    end
-    
-    return soundPath, dialogType, questID, seconds
+    if not npcName or not dialogText or not FindDialogSound then return nil end
+    return FindDialogSound(npcName, dialogText)    
 end
 
--------------------------------------------------
--- ADD SOUND
--------------------------------------------------
-
 function SoundQueue:AddSound(npcName, dialogText, title)
-    Debug("========================================")
-    Debug("AddSound called")
-    Debug("NPC: " .. tostring(npcName))
-    Debug("Title: " .. tostring(title))
+    local soundPath, dialogType, questID, seconds = self:FindSound(npcName, dialogText)
     
-    local soundPath, dialogType, questID,seconds = self:FindSound(npcName, dialogText)
+    if not soundPath then return end
     
-    if not soundPath then
-        Debug("FindSound returned nil, aborting")
-        return
-    end
-    
-    Debug("Creating soundData...")
     local soundData = {
         npcName = npcName,
         text = dialogText,
@@ -104,111 +97,62 @@ function SoundQueue:AddSound(npcName, dialogText, title)
         filePath = soundPath,
         dialogType = dialogType,
         questID = questID,
-        duration  = seconds or 15,  -- fallback safety
+        duration = seconds or 15,
+        startTime = 0,
+        pauseOffset = 0,
     }
     
-    Debug("soundData.filePath = " .. soundData.filePath)
-    
-    -- Don't add duplicates
+    -- Check for duplicates
     for _, queuedSound in ipairs(self.sounds) do
-        if queuedSound.filePath == soundData.filePath then
-            Debug("Already queued")
-            return
-        end
-    end
-    
-    -- Don't add gossip if quest exists
-    if not questID then
-        for _, queuedSound in ipairs(self.sounds) do
-            if queuedSound.questID then
-                Debug("Skipping gossip (quest in queue)")
-                return
-            end
-        end
+        if queuedSound.filePath == soundData.filePath then return end
     end
     
     table.insert(self.sounds, soundData)
-    Debug("Added to queue, size now: " .. self:GetQueueSize())
     
-    if self:GetQueueSize() == 1 then
-        Debug("First in queue, playing immediately")
+    if table.getn(self.sounds) == 1 then
         self:PlaySound(soundData)
     end
     
-    Debug("Calling UpdateUI...")
     self:UpdateUI()
-    Debug("========================================")
 end
 
 -------------------------------------------------
 -- PLAYBACK
 -------------------------------------------------
 
-
-
 function SoundQueue:PlaySound(soundData)
-    Debug("========================================")
-    Debug("PlaySound called")
+    if not soundData then return end
     
-    if not soundData or not soundData.filePath then
-        Debug("ERROR: Invalid sound data")
-        return
-    end
-    
-    Debug("Original path: " .. soundData.filePath)
-    local path = NormalizePath(soundData.filePath) 
-    Debug("Normalized path: " .. path)
-    
-    -- In WoW 1.12.1, PlaySoundFile doesn't return reliable values
-    -- Just call it and hope for the best
-    Debug("Calling PlaySoundFile(path, 'Master')...")
+    local path = NormalizePath(soundData.filePath)
     PlaySoundFile(path)
-    Debug("PlaySoundFile called (no return value checked)")
     
     soundData.startTime = GetTime()
-    
     self.currentSound = soundData
     self.isPlaying = true
+    self.isPaused = false
     
-    Debug("Set as current sound")
-    Debug("Duration seconds:" .. tostring(soundData.duration))
-    Debug("NPC: " .. soundData.npcName)
-    
-    -- Start timer to auto-advance queue
     if not self.updateFrame then
-        Debug("Creating update frame...")
         self.updateFrame = CreateFrame("Frame")
         self.updateFrame:SetScript("OnUpdate", function()
             SoundQueue:CheckSoundFinished()
         end)
     end
     self.updateFrame:Show()
-    Debug("Update frame started")
-    
-    Debug("Calling UpdateUI...")
     self:UpdateUI()
-    Debug("========================================")
 end
 
 function SoundQueue:CheckSoundFinished()
-    if not self.currentSound then
-        if self.updateFrame then
-            self.updateFrame:Hide()
-        end
-        return
-    end
+    -- If paused, we don't tick the timer forward
+    if not self.currentSound or self.isPaused then return end
     
     local elapsed = GetTime() - self.currentSound.startTime
-    
     if elapsed >= self.currentSound.duration then
-        Debug("Timer expired, removing sound")
+        Debug("Sound finished naturally")
         self:RemoveSound(self.currentSound)
     end
 end
 
 function SoundQueue:RemoveSound(soundData)
-    Debug("RemoveSound called for: " .. (soundData.npcName or "unknown"))
-    
     local removedIndex = nil
     for i, queuedSound in ipairs(self.sounds) do
         if queuedSound == soundData then
@@ -218,47 +162,20 @@ function SoundQueue:RemoveSound(soundData)
         end
     end
     
-    if not removedIndex then
-        Debug("Sound not in queue")
-        return
-    end
-    
-    Debug("Removed from index " .. removedIndex)
-    
     if removedIndex == 1 then
         self.currentSound = nil
         self.isPlaying = false
+        self.isPaused = false
         
         local nextSound = self:GetCurrentSound()
         if nextSound then
-            Debug("Playing next sound")
             self:PlaySound(nextSound)
         else
-            Debug("Queue empty")
-            if self.updateFrame then
-                self.updateFrame:Hide()
-            end
+            if self.updateFrame then self.updateFrame:Hide() end
         end
     end
     
     self:UpdateUI()
-end
-
-function SoundQueue:Stop()
-    Debug("Stop called")
-    self.currentSound = nil
-    self.isPlaying = false
-    if self.updateFrame then
-        self.updateFrame:Hide()
-    end
-end
-
-function SoundQueue:Clear()
-    Debug("Clear called")
-    while self:GetQueueSize() > 0 do
-        self:RemoveSound(self.sounds[1])
-    end
-    self:Stop()
 end
 
 -------------------------------------------------
@@ -266,155 +183,65 @@ end
 -------------------------------------------------
 
 function SoundQueue:InitializeUI()
-    if self.frame then
-        Debug("UI already initialized")
-        return
-    end
-    
-    Debug("Initializing UI...")
+    if self.frame then return end
     
     self.frame = CreateFrame("Frame", "BetterQuestVoiceOverFrame", UIParent)
-    self.frame:SetWidth(350)
-    self.frame:SetHeight(100)
-    self.frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 200)
-    self.frame:Hide()
+    self.frame:SetWidth(300)
+    self.frame:SetHeight(80)
+    self.frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 150)
     
     self.frame.bg = self.frame:CreateTexture(nil, "BACKGROUND")
     self.frame.bg:SetAllPoints()
-    self.frame.bg:SetTexture(0, 0, 0, 0.8)
+    self.frame.bg:SetTexture(0, 0, 0, 0.7)
     
-    self.frame.npcName = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    self.frame.npcName:SetPoint("TOP", 0, -10)
-    self.frame.npcName:SetTextColor(1, 0.82, 0)
+    self.frame.npcName = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    self.frame.npcName:SetPoint("TOPLEFT", 10, -10)
     
-    self.frame.title = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    self.frame.title:SetPoint("TOP", 0, -30)
-    self.frame.title:SetTextColor(0.8, 0.8, 0.8)
+    self.frame.title = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    self.frame.title:SetPoint("TOPLEFT", 10, -25)
+    self.frame.title:SetTextColor(0.7, 0.7, 0.7)
     
     self.frame.status = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.status:SetPoint("BOTTOM", 0, 10)
-    self.frame.status:SetTextColor(0.5, 1, 0.5)
+    self.frame.status:SetPoint("BOTTOMLEFT", 10, 10)
+
+    -- SKIP BUTTON (X)
+    self.frame.skipBtn = CreateFrame("Button", nil, self.frame, "UIPanelCloseButton")
+    self.frame.skipBtn:SetPoint("TOPRIGHT", -2, -2)
+    self.frame.skipBtn:SetWidth(24)
+    self.frame.skipBtn:SetHeight(24)
+    self.frame.skipBtn:SetScript("OnClick", function() SoundQueue:SkipCurrent() end)
+
+    -- PAUSE BUTTON (Arrow)
+    self.frame.pauseBtn = CreateFrame("Button", nil, self.frame)
+    self.frame.pauseBtn:SetWidth(20)
+    self.frame.pauseBtn:SetHeight(20)
+    self.frame.pauseBtn:SetPoint("BOTTOMRIGHT", -10, 10)
+    self.frame.pauseBtn:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up")
+    self.frame.pauseBtn:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Down")
+    self.frame.pauseBtn:SetScript("OnClick", function() SoundQueue:TogglePause() end)
     
-    Debug("UI initialized successfully")
+    self.frame:Hide()
 end
 
 function SoundQueue:UpdateUI()
-    Debug("UpdateUI called")
+    if not self.frame then self:InitializeUI() end
     
-    if not self.frame then
-        self:InitializeUI()
-    end
-    
-    local currentSound = self:GetCurrentSound()
-    
-    if not currentSound then
-        Debug("No current sound, hiding frame")
+    local current = self:GetCurrentSound()
+    if not current then
         self.frame:Hide()
         return
     end
     
-    Debug("Current sound exists: " .. currentSound.npcName)
+    self.frame.npcName:SetText(current.npcName or "Unknown")
+    self.frame.title:SetText(current.title or "")
     
-    self.frame.npcName:SetText(currentSound.npcName or "Unknown NPC")
-    
-    local titleText = currentSound.title or ""
-    if currentSound.questID then
-        titleText = titleText .. " (Quest)"
+    if self.isPaused then
+        self.frame.status:SetText("|cffff0000PAUSED|r")
     else
-        titleText = titleText .. " (Gossip)"
-    end
-    self.frame.title:SetText(titleText)
-    
-    if self.isPlaying then
-        self.frame.status:SetText("Playing...")
-        self.frame.status:SetTextColor(0.5, 1, 0.5)
-    else
-        self.frame.status:SetText("Ready")
-        self.frame.status:SetTextColor(0.8, 0.8, 0.8)
+        self.frame.status:SetText("|cff00ff00Playing...|r")
     end
     
     self.frame:Show()
-    Debug("Frame shown")
-end
-
--------------------------------------------------
--- EVENT HANDLERS
--------------------------------------------------
-
-local eventFrame = CreateFrame("Frame")
-
-local function OnQuestDetail()
-    Debug("*** QUEST_DETAIL event ***")
-    
-    local npcName = UnitName("npc") or UnitName("target")
-    if not npcName then
-        Debug("ERROR: Could not get NPC name")
-        return
-    end
-    
-    local questTitle = GetTitleText()
-    local questText = GetQuestText()
-    
-    if not questText or questText == "" then
-        Debug("ERROR: No quest text")
-        return
-    end
-    
-    Debug("NPC: " .. npcName .. ", Title: " .. questTitle)
-    SoundQueue:AddSound(npcName, questText, questTitle)
-end
-
-local function OnQuestProgress()
-    Debug("*** QUEST_PROGRESS event ***")
-    
-    local npcName = UnitName("npc") or UnitName("target")
-    if not npcName then
-        return
-    end
-    
-    local questTitle = GetTitleText()
-    local progressText = GetProgressText()
-    
-    if not progressText or progressText == "" then
-        return
-    end
-    
-    SoundQueue:AddSound(npcName, progressText, questTitle)
-end
-
-local function OnQuestComplete()
-    Debug("*** QUEST_COMPLETE event ***")
-    
-    local npcName = UnitName("npc") or UnitName("target")
-    if not npcName then
-        return
-    end
-    
-    local questTitle = GetTitleText()
-    local rewardText = GetRewardText()
-    
-    if not rewardText or rewardText == "" then
-        return
-    end
-    
-    SoundQueue:AddSound(npcName, rewardText, questTitle)
-end
-
-local function OnGossipShow()
-    Debug("*** GOSSIP_SHOW event ***")
-    
-    local npcName = UnitName("npc") or UnitName("target")
-    if not npcName then
-        return
-    end
-    
-    local gossipText = GetGossipText()
-    
-    if not gossipText or gossipText == "" then
-        return
-    end
-    
-    SoundQueue:AddSound(npcName, gossipText, npcName)
 end
 
 -------------------------------------------------
@@ -422,43 +249,32 @@ end
 -------------------------------------------------
 
 function SoundQueue:Initialize()
-    Debug("========================================")
-    Debug("INITIALIZING SOUNDQUEUE")
-    Debug("========================================")
-    
-    if not FindDialogSound then
-        DEFAULT_CHAT_FRAME:AddMessage("|cffff0000ERROR: npc_dialog_map.lua required|r")
-        return
-    end
-    
-    Debug("FindDialogSound found")
+    if not FindDialogSound then return end
     
     self:InitializeUI()
     
-    Debug("Registering events...")
+    local eventFrame = CreateFrame("Frame")
     eventFrame:RegisterEvent("QUEST_DETAIL")
     eventFrame:RegisterEvent("QUEST_PROGRESS")
     eventFrame:RegisterEvent("QUEST_COMPLETE")
     eventFrame:RegisterEvent("GOSSIP_SHOW")
-    eventFrame:RegisterEvent("QUEST_FINISHED")
     eventFrame:RegisterEvent("GOSSIP_CLOSED")
+    eventFrame:RegisterEvent("QUEST_FINISHED")
     
     eventFrame:SetScript("OnEvent", function()
-        Debug("Event received: " .. tostring(event))
-        
         if event == "QUEST_DETAIL" then
-            OnQuestDetail()
+            SoundQueue:AddSound(UnitName("npc"), GetQuestText(), GetTitleText())
         elseif event == "QUEST_PROGRESS" then
-            OnQuestProgress()
+            SoundQueue:AddSound(UnitName("npc"), GetProgressText(), GetTitleText())
         elseif event == "QUEST_COMPLETE" then
-            OnQuestComplete()
+            SoundQueue:AddSound(UnitName("npc"), GetRewardText(), GetTitleText())
         elseif event == "GOSSIP_SHOW" then
-            OnGossipShow()
+            SoundQueue:AddSound(UnitName("npc"), GetGossipText(), UnitName("npc"))
+        elseif event == "GOSSIP_CLOSED" or event == "QUEST_FINISHED" then
+            -- Optional: Clear queue on close? 
+            -- Better to let it finish playing as the player walks away.
         end
     end)
-    
-    Debug("SoundQueue ready")
-    Debug("========================================")
 end
 
 SoundQueue:Initialize()
