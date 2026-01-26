@@ -86,8 +86,7 @@ def extract_all_dialog():
             ct.Entry AS npc_id,
             bt.Id AS bt_id,
             bt.Text,
-            bt.Text1,
-            'gossip' as dialog_type
+            bt.Text1
         FROM creature_template ct
         JOIN creature_ai_scripts cas ON cas.creature_id = ct.Entry
         JOIN broadcast_text bt ON (
@@ -105,9 +104,8 @@ def extract_all_dialog():
         if is_clean_text(txt):
             rows.append({
                 "npc_name": npc["npc_name"] if npc else "Unknown",
-                "npc_id": row["npc_id"],
                 "sex": npc["sex"] if npc else None,
-                "dialog_type": row["dialog_type"],
+                "dialog_type": "gossip",
                 "quest_id": None,
                 "text": txt.strip(),
             })
@@ -119,8 +117,7 @@ def extract_all_dialog():
             ct.Entry AS npc_id,
             bt.Id AS bt_id,
             bt.Text,
-            bt.Text1,
-            'gossip' as dialog_type
+            bt.Text1
         FROM creature_template ct
         JOIN gossip_menu gm ON gm.entry = ct.GossipMenuId
         JOIN npc_text_broadcast_text ntbt ON ntbt.Id = gm.text_id
@@ -139,9 +136,8 @@ def extract_all_dialog():
         if is_clean_text(txt):
             rows.append({
                 "npc_name": npc["npc_name"] if npc else "Unknown",
-                "npc_id": row["npc_id"],
                 "sex": npc["sex"] if npc else None,
-                "dialog_type": row["dialog_type"],
+                "dialog_type": "gossip",
                 "quest_id": None,
                 "text": txt.strip(),
             })
@@ -154,8 +150,7 @@ def extract_all_dialog():
             qt.entry AS quest_id,
             bt.Id AS bt_id,
             bt.Text,
-            bt.Text1,
-            'gossip' as dialog_type
+            bt.Text1
         FROM dbscripts_on_quest_start dqs
         JOIN broadcast_text bt ON bt.Id = dqs.dataint
         JOIN creature_questrelation cqr ON cqr.quest = dqs.id
@@ -170,9 +165,8 @@ def extract_all_dialog():
         if is_clean_text(txt):
             rows.append({
                 "npc_name": npc["npc_name"] if npc else "Unknown",
-                "npc_id": row["npc_id"],
                 "sex": npc["sex"] if npc else None,
-                "dialog_type": row["dialog_type"],
+                "dialog_type": "quest_start_script",
                 "quest_id": row["quest_id"],
                 "text": txt.strip(),
             })
@@ -185,8 +179,7 @@ def extract_all_dialog():
             qt.entry AS quest_id,
             bt.Id AS bt_id,
             bt.Text,
-            bt.Text1,
-            'gossip' as dialog_type
+            bt.Text1
         FROM dbscripts_on_quest_end dqe
         JOIN broadcast_text bt ON bt.Id = dqe.dataint
         JOIN creature_involvedrelation cir ON cir.quest = dqe.id
@@ -201,40 +194,153 @@ def extract_all_dialog():
         if is_clean_text(txt):
             rows.append({
                 "npc_name": npc["npc_name"] if npc else "Unknown",
-                "npc_id": row["npc_id"],
                 "sex": npc["sex"] if npc else None,
-                "dialog_type": row["dialog_type"],
+                "dialog_type": "quest_end_script",
                 "quest_id": row["quest_id"],
                 "text": txt.strip(),
             })
             seen_broadcast_ids.add(row["bt_id"])
 
-    # 2e. Event Scripts
-    cursor.execute("""
-        SELECT DISTINCT
-            bt.Id AS bt_id,
-            bt.Text,
-            bt.Text1,
-            'gossip' as dialog_type
-        FROM dbscripts_on_event dse
-        JOIN broadcast_text bt ON bt.Id = dse.dataint
-        WHERE dse.command = 0 AND bt.Id > 0
-    """)
+    # 2e-j. All other dbscripts (gossip-type dialogue)
+    dbscript_tables = [
+        ("dbscripts_on_event", "dse"),
+        ("dbscripts_on_creature_movement", "dscm"),
+        ("dbscripts_on_gossip", "dsg"),
+        ("dbscripts_on_relay", "dsr"),
+        ("dbscripts_on_go_template_use", "dsgt"),
+        ("dbscripts_on_creature_death", "dscd"),
+    ]
     
-    for row in cursor.fetchall():
-        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+    for table, alias in dbscript_tables:
+        cursor.execute(f"""
+            SELECT DISTINCT
+                bt.Id AS bt_id,
+                bt.Text,
+                bt.Text1
+            FROM {table} {alias}
+            JOIN broadcast_text bt ON bt.Id = {alias}.dataint
+            WHERE {alias}.command = 0 AND bt.Id > 0
+        """)
         
-        if is_clean_text(txt):
-            rows.append({
-                "npc_name": "Unknown",
-                "npc_id": f"event_{row['bt_id']}",
-                "sex": None,
-                "dialog_type": row["dialog_type"],
-                "quest_id": None,
-                "text": txt.strip(),
-            })
-            seen_broadcast_ids.add(row["bt_id"])
+        for row in cursor.fetchall():
+            txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+            
+            if is_clean_text(txt):
+                rows.append({
+                    "npc_name": "Unknown",
+                    "sex": None,
+                    "dialog_type": "gossip",
+                    "quest_id": None,
+                    "text": txt.strip(),
+                })
+                seen_broadcast_ids.add(row["bt_id"])
+    
+# -------------------------------------------------
+    # OBJECT TEXT (plaques, graves, books on the ground etc)
+    # -------------------------------------------------
 
+    cursor.execute("""
+        SELECT
+            got.entry AS go_id,
+            got.name  AS go_name,
+            got.data0 AS page_id
+        FROM gameobject_template got
+        WHERE got.type = 9
+        AND got.data0 IS NOT NULL
+    """)
+
+    gameobjects = cursor.fetchall()
+
+    # page_text lookup (reuse existing dict)
+    cursor.execute("SELECT entry, text, next_page FROM page_text")
+    page_dict = {r["entry"]: r for r in cursor.fetchall()}
+
+    for go in gameobjects:
+        page_id = go["page_id"]
+        while page_id and page_id in page_dict:
+            page = page_dict[page_id]
+            if is_clean_text(page["text"]):
+                rows.append({
+                    "npc_name": go["go_name"],
+                    "sex": None,
+                    "dialog_type": "item_text",
+                    "quest_id": None,
+                    "text": page["text"].strip(),
+                })
+            page_id = page["next_page"] if page["next_page"] != 0 else None
+
+    # -------------------------------------------------
+    # ITEM TEXT (letters, books, quest items)
+    # -------------------------------------------------
+
+    cursor.execute("""
+        SELECT
+            it.entry AS item_id,
+            it.name AS item_name,
+            it.startquest AS quest_id,
+            it.PageText AS page_id
+        FROM item_template it
+        WHERE it.PageText IS NOT NULL
+    """)
+
+    items = cursor.fetchall()
+
+    for item in items:
+        page_id = item["page_id"]
+        while page_id and page_id in page_dict:
+            page = page_dict[page_id]
+            text = page["text"]
+            if is_clean_text(text):
+                rows.append({
+                    "npc_name": item["item_name"],
+                    "sex": None,
+                    "dialog_type": "item_text",
+                    "quest_id": item["quest_id"],
+                    "text": text.strip(),
+                })
+            page_id = page["next_page"] if page["next_page"] != 0 else None
+
+# -------------------------------------------------
+    # QUEST GREETINGS
+    # -------------------------------------------------
+    cursor.execute("""
+        SELECT
+            Entry AS npc_id,
+            Text  AS text
+        FROM questgiver_greeting
+    """)
+
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        if npc and is_clean_text(row["text"]):
+            rows.append({
+                "npc_name": npc["npc_name"],
+                "sex": npc["sex"],
+                "dialog_type": "gossip",
+                "quest_id": None,
+                "text": row["text"].strip(),
+            })
+
+    # -------------------------------------------------
+    # TRAINER GREETINGS
+    # -------------------------------------------------
+    cursor.execute("""
+        SELECT
+            Entry AS npc_id,
+            Text  AS text
+        FROM trainer_greeting
+    """)
+
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        if npc and is_clean_text(row["text"]):
+            rows.append({
+                "npc_name": npc["npc_name"],
+                "sex": npc["sex"],
+                "dialog_type": "gossip",
+                "quest_id": None,
+                "text": row["text"].strip(),
+            })
     # 3. QUEST TEXTS (Accept, Progress, Complete, Objectives)
     cursor.execute("""
         SELECT qt.entry AS quest_id, qt.Details, qt.RequestItemsText, qt.OfferRewardText, qt.Objectives,
@@ -250,15 +356,14 @@ def extract_all_dialog():
             (row["complete_npc"], "quest_complete", "OfferRewardText"),
             (row["accept_npc"], "quest_objectives", "Objectives")
         ]
-        for n_id, dialog_type, col in fields:
-            npc = npc_meta.get(n_id)
+        for npc_id, dialog_type, col in fields:
+            npc = npc_meta.get(npc_id)
             if npc and is_clean_text(row[col]):
                 rows.append({
-                    "npc_name": npc["npc_name"], 
-                    "npc_id": npc["npc_id"], 
+                    "npc_name": npc["npc_name"],
                     "sex": npc["sex"],
-                    "dialog_type": dialog_type, 
-                    "quest_id": row["quest_id"], 
+                    "dialog_type": dialog_type,
+                    "quest_id": row["quest_id"],
                     "text": row[col].strip()
                 })
 
@@ -270,9 +375,8 @@ def extract_all_dialog():
             if is_clean_text(txt):
                 rows.append({
                     "npc_name": "Unknown",
-                    "npc_id": f"{row['Id']}",
                     "sex": None,
-                    "dialog_type": "broadcast_orphan",
+                    "dialog_type": "gossip",
                     "quest_id": None,
                     "text": txt.strip(),
                 })
@@ -288,7 +392,7 @@ def extract_all_dialog():
 if __name__ == "__main__":
     data = extract_all_dialog()
     with open(OUTPUT_CSV, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["npc_name", "npc_id", "sex", "dialog_type", "quest_id", "text"])
+        writer = csv.DictWriter(f, fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"])
         writer.writeheader()
         writer.writerows(data)
     print(f"Extracted {len(data)} lines. Combat noise filtered.")

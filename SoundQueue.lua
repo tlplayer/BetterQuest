@@ -9,7 +9,6 @@ SoundQueue = {
     isPaused = false, -- NEW: Track pause state
     updateFrame = nil,
 }
-
 -------------------------------------------------
 -- DEBUG & UTILS
 -------------------------------------------------
@@ -18,54 +17,77 @@ local function Debug(msg)
     DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[SoundQueue]|r " .. tostring(msg))
 end
 
--- Vanilla lacks a StopSound command for PlaySoundFile.
--- Toggling the Sound CVar is the only way to force instant silence.
-local function KillSoundEngine()
-    SetCVar("Sound_EnableAllSound", 0)
-    SetCVar("Sound_EnableAllSound", 1)
-end
-
 local function NormalizePath(path)
-    if not path then return nil end
+    if not path then
+        Debug("NormalizePath received nil")
+        return nil
+    end
     return string.gsub(path, "/+", "\\")
 end
 
--------------------------------------------------
--- CONTROLS
--------------------------------------------------
 
-function SoundQueue:SkipCurrent()
-    Debug("SkipCurrent clicked")
-    KillSoundEngine()
-    if self.currentSound then
-        -- Remove the first item (current) and trigger next
-        self:RemoveSound(self.sounds[1])
+--CONTROLS
+
+function SoundQueue:PlaySound(soundData)
+    if not soundData then return end
+
+    Utils:PlaySound(soundData)  -- safe 1.12 wrapper
+    soundData.startTime = GetTime()
+    self.currentSound = soundData
+    self.isPlaying = true
+    self.isPaused = false
+
+    if not self.updateFrame then
+        self.updateFrame = CreateFrame("Frame")
+        self.updateFrame:SetScript("OnUpdate", function()
+            SoundQueue:CheckSoundFinished()
+        end)
     end
+    self.updateFrame:Show()
+    self:UpdateUI()
+end
+
+local function StopSound(soundData)
+    if not soundData then return end
+    Utils:StopSound(soundData)  -- use Utils
+    Debug("Stopped sound: " .. tostring(soundData.filePath))
 end
 
 function SoundQueue:TogglePause()
-    if not self.currentSound then return end
+    local current = self.currentSound
+    if not current then
+        Debug("TogglePause called but no current sound")
+        return
+    end
 
     self.isPaused = not self.isPaused
-    
+
     if self.isPaused then
-        Debug("Paused - Killing Sound")
-        KillSoundEngine()
-        
-        -- Store how far we were into the track
-        self.currentSound.pauseOffset = GetTime() - self.currentSound.startTime
-        self.frame.status:SetText("|cffff0000PAUSED|r")
+        local elapsed = GetTime() - (current.startTime or GetTime())
+        current.remaining = (current.duration or 0) - elapsed
+        if current.remaining < 0 then current.remaining = 0 end
+        StopSound(current)
+        Debug("Paused sound with remaining: " .. tostring(current.remaining))
     else
-        Debug("Resuming - Restarting File")
-        -- 1.12.1 cannot seek. We restart the file.
-        local path = NormalizePath(self.currentSound.filePath)
-        PlaySoundFile(path)
-        
-        -- Reset startTime so the timer doesn't expire too early
-        -- It treats the resume as a fresh start for the remaining duration
-        self.currentSound.startTime = GetTime() - (self.currentSound.pauseOffset or 0)
-        self.frame.status:SetText("Playing...")
+        current.startTime = GetTime()
+        current.duration = current.remaining or current.duration
+        self:PlaySound(current)
+        Debug("Resumed sound")
     end
+
+    self:UpdateUI()
+end
+
+function SoundQueue:SkipCurrent()
+    local current = self.currentSound
+    if not current then
+        Debug("SkipCurrent called but no current sound")
+        return
+    end
+
+    StopSound(current)
+    self:RemoveSound(current)
+    Debug("Skipped current sound: " .. (current.npcName or "Unknown"))
 end
 
 -------------------------------------------------
@@ -124,7 +146,8 @@ function SoundQueue:PlaySound(soundData)
     if not soundData then return end
     
     local path = NormalizePath(soundData.filePath)
-    PlaySoundFile(path)
+    local willPlay, handle = PlaySoundFile(path)
+    soundData.handle = handle
     
     soundData.startTime = GetTime()
     self.currentSound = soundData
