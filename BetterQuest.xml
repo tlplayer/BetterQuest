@@ -13,6 +13,7 @@
     <!-- UI frames -->
     <Script file="GossipFrame.lua"/>
     <Script file="QuestFrame.lua"/>
+    <Script file="Broadcast.lua"/>
 
     <!-- Features -->
     <Script file="Book.lua"/>
