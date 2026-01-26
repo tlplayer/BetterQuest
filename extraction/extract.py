@@ -87,7 +87,7 @@ def extract_all_dialog():
             bt.Id AS bt_id,
             bt.Text,
             bt.Text1,
-            'ai_script' as dialog_type
+            'gossip' as dialog_type
         FROM creature_template ct
         JOIN creature_ai_scripts cas ON cas.creature_id = ct.Entry
         JOIN broadcast_text bt ON (
@@ -155,7 +155,7 @@ def extract_all_dialog():
             bt.Id AS bt_id,
             bt.Text,
             bt.Text1,
-            'quest_start_script' as dialog_type
+            'gossip' as dialog_type
         FROM dbscripts_on_quest_start dqs
         JOIN broadcast_text bt ON bt.Id = dqs.dataint
         JOIN creature_questrelation cqr ON cqr.quest = dqs.id
@@ -186,7 +186,7 @@ def extract_all_dialog():
             bt.Id AS bt_id,
             bt.Text,
             bt.Text1,
-            'quest_end_script' as dialog_type
+            'gossip' as dialog_type
         FROM dbscripts_on_quest_end dqe
         JOIN broadcast_text bt ON bt.Id = dqe.dataint
         JOIN creature_involvedrelation cir ON cir.quest = dqe.id
@@ -215,7 +215,7 @@ def extract_all_dialog():
             bt.Id AS bt_id,
             bt.Text,
             bt.Text1,
-            'event_script' as dialog_type
+            'gossip' as dialog_type
         FROM dbscripts_on_event dse
         JOIN broadcast_text bt ON bt.Id = dse.dataint
         WHERE dse.command = 0 AND bt.Id > 0
@@ -270,7 +270,7 @@ def extract_all_dialog():
             if is_clean_text(txt):
                 rows.append({
                     "npc_name": "Unknown",
-                    "npc_id": f"orphan_{row['Id']}",
+                    "npc_id": f"{row['Id']}",
                     "sex": None,
                     "dialog_type": "broadcast_orphan",
                     "quest_id": None,
