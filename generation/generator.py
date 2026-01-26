@@ -341,12 +341,10 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_m
             filename = f"gossip_{idx}.wav"
         else:
             qid = row.get("quest_id")
-            nid = row.get("npc_id")
+            nid = row.get("npc_name")
 
             if pd.notna(qid):
                 quest_id = str(int(qid))
-            elif pd.notna(nid):
-                quest_id = str(int(nid))
             else:
                 quest_id = "0"
 
@@ -405,6 +403,7 @@ def parse_args():
     parser.add_argument("--sex", type=str, help="Filter by NPC sex (male/female)")
     parser.add_argument("--npc", type=str)
     parser.add_argument("--zone", type=str)
+    parser.add_argument("--type", type=str)
     parser.add_argument("--limit", type=int, default=None)
     parser.add_argument("--regenerate", action="store_true")
     parser.add_argument("--clean-orphans", action="store_true", 
@@ -415,6 +414,9 @@ def parse_args():
 def filter_dataframe(df, args):
     if args.npc:
         df = df[df["npc_name"] == args.npc]
+
+    if args.type:
+        df = df[df["dialog_type"] == args.type]
 
     if args.race:
         allowed = {
@@ -504,7 +506,7 @@ def merge_item_text_rows(df):
     seen_text_blocks = set()
 
     # Group by item ID (or item_name if available)
-    for item_id, group in item_rows.groupby("npc_id"):
+    for item_id, group in item_rows.groupby("npc_name"):
         merged_texts = []
         for text in group["text"]:
             # Deduplicate exact repeated blocks
@@ -542,7 +544,6 @@ def process_dataframe(df, output_dir="../sounds"):
         result = generate_tts_for_row(row, output_dir=output_dir)
         if not result:
             missing_narrators.append({
-                "npc_id": row["npc_id"],
                 "npc_name": row["npc_name"],
                 "dialog_type": row["dialog_type"]
             })
