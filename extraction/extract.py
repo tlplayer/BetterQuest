@@ -25,387 +25,132 @@ OUTPUT_CSV = "../data/all_npc_dialog.csv"
 def get_connection():
     return mysql.connector.connect(**DB_CONFIG)
 
-# =========================
-# HELPERS
-# =========================
-
 def non_empty(text):
     return text is not None and text.strip() != ""
 
 # =========================
 # EXTRACTION
-# =========================
+# = ::::::::::::::::::::: =
 
 def extract_all_dialog():
     db = get_connection()
     cursor = db.cursor(dictionary=True)
 
     rows = []
+    seen_broadcast_ids = set()  # Track IDs to find orphans later
 
-    # -------------------------------------------------
-    # BASE NPC METADATA
-    # -------------------------------------------------
-
+    # 1. BASE NPC METADATA
     cursor.execute("""
         SELECT
             ct.Entry        AS npc_id,
             ct.Name         AS npc_name,
             ct.GossipMenuId AS gossip_menu_id,
             ct.DisplayId1   AS model_id,
-            cmi.gender      AS sex,
-            cmr.racemask    AS race_mask
+            cmi.gender      AS sex
         FROM creature_template ct
-        LEFT JOIN creature_model_info cmi
-            ON cmi.modelid = ct.DisplayId1
-        LEFT JOIN creature_model_race cmr
-            ON cmr.modelid = ct.DisplayId1
+        LEFT JOIN creature_model_info cmi ON cmi.modelid = ct.DisplayId1
     """)
-
     npc_meta = {r["npc_id"]: r for r in cursor.fetchall()}
 
-    # -------------------------------------------------
-    # BROADCAST TEXT (via gossip_menu)
-    # -------------------------------------------------
-
+    # 2. BROADCAST TEXT (via gossip_menu)
     cursor.execute("""
         SELECT DISTINCT
             ct.Entry AS npc_id,
-            bt.Text AS text
+            bt.Id AS bt_id,
+            bt.Text AS text,
+            bt.Text1 AS text1
         FROM creature_template ct
-        JOIN gossip_menu gm
-            ON gm.entry = ct.GossipMenuId
-        JOIN npc_text_broadcast_text ntbt
-            ON ntbt.Id = gm.text_id
-        JOIN broadcast_text bt
-            ON bt.Id IN (
-                ntbt.BroadcastTextId0,
-                ntbt.BroadcastTextId1,
-                ntbt.BroadcastTextId2,
-                ntbt.BroadcastTextId3,
-                ntbt.BroadcastTextId4,
-                ntbt.BroadcastTextId5,
-                ntbt.BroadcastTextId6,
-                ntbt.BroadcastTextId7
-            )
-        WHERE bt.Text IS NOT NULL 
-            AND bt.Text != ''
-            AND bt.Id > 0
+        JOIN gossip_menu gm ON gm.entry = ct.GossipMenuId
+        JOIN npc_text_broadcast_text ntbt ON ntbt.Id = gm.text_id
+        JOIN broadcast_text bt ON bt.Id IN (
+            ntbt.BroadcastTextId0, ntbt.BroadcastTextId1, ntbt.BroadcastTextId2, ntbt.BroadcastTextId3,
+            ntbt.BroadcastTextId4, ntbt.BroadcastTextId5, ntbt.BroadcastTextId6, ntbt.BroadcastTextId7
+        )
     """)
-
     for row in cursor.fetchall():
         npc = npc_meta.get(row["npc_id"])
-        if npc and non_empty(row["text"]):
+        txt = row["text"] if non_empty(row["text"]) else row["text1"]
+        if npc and non_empty(txt):
             rows.append({
                 "npc_name": npc["npc_name"],
                 "npc_id": npc["npc_id"],
                 "sex": npc["sex"],
                 "dialog_type": "gossip",
                 "quest_id": None,
-                "text": row["text"].strip(),
+                "text": txt.strip(),
             })
+            seen_broadcast_ids.add(row["bt_id"])
 
-    # -------------------------------------------------
-    # GOSSIP TEXT (npc_text - legacy format)
-    # -------------------------------------------------
-
+    # 3. QUEST TEXTS (Accept, Progress, Complete, Objectives)
+    # Using a combined query for efficiency
     cursor.execute("""
-        SELECT
-            ct.Entry AS npc_id,
-            nt.*
-        FROM creature_template ct
-        JOIN gossip_menu gm
-            ON gm.entry = ct.GossipMenuId
-        JOIN npc_text nt
-            ON nt.ID = gm.text_id
+        SELECT qt.entry AS quest_id, qt.Details, qt.RequestItemsText, qt.OfferRewardText, qt.Objectives,
+               cqr.id AS accept_npc, cir.id AS complete_npc
+        FROM quest_template qt
+        LEFT JOIN creature_questrelation cqr ON qt.entry = cqr.quest
+        LEFT JOIN creature_involvedrelation cir ON qt.entry = cir.quest
     """)
-
     for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        if not npc:
-            continue
-
-        for i in range(8):
-            for j in range(2):
-                field = f"text{i}_{j}"
-                text = row.get(field)
-                if non_empty(text):
-                    rows.append({
-                        "npc_name": npc["npc_name"],
-                        "npc_id": npc["npc_id"],
-                        "sex": npc["sex"],
-                        "dialog_type": "gossip",
-                        "quest_id": None,
-                        "text": text.strip(),
-                    })
-
-    # -------------------------------------------------
-    # QUEST ACCEPT / PROGRESS TEXT
-    # -------------------------------------------------
-
-    cursor.execute("""
-        SELECT
-            cqr.id       AS npc_id,
-            qt.entry     AS quest_id,
-            qt.title     AS title,
-            qt.Details,
-            qt.RequestItemsText
-        FROM creature_questrelation cqr
-        JOIN quest_template qt
-            ON qt.entry = cqr.quest
-    """)
-
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        if not npc:
-            continue
-
-        if non_empty(row["Details"]):
-            rows.append({
-                "npc_name": npc["npc_name"],
-                "npc_id": npc["npc_id"],
-                "sex": npc["sex"],
-                "dialog_type": "quest_accept",
-                "quest_id": row["quest_id"],
-                "text": row["Details"].strip(),
-            })
-
-        if non_empty(row["RequestItemsText"]):
-            rows.append({
-                "npc_name": npc["npc_name"],
-                "npc_id": npc["npc_id"],
-                "sex": npc["sex"],
-                "dialog_type": "quest_progress",
-                "quest_id": row["quest_id"],
-                "text": row["RequestItemsText"].strip(),
-            })
-
-    # -------------------------------------------------
-    # QUEST COMPLETE TEXT
-    # -------------------------------------------------
-
-    cursor.execute("""
-        SELECT
-            cir.id       AS npc_id,
-            qt.entry     AS quest_id,
-            qt.OfferRewardText
-        FROM creature_involvedrelation cir
-        JOIN quest_template qt
-            ON qt.entry = cir.quest
-    """)
-
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        if npc and non_empty(row["OfferRewardText"]):
-            rows.append({
-                "npc_name": npc["npc_name"],
-                "npc_id": npc["npc_id"],
-                "sex": npc["sex"],
-                "dialog_type": "quest_complete",
-                "quest_id": row["quest_id"],
-                "text": row["OfferRewardText"].strip(),
-            })
-
-    # -------------------------------------------------
-    # QUEST OBJECTIVES TEXT (NPC-SPOKEN)
-    # -------------------------------------------------
-
-    cursor.execute("""
-        SELECT
-            cqr.id       AS npc_id,
-            qt.entry     AS quest_id,
-            qt.Objectives
-        FROM creature_questrelation cqr
-        JOIN quest_template qt
-            ON qt.entry = cqr.quest
-        WHERE qt.Objectives IS NOT NULL
-    """)
-
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        if npc and non_empty(row["Objectives"]):
-            rows.append({
-                "npc_name": npc["npc_name"],
-                "npc_id": npc["npc_id"],
-                "sex": npc["sex"],
-                "dialog_type": "quest_objectives",
-                "quest_id": row["quest_id"],
-                "text": row["Objectives"].strip(),
-            })
-
-    # -------------------------------------------------
-    # OBJECT TEXT (plaques, graves, books on the ground etc)
-    # -------------------------------------------------
-
-    cursor.execute("""
-        SELECT
-            got.entry AS go_id,
-            got.name  AS go_name,
-            got.data0 AS page_id
-        FROM gameobject_template got
-        WHERE got.type = 9
-        AND got.data0 IS NOT NULL
-    """)
-
-    gameobjects = cursor.fetchall()
-
-    # page_text lookup (reuse existing dict)
-    cursor.execute("SELECT entry, text, next_page FROM page_text")
-    page_dict = {r["entry"]: r for r in cursor.fetchall()}
-
-    for go in gameobjects:
-        page_id = go["page_id"]
-        while page_id and page_id in page_dict:
-            page = page_dict[page_id]
-            if non_empty(page["text"]):
+        for n_id, d_type, field in [
+            (row["accept_npc"], "quest_accept", "Details"),
+            (row["accept_npc"], "quest_progress", "RequestItemsText"),
+            (row["complete_npc"], "quest_complete", "OfferRewardText"),
+            (row["accept_npc"], "quest_objectives", "Objectives")
+        ]:
+            npc = npc_meta.get(n_id)
+            if npc and non_empty(row[field]):
                 rows.append({
-                    "npc_name": go["go_name"],
-                    "npc_id": f"go_{go['go_id']}",
-                    "sex": None,
-                    "dialog_type": "item_text",
-                    "quest_id": None,
-                    "text": page["text"].strip(),
+                    "npc_name": npc["npc_name"], "npc_id": npc["npc_id"], "sex": npc["sex"],
+                    "dialog_type": d_type, "quest_id": row["quest_id"], "text": row[field].strip()
                 })
-            page_id = page["next_page"] if page["next_page"] != 0 else None
 
-    # -------------------------------------------------
-    # ITEM TEXT (letters, books, quest items)
-    # -------------------------------------------------
-
-    cursor.execute("""
-        SELECT
-            it.entry AS item_id,
-            it.name AS item_name,
-            it.startquest AS quest_id,
-            it.PageText AS page_id
-        FROM item_template it
-        WHERE it.PageText IS NOT NULL
-    """)
-
-    items = cursor.fetchall()
-
-    for item in items:
-        page_id = item["page_id"]
-        while page_id and page_id in page_dict:
-            page = page_dict[page_id]
-            text = page["text"]
-            if non_empty(text):
-                rows.append({
-                    "npc_name": item["item_name"],
-                    "npc_id": f"item_{item['item_id']}",
-                    "sex": None,
-                    "dialog_type": "item_text",
-                    "quest_id": item["quest_id"],
-                    "text": text.strip(),
-                })
-            page_id = page["next_page"] if page["next_page"] != 0 else None
-
-    # -------------------------------------------------
-    # QUEST GREETINGS
-    # -------------------------------------------------
-    cursor.execute("""
-        SELECT
-            Entry AS npc_id,
-            Text  AS text
-        FROM questgiver_greeting
-    """)
-
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        if npc and non_empty(row["text"]):
-            rows.append({
-                "npc_name": npc["npc_name"],
-                "npc_id": npc["npc_id"],
-                "sex": npc["sex"],
-                "dialog_type": "gossip",
-                "quest_id": None,
-                "text": row["text"].strip(),
-            })
-
-    # -------------------------------------------------
-    # TRAINER GREETINGS
-    # -------------------------------------------------
-    cursor.execute("""
-        SELECT
-            Entry AS npc_id,
-            Text  AS text
-        FROM trainer_greeting
-    """)
-
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        if npc and non_empty(row["text"]):
-            rows.append({
-                "npc_name": npc["npc_name"],
-                "npc_id": npc["npc_id"],
-                "sex": npc["sex"],
-                "dialog_type": "gossip",
-                "quest_id": None,
-                "text": row["text"].strip(),
-            })
-
-# -------------------------------------------------
-    # BROADCAST TEXT RESOLVER (The Aynasha Fix)
-    # -------------------------------------------------
-    # Action Type 1 in EventAI often triggers a Talk action 
-    # that points to a BroadcastText ID.
+    # 4. BROADCAST TEXT RESOLVER (Creature_AI_Scripts)
     cursor.execute("""
         SELECT DISTINCT
-            ct.Entry AS npc_id,
-            ct.Name AS npc_name,
-            bt.Id AS broadcast_id,
-            bt.Text AS text_male,
-            bt.Text1 AS text_female
+            ct.Entry AS npc_id, bt.Id AS bt_id, bt.Text AS t0, bt.Text1 AS t1
         FROM creature_ai_scripts cas
         JOIN creature_template ct ON cas.creature_id = ct.Entry
         JOIN broadcast_text bt ON (
-            bt.Id = cas.action1_param1 OR 
-            bt.Id = cas.action2_param1 OR 
-            bt.Id = cas.action3_param1
+            (cas.action1_type = 1 AND bt.Id = cas.action1_param1) OR
+            (cas.action2_type = 1 AND bt.Id = cas.action2_param1) OR
+            (cas.action3_type = 1 AND bt.Id = cas.action3_param1)
         )
-        WHERE cas.action1_type = 1 
-           OR cas.action2_type = 1 
-           OR cas.action3_type = 1
     """)
-
     for row in cursor.fetchall():
-        # Pick Text1 if Text is empty (common for female NPCs)
-        final_text = row["text_male"] if row["text_male"] else row["text_female"]
-        
-        if final_text:
+        npc = npc_meta.get(row["npc_id"])
+        txt = row["t0"] if row["t0"] else row["t1"]
+        if non_empty(txt):
             rows.append({
-                "npc_id": row["npc_id"],
-                "npc_name": row["npc_name"],
-                "sex": None,
-                "dialog_type": "broadcast_ai",
-                "quest_id": None,
-                "text": final_text.strip(),
+                "npc_name": npc["npc_name"] if npc else "Unknown AI",
+                "npc_id": row["npc_id"], "sex": npc["sex"] if npc else None,
+                "dialog_type": "broadcast_ai", "quest_id": None, "text": txt.strip()
             })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 5. THE ORPHAN SWEEP (Everything else in broadcast_text)
+    # This puts all unlinked text at the end of the file
+    cursor.execute("SELECT Id, Text, Text1 FROM broadcast_text")
+    for row in cursor.fetchall():
+        if row["Id"] not in seen_broadcast_ids:
+            txt = row["Text"] if non_empty(row["Text"]) else row["Text1"]
+            if non_empty(txt):
+                rows.append({
+                    "npc_name": "Unknown",
+                    "npc_id": f"orphan_bt_{row['Id']}",
+                    "sex": None,
+                    "dialog_type": "broadcast_orphan",
+                    "quest_id": None,
+                    "text": txt.strip(),
+                })
 
     cursor.close()
     db.close()
-
     return rows
-
-# =========================
-# WRITE CSV
-# =========================
 
 if __name__ == "__main__":
     data = extract_all_dialog()
-
     with open(OUTPUT_CSV, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=[
-                "npc_name",
-                "npc_id",
-                "sex",
-                "dialog_type",
-                "quest_id",
-                "text",
-            ],
-        )
+        writer = csv.DictWriter(f, fieldnames=["npc_name", "npc_id", "sex", "dialog_type", "quest_id", "text"])
         writer.writeheader()
         writer.writerows(data)
-
-    print(f"Extracted {len(data)} dialog rows → {OUTPUT_CSV}")
+    print(f"Extracted {len(data)} rows. Check the end of the file for 'Unknown' orphans.")
