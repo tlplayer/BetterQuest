@@ -2,6 +2,7 @@
 
 import csv
 import mysql.connector
+import os
 
 # =========================
 # CONFIG
@@ -18,134 +19,137 @@ DB_CONFIG = {
 
 OUTPUT_CSV = "../data/all_npc_dialog.csv"
 
+EXCLUDED_SUBSTRINGS = [
+    "attempts to run away in fear",
+    "goes into a berserker rage",
+    "is possessed",
+    "is enraged",
+    "begins to cast",
+    "dies.",
+]
+
 # =========================
-# DB CONNECTION
+# HELPERS
 # =========================
 
 def get_connection():
     return mysql.connector.connect(**DB_CONFIG)
 
-def non_empty(text):
-    return text is not None and text.strip() != ""
+def is_clean_text(text):
+    if text is None: return False
+    t = text.strip()
+    if not t: return False
+    for pattern in EXCLUDED_SUBSTRINGS:
+        if pattern.lower() in t.lower(): return False
+    return True
+
+def load_existing_corrections(filepath):
+    """Maps text content to manual NPC names/IDs from previous runs."""
+    corrections = {}
+    if not os.path.exists(filepath):
+        return corrections
+    
+    with open(filepath, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            txt = row["text"].strip()
+            if row["npc_name"] != "Unknown":
+                corrections[txt] = {
+                    "npc_name": row["npc_name"],
+                    "npc_id": row["npc_id"],
+                    "sex": row.get("sex"),
+                    "quest_id": row.get("quest_id")
+                }
+    return corrections
 
 # =========================
 # EXTRACTION
-# = ::::::::::::::::::::: =
+# =========================
 
 def extract_all_dialog():
+    # 1. Load manual work first
+    manual_map = load_existing_corrections(OUTPUT_CSV)
+    
     db = get_connection()
     cursor = db.cursor(dictionary=True)
 
-    rows = []
-    seen_broadcast_ids = set()  # Track IDs to find orphans later
+    # Use a dictionary keyed by TEXT to deduplicate and preserve manual fixes
+    final_output = {}
+    seen_broadcast_ids = set()
 
-    # 1. BASE NPC METADATA
+    # 2. Get Metadata
+    cursor.execute("SELECT Entry, Name, DisplayId1 FROM creature_template")
+    npc_meta = {r["Entry"]: r for r in cursor.fetchall()}
+
+    # 3. Define a helper to add rows with preservation logic
+    def add_to_final(npc_id, npc_name, sex, d_type, q_id, text, bt_id=None):
+        if not is_clean_text(text):
+            return
+        
+        txt_key = text.strip()
+        
+        # Priority 1: Manual Correction from CSV
+        if txt_key in manual_map:
+            npc_name = manual_map[txt_key]["npc_name"]
+            npc_id = manual_map[txt_key]["npc_id"]
+        
+        # Priority 2: Don't overwrite a named entry with an 'Unknown' entry
+        if txt_key in final_output:
+            if final_output[txt_key]["npc_name"] != "Unknown" and npc_name == "Unknown":
+                return 
+
+        final_output[txt_key] = {
+            "npc_name": npc_name,
+            "npc_id": npc_id,
+            "sex": sex,
+            "dialog_type": d_type,
+            "quest_id": q_id,
+            "text": txt_key,
+        }
+        if bt_id: seen_broadcast_ids.add(bt_id)
+
+    # --- START DATA GATHERING ---
+
+    # A. Broadcast Text (Gossip/AI)
     cursor.execute("""
-        SELECT
-            ct.Entry        AS npc_id,
-            ct.Name         AS npc_name,
-            ct.GossipMenuId AS gossip_menu_id,
-            ct.DisplayId1   AS model_id,
-            cmi.gender      AS sex
+        SELECT DISTINCT ct.Entry, ct.Name, bt.Id as bt_id, bt.Text, bt.Text1
         FROM creature_template ct
-        LEFT JOIN creature_model_info cmi ON cmi.modelid = ct.DisplayId1
-    """)
-    npc_meta = {r["npc_id"]: r for r in cursor.fetchall()}
-
-    # 2. BROADCAST TEXT (via gossip_menu)
-    cursor.execute("""
-        SELECT DISTINCT
-            ct.Entry AS npc_id,
-            bt.Id AS bt_id,
-            bt.Text AS text,
-            bt.Text1 AS text1
-        FROM creature_template ct
-        JOIN gossip_menu gm ON gm.entry = ct.GossipMenuId
-        JOIN npc_text_broadcast_text ntbt ON ntbt.Id = gm.text_id
-        JOIN broadcast_text bt ON bt.Id IN (
-            ntbt.BroadcastTextId0, ntbt.BroadcastTextId1, ntbt.BroadcastTextId2, ntbt.BroadcastTextId3,
-            ntbt.BroadcastTextId4, ntbt.BroadcastTextId5, ntbt.BroadcastTextId6, ntbt.BroadcastTextId7
-        )
-    """)
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        txt = row["text"] if non_empty(row["text"]) else row["text1"]
-        if npc and non_empty(txt):
-            rows.append({
-                "npc_name": npc["npc_name"],
-                "npc_id": npc["npc_id"],
-                "sex": npc["sex"],
-                "dialog_type": "gossip",
-                "quest_id": None,
-                "text": txt.strip(),
-            })
-            seen_broadcast_ids.add(row["bt_id"])
-
-    # 3. QUEST TEXTS (Accept, Progress, Complete, Objectives)
-    # Using a combined query for efficiency
-    cursor.execute("""
-        SELECT qt.entry AS quest_id, qt.Details, qt.RequestItemsText, qt.OfferRewardText, qt.Objectives,
-               cqr.id AS accept_npc, cir.id AS complete_npc
-        FROM quest_template qt
-        LEFT JOIN creature_questrelation cqr ON qt.entry = cqr.quest
-        LEFT JOIN creature_involvedrelation cir ON qt.entry = cir.quest
-    """)
-    for row in cursor.fetchall():
-        for n_id, d_type, field in [
-            (row["accept_npc"], "quest_accept", "Details"),
-            (row["accept_npc"], "quest_progress", "RequestItemsText"),
-            (row["complete_npc"], "quest_complete", "OfferRewardText"),
-            (row["accept_npc"], "quest_objectives", "Objectives")
-        ]:
-            npc = npc_meta.get(n_id)
-            if npc and non_empty(row[field]):
-                rows.append({
-                    "npc_name": npc["npc_name"], "npc_id": npc["npc_id"], "sex": npc["sex"],
-                    "dialog_type": d_type, "quest_id": row["quest_id"], "text": row[field].strip()
-                })
-
-    # 4. BROADCAST TEXT RESOLVER (Creature_AI_Scripts)
-    cursor.execute("""
-        SELECT DISTINCT
-            ct.Entry AS npc_id, bt.Id AS bt_id, bt.Text AS t0, bt.Text1 AS t1
-        FROM creature_ai_scripts cas
-        JOIN creature_template ct ON cas.creature_id = ct.Entry
+        LEFT JOIN gossip_menu gm ON gm.entry = ct.GossipMenuId
+        LEFT JOIN npc_text_broadcast_text ntbt ON ntbt.Id = gm.text_id
+        LEFT JOIN creature_ai_scripts cas ON cas.creature_id = ct.Entry
         JOIN broadcast_text bt ON (
-            (cas.action1_type = 1 AND bt.Id = cas.action1_param1) OR
-            (cas.action2_type = 1 AND bt.Id = cas.action2_param1) OR
-            (cas.action3_type = 1 AND bt.Id = cas.action3_param1)
+            bt.Id IN (ntbt.BroadcastTextId0, ntbt.BroadcastTextId1, ntbt.BroadcastTextId2) OR
+            (cas.action1_type = 1 AND bt.Id = cas.action1_param1)
         )
     """)
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        txt = row["t0"] if row["t0"] else row["t1"]
-        if non_empty(txt):
-            rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown AI",
-                "npc_id": row["npc_id"], "sex": npc["sex"] if npc else None,
-                "dialog_type": "broadcast_ai", "quest_id": None, "text": txt.strip()
-            })
-            seen_broadcast_ids.add(row["bt_id"])
+    for r in cursor.fetchall():
+        txt = r["Text"] if r["Text"] else r["Text1"]
+        add_to_final(r["Entry"], r["Name"], None, "broadcast", None, txt, r["bt_id"])
 
-    # 5. THE ORPHAN SWEEP (Everything else in broadcast_text)
-    # This puts all unlinked text at the end of the file
-    cursor.execute("SELECT Id, Text, Text1 FROM broadcast_text")
-    for row in cursor.fetchall():
-        if row["Id"] not in seen_broadcast_ids:
-            txt = row["Text"] if non_empty(row["Text"]) else row["Text1"]
-            if non_empty(txt):
-                rows.append({
-                    "npc_name": "Unknown",
-                    "npc_id": f"orphan_bt_{row['Id']}",
-                    "sex": None,
-                    "dialog_type": "broadcast_orphan",
-                    "quest_id": None,
-                    "text": txt.strip(),
-                })
+    # B. Quest Text
+    cursor.execute("""
+        SELECT qt.entry, qt.Details, qt.RequestItemsText, qt.OfferRewardText, cqr.id as npc_id
+        FROM quest_template qt 
+        JOIN creature_questrelation cqr ON qt.entry = cqr.quest
+    """)
+    for r in cursor.fetchall():
+        meta = npc_meta.get(r["npc_id"], {"Name": "Unknown"})
+        add_to_final(r["npc_id"], meta["Name"], None, "quest", r["entry"], r["Details"])
+
+    # C. The Orphan Sweep
+    cursor.execute("SELECT Id, Text, Text1 FROM broadcast_text WHERE Id > 0")
+    for r in cursor.fetchall():
+        if r["Id"] not in seen_broadcast_ids:
+            txt = r["Text"] if r["Text"] else r["Text1"]
+            add_to_final(f"orphan_{r['Id']}", "Unknown", None, "orphan", None, txt)
 
     cursor.close()
     db.close()
-    return rows
+    return list(final_output.values())
+
+# =========================
+# WRITE CSV
+# =========================
 
 if __name__ == "__main__":
     data = extract_all_dialog()
@@ -153,4 +157,4 @@ if __name__ == "__main__":
         writer = csv.DictWriter(f, fieldnames=["npc_name", "npc_id", "sex", "dialog_type", "quest_id", "text"])
         writer.writeheader()
         writer.writerows(data)
-    print(f"Extracted {len(data)} rows. Check the end of the file for 'Unknown' orphans.")
+    print(f"Extraction complete. {len(data)} unique lines processed.")
