@@ -92,6 +92,358 @@ MariaDB [classicmangos]> SELECT 'creature_ai_scripts' as tbl, id, creature_id, e
 6 rows in set (0.011 sec)
 
 
+!mysql
+mysql -u mangos -p classicmangos
+Enter password: 
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 243
+Server version: 10.11.13-MariaDB-0ubuntu0.24.04.1 Ubuntu 24.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- FINDING THE ELUSIVE "I've run out of arrows!" (broadcast_text 7199)
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- First, confirm the text exists
+MariaDB [classicmangos]> SELECT * FROM broadcast_text WHERE Id = 7199;
++------+------+----------------------------------------------------------------------------------------------------------+------------+------------+-------------+----------+-------+-----------------+-----------------+----------+----------+----------+-------------+-------------+-------------+---------------+
+| Id   | Text | Text1                                                                                                    | ChatTypeID | LanguageID | ConditionID | EmotesID | Flags | SoundEntriesID1 | SoundEntriesID2 | EmoteID1 | EmoteID2 | EmoteID3 | EmoteDelay1 | EmoteDelay2 | EmoteDelay3 | VerifiedBuild |
++------+------+----------------------------------------------------------------------------------------------------------+------------+------------+-------------+----------+-------+-----------------+-----------------+----------+----------+----------+-------------+-------------+-------------+---------------+
+| 7199 |      | I've run out of arrows! I'm afraid if any more come you will need to take them on by yourself my friend. |          0 |          0 |           0 |        0 |     1 |               0 |               0 |        0 |        0 |        0 |           0 |           0 |           0 |         31882 |
++------+------+----------------------------------------------------------------------------------------------------------+------------+------------+-------------+----------+-------+-----------------+-----------------+----------+----------+----------+-------------+-------------+-------------+---------------+
+1 row in set (0.000 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 1: Check ALL script tables for this broadcast_text
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Check creature_ai_scripts (all action slots)
+MariaDB [classicmangos]> SELECT 'creature_ai_scripts' AS source, creature_id, id, event_type, 
+    ->        action1_type, action1_param1, action2_type, action2_param2, action3_type, action3_param3, comment
+    -> FROM creature_ai_scripts 
+    -> WHERE action1_param1 = 7199 OR action1_param2 = 7199 OR action1_param3 = 7199
+    ->    OR action2_param1 = 7199 OR action2_param2 = 7199 OR action2_param3 = 7199
+    ->    OR action3_param1 = 7199 OR action3_param2 = 7199 OR action3_param3 = 7199;
+Empty set (0.003 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Check dbscripts_on_creature_movement
+MariaDB [classicmangos]> SELECT 'dbscripts_on_creature_movement' AS source, id, delay, command, datalong, dataint, comments
+    -> FROM dbscripts_on_creature_movement 
+    -> WHERE dataint = 7199 OR datalong = 7199;
+Empty set (0.001 sec)
+
+MariaDB [classicmangos]> 
+eMariaDB [classicmangos]> -- Check dbscripts_on_event
+MariaDB [classicmangos]> SELECT 'dbscripts_on_event' AS source, id, delay, command, datalong, dataint, comments
+    -> FROM dbscripts_on_event 
+    -> WHERE dataint = 7199 OR datalong = 7199;
+Empty set (0.000 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> y-- Check dbscripts_on_gossip
+MariaDB [classicmangos]> SELECT 'dbscripts_on_gossip' AS source, id, delay, command, datalong, dataint, comments
+    -> FROM dbscripts_on_gossip 
+    -> WHERE dataint = 7199 OR datalong = 7199;
+Empty set (0.000 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Check dbscripts_on_quest_start
+MariaDB [classicmangos]> SELECT 'dbscripts_on_quest_start' AS source, id, delay, command, datalong, dataint, comments
+    -> FROM dbscripts_on_quest_start 
+    -> WHERE dataint = 7199 OR datalong = 7199;
++--------------------------+------+-------+---------+----------+---------+---------------+
+| source                   | id   | delay | command | datalong | dataint | comments      |
++--------------------------+------+-------+---------+----------+---------+---------------+
+| dbscripts_on_quest_start | 5713 | 75000 |       0 |        0 |    7199 | say_protect_2 |
++--------------------------+------+-------+---------+----------+---------+---------------+
+1 row in set (0.001 sec)
+
+MariaDB [classicmangos]> 
+=MariaDB [classicmangos]> -- Check dbscripts_on_quest_end
+MariaDB [classicmangos]> SELECT 'dbscripts_on_quest_end' AS source, id, delay, command, datalong, dataint, comments
+    -> FROM dbscripts_on_quest_end 
+    -> WHERE dataint = 7199 OR datalong = 7199;
+Empty set (0.002 sec)
+
+MariaDB [classicmangos]> 
+sMariaDB [classicmangos]> -- Check dbscripts_on_spell
+MariaDB [classicmangos]> SELECT 'dbscripts_on_spell' AS source, id, delay, command, datalong, dataint, comments
+    -> FROM dbscripts_on_spell 
+    -> WHERE dataint = 7199 OR datalong = 7199;
+Empty set (0.000 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Check dbscripts_on_go_use
+MariaDB [classicmangos]> SELECT 'dbscripts_on_go_use' AS source, id, delay, command, datalong, dataint, comments
+    -> FROM dbscripts_on_go_use 
+    -> WHERE dataint = 7199 OR datalong = 7199;
+Empty set (0.000 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Check dbscripts_on_go_template_use
+MariaDB [classicmangos]> SELECT 'dbscripts_on_go_template_use' AS source, id, delay, command, datalong, dataint, comments
+    -> FROM dbscripts_on_go_template_use 
+    -> WHERE dataint = 7199 OR datalong = 7199;
+Empty set (0.000 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 2: Check if it's in npc_text_broadcast_text (gossip)
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> SELECT * FROM npc_text_broadcast_text 
+    -> WHERE BroadcastTextId0 = 7199 OR BroadcastTextId1 = 7199 OR BroadcastTextId2 = 7199
+    ->    OR BroadcastTextId3 = 7199 OR BroadcastTextId4 = 7199 OR BroadcastTextId5 = 7199
+    ->    OR BroadcastTextId6 = 7199 OR BroadcastTextId7 = 7199;
+Empty set (0.001 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 3: Search for Darrowshire-related content (context from your search)
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- The "arrows" text was in a search about Darrowshire, so let's find that event
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Find all Darrowshire NPCs
+MariaDB [classicmangos]> SELECT Entry, Name FROM creature_template WHERE Name LIKE '%Darrow%';
++-------+-------------------------+
+| Entry | Name                    |
++-------+-------------------------+
+| 10947 | Darrowshire Betrayer    |
+| 10948 | Darrowshire Defender    |
+| 11064 | Darrowshire Spirit      |
+| 11277 | Caer Darrow Citizen     |
+| 11279 | Caer Darrow Guardsman   |
+| 11280 | Caer Darrow Cannoneer   |
+| 11281 | Caer Darrow Horseman    |
+| 11296 | Darrowshire Poltergeist |
++-------+-------------------------+
+8 rows in set (0.004 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Find Darrowshire quests
+MariaDB [classicmangos]> SELECT entry, Title FROM quest_template WHERE Title LIKE '%Darrow%';
++-------+---------------------------+
+| entry | Title                     |
++-------+---------------------------+
+|  5154 | The Annals of Darrowshire |
+|  5168 | Heroes of Darrowshire     |
+|  5181 | Villains of Darrowshire   |
+|  5206 | Marauders of Darrowshire  |
+|  5211 | Defenders of Darrowshire  |
+|  5721 | The Battle of Darrowshire |
++-------+---------------------------+
+6 rows in set (0.004 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Find Darrowshire events
+MariaDB [classicmangos]> SELECT * FROM game_event WHERE description LIKE '%Darrow%';
+Empty set (0.000 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 4: Check game_event_scripts (special events)
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> SELECT 'game_event_creature_data' AS source, guid, entry_id 
+    -> FROM game_event_creature_data 
+    -> WHERE entry_id IN (
+    ->     SELECT creature_id FROM creature_ai_scripts 
+    ->     WHERE action1_param1 = 7199 OR action2_param1 = 7199 OR action3_param1 = 7199
+    -> );
+Empty set (0.004 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 5: Search for event-based broadcast_text
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- Some texts only appear during special events
+MariaDB [classicmangos]> SELECT DISTINCT bt.Id, bt.Text, bt.Text1, ct.Entry, ct.Name
+    -> FROM broadcast_text bt
+    -> LEFT JOIN creature_ai_scripts cas ON (
+    ->     bt.Id = cas.action1_param1 OR bt.Id = cas.action2_param1 OR bt.Id = cas.action3_param1
+    -> )
+    -> LEFT JOIN creature_template ct ON ct.Entry = cas.creature_id
+    -> WHERE bt.Id BETWEEN 7190 AND 7210  -- Range around 7199
+    -> ORDER BY bt.Id;
++------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+-------+------+
+| Id   | Text                                                                                                                                                            | Text1                                                                                                                                              | Entry | Name |
++------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+-------+------+
+| 7190 | We await a batch of black dragon eggs from the Burning Steppes.  We believe that, through their study, we will advance our knowledge dramatically.              |                                                                                                                                                    |  NULL | NULL |
+| 7191 | Our oldest clutch of dragons are still far from maturity, but with patience and study, we are confident the dragonflight will soon be ready.                    |                                                                                                                                                    |  NULL | NULL |
+| 7192 | From yesterday's field trip, Marduk showed us that the dragons will tolerate the meat of recently killed humanoids, but only if they died slowly and painfully. |                                                                                                                                                    |  NULL | NULL |
+| 7193 | Tomorrow we will begin training of our promising dragons, so don't forget your chew toys.                                                                       |                                                                                                                                                    |  NULL | NULL |
+| 7194 | The Lich King's forces are building.  It is imperative that our timetable supports his plans.                                                                   |                                                                                                                                                    |  NULL | NULL |
+| 7195 | When preparing the dragon's meal, be sure to torture the prisoner in view of the dragon.  It responds well to pre-meal entertainment.                           |                                                                                                                                                    |  NULL | NULL |
+| 7196 | This kodo sure looks nothing like the beast I originally lured!  I wonder if the kombobulator can be used on me.                                                | This kodo sure looks nothing like the beast I originally lured!  I wonder if the kombobulator can be used on me.                                   |  NULL | NULL |
+| 7197 |                                                                                                                                                                 | The plaguelands are an excellent place to strike against the Scourge!                                                                              |  NULL | NULL |
+| 7198 | May I have another Dawn's Gambit, Betina?  I want to test it again...                                                                                           | May I have another Dawn's Gambit, Betina?  I want to test it again...                                                                              |  NULL | NULL |
+| 7199 |                                                                                                                                                                 | I've run out of arrows! I'm afraid if any more come you will need to take them on by yourself my friend.                                           |  NULL | NULL |
+| 7200 |                                                                                                                                                                 | Wait... did you hear that? Something approaches from the west!                                                                                     |  NULL | NULL |
+| 7201 |                                                                                                                                                                 | Praise Elune! I don't know if I could have survived the day without you, friend.                                                                   |  NULL | NULL |
+| 7202 |                                                                                                                                                                 | My leg feels much better now, the remedy must be working. If you will excuse me, I must go report to my superiors about what has transpired here.
+ |  NULL | NULL |
+| 7203 | Who dares to challenge me in my domain?!                                                                                                                        |                                                                                                                                                    |  NULL | NULL |
+| 7204 |                                                                                                                                                                 | I just fired an arrow.                                                                                                                             |  NULL | NULL |
+| 7205 | End our suffering!                                                                                                                                              | End our suffering!                                                                                                                                 |  NULL | NULL |
+| 7206 | You must save him!                                                                                                                                              | You must save him!                                                                                                                                 |  NULL | NULL |
+| 7207 | Oh, Darrowshire!  I would give a thousand lives for you!                                                                                                        | Oh, Darrowshire!  I would give a thousand lives for you!                                                                                           |  NULL | NULL |
+| 7208 | Do not fail us!                                                                                                                                                 | Do not fail us!                                                                                                                                    |  NULL | NULL |
+| 7209 | The Light must prevail!                                                                                                                                         | The Light must prevail!                                                                                                                            |  NULL | NULL |
+| 7210 | Beware Marduk!  Beware, or your strength will wither.                                                                                                           | Beware Marduk!  Beware, or your strength will wither.                                                                                              |  NULL | NULL |
++------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+-------+------+
+21 rows in set (0.042 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 6: Check if Sentinel Aynasha has multiple AI script entries
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- Maybe she has a different AI script during a special event
+MariaDB [classicmangos]> SELECT * FROM creature_ai_scripts WHERE creature_id = 11711;
++---------+-------------+------------+--------------------------+--------------+-------------+--------------+--------------+--------------+--------------+--------------+--------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+-----------------------------------------------+
+| id      | creature_id | event_type | event_inverse_phase_mask | event_chance | event_flags | event_param1 | event_param2 | event_param3 | event_param4 | event_param5 | event_param6 | action1_type | action1_param1 | action1_param2 | action1_param3 | action2_type | action2_param1 | action2_param2 | action2_param3 | action3_type | action3_param1 | action3_param2 | action3_param3 | comment                                       |
++---------+-------------+------------+--------------------------+--------------+-------------+--------------+--------------+--------------+--------------+--------------+--------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+-----------------------------------------------+
+| 1171101 |       11711 |          4 |                        0 |          100 |           0 |            0 |            0 |            0 |            0 |            0 |            0 |           57 |              2 |             25 |              0 |            0 |              0 |              0 |              0 |            0 |              0 |              0 |              0 | Sentinel Aynasha - Enable Range Mode on Aggro |
+| 1171102 |       11711 |          0 |                        0 |           30 |        1025 |        15000 |        30000 |        30000 |        60000 |            0 |            0 |            4 |           7339 |              0 |              0 |            0 |              0 |              0 |              0 |            0 |              0 |              0 |              0 | Sentinel Aynasha - Random Sound               |
+| 1171103 |       11711 |          2 |                        0 |          100 |        1024 |           15 |            0 |            0 |            0 |            0 |            0 |           25 |              0 |              0 |              0 |            1 |           1150 |              0 |              0 |            0 |              0 |              0 |              0 | Sentinel Aynasha - Flee at 15% HP             |
+| 1171104 |       11711 |          9 |                        0 |          100 |        1025 |            0 |           30 |         2300 |         3900 |            0 |            0 |           11 |          19767 |              1 |            256 |            0 |              0 |              0 |              0 |            0 |              0 |              0 |              0 | Sentinel Aynasha - Cast Aynasha's Bow         |
++---------+-------------+------------+--------------------------+--------------+-------------+--------------+--------------+--------------+--------------+--------------+--------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+-----------------------------------------------+
+4 rows in set (0.003 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 7: Check for conditional AI scripts
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- Some NPCs use different scripts based on conditions
+MariaDB [classicmangos]> SELECT 
+    ->     ct.Entry, 
+    ->     ct.Name, 
+    ->     ct.AIName,
+    ->     cas.*
+    -> FROM creature_template ct
+    -> LEFT JOIN creature_ai_scripts cas ON cas.creature_id = ct.Entry
+    -> WHERE ct.Entry = 11711;
++-------+------------------+---------+---------+-------------+------------+--------------------------+--------------+-------------+--------------+--------------+--------------+--------------+--------------+--------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+-----------------------------------------------+
+| Entry | Name             | AIName  | id      | creature_id | event_type | event_inverse_phase_mask | event_chance | event_flags | event_param1 | event_param2 | event_param3 | event_param4 | event_param5 | event_param6 | action1_type | action1_param1 | action1_param2 | action1_param3 | action2_type | action2_param1 | action2_param2 | action2_param3 | action3_type | action3_param1 | action3_param2 | action3_param3 | comment                                       |
++-------+------------------+---------+---------+-------------+------------+--------------------------+--------------+-------------+--------------+--------------+--------------+--------------+--------------+--------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+-----------------------------------------------+
+| 11711 | Sentinel Aynasha | EventAI | 1171101 |       11711 |          4 |                        0 |          100 |           0 |            0 |            0 |            0 |            0 |            0 |            0 |           57 |              2 |             25 |              0 |            0 |              0 |              0 |              0 |            0 |              0 |              0 |              0 | Sentinel Aynasha - Enable Range Mode on Aggro |
+| 11711 | Sentinel Aynasha | EventAI | 1171102 |       11711 |          0 |                        0 |           30 |        1025 |        15000 |        30000 |        30000 |        60000 |            0 |            0 |            4 |           7339 |              0 |              0 |            0 |              0 |              0 |              0 |            0 |              0 |              0 |              0 | Sentinel Aynasha - Random Sound               |
+| 11711 | Sentinel Aynasha | EventAI | 1171103 |       11711 |          2 |                        0 |          100 |        1024 |           15 |            0 |            0 |            0 |            0 |            0 |           25 |              0 |              0 |              0 |            1 |           1150 |              0 |              0 |            0 |              0 |              0 |              0 | Sentinel Aynasha - Flee at 15% HP             |
+| 11711 | Sentinel Aynasha | EventAI | 1171104 |       11711 |          9 |                        0 |          100 |        1025 |            0 |           30 |         2300 |         3900 |            0 |            0 |           11 |          19767 |              1 |            256 |            0 |              0 |              0 |              0 |            0 |              0 |              0 |              0 | Sentinel Aynasha - Cast Aynasha's Bow         |
++-------+------------------+---------+---------+-------------+------------+--------------------------+--------------+-------------+--------------+--------------+--------------+--------------+--------------+--------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+--------------+----------------+----------------+----------------+-----------------------------------------------+
+4 rows in set (0.003 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 8: Check creature spawns for this NPC
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- Maybe different spawns use different scripts
+MariaDB [classicmangos]> SELECT * FROM creature WHERE id = 11711;
++-------+-------+-----+-----------+---------------------------+--------------------------+-------------------------+------------------------+------------------+------------------+-----------+--------------+
+| guid  | id    | map | spawnMask | position_x                | position_y               | position_z              | orientation            | spawntimesecsmin | spawntimesecsmax | spawndist | MovementType |
++-------+-------+-----+-----------+---------------------------+--------------------------+-------------------------+------------------------+------------------+------------------+-----------+--------------+
+| 38663 | 11711 |   1 |         1 | 4390.68017578125000000000 | -67.31199645996094000000 | 86.71769714355469000000 | 2.32129001617431640000 |              275 |              275 |         0 |            0 |
++-------+-------+-----+-----------+---------------------------+--------------------------+-------------------------+------------------------+------------------+------------------+-----------+--------------+
+1 row in set (0.001 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> -- QUERY 9: Full text search for "arrows" in all script comments
+MariaDB [classicmangos]> -- =============================================================================
+MariaDB [classicmangos]> SELECT 'creature_ai_scripts' AS source, creature_id, comment
+    -> FROM creature_ai_scripts 
+    -> WHERE comment LIKE '%arrow%'
+    -> UNION ALL
+    -> SELECT 'dbscripts_on_creature_movement', id, comments
+    -> FROM dbscripts_on_creature_movement 
+    -> WHERE comments LIKE '%arrow%'
+    -> UNION ALL
+    -> SELECT 'dbscripts_on_event', id, comments
+    -> FROM dbscripts_on_event 
+    -> WHERE comments LIKE '%arrow%';
++---------------------+-------------+-----------------------------------------------------------------------------------------------------------------------+
+| source              | creature_id | comment                                                                                                               |
++---------------------+-------------+-----------------------------------------------------------------------------------------------------------------------+
+| creature_ai_scripts |        8530 | Cannibal Ghoul - Cast Summon Darrowshire Spirit on Death                                                              |
+| creature_ai_scripts |        8531 | Gibbering Ghoul - Cast Summon Darrowshire Spirit on Death                                                             |
+| creature_ai_scripts |        8532 | Diseased Flayer - Cast Summon Darrowshire Spirit on Death                                                             |
+| creature_ai_scripts |       10947 | Darrowshire Betrayer - Cast Wither Strike                                                                             |
+| creature_ai_scripts |       10948 | Darrowshire Defender - Cast Strike                                                                                    |
+| creature_ai_scripts |       10948 | Darrowshire Defender - Cast Shield Block                                                                              |
+| creature_ai_scripts |       11064 | Darrowshire Spirit - Cast Spirit Spawn-in, Spirit Particles on Spawn                                                  |
+| creature_ai_scripts |       11277 | Caer Darrow Citizen - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                               |
+| creature_ai_scripts |       11278 | Magnus Frostwake - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                                  |
+| creature_ai_scripts |       11279 | Caer Darrow Guardsman - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                             |
+| creature_ai_scripts |       11280 | Caer Darrow Cannoneer - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                             |
+| creature_ai_scripts |       11281 | Caer Darrow Horseman - Cast Caer Darrow Ghosts on Spawn                                                               |
+| creature_ai_scripts |       11282 | Melia - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                                             |
+| creature_ai_scripts |       11283 | Sammy - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                                             |
+| creature_ai_scripts |       11285 | Rory - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                                              |
+| creature_ai_scripts |       11286 | Magistrate Marduke - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                                |
+| creature_ai_scripts |       11287 | Baker Masterson - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                                   |
+| creature_ai_scripts |       11296 | Darrowshire Poltergeist - Cast Spirit Particles, Poltergeist Periodic Schedule, Poltergeist Despawn Schedule on Spawn |
+| creature_ai_scripts |       11296 | Darrowshire Poltergeist - Set Passive State and Random Say on Spawn                                                   |
+| creature_ai_scripts |       11316 | Joseph Dirte - Cast Shroud of Death, Caer Darrow Ghosts on Spawn                                                      |
+| creature_ai_scripts |        7999 | Tyrande Whisperwind - Cast Searing Arrow                                                                              |
+| creature_ai_scripts |       14695 | Lord Blackwood - Cast Black Arrow                                                                                     |
++---------------------+-------------+-----------------------------------------------------------------------------------------------------------------------+
+22 rows in set (0.008 sec)
+
+MariaDB [classicmangos]> 
+
+> SELECT 
+    ->     qt.entry AS quest_id,
+    ->     qt.Title AS quest_title,
+    ->     cqr.id AS quest_giver_npc_id,
+    ->     ct.Name AS quest_giver_name
+    -> FROM quest_template qt
+    -> LEFT JOIN creature_questrelation cqr ON cqr.quest = qt.entry
+    -> LEFT JOIN creature_template ct ON ct.Entry = cqr.id
+    -> WHERE qt.entry = 5713;
++----------+---------------------+--------------------+------------------+
+| quest_id | quest_title         | quest_giver_npc_id | quest_giver_name |
++----------+---------------------+--------------------+------------------+
+|     5713 | One Shot. One Kill. |              11711 | Sentinel Aynasha |
++----------+---------------------+--------------------+------------------+
+1 row in set (0.001 sec)
+
+MariaDB [classicmangos]> 
+MariaDB [classicmangos]> -- Also check the full quest start script
+MariaDB [classicmangos]> SELECT * FROM dbscripts_on_quest_start WHERE id = 5713 ORDER BY delay;
++------+--------+----------+---------+----------+-----------+-----------+-------------+---------------+------------+---------+----------+----------+----------+-----------+---------+---------+-------+---+-------+--------------+-----------------------------------------------+
+| id   | delay  | priority | command | datalong | datalong2 | datalong3 | buddy_entry | search_radius | data_flags | dataint | dataint2 | dataint3 | dataint4 | datafloat | x       | y       | z     | o | speed | condition_id | comments                                      |
++------+--------+----------+---------+----------+-----------+-----------+-------------+---------------+------------+---------+----------+----------+----------+-----------+---------+---------+-------+---+-------+--------------+-----------------------------------------------+
+| 5713 |      0 |        0 |       0 |        0 |         0 |         0 |           0 |             0 |          0 |    7200 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | say_protect_1                                 |
+| 5713 |   5000 |        0 |      10 |    11713 |     60000 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 | 4371.17 | -11.965 | 67.64 | 0 |     0 |            0 | summon first wave                             |
+| 5713 |   5000 |        0 |      10 |    11713 |     60000 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 | 4368.29 | -13.418 | 67.81 | 0 |     0 |            0 | summon first wave                             |
+| 5713 |  50000 |        0 |      34 |      317 |      5713 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | Stop script if player is dead or out of range |
+| 5713 |  50000 |        0 |      34 |      318 |      5713 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | Stop script if npc is dead                    |
+| 5713 |  55000 |        0 |      10 |    11713 |     60000 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 | 4368.86 | -15.438 | 68.36 | 0 |     0 |            0 | summon second wave                            |
+| 5713 |  55000 |        0 |      10 |    11713 |     60000 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 | 4368.29 | -13.418 | 67.81 | 0 |     0 |            0 | summon second wave                            |
+| 5713 |  55000 |        0 |      10 |    11713 |     60000 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 | 4371.17 | -11.965 | 67.64 | 0 |     0 |            0 | summon second wave                            |
+| 5713 |  70000 |        0 |      34 |      317 |      5713 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | Stop script if player is dead or out of range |
+| 5713 |  70000 |        0 |      34 |      318 |      5713 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | Stop script if npc is dead                    |
+| 5713 |  75000 |        0 |      10 |    11714 |     60000 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 | 4371.17 | -11.965 | 67.64 | 0 |     0 |            0 | summon third wave                             |
+| 5713 |  75000 |        0 |       0 |        0 |         0 |         0 |           0 |             0 |          0 |    7199 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | say_protect_2                                 |
+| 5713 | 160000 |        0 |      34 |      317 |      5713 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | Stop script if player is dead or out of range |
+| 5713 | 160000 |        0 |      34 |      318 |      5713 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | Stop script if npc is dead                    |
+| 5713 | 165000 |        0 |       7 |     5713 |         0 |         0 |           0 |             0 |          0 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | quest complete                                |
+| 5713 | 168000 |        0 |       0 |        0 |         0 |         0 |           0 |             0 |          0 |    7201 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | say_protect_3                                 |
+| 5713 | 170000 |        0 |       0 |        0 |         0 |         0 |           0 |             0 |          0 |    7202 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | say_protect_4                                 |
+| 5713 | 173000 |        0 |       0 |        0 |         0 |         0 |           0 |             0 |          0 |    7328 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | say_protect_5                                 |
+| 5713 | 175000 |        0 |      25 |        1 |         0 |         0 |           0 |             0 |          4 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | set run on                                    |
+| 5713 | 175000 |        0 |      20 |        2 |         0 |         0 |           0 |             0 |          4 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | start wp move                                 |
+| 5713 | 175000 |        0 |      18 |    20000 |         0 |         0 |           0 |             0 |          4 |       0 |        0 |        0 |        0 |         0 |       0 |       0 |     0 | 0 |     0 |            0 | despawn on timer                              |
++------+--------+----------+---------+----------+-----------+-----------+-------------+---------------+------------+---------+----------+----------+----------+-----------+---------+---------+-------+---+-------+--------------+-----------------------------------------------+
+21 rows in set (0.001 sec)
+
+MariaDB [classicmangos]> 
+
 
 
 ## Core Components

@@ -19,6 +19,7 @@ DB_CONFIG = {
 OUTPUT_CSV = "../data/all_npc_dialog.csv"
 
 # Add generic system/combat strings here to ignore them
+# These are emotes and combat messages we don't want to narrate
 EXCLUDED_SUBSTRINGS = [
     "attempts to run away in fear",
     "goes into a berserker rage",
@@ -26,6 +27,9 @@ EXCLUDED_SUBSTRINGS = [
     "is enraged",
     "begins to cast",
     "dies.",
+    "flees in terror",
+    "becomes enraged",
+    "goes into a frenzy",
 ]
 
 # =========================
@@ -75,20 +79,23 @@ def extract_all_dialog():
     """)
     npc_meta = {r["npc_id"]: r for r in cursor.fetchall()}
 
-    # 2. BROADCAST TEXT (Gossip & Scripts)
-    # This query captures both gossip_menu and creature_ai_scripts mappings
+    # 2. BROADCAST TEXT - Multiple Sources
+    # 2a. AI Scripts (action1, action2, action3)
     cursor.execute("""
         SELECT DISTINCT
-            ct.Entry AS npc_id, bt.Id AS bt_id, bt.Text, bt.Text1, 'gossip_or_ai' as d_type
+            ct.Entry AS npc_id,
+            bt.Id AS bt_id,
+            bt.Text,
+            bt.Text1,
+            'ai_script' as dialog_type
         FROM creature_template ct
-        LEFT JOIN gossip_menu gm ON gm.entry = ct.GossipMenuId
-        LEFT JOIN npc_text_broadcast_text ntbt ON ntbt.Id = gm.text_id
-        LEFT JOIN creature_ai_scripts cas ON cas.creature_id = ct.Entry
+        JOIN creature_ai_scripts cas ON cas.creature_id = ct.Entry
         JOIN broadcast_text bt ON (
-            bt.Id IN (ntbt.BroadcastTextId0, ntbt.BroadcastTextId1, ntbt.BroadcastTextId2) OR
             (cas.action1_type = 1 AND bt.Id = cas.action1_param1) OR
-            (cas.action2_type = 1 AND bt.Id = cas.action2_param1)
+            (cas.action2_type = 1 AND bt.Id = cas.action2_param1) OR
+            (cas.action3_type = 1 AND bt.Id = cas.action3_param1)
         )
+        WHERE bt.Id > 0
     """)
     
     for row in cursor.fetchall():
@@ -100,7 +107,129 @@ def extract_all_dialog():
                 "npc_name": npc["npc_name"] if npc else "Unknown",
                 "npc_id": row["npc_id"],
                 "sex": npc["sex"] if npc else None,
-                "dialog_type": row["d_type"],
+                "dialog_type": row["dialog_type"],
+                "quest_id": None,
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 2b. Gossip Text
+    cursor.execute("""
+        SELECT DISTINCT
+            ct.Entry AS npc_id,
+            bt.Id AS bt_id,
+            bt.Text,
+            bt.Text1,
+            'gossip' as dialog_type
+        FROM creature_template ct
+        JOIN gossip_menu gm ON gm.entry = ct.GossipMenuId
+        JOIN npc_text_broadcast_text ntbt ON ntbt.Id = gm.text_id
+        JOIN broadcast_text bt ON bt.Id IN (
+            ntbt.BroadcastTextId0, ntbt.BroadcastTextId1, ntbt.BroadcastTextId2,
+            ntbt.BroadcastTextId3, ntbt.BroadcastTextId4, ntbt.BroadcastTextId5,
+            ntbt.BroadcastTextId6, ntbt.BroadcastTextId7
+        )
+        WHERE bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "npc_id": row["npc_id"],
+                "sex": npc["sex"] if npc else None,
+                "dialog_type": row["dialog_type"],
+                "quest_id": None,
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 2c. Quest Start Scripts
+    cursor.execute("""
+        SELECT DISTINCT
+            cqr.id AS npc_id,
+            qt.entry AS quest_id,
+            bt.Id AS bt_id,
+            bt.Text,
+            bt.Text1,
+            'quest_start_script' as dialog_type
+        FROM dbscripts_on_quest_start dqs
+        JOIN broadcast_text bt ON bt.Id = dqs.dataint
+        JOIN creature_questrelation cqr ON cqr.quest = dqs.id
+        JOIN quest_template qt ON qt.entry = dqs.id
+        WHERE dqs.command = 0 AND bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "npc_id": row["npc_id"],
+                "sex": npc["sex"] if npc else None,
+                "dialog_type": row["dialog_type"],
+                "quest_id": row["quest_id"],
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 2d. Quest End Scripts
+    cursor.execute("""
+        SELECT DISTINCT
+            cir.id AS npc_id,
+            qt.entry AS quest_id,
+            bt.Id AS bt_id,
+            bt.Text,
+            bt.Text1,
+            'quest_end_script' as dialog_type
+        FROM dbscripts_on_quest_end dqe
+        JOIN broadcast_text bt ON bt.Id = dqe.dataint
+        JOIN creature_involvedrelation cir ON cir.quest = dqe.id
+        JOIN quest_template qt ON qt.entry = dqe.id
+        WHERE dqe.command = 0 AND bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "npc_id": row["npc_id"],
+                "sex": npc["sex"] if npc else None,
+                "dialog_type": row["dialog_type"],
+                "quest_id": row["quest_id"],
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 2e. Event Scripts
+    cursor.execute("""
+        SELECT DISTINCT
+            bt.Id AS bt_id,
+            bt.Text,
+            bt.Text1,
+            'event_script' as dialog_type
+        FROM dbscripts_on_event dse
+        JOIN broadcast_text bt ON bt.Id = dse.dataint
+        WHERE dse.command = 0 AND bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": "Unknown",
+                "npc_id": f"event_{row['bt_id']}",
+                "sex": None,
+                "dialog_type": row["dialog_type"],
                 "quest_id": None,
                 "text": txt.strip(),
             })
@@ -121,12 +250,16 @@ def extract_all_dialog():
             (row["complete_npc"], "quest_complete", "OfferRewardText"),
             (row["accept_npc"], "quest_objectives", "Objectives")
         ]
-        for n_id, d_type, col in fields:
+        for n_id, dialog_type, col in fields:
             npc = npc_meta.get(n_id)
             if npc and is_clean_text(row[col]):
                 rows.append({
-                    "npc_name": npc["npc_name"], "npc_id": npc["npc_id"], "sex": npc["sex"],
-                    "dialog_type": d_type, "quest_id": row["quest_id"], "text": row[col].strip()
+                    "npc_name": npc["npc_name"], 
+                    "npc_id": npc["npc_id"], 
+                    "sex": npc["sex"],
+                    "dialog_type": dialog_type, 
+                    "quest_id": row["quest_id"], 
+                    "text": row[col].strip()
                 })
 
     # 4. THE FINAL SWEEP (Orphans / Unlinked text)
@@ -148,43 +281,6 @@ def extract_all_dialog():
     db.close()
     return rows
 
-
-
-def extract_all_dialog():
-    # Load your manual work first
-    manual_map = load_existing_corrections(OUTPUT_CSV)
-    
-    db = get_connection()
-    cursor = db.cursor(dictionary=True)
-    
-    # We use a dict keyed by text to prevent duplicates and preserve fixes
-    final_output = {}
-
-    # ... (Run your SQL queries as before) ...
-    
-    # When processing ANY row (Gossip, AI, or Orphan):
-    for row in db_results:
-        txt = row["text"].strip()
-        
-        # 1. Is this text already in our manual correction map?
-        if txt in manual_map:
-            npc_name = manual_map[txt]["npc_name"]
-            npc_id = manual_map[txt]["npc_id"]
-        else:
-            # 2. Otherwise, use what the DB gave us (which might be "Unknown")
-            npc_name = row["npc_name"]
-            npc_id = row["npc_id"]
-
-        # 3. Only add if we haven't seen this text, OR if we are upgrading an "Unknown" to a real name
-        if txt not in final_output or (final_output[txt]["npc_name"] == "Unknown" and npc_name != "Unknown"):
-            final_output[txt] = {
-                "npc_name": npc_name,
-                "npc_id": npc_id,
-                "text": txt,
-                # ... (other fields)
-            }
-
-    return list(final_output.values())
 # =========================
 # WRITE CSV
 # =========================
