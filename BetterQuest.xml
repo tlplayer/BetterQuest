@@ -5,6 +5,8 @@
 
     <!-- Databases -->
     <Include file="db\npc_database.lua"/>
+    <Include file="Environment.lua"/>
+    <Include file="Utils.lua"/>
 
     <!-- Core systems -->
     <Script file="SoundQueue.lua"/>
@@ -17,4 +19,5 @@
 
     <!-- Features -->
     <Script file="Book.lua"/>
+    <Include file="Compatibility.lua"/>
 </Ui>

@@ -25,13 +25,23 @@ def normalize_name(name):
         return None
     return name.strip().replace('"', '').replace("'", "")
 
-def sanitize_filename(name: str) -> str:
-    name = name.strip()
-    name = re.sub(r"[^\w\s-]", "", name)
-    name = re.sub(r"\s+", "_", name)
-    return name.lower()
+def sanitize_filename(text: str) -> str:
+    """
+    Must match the TTS generation script exactly.
+    1. Strip whitespace
+    2. Remove non-word chars (except spaces and hyphens)
+    3. Replace spaces with underscores
+    4. Lowercase
+    """
+    if not isinstance(text, str):
+        return ""
+    text = text.strip()
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"\s+", "_", text)
+    return text.lower()
 
 def normalize_text_for_matching(text: str) -> str:
+    """Used for the Lua lookup key (text_hash), not the filename."""
     if not isinstance(text, str):
         return ""
 
@@ -100,40 +110,13 @@ npc_zone = invert_mapping(read_yaml(ZONE_FILE))
 df = pd.read_csv(CSV_PATH)
 df = df[df["text"].notna()]
 
-# ---------- Build gossip index map ----------
-def build_gossip_index_map(df):
-    """Pre-index all gossip lines per NPC from the CSV."""
-    gossip_map = {}
-    
-    for _, row in df.iterrows():
-        npc_name = normalize_name(row.get("npc_name"))
-        if not npc_name:
-            continue
-        
-        dialog_type = str(row.get("dialog_type", "")).lower()
-        if "gossip" not in dialog_type:
-            continue
-        
-        text = row.get("text", "")
-        if not text:
-            continue
-        
-        if npc_name not in gossip_map:
-            gossip_map[npc_name] = []
-        
-        if text not in gossip_map[npc_name]:
-            gossip_map[npc_name].append(text)
-    
-    return gossip_map
-
-gossip_index_map = build_gossip_index_map(df)
-
 # ---------- Merge item_text blocks ----------
-item_text_rows = df[df["dialog_type"].str.lower() == "item_text"]
+# Books/Items are often split into multiple rows in DB but generated as one file.
+item_text_rows = df[df["dialog_type"].str.lower().isin(["item_text", "book"])]
 merged_rows = []
 seen_text_blocks = set()
 
-for _, group in item_text_rows.groupby("npc_id"):
+for _, group in item_text_rows.groupby("npc_name"):
     merged = []
     for text in group["text"]:
         if text not in seen_text_blocks:
@@ -143,11 +126,13 @@ for _, group in item_text_rows.groupby("npc_id"):
     if not merged:
         continue
 
+    # Create a single merged row
     row = group.iloc[0].copy()
     row["text"] = " ".join(merged).strip()
     merged_rows.append(row)
 
-df = df[df["dialog_type"].str.lower() != "item_text"]
+# Remove original item rows and append merged ones
+df = df[~df["dialog_type"].str.lower().isin(["item_text", "book"])]
 if merged_rows:
     df = pd.concat([df, pd.DataFrame(merged_rows)], ignore_index=True)
 
@@ -176,7 +161,7 @@ for _, row in df.iterrows():
         if not race:
             missing_race[npc_name] = None
         
-        # Determine narrator
+        # Determine narrator info
         if race:
             narrator = f"{race}_female" if sex == "female" else race
             portrait = race
@@ -204,47 +189,52 @@ for _, row in df.iterrows():
 
     narrator = npc_database[npc_name]["narrator"]
     npc_dirname = sanitize_filename(npc_name)
+    quest_id = None
 
-    # Determine sound path
-    if "gossip" in dialog_type:
-        quest_id = None
-        
-        # Find index for this gossip text
-        idx = 0
-        if npc_name in gossip_index_map and text in gossip_index_map[npc_name]:
-            idx = gossip_index_map[npc_name].index(text)
-        
+    # =========================================================
+    # PATH GENERATION LOGIC (Must match TTS script)
+    # =========================================================
+
+    # Case A: Books / Items
+    # Path: ../sounds/{narrator}/{sanitized_npc_name}.wav
+    if dialog_type in ("book", "item_text"):
+        filename = f"{npc_dirname}.wav"
+        # Note: Books are often stored directly in the race/narrator folder, 
+        # not a subfolder for the book "NPC".
         sound_path = (
             f"Interface\\AddOns\\BetterQuest\\sounds\\"
-            f"{narrator}\\{npc_dirname}\\gossip_{idx}.wav"
+            f"{narrator}\\{filename}"
         )
 
-    elif dialog_type == "item_text":
-        quest_id = None
-        sound_path = (
-            f"Interface\\AddOns\\BetterQuest\\sounds\\narrator\\"
-            f"{npc_dirname}.wav"
-        )
-
+    # Case B: NPC Dialog (Quests & Gossip)
+    # Path: ../sounds/{narrator}/{sanitized_npc_name}/{filename}
     else:
         qid = row.get("quest_id")
-        nid = row.get("npc_id")
+        
+        # Check for valid numeric quest ID
+        has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
 
-        if pd.notna(qid):
+        if has_quest_id:
             quest_id = int(qid)
-        elif pd.notna(nid):
-            quest_id = int(nid)
+            filename = f"{quest_id}_{dialog_type}.wav"
         else:
-            quest_id = 0
+            # Fallback to text-based filename (Gossip style)
+            # Sanitize text, truncate to 50 chars
+            clean_text = sanitize_filename(text)
+            if not clean_text:
+                clean_text = "unknown_dialog"
+            filename = f"{clean_text[:50]}.wav"
 
         sound_path = (
             f"Interface\\AddOns\\BetterQuest\\sounds\\"
-            f"{narrator}\\{npc_dirname}\\{quest_id}_{dialog_type}.wav"
+            f"{narrator}\\{npc_dirname}\\{filename}"
         )
 
-    # Check if file exists
+    # Check if file exists on disk
     fs_path = sound_path_to_fs(sound_path)
     if not fs_path or not fs_path.exists():
+        # Optional: Uncomment to debug missing files
+        # print(f"Missing: {fs_path}")
         continue
 
     seconds = get_wav_duration_seconds(fs_path)
@@ -271,6 +261,9 @@ with open(OUTPUT_LUA, "w", encoding="utf-8") as f:
     f.write("NPC_DATABASE = {\n")
 
     for npc_name, data in sorted(npc_database.items()):
+        if not data["dialogs"]:
+            continue # Skip NPCs with no found audio files
+
         f.write(f'  ["{npc_name}"] = {{\n')
         
         # Metadata
@@ -365,14 +358,13 @@ function FindDialogSound(npcName, dialogText)
   end
 
   -- 2) Fallback: search all NPCs by text hash
+  -- Useful for shared generic dialogue (e.g. guards) or slight name mismatches
   for otherNpcName, data in pairs(NPC_DATABASE) do
     if data.dialogs then
       local entry = data.dialogs[key]
       if entry then
-        DEFAULT_CHAT_FRAME:AddMessage(
-          "|cffff8800[SoundQueue]|r NPC mismatch: '" ..
-          lookupName .. "' → '" .. otherNpcName .. "'"
-        )
+        -- Optional: Debug print for mismatches
+        -- DEFAULT_CHAT_FRAME:AddMessage("|cffff8800[SoundQueue]|r NPC mismatch: '" .. lookupName .. "' -> '" .. otherNpcName .. "'")
         return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
       end
     end
@@ -384,6 +376,6 @@ end
 """)
 
 print(f"Generated unified database for {len(npc_database)} NPCs")
-print(f"Total dialog entries: {sum(len(v['dialogs']) for v in npc_database.values())}")
+print(f"Total dialog entries linked: {sum(len(v['dialogs']) for v in npc_database.values())}")
 print(f"Missing races: {len(missing_race)}")
 print(f"Output written to: {OUTPUT_LUA}")

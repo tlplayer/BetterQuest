@@ -129,25 +129,11 @@ local function PlayBookVoiceFromTooltip()
 
     local key = NormalizeDialogText(text)
     DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r Normalized key: " .. key)
-
     -- Use the title as the NPC/Item key
-    local npcEntry = NPC_DIALOG_MAP[title]
-    if not npcEntry then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r No NPC_DIALOG_MAP entry for: " .. title)
-        return
-    end
 
-    local entry = npcEntry[key]
-    if entry then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r Found entry! Path: " .. entry.path)
         if SoundQueue then
             SoundQueue:AddSound(title, text, title)
-        else
-            PlaySoundFile(entry.path, "Master")
         end
-    else
-        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r No matching entry for normalized key")
-    end
 end
 
 -- Hook to ITEM_TEXT_READY

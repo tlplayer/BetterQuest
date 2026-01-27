@@ -1,95 +1,3 @@
-animal:
-- ' Polly'
-- Ancient Equine Spirit
-- Dadanga
-- Darkreaver's Fallen Charger
-- Flik's Frog
-- Maws
-- Metzen the Reindeer
-- Nag
-- Opus
-- Polly
-- Roc
-- Screecher Spirit
-- Tamed Kodo
-- The Abominable Greench
-- Tooga
-- Torta
-- Umpi
-- A
-- Chicken
-- Krakle's Thermometer
-- Lady
-- Voice of Elune
-demon:
-- Avatar of Hakkar
-- Blackwing
-- Captain Tuubid
-- Cracked Necrotic Crystal
-- Faint Necrotic Crystal
-- Forest Wisp
-- Freed Soul
-- General Rajaxx
-- Hakkar
-- Hastat the Ancient
-- Onu
-- Stoma the Ancient
-- Strange Snowman
-- The Master's Eye
-- Vartrus the Ancient
-- Warcaller Finster
-- Dreadsteed Spirit
-- Impsy
-- J'eevee
-- Nightmare
-- Pusillin
-- Zggi
-trogg:
-- Ambassador Ardalan
-- Berserk Trogg
-- Boss Galgosh
-- Captain Hecklebury Smotts
-- Captain Thalo'thas Brightsun
-- Fleet Master Firallon
-- Grawmug
-- Grimlok
-- Grubbis
-- Hammerspine
-- Johnny McWeaksauce
-- Lothos Riftwaker
-- Magosh
-- Myrokos Silentform
-- Priest
-- Priestess
-- Red Jack Flint
-- Rockjaw Ambusher
-- Rockjaw Skullthumper
-- Shakes O'Breen
-- Spirit Healer
-- Spirit Healer (DND)
-- Stonesplinter Bonesnapper
-- Stonesplinter Digger
-- Stonesplinter Geomancer
-- Stonesplinter Scout
-- Stonesplinter Seer
-- Stonesplinter Shaman
-- Stonesplinter Skullthumper
-- Stonesplinter Trogg
-- Super-Seller 680
-- Vendor-Tron 1000
-- Warosh
-- Winter Reveler
-- Wolf Master Nandos
-- Chicken
-- Krakle's Thermometer
-- Voice of Elune
-mechanical:
-- A-Me 01
-- Homing Robot OOX-09/HL
-- Homing Robot OOX-17/TN
-- Homing Robot OOX-22/FE
-- Tyrion's Spybot
-- Wrenix's Gizmotronic Apparatus
 abomination:
 - Algernon
 - Boyle
@@ -97,27 +5,24 @@ abomination:
 - Undercity Guardian
 ancients:
 - Arei
-- Ironbark the Redeemed
-- Old Ironbark
-- Phalanx
-- Prince Thunderaan
-- Ragnaros
-- Tendris Warpwood
 - Baron Rivendare
 - Eye of Naxxramas
 - Glutton
 - Gordo
-- Loatheb
-- Patchwerk
-- Stitches
-- Thaddius
-- Undercity Guardian
-- Arei
 - Hastat the Ancient
 - Ironbark the Redeemed
+- Loatheb
 - Old Ironbark
 - Onu
+- Patchwerk
+- Phalanx
+- Prince Thunderaan
+- Ragnaros
+- Stitches
 - Stoma the Ancient
+- Tendris Warpwood
+- Thaddius
+- Undercity Guardian
 - Vartrus the Ancient
 animal:
 - ' Polly'
@@ -148,32 +53,12 @@ animal:
 - Torta
 - Umpi
 - Voice of Elune
-- ' Polly'
-- Ancient Equine Spirit
-- Dadanga
-- Darkreaver's Fallen Charger
-- Flik's Frog
-- Great Bear Spirit
-- Maexxna
-- Maws
-- Metzen the Reindeer
-- Mist
-- Nag
-- Opus
-- Polly
-- Roc
-- Screecher Spirit
-- Stanley
-- Tamed Kodo
-- The Abominable Greench
-- Tooga
-- Torta
-- Umpi
 blood_elf:
 - Ambassador Ardalan
 - Aurora Skycaller
 - Baron Longshore
 - Bloodmage Drazial
+- Bloodmage Lynnore
 - Braelyn Firehand
 - Captain Thalo'thas Brightsun
 - Earthcaller Franzahl
@@ -191,15 +76,8 @@ blood_elf:
 - Raze
 - Red Jack Flint
 - Sanath Lim-yo
-- Vyrin Swiftwind
-- Bloodmage Drazial
-- Bloodmage Lynnore
-- Braelyn Firehand
-- Gilthares Firebough
-- Lady Sylvanas Windrunner
-- Mathredis Firestar
-- Sanath Lim-yo
 - The Banshee Queen
+- Vyrin Swiftwind
 centaur:
 - Centaur Pariah
 - Kolkar Bloodcharger
@@ -291,32 +169,12 @@ dragon:
 - Awbee
 - Azuregos
 - Cyrus Therepentous
-- Dreamscythe
-- Emberstrife
-- Emeriss
-- Haleh
-- Jade
-- Lethon
-- Nefarian
-- Nightmare Suppressor
-- Onyxia
-- Rookery Hatcher
-- Shade of Eranikus
-- Solakar Flamewreath
-- Spirit of Azuregos
-- Taerar
-- Vaelastrasz
-- Vaelastrasz the Corrupt
-- Ysondre
-- Anachronos
-- Awbee
-- Azuregos
-- Cyrus Therepentous
 - Death Talon Overseer
 - Dreamscythe
 - Emberstrife
 - Emeriss
 - Green Dragonspawn
+- Haleh
 - Jade
 - Lethon
 - Lord Valthalak
@@ -1787,9 +1645,6 @@ kobold:
 - Windshear Overlord
 - Windshear Tunnel Rat
 - Znort
-draenei:
-- Kum'isha the Collector
-- Magtoor
 mechanical:
 - 7:XT
 - A-Me 01
