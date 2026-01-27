@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
 import csv
+import yaml
+import os
 import mysql.connector
+from collections import defaultdict
 
 # =========================
 # CONFIG
@@ -17,9 +20,122 @@ DB_CONFIG = {
 }
 
 OUTPUT_CSV = "../data/all_npc_dialog.csv"
+RACE_YAML = "../data/npc_race.yaml"
+SEX_YAML = "../data/npc_sex.yaml"
+
+TEXTURE_FAMILY_RACE = {
+    # Humanoid variants
+    'kid': 'child',
+    'femalekid': 'child_female',
+    'human': 'human',
+    'gnome': 'gnome',
+    'goblin': 'goblin',
+
+    # Kobolds / Troggs
+    'kobold': 'kobold',
+    'trogg': 'trogg',
+
+    # Undead
+    'bansheeskin': 'spirit_female',
+    'zombieskin': 'undead',
+    'ghoulskin': 'undead',
+    'skeleton': 'undead',
+    'wight': 'spirit',
+    'ghost': 'spirit',
+
+    # Elementals
+    'elemental': 'elemental',
+
+    # Giants
+    'giant': 'giant',
+
+
+    # Beasts
+    'wolfskin': 'animal',
+    'direwolfskin': 'animal',
+    'bearskin': 'animal',
+    'owlbearskin': 'animal',
+    'tigerskin': 'animal',
+
+    # Demons
+    'dreadlordskin': 'demon',
+    'succubus': 'succubus',
+    'voidwalker': 'demon',
+    'infernalskin': 'demon',
+
+    # Dragonkin
+    'drake': 'dragon',
+
+    # Misc
+    'quilboar': 'quilboar',
+    'bogbeast': 'elemental',
+    'lostone': 'lost_one',
+    'bloodelf': 'bloodelf',
+    'highelf': 'highelf', 
+    'nightelf': 'nightelf',
+    'dryad': 'keeper',
+    'keeper': 'keeper',
+    'naga': 'naga',
+    'siren': 'naga_female',
+    'dragon': 'dragonkin',
+    'demon': 'demon',
+    'satyr': 'satyr',
+    'furbolg': 'furbolg',
+    'centaur': 'centaur',
+    'harpy': 'harpy',
+    'gnoll': 'gnoll',
+    'troll': 'troll',
+    'ogre' : 'ogre'
+}
+
+
+# https://wowpedia.fandom.com/wiki/RaceId
+RACE_DICT = {
+    -1: 'narrator',
+    1: 'human',
+    2: 'orc',
+    3: 'dwarf',
+    4: 'nightelf',
+    5: 'scourge',
+    6: 'tauren',
+    7: 'gnome',
+    8: 'troll',
+    9: 'goblin',
+    10: 'bloodelf',
+    11: 'draenei',
+    12: 'felorc',
+    13: 'naga',
+    14: 'broken',
+    15: 'skeleton',
+    16: 'vrykul',
+    17: 'tuskarr',
+    18: 'foresttroll',
+    19: 'taunka',
+    20: 'northrendskeleton',
+    21: 'icetroll',
+    22: 'worgen',
+    23: 'human',
+    24: 'pandaren',
+    25: 'pandaren',
+    26: 'pandaren',
+    27: 'nightborne',
+    28: 'highmountaintauren',
+    29: 'voidelf',
+    30: 'lightforgeddraenei',
+    31: 'zandalari',
+    32: 'kultiran',
+    33: 'thinhuman',
+    34: 'darkirondwarf',
+    35: 'vulpera',
+    36: 'magharorc',
+    37: 'mechagnome',
+    52: 'dracthyr',
+    70: 'dracthyr'
+}
+
+GENDER_DICT = {0: 'male', 1: 'female'}
 
 # Add generic system/combat strings here to ignore them
-# These are emotes and combat messages we don't want to narrate
 EXCLUDED_SUBSTRINGS = [
     "attempts to run away in fear",
     "goes into a berserker rage",
@@ -30,6 +146,7 @@ EXCLUDED_SUBSTRINGS = [
     "flees in terror",
     "becomes enraged",
     "goes into a frenzy",
+    "%s ",  # Generic placeholder combat messages
 ]
 
 # =========================
@@ -55,6 +172,53 @@ def is_clean_text(text):
             
     return True
 
+def load_existing_yaml(filepath):
+    """Load existing YAML file if it exists, otherwise return empty dict."""
+    if os.path.exists(filepath):
+        with open(filepath, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f) or {}
+    return {}
+
+def discover_new_race_gender_mappings(db):
+    """
+    Discover unmapped DisplayRaceID and DisplaySexID values from the database.
+    Returns dict of new mappings with sample NPC names.
+    """
+    cursor = db.cursor(dictionary=True)
+    
+    # Find all unique race/gender combinations with example NPCs
+    cursor.execute("""
+        SELECT DISTINCT
+            cdix.DisplayRaceID,
+            cdix.DisplaySexID,
+            ct.name AS example_npc
+        FROM creature_template ct
+        LEFT JOIN db_CreatureDisplayInfo cdi ON cdi.ID = ct.DisplayId1
+        LEFT JOIN db_CreatureDisplayInfoExtra cdix ON cdix.ID = cdi.ExtendedDisplayInfoID
+        WHERE cdix.DisplayRaceID IS NOT NULL
+        ORDER BY cdix.DisplayRaceID, cdix.DisplaySexID
+    """)
+    
+    results = cursor.fetchall()
+    cursor.close()
+    
+    # Group by race/gender ID
+    unmapped_races = defaultdict(list)
+    unmapped_genders = defaultdict(list)
+    
+    for row in results:
+        race_id = row['DisplayRaceID']
+        gender_id = row['DisplaySexID']
+        npc_name = row['example_npc']
+        
+        if race_id not in RACE_DICT and npc_name:
+            unmapped_races[race_id].append(npc_name)
+        
+        if gender_id not in GENDER_DICT and npc_name:
+            unmapped_genders[gender_id].append(npc_name)
+    
+    return unmapped_races, unmapped_genders
+
 # =========================
 # EXTRACTION
 # =========================
@@ -79,8 +243,224 @@ def extract_all_dialog():
     """)
     npc_meta = {r["npc_id"]: r for r in cursor.fetchall()}
 
-    # 2. BROADCAST TEXT - Multiple Sources
-    # 2a. AI Scripts (action1, action2, action3)
+    # 2. SCRIPT_TEXTS (C++ ScriptDev2 system)
+    cursor.execute("""
+        SELECT
+            st.entry AS script_entry,
+            st.content_default AS text,
+            st.broadcast_text_id,
+            st.comment,
+            ct.Entry AS npc_id,
+            ct.Name AS npc_name
+        FROM script_texts st
+        LEFT JOIN creature_template ct ON ct.ScriptName IS NOT NULL
+            AND st.comment LIKE CONCAT(LOWER(REPLACE(ct.Name, ' ', '_')), '%')
+        WHERE st.entry < 0
+            AND st.content_default IS NOT NULL
+            AND st.content_default != ''
+    """)
+    
+    for row in cursor.fetchall():
+        txt = row["text"]
+        if is_clean_text(txt):
+            # Try to extract NPC name from comment if not linked
+            npc_name = row["npc_name"]
+            if not npc_name and row["comment"]:
+                # Comment format is usually "npc_name SAY_SOMETHING"
+                npc_name = row["comment"].split()[0].replace('_', ' ').title()
+            
+            rows.append({
+                "npc_name": npc_name or "Unknown",
+                "sex": npc_meta.get(row["npc_id"], {}).get("sex") if row["npc_id"] else None,
+                "dialog_type": "gossip",
+                "quest_id": None,
+                "text": txt.strip(),
+            })
+            if row["broadcast_text_id"]:
+                seen_broadcast_ids.add(row["broadcast_text_id"])
+
+    # 3. DBSCRIPTS - CREATURE_DEATH
+    cursor.execute("""
+        SELECT DISTINCT
+            d.id AS script_id,
+            d.dataint AS bt_id,
+            d.buddy_entry,
+            bt.Text,
+            bt.Text1,
+            COALESCE(ct_buddy.Name, 'Unknown') AS npc_name,
+            COALESCE(cmi.gender, 0) AS sex
+        FROM dbscripts_on_creature_death d
+        JOIN broadcast_text bt ON bt.Id = d.dataint
+        LEFT JOIN creature_template ct_buddy ON ct_buddy.Entry = d.buddy_entry
+        LEFT JOIN creature_model_info cmi ON cmi.modelid = ct_buddy.DisplayId1
+        WHERE d.command = 0 AND bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": row["npc_name"],
+                "sex": row["sex"],
+                "dialog_type": "gossip",
+                "quest_id": None,
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 4. DBSCRIPTS - CREATURE_MOVEMENT
+    cursor.execute("""
+        SELECT DISTINCT
+            d.id AS script_id,
+            d.dataint AS bt_id,
+            d.buddy_entry,
+            bt.Text,
+            bt.Text1,
+            COALESCE(ct_buddy.Name, ct_main.Name, 'Unknown') AS npc_name,
+            COALESCE(cmi_buddy.gender, cmi_main.gender, 0) AS sex
+        FROM dbscripts_on_creature_movement d
+        JOIN broadcast_text bt ON bt.Id = d.dataint
+        LEFT JOIN creature_template ct_buddy ON ct_buddy.Entry = d.buddy_entry
+        LEFT JOIN creature_model_info cmi_buddy ON cmi_buddy.modelid = ct_buddy.DisplayId1
+        LEFT JOIN creature_template ct_main ON ct_main.Entry = FLOOR(d.id / 100)
+        LEFT JOIN creature_model_info cmi_main ON cmi_main.modelid = ct_main.DisplayId1
+        WHERE d.command = 0 AND bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": row["npc_name"],
+                "sex": row["sex"],
+                "dialog_type": "gossip",
+                "quest_id": None,
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 5. DBSCRIPTS - RELAY
+    cursor.execute("""
+        SELECT DISTINCT
+            d.id AS script_id,
+            d.dataint AS bt_id,
+            d.buddy_entry,
+            bt.Text,
+            bt.Text1,
+            COALESCE(ct_buddy.Name, ct_relay.Name, 'Unknown') AS npc_name,
+            COALESCE(cmi_buddy.gender, cmi_relay.gender, 0) AS sex
+        FROM dbscripts_on_relay d
+        JOIN broadcast_text bt ON bt.Id = d.dataint
+        LEFT JOIN creature_template ct_buddy ON ct_buddy.Entry = d.buddy_entry
+        LEFT JOIN creature_model_info cmi_buddy ON cmi_buddy.modelid = ct_buddy.DisplayId1
+        LEFT JOIN creature_template ct_relay ON ct_relay.Entry = d.id AND d.buddy_entry = 0
+        LEFT JOIN creature_model_info cmi_relay ON cmi_relay.modelid = ct_relay.DisplayId1
+        WHERE d.command = 0 AND bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": row["npc_name"],
+                "sex": row["sex"],
+                "dialog_type": "event",
+                "quest_id": None,
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 6. DBSCRIPTS - QUEST START
+    cursor.execute("""
+        SELECT DISTINCT
+            cqr.id AS npc_id,
+            qt.entry AS quest_id,
+            bt.Id AS bt_id,
+            bt.Text,
+            bt.Text1
+        FROM dbscripts_on_quest_start dqs
+        JOIN broadcast_text bt ON bt.Id = dqs.dataint
+        JOIN creature_questrelation cqr ON cqr.quest = dqs.id
+        JOIN quest_template qt ON qt.entry = dqs.id
+        WHERE dqs.command = 0 AND bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "sex": npc["sex"] if npc else None,
+                "dialog_type": "quest_start_script",
+                "quest_id": row["quest_id"],
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 7. DBSCRIPTS - QUEST END
+    cursor.execute("""
+        SELECT DISTINCT
+            cir.id AS npc_id,
+            qt.entry AS quest_id,
+            bt.Id AS bt_id,
+            bt.Text,
+            bt.Text1
+        FROM dbscripts_on_quest_end dqe
+        JOIN broadcast_text bt ON bt.Id = dqe.dataint
+        JOIN creature_involvedrelation cir ON cir.quest = dqe.id
+        JOIN quest_template qt ON qt.entry = dqe.id
+        WHERE dqe.command = 0 AND bt.Id > 0
+    """)
+    
+    for row in cursor.fetchall():
+        npc = npc_meta.get(row["npc_id"])
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        
+        if is_clean_text(txt):
+            rows.append({
+                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "sex": npc["sex"] if npc else None,
+                "dialog_type": "quest_end_script",
+                "quest_id": row["quest_id"],
+                "text": txt.strip(),
+            })
+            seen_broadcast_ids.add(row["bt_id"])
+
+    # 8. DBSCRIPTS - OTHER TABLES (event, gossip, go_use, go_template_use)
+    dbscript_tables = [
+        ("dbscripts_on_event", "dse"),
+        ("dbscripts_on_gossip", "dsg"),
+        ("dbscripts_on_go_template_use", "dsgt"),
+        ("dbscripts_on_go_use", "dsgu"),
+    ]
+    
+    for table, alias in dbscript_tables:
+        cursor.execute(f"""
+            SELECT DISTINCT
+                bt.Id AS bt_id,
+                bt.Text,
+                bt.Text1
+            FROM {table} {alias}
+            JOIN broadcast_text bt ON bt.Id = {alias}.dataint
+            WHERE {alias}.command = 0 AND bt.Id > 0
+        """)
+        
+        for row in cursor.fetchall():
+            txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+            
+            if is_clean_text(txt):
+                rows.append({
+                    "npc_name": "Unknown",
+                    "sex": None,
+                    "dialog_type": "event",
+                    "quest_id": None,
+                    "text": txt.strip(),
+                })
+                seen_broadcast_ids.add(row["bt_id"])
+
+    # 9. AI SCRIPTS (action1, action2, action3)
     cursor.execute("""
         SELECT DISTINCT
             ct.Entry AS npc_id,
@@ -105,13 +485,13 @@ def extract_all_dialog():
             rows.append({
                 "npc_name": npc["npc_name"] if npc else "Unknown",
                 "sex": npc["sex"] if npc else None,
-                "dialog_type": "gossip",
+                "dialog_type": "combat",
                 "quest_id": None,
                 "text": txt.strip(),
             })
             seen_broadcast_ids.add(row["bt_id"])
 
-    # 2b. Gossip Text
+    # 10. GOSSIP TEXT
     cursor.execute("""
         SELECT DISTINCT
             ct.Entry AS npc_id,
@@ -143,102 +523,7 @@ def extract_all_dialog():
             })
             seen_broadcast_ids.add(row["bt_id"])
 
-    # 2c. Quest Start Scripts
-    cursor.execute("""
-        SELECT DISTINCT
-            cqr.id AS npc_id,
-            qt.entry AS quest_id,
-            bt.Id AS bt_id,
-            bt.Text,
-            bt.Text1
-        FROM dbscripts_on_quest_start dqs
-        JOIN broadcast_text bt ON bt.Id = dqs.dataint
-        JOIN creature_questrelation cqr ON cqr.quest = dqs.id
-        JOIN quest_template qt ON qt.entry = dqs.id
-        WHERE dqs.command = 0 AND bt.Id > 0
-    """)
-    
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
-        
-        if is_clean_text(txt):
-            rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown",
-                "sex": npc["sex"] if npc else None,
-                "dialog_type": "quest_start_script",
-                "quest_id": row["quest_id"],
-                "text": txt.strip(),
-            })
-            seen_broadcast_ids.add(row["bt_id"])
-
-    # 2d. Quest End Scripts
-    cursor.execute("""
-        SELECT DISTINCT
-            cir.id AS npc_id,
-            qt.entry AS quest_id,
-            bt.Id AS bt_id,
-            bt.Text,
-            bt.Text1
-        FROM dbscripts_on_quest_end dqe
-        JOIN broadcast_text bt ON bt.Id = dqe.dataint
-        JOIN creature_involvedrelation cir ON cir.quest = dqe.id
-        JOIN quest_template qt ON qt.entry = dqe.id
-        WHERE dqe.command = 0 AND bt.Id > 0
-    """)
-    
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
-        
-        if is_clean_text(txt):
-            rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown",
-                "sex": npc["sex"] if npc else None,
-                "dialog_type": "quest_end_script",
-                "quest_id": row["quest_id"],
-                "text": txt.strip(),
-            })
-            seen_broadcast_ids.add(row["bt_id"])
-
-    # 2e-j. All other dbscripts (gossip-type dialogue)
-    dbscript_tables = [
-        ("dbscripts_on_event", "dse"),
-        ("dbscripts_on_creature_movement", "dscm"),
-        ("dbscripts_on_gossip", "dsg"),
-        ("dbscripts_on_relay", "dsr"),
-        ("dbscripts_on_go_template_use", "dsgt"),
-        ("dbscripts_on_creature_death", "dscd"),
-    ]
-    
-    for table, alias in dbscript_tables:
-        cursor.execute(f"""
-            SELECT DISTINCT
-                bt.Id AS bt_id,
-                bt.Text,
-                bt.Text1
-            FROM {table} {alias}
-            JOIN broadcast_text bt ON bt.Id = {alias}.dataint
-            WHERE {alias}.command = 0 AND bt.Id > 0
-        """)
-        
-        for row in cursor.fetchall():
-            txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
-            
-            if is_clean_text(txt):
-                rows.append({
-                    "npc_name": "Unknown",
-                    "sex": None,
-                    "dialog_type": "gossip",
-                    "quest_id": None,
-                    "text": txt.strip(),
-                })
-                seen_broadcast_ids.add(row["bt_id"])
-    
-# -------------------------------------------------
-    # OBJECT TEXT (plaques, graves, books on the ground etc)
-    # -------------------------------------------------
-
+    # 11. OBJECT TEXT (plaques, graves, books on the ground etc)
     cursor.execute("""
         SELECT
             got.entry AS go_id,
@@ -251,7 +536,7 @@ def extract_all_dialog():
 
     gameobjects = cursor.fetchall()
 
-    # page_text lookup (reuse existing dict)
+    # page_text lookup
     cursor.execute("SELECT entry, text, next_page FROM page_text")
     page_dict = {r["entry"]: r for r in cursor.fetchall()}
 
@@ -269,10 +554,7 @@ def extract_all_dialog():
                 })
             page_id = page["next_page"] if page["next_page"] != 0 else None
 
-    # -------------------------------------------------
-    # ITEM TEXT (letters, books, quest items)
-    # -------------------------------------------------
-
+    # 12. ITEM TEXT (letters, books, quest items)
     cursor.execute("""
         SELECT
             it.entry AS item_id,
@@ -300,9 +582,7 @@ def extract_all_dialog():
                 })
             page_id = page["next_page"] if page["next_page"] != 0 else None
 
-# -------------------------------------------------
-    # QUEST GREETINGS
-    # -------------------------------------------------
+    # 13. QUEST GREETINGS
     cursor.execute("""
         SELECT
             Entry AS npc_id,
@@ -321,9 +601,7 @@ def extract_all_dialog():
                 "text": row["text"].strip(),
             })
 
-    # -------------------------------------------------
-    # TRAINER GREETINGS
-    # -------------------------------------------------
+    # 14. TRAINER GREETINGS
     cursor.execute("""
         SELECT
             Entry AS npc_id,
@@ -341,7 +619,8 @@ def extract_all_dialog():
                 "quest_id": None,
                 "text": row["text"].strip(),
             })
-    # 3. QUEST TEXTS (Accept, Progress, Complete, Objectives)
+
+    # 15. QUEST TEXTS (Accept, Progress, Complete, Objectives)
     cursor.execute("""
         SELECT qt.entry AS quest_id, qt.Details, qt.RequestItemsText, qt.OfferRewardText, qt.Objectives,
                cqr.id AS accept_npc, cir.id AS complete_npc
@@ -367,7 +646,7 @@ def extract_all_dialog():
                     "text": row[col].strip()
                 })
 
-    # 4. THE FINAL SWEEP (Orphans / Unlinked text)
+    # 16. THE FINAL SWEEP (Orphans / Unlinked text)
     cursor.execute("SELECT Id, Text, Text1 FROM broadcast_text WHERE Id > 0")
     for row in cursor.fetchall():
         if row["Id"] not in seen_broadcast_ids:
@@ -376,23 +655,404 @@ def extract_all_dialog():
                 rows.append({
                     "npc_name": "Unknown",
                     "sex": None,
-                    "dialog_type": "gossip",
+                    "dialog_type": "unknown",
                     "quest_id": None,
                     "text": txt.strip(),
                 })
 
     cursor.close()
-    db.close()
-    return rows
+    return rows, db
+
+def discover_race_from_texture_variations(db):
+    """
+    Analyze TextureVariation fields to help identify creature races.
+    Returns dict mapping texture patterns to example NPCs.
+    """
+    cursor = db.cursor(dictionary=True)
+    
+    cursor.execute("""
+        SELECT DISTINCT
+            ct.name AS npc_name,
+            ct.CreatureType,
+            cdi.TextureVariation_1,
+            cdi.TextureVariation_2,
+            cdi.TextureVariation_3
+        FROM creature_template ct
+        LEFT JOIN db_CreatureDisplayInfo cdi ON cdi.ID = ct.DisplayId1
+        WHERE cdi.TextureVariation_1 IS NOT NULL
+           OR cdi.TextureVariation_2 IS NOT NULL
+           OR cdi.TextureVariation_3 IS NOT NULL
+        ORDER BY cdi.TextureVariation_1
+    """)
+    
+    texture_patterns = defaultdict(list)
+    
+    for row in cursor.fetchall():
+        # Combine all texture variations
+        textures = []
+        if row['TextureVariation_1']:
+            textures.append(row['TextureVariation_1'])
+        if row['TextureVariation_2']:
+            textures.append(row['TextureVariation_2'])
+        if row['TextureVariation_3']:
+            textures.append(row['TextureVariation_3'])
+        
+        if textures:
+            # Look for race identifiers in texture names
+            texture_str = ' '.join(textures).lower()
+            
+            for keyword, race in TEXTURE_FAMILY_RACE.items():
+                if keyword in texture_str:
+                    texture_patterns[race].append({
+                        'npc_name': row['npc_name'],
+                        'creature_type': row['CreatureType'],
+                        'textures': textures
+                    })
+                    break
+    
+    cursor.close()
+    return dict(texture_patterns)
+
+def export_race_sex_yaml(db, dialog_rows):
+    """
+    Export race/gender YAML files for NPCs in dialog.
+    Preserves existing mappings and only adds new ones.
+    """
+    print("\n" + "="*60)
+    print("EXPORTING RACE/SEX DATA")
+    print("="*60)
+    
+    # Load existing YAML files
+    existing_race_dict = load_existing_yaml(RACE_YAML)
+    existing_sex_dict = load_existing_yaml(SEX_YAML)
+    
+    # Clean up None values from existing YAML
+    existing_race_dict = {k: (v if v is not None else []) for k, v in existing_race_dict.items()}
+    existing_sex_dict = {k: (v if v is not None else []) for k, v in existing_sex_dict.items()}
+    
+    print(f"Loaded {len(existing_race_dict)} existing race categories")
+    print(f"Loaded {len(existing_sex_dict)} existing sex categories")
+    
+    # Get unique NPC names from dialog
+    dialog_npc_names = set(row['npc_name'] for row in dialog_rows if row['npc_name'] != 'Unknown')
+    print(f"\nProcessing {len(dialog_npc_names)} unique NPCs from dialog...")
+    
+    cursor = db.cursor(dictionary=True)
+    
+    # Get comprehensive race/gender data including texture variations
+    cursor.execute("""
+        SELECT DISTINCT 
+            ct.name AS npc_name,
+            cdix.DisplayRaceID,
+            cdix.DisplaySexID,
+            cmi.gender AS model_gender,
+            ct.CreatureType,
+            cdi.TextureVariation_1,
+            cdi.TextureVariation_2,
+            cdi.TextureVariation_3
+        FROM creature_template ct
+        LEFT JOIN db_CreatureDisplayInfo cdi ON cdi.ID = ct.DisplayId1
+        LEFT JOIN db_CreatureDisplayInfoExtra cdix ON cdix.ID = cdi.ExtendedDisplayInfoID
+        LEFT JOIN creature_model_info cmi ON cmi.modelid = ct.DisplayId1
+        WHERE ct.name IS NOT NULL
+    """)
+    
+    npc_race_sex = {}
+    stats = {
+        'has_display_race': 0,
+        'has_display_sex': 0,
+        'has_model_gender': 0,
+        'has_creature_type': 0,
+        'has_texture_hint': 0,
+        'completely_missing': 0
+    }
+    
+    # Creature type to race mapping
+    CREATURE_TYPE_RACE = {
+        0: 'unknown',
+        1: 'beast',
+        2: 'dragonkin',
+        3: 'demon',
+        4: 'elemental',
+        5: 'giant',
+        6: 'undead',
+        7: 'humanoid',
+        8: 'critter',
+        9: 'mechanical',
+        10: 'unknown',
+        11: 'totem',
+        12: 'non_combat',
+        13: 'gas_cloud',
+    }
+    
+    # Texture-based race detection
+    def detect_race_from_texture(tex1, tex2, tex3):
+        """Try to detect race from texture variation names."""
+        textures = []
+        if tex1: textures.append(tex1.lower())
+        if tex2: textures.append(tex2.lower())
+        if tex3: textures.append(tex3.lower())
+        
+        if not textures:
+            return None
+        
+        texture_str = ' '.join(textures)
+        
+        for keyword, race in TEXTURE_FAMILY_RACE.items():
+            if keyword in texture_str:
+                return race
+        print(textures)
+        return None
+    
+    # Detect gender from texture variations
+    def detect_gender_from_texture(tex1, tex2, tex3):
+        """Try to detect gender from texture variation names."""
+        textures = []
+        if tex1: textures.append(tex1.lower())
+        if tex2: textures.append(tex2.lower())
+        if tex3: textures.append(tex3.lower())
+        
+        if not textures:
+            return None
+        
+        texture_str = ' '.join(textures)
+        
+        if 'female' in texture_str:
+            return 1  # Female
+        elif 'male' in texture_str:
+            return 0  # Male
+        
+        return None
+    
+    for row in cursor.fetchall():
+        if row['npc_name'] in dialog_npc_names:
+            # Determine race_id with fallback chain
+            race_id = row['DisplayRaceID']
+            texture_race = None
+            
+            if race_id is None:
+                # Try texture-based detection
+                texture_race = detect_race_from_texture(
+                    row['TextureVariation_1'],
+                    row['TextureVariation_2'],
+                    row['TextureVariation_3']
+                )
+                
+                if texture_race:
+                    race_id = f"{texture_race}"
+                    stats['has_texture_hint'] += 1
+                else:
+                    # Use creature type as fallback
+                    creature_type = row['CreatureType']
+                    race_id = f"{creature_type}"
+                    stats['has_creature_type'] += 1
+            else:
+                stats['has_display_race'] += 1
+            
+            # Determine sex_id with fallback chain
+            sex_id = row['DisplaySexID']
+            if sex_id is None:
+                # Try texture-based gender detection
+                texture_gender = detect_gender_from_texture(
+                    row['TextureVariation_1'],
+                    row['TextureVariation_2'],
+                    row['TextureVariation_3']
+                )
+                
+                if texture_gender is not None:
+                    sex_id = texture_gender
+                else:
+                    # Fall back to model_gender
+                    sex_id = row['model_gender']
+                    if sex_id is not None:
+                        stats['has_model_gender'] += 1
+            else:
+                stats['has_display_sex'] += 1
+            
+            if race_id is None and sex_id is None:
+                stats['completely_missing'] += 1
+            
+            npc_race_sex[row['npc_name']] = {
+                'race_id': race_id,
+                'sex_id': sex_id,
+                'creature_type': row['CreatureType'],
+                'texture_race': texture_race
+            }
+    
+    cursor.close()
+    
+    print(f"\nData source statistics:")
+    print(f"  DisplayRaceID available:     {stats['has_display_race']:4d} NPCs")
+    print(f"  DisplaySexID available:      {stats['has_display_sex']:4d} NPCs")
+    print(f"  Texture-based race hint:     {stats['has_texture_hint']:4d} NPCs")
+    print(f"  Using model_gender fallback: {stats['has_model_gender']:4d} NPCs")
+    print(f"  Using CreatureType fallback: {stats['has_creature_type']:4d} NPCs")
+    print(f"  No data at all:              {stats['completely_missing']:4d} NPCs")
+    
+    # Build new race dictionary
+    race_dict = {k: list(v) if v else [] for k, v in existing_race_dict.items()}
+    
+    for npc_name, data in npc_race_sex.items():
+        race_id = data['race_id']
+        
+        # Handle different race_id types
+        if isinstance(race_id, str):
+            if race_id.startswith('texture_'):
+                # Texture-detected race
+                race = race_id.replace('texture_', '')
+            elif race_id.startswith('creature_type_'):
+                # CreatureType fallback
+                creature_type = data['creature_type']
+                race = CREATURE_TYPE_RACE.get(creature_type, f'creature_type_{creature_type}')
+            else:
+                race = race_id
+        elif race_id in RACE_DICT:
+            # Known DisplayRaceID
+            race = RACE_DICT[race_id]
+        elif race_id is not None:
+            # Unknown DisplayRaceID
+            race = f"race_id_{race_id}"
+        else:
+            # No race data at all
+            race = 'unknown'
+        
+        # Add to appropriate category
+        if race not in race_dict:
+            race_dict[race] = []
+        if npc_name not in race_dict[race]:
+            race_dict[race].append(npc_name)
+    
+    # Build new sex dictionary
+    sex_dict = {k: list(v) if v else [] for k, v in existing_sex_dict.items()}
+    
+    for npc_name, data in npc_race_sex.items():
+        sex_id = data['sex_id']
+        
+        # Map sex_id
+        if sex_id in GENDER_DICT:
+            gender = GENDER_DICT[sex_id]
+        elif sex_id is not None:
+            gender = f"sex_id_{sex_id}"
+        else:
+            gender = 'unknown'
+        
+        # Add to appropriate category
+        if gender not in sex_dict:
+            sex_dict[gender] = []
+        if npc_name not in sex_dict[gender]:
+            sex_dict[gender].append(npc_name)
+    
+    # Sort all lists alphabetically
+    for race in list(race_dict.keys()):
+        if race_dict[race]:
+            race_dict[race] = sorted(set(race_dict[race]))
+        else:
+            race_dict[race] = []
+    
+    for gender in list(sex_dict.keys()):
+        if sex_dict[gender]:
+            sex_dict[gender] = sorted(set(sex_dict[gender]))
+        else:
+            sex_dict[gender] = []
+    
+    # Write YAML files
+    print("\nWriting YAML files...")
+    
+    with open(RACE_YAML, 'w', encoding='utf-8') as f:
+        yaml.dump(race_dict, f, allow_unicode=True, 
+                  default_flow_style=False, sort_keys=True)
+    print(f"  ✓ {RACE_YAML}")
+    
+    with open(SEX_YAML, 'w', encoding='utf-8') as f:
+        yaml.dump(sex_dict, f, allow_unicode=True, 
+                  default_flow_style=False, sort_keys=True)
+    print(f"  ✓ {SEX_YAML}")
+    
+    # Print summary with categorization
+    print(f"\n{'='*60}")
+    print("Race Distribution:")
+    print(f"{'='*60}")
+    
+    # Categorize races
+    known_player_races = {}
+    texture_detected_races = {}
+    creature_type_races = {}
+    unmapped_race_ids = {}
+    
+    for k, v in race_dict.items():
+        if k in ['human', 'orc', 'dwarf', 'nightelf', 'scourge', 'tauren', 'gnome', 'troll', 'bloodelf', 'draenei']:
+            known_player_races[k] = v
+        elif k in ['keeper', 'naga', 'satyr', 'furbolg', 'centaur', 'harpy', 'highelf']:
+            texture_detected_races[k] = v
+        elif k.startswith('race_id_'):
+            unmapped_race_ids[k] = v
+        elif k.startswith('creature_type_') or k in ['beast', 'dragonkin', 'demon', 'elemental', 'giant', 'undead', 'humanoid', 'critter', 'mechanical', 'totem', 'non_combat', 'gas_cloud']:
+            creature_type_races[k] = v
+        else:
+            known_player_races[k] = v  # Other known races
+    
+    print("Known Player Races:")
+    for race in sorted(known_player_races.keys()):
+        count = len(known_player_races[race])
+        print(f"  {race:20s}: {count:4d} NPCs")
+    
+    if texture_detected_races:
+        print("\nTexture-Detected Races:")
+        for race in sorted(texture_detected_races.keys()):
+            count = len(texture_detected_races[race])
+            examples = texture_detected_races[race][:3]
+            print(f"  {race:20s}: {count:4d} NPCs (e.g., {examples})")
+    
+    if creature_type_races:
+        print("\nCreatureType-Based (no better data):")
+        for race in sorted(creature_type_races.keys()):
+            count = len(creature_type_races[race])
+            examples = creature_type_races[race][:3]
+            print(f"  {race:20s}: {count:4d} NPCs (e.g., {examples})")
+    
+    if unmapped_race_ids:
+        print("\n⚠️  Unmapped DisplayRaceIDs (add to RACE_DICT):")
+        for race_id_str in sorted(unmapped_race_ids.keys()):
+            count = len(unmapped_race_ids[race_id_str])
+            examples = unmapped_race_ids[race_id_str][:3]
+            print(f"  {race_id_str:20s}: {count:4d} NPCs (e.g., {examples})")
+    
+    print(f"\n{'='*60}")
+    print("Gender Distribution:")
+    print(f"{'='*60}")
+    
+    known_genders = {k: v for k, v in sex_dict.items() if not k.startswith('sex_id_')}
+    unmapped_sex_ids = {k: v for k, v in sex_dict.items() if k.startswith('sex_id_')}
+    
+    for gender in sorted(known_genders.keys()):
+        count = len(known_genders[gender])
+        print(f"  {gender:20s}: {count:4d} NPCs")
+    
+    if unmapped_sex_ids:
+        print("\n⚠️  Unmapped DisplaySexIDs (add to GENDER_DICT):")
+        for sex_id_str in sorted(unmapped_sex_ids.keys()):
+            count = len(unmapped_sex_ids[sex_id_str])
+            examples = unmapped_sex_ids[sex_id_str][:3]
+            print(f"  {sex_id_str:20s}: {count:4d} NPCs (e.g., {examples})")
 
 # =========================
 # WRITE CSV
 # =========================
 
 if __name__ == "__main__":
-    data = extract_all_dialog()
+    print("Extracting dialog...")
+    data, db = extract_all_dialog()
+    
+    print(f"\nWriting CSV with {len(data)} dialog lines...")
     with open(OUTPUT_CSV, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"])
         writer.writeheader()
         writer.writerows(data)
-    print(f"Extracted {len(data)} lines. Combat noise filtered.")
+    print(f"  ✓ {OUTPUT_CSV}")
+    
+    # Export race/sex YAML files
+    export_race_sex_yaml(db, data)
+    
+    db.close()
+    
+    print(f"\n✓ All extractions complete!")

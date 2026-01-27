@@ -1,107 +1,249 @@
-
 animal:
+- ' Polly'
+- Ancient Equine Spirit
 - Dadanga
-- Torta
-- Chicken
-- Mist
-- Precious
-- Tamed Kodo
-- Tooga
-- Umpi
-- Metzen the Reindeer
+- Darkreaver's Fallen Charger
 - Flik's Frog
-
-gnoll:
-- Miblon Snarltooth
-- Mangletooth
-- Sayge
-
+- Maws
+- Metzen the Reindeer
+- Nag
+- Opus
+- Polly
+- Roc
+- Screecher Spirit
+- Tamed Kodo
+- The Abominable Greench
+- Tooga
+- Torta
+- Umpi
+- A
+- Chicken
+- Krakle's Thermometer
+- Lady
+- Voice of Elune
+demon:
+- Avatar of Hakkar
+- Blackwing
+- Captain Tuubid
+- Cracked Necrotic Crystal
+- Faint Necrotic Crystal
+- Forest Wisp
+- Freed Soul
+- General Rajaxx
+- Hakkar
+- Hastat the Ancient
+- Onu
+- Stoma the Ancient
+- Strange Snowman
+- The Master's Eye
+- Vartrus the Ancient
+- Warcaller Finster
+- Dreadsteed Spirit
+- Impsy
+- J'eevee
+- Nightmare
+- Pusillin
+- Zggi
+trogg:
+- Ambassador Ardalan
+- Berserk Trogg
+- Boss Galgosh
+- Captain Hecklebury Smotts
+- Captain Thalo'thas Brightsun
+- Fleet Master Firallon
+- Grawmug
+- Grimlok
+- Grubbis
+- Hammerspine
+- Johnny McWeaksauce
+- Lothos Riftwaker
+- Magosh
+- Myrokos Silentform
+- Priest
+- Priestess
+- Red Jack Flint
+- Rockjaw Ambusher
+- Rockjaw Skullthumper
+- Shakes O'Breen
+- Spirit Healer
+- Spirit Healer (DND)
+- Stonesplinter Bonesnapper
+- Stonesplinter Digger
+- Stonesplinter Geomancer
+- Stonesplinter Scout
+- Stonesplinter Seer
+- Stonesplinter Shaman
+- Stonesplinter Skullthumper
+- Stonesplinter Trogg
+- Super-Seller 680
+- Vendor-Tron 1000
+- Warosh
+- Winter Reveler
+- Wolf Master Nandos
+- Chicken
+- Krakle's Thermometer
+- Voice of Elune
+mechanical:
+- A-Me 01
+- Homing Robot OOX-09/HL
+- Homing Robot OOX-17/TN
+- Homing Robot OOX-22/FE
+- Tyrion's Spybot
+- Wrenix's Gizmotronic Apparatus
 abomination:
 - Algernon
-- Undercity Guardian
 - Boyle
 - Gordo
-
+- Undercity Guardian
 ancients:
 - Arei
-- Onu
 - Ironbark the Redeemed
-- Hastat the Ancient
 - Old Ironbark
+- Phalanx
+- Prince Thunderaan
+- Ragnaros
+- Tendris Warpwood
+- Baron Rivendare
+- Eye of Naxxramas
+- Glutton
+- Gordo
+- Loatheb
+- Patchwerk
+- Stitches
+- Thaddius
+- Undercity Guardian
+- Arei
+- Hastat the Ancient
+- Ironbark the Redeemed
+- Old Ironbark
+- Onu
 - Stoma the Ancient
 - Vartrus the Ancient
-
-#deer people
-keeper:
-- Fiora Longears
-- Anilia
-- Selendra
-- Shael'dryn
-- Celebras the Redeemed
-- Keeper Albagorm
-- Keeper Marandis
-- Keeper Remulos
-- Illiyana Moonblaze
-- Cavindra
-- Therylune
-- Illiyana
-- Therysil
-- Tarindrella 
-
-succubus:
-- Mistress Nagmara
-
+animal:
+- ' Polly'
+- A
+- Ancient Equine Spirit
+- Chicken
+- Dadanga
+- Darkreaver's Fallen Charger
+- Flik's Frog
+- Great Bear Spirit
+- Krakle's Thermometer
+- Lady
+- Lunaclaw Spirit
+- Maexxna
+- Maws
+- Metzen the Reindeer
+- Mist
+- Nag
+- Opus
+- Polly
+- Precious
+- Roc
+- Screecher Spirit
+- Stanley
+- Tamed Kodo
+- The Abominable Greench
+- Tooga
+- Torta
+- Umpi
+- Voice of Elune
+- ' Polly'
+- Ancient Equine Spirit
+- Dadanga
+- Darkreaver's Fallen Charger
+- Flik's Frog
+- Great Bear Spirit
+- Maexxna
+- Maws
+- Metzen the Reindeer
+- Mist
+- Nag
+- Opus
+- Polly
+- Roc
+- Screecher Spirit
+- Stanley
+- Tamed Kodo
+- The Abominable Greench
+- Tooga
+- Torta
+- Umpi
 blood_elf:
-- Gilthares Firebough
-- Elsharin
-- Gilveradin Sunchaser
 - Ambassador Ardalan
-- Earthcaller Franzahl
-- Braelyn Firehand
+- Aurora Skycaller
+- Baron Longshore
 - Bloodmage Drazial
+- Braelyn Firehand
+- Captain Thalo'thas Brightsun
+- Earthcaller Franzahl
+- Elsharin
 - Garek
+- Gilthares Firebough
+- Gilveradin Sunchaser
+- Haleh
+- Itharius
+- Jeziba
+- Lady Sylvanas Windrunner
 - Lothos Riftwaker
 - Mathredis Firestar
-- Aurora Skycaller
-- Captain Thalo'thas Brightsun
-- Vyrin Swiftwind
-- Lady Sylvanas Windrunner
-- Haleh
-- Baron Longshore
+- Myrokos Silentform
+- Raze
 - Red Jack Flint
 - Sanath Lim-yo
-- Jeziba
-- Raze
-- Itharius
-- Myrokos Silentform
-
-draenei:
-- Kum'isha the Collector
-- Magtoor
-
+- Vyrin Swiftwind
+- Bloodmage Drazial
+- Bloodmage Lynnore
+- Braelyn Firehand
+- Gilthares Firebough
+- Lady Sylvanas Windrunner
+- Mathredis Firestar
+- Sanath Lim-yo
+- The Banshee Queen
 centaur:
 - Centaur Pariah
+- Kolkar Bloodcharger
+- Kolkar Marauder
+- Kolkar Pack Runner
+- Kolkar Stormer
 - Uthek the Wise
+- Verog the Dervish
 - Warug
-
 child:
-- Thomas
-- Flik
-- Pamela Redpath
-- Spoops
-- Shawn
-- Hilary
-- Jesper
-- Thurman Schneider
+- Billy
 - Billy Maclure
+- Bo
+- Donna
+- Erk
+- Flik
+- Gil
+- Gruk
+- Hilary
 - Human Orphan
+- Jamin
+- Jesper
+- Jimmy
+- Justin
+- Karu
+- Lil Timmy
+- Matt
+- Melia
+- Mogg
+- Okla
 - Orcish Orphan
-
-giant:
-- Lord Arkkoroc
-
+- Paige Chaddis
+- Pamela Redpath
+- Pat
+- Roger
+- Sammy
+- Shawn
+- Spoops
+- Steven
+- Thomas
+- Thurman Schneider
+- Trok
+- William
 construct:
-- Phalanx
 - Cracked Necrotic Crystal
 - Faint Necrotic Crystal
 - Fishbot 5000
@@ -109,120 +251,94 @@ construct:
 - Homing Robot OOX-17/TN
 - Homing Robot OOX-22/FE
 - Lore Keeper of Norgannon
+- Phalanx
 - Stone Watcher of Norgannon
+- Super-Seller 680
 - Vendor-Tron 1000
 - Wizzlecrank's Shredder
 - Wrenix's Gizmotronic Apparatus
-- Super-Seller 680
-
 demon:
-- Raze
-- Vi'el
-- Lord Banehollow
-- Varimathras
-- Zenn Foulhoof
+- A
+- Aligar the Tormentor
+- Balizar the Umbrage
+- Dreadsteed Spirit
+- Impsy
+- J'eevee
 - Lorax
-
+- Lord Banehollow
+- Lord Hel'nurath
+- Mistress Nagmara
+- Nightmare
+- Precious
+- Pusillin
+- Raze
+- Razelikh the Defiler
+- Summoned Succubus
+- Summoned Voidwalker
+- The Cleaner
+- Twilight Corrupter
+- Varimathras
+- Vi'el
+- Xabraxxis
+- Xandivious
+- Zenn Foulhoof
+- Zggi
+draenei:
+- Kum'isha the Collector
+- Magtoor
 dragon:
-- Awbee
 - Anachronos
+- Awbee
 - Azuregos
 - Cyrus Therepentous
+- Dreamscythe
 - Emberstrife
+- Emeriss
+- Haleh
+- Jade
+- Lethon
+- Nefarian
+- Nightmare Suppressor
+- Onyxia
+- Rookery Hatcher
+- Shade of Eranikus
+- Solakar Flamewreath
+- Spirit of Azuregos
+- Taerar
+- Vaelastrasz
 - Vaelastrasz the Corrupt
-
-elemental:
-- Rockbiter
-- Duke Hydraxis
-- Hydraxian Honor Guard
-- Minor Manifestation of Earth
-- Minor Manifestation of Water
-- Rockbiter
-- Rethiel the Greenwarden
-
-furbolg:
-- Ogtinc
-- Krolg
-- Nafien
-- Grazle
-- Gorn One Eye
-- Kernda
-- Meilosh
-- Salfa
-
-
-mechanical:
-- A-Me 01
-
-naga:
-
-imp:
-- Pusillin
-- Impsy
-
-
-object:
-- Strange Snowman
-- Winter Reveler
-
-trogg:
-- Warosh
-
-ogre:
-- Tharg
-- Draz'Zilb
-- Mizzle the Crafty
-- Do'gol
-- Ogtinc
-- Lolo the Lookout
-- Lard
-- Burth
-- Gordok Brute
-- Gordok Bushwacker
-- Gordok Captain
-- Gordok Mage-Lord
-- Gordok Reaver
-- Gordok Warlock
-- Overlord Mok'Morokk
-- Mudcrush Durtfeet
-- Ogron
-- Cho'Rush the Observer
-- Stomper Kreeg
-- Guard Fengus
-- Guard Slip'kik
-- Guard Mol'dar
-- Captain Kromcrush
-- Gordok Bushwacker
-- Sah'rhee
-
-
-qiraji:
-
-spirit:
-- Aelthalyste
-- Captain Grayson
-- Ancient Equine Spirit
-- Darkreaver's Fallen Charger
-- Dreadsteed Spirit
-- Forest Wisp
-- Great Bear Spirit
-- Lunaclaw Spirit
-- Nightmare
-- Screecher Spirit
+- Ysondre
+- Anachronos
+- Awbee
+- Azuregos
+- Cyrus Therepentous
+- Death Talon Overseer
+- Dreamscythe
+- Emberstrife
+- Emeriss
+- Green Dragonspawn
+- Jade
+- Lethon
+- Lord Valthalak
+- Nefarian
+- Nightmare Suppressor
+- Onyxia
+- Rookery Hatcher
+- Shade of Eranikus
+- Solakar Flamewreath
 - Spirit of Azuregos
 - Spirit of Lord Valthalak
-- Vectus
-- Kaelystia Hatebringer
-- Remorseful Highborne
-- Deathly Usher
-- Zaetar's Spirit
-
-
+- Taerar
+- Vaelastrasz
+- Vaelastrasz the Corrupt
+- Ysondre
 dwarf:
 - Advisor Belgrum
 - Aedis Brom
 - Agnar Beastamer
+- Alexia Ironknife
 - Anger'rel
+- Anvilrage Guardsman
 - Archaeologist Flagongut
 - Archaeologist Hollee
 - Argent Medic
@@ -232,6 +348,7 @@ dwarf:
 - Baelog
 - Bailor Stonehand
 - Baldruc
+- Balgaras the Foul
 - Balir Frosthammer
 - Balthus Stoneflayer
 - Barim Jurgenstaad
@@ -260,6 +377,7 @@ dwarf:
 - Bromos Grummner
 - Bronk Guzzlegear
 - Brooke Stonebraid
+- Bruegal Ironknuckle
 - Bruuk Barleybeard
 - Bryllia Ironbrand
 - Buliwyf Stonehand
@@ -268,6 +386,7 @@ dwarf:
 - Captain Steelgut
 - Captain Stoutfist
 - Captured Mountaineer
+- Chambermaid Pillaclencher
 - Chief Archaeologist Greywhisker
 - Chief Engineer Hinderweir VII
 - Claude Erksine
@@ -283,6 +402,16 @@ dwarf:
 - Dame Twinbraid
 - Dank Drizzlecut
 - Dargh Trueaim
+- Dark Iron Bombardier
+- Dark Iron Demolitionist
+- Dark Iron Dwarf
+- Dark Iron Insurgent
+- Dark Iron Marksman
+- Dark Iron Rifleman
+- Dark Iron Saboteur
+- Dark Iron Sapper
+- Dark Iron Steelshifter
+- Dark Iron Tunneler
 - Daryl Riknussun
 - Dashel Stonefist
 - Deeg
@@ -296,6 +425,7 @@ dwarf:
 - Donova Snowden
 - Doom'rel
 - Dope'rel
+- Dorius
 - Dorius Stonetender
 - Drakk Stonehand
 - Dun Morogh Mountaineer
@@ -337,6 +467,7 @@ dwarf:
 - Franclorn Forgewright
 - Frankal Stonebridge
 - Furen Longbeard
+- Galgann Firehammer
 - Galvan the Ancient
 - Garel Redrock
 - Gazin Tenorm
@@ -348,6 +479,7 @@ dwarf:
 - Gloom'rel
 - Glordrum Steelbeard
 - Glorin Steelbrow
+- Golem Lord Argelmach
 - Goli Krumn
 - Golnir Bouldertoe
 - Gorbold Steelhand
@@ -377,8 +509,10 @@ dwarf:
 - Hammered Patron
 - Hammertoe Grez
 - Hansel Heavyhands
+- Hargin Mundar
 - Harick Boulderdrum
 - Harlo Barnaby
+- Hate'rel
 - Hegnar Rumbleshot
 - Hegnar Swiftaxe
 - Hemet Nesingwary
@@ -390,12 +524,15 @@ dwarf:
 - Hogral Bakkan
 - Huldar
 - Hulfdan Blackbeard
+- Hurley Blackbreath
 - Ingrys Stonebrow
 - Innkeeper Belm
 - Innkeeper Firebrew
 - Innkeeper Hearthstove
 - Innkeeper Helbrek
 - Innkeeper Thulfram
+- Ironforge Brigade Footman
+- Ironforge Brigade Rifleman
 - Ironforge Commendation Officer
 - Ironforge Guard
 - Ironforge Mountaineer
@@ -424,6 +561,7 @@ dwarf:
 - Kreldig Ungor
 - Krom Stoutarm
 - Kurdram Stonehammer
+- Lanie Reed
 - Larion
 - Librarian Mae Paledust
 - Lieutenant Dagel
@@ -448,7 +586,9 @@ dwarf:
 - Master Smith Burninate
 - Maxan Anvol
 - Melnan Darkstone
+- Mercutio Filthgorger
 - Merrin Rockweaver
+- Miner Grumnal
 - Miran
 - Mistina Steelshield
 - Morgg Stormshot
@@ -456,6 +596,7 @@ dwarf:
 - Motley Garmason
 - Mountaineer Barleybrew
 - Mountaineer Boombellow
+- Mountaineer Brokk
 - Mountaineer Cobbleflint
 - Mountaineer Gravelgaw
 - Mountaineer Kadrell
@@ -499,6 +640,7 @@ dwarf:
 - Prospector Stormpike
 - Prospector Whelgar
 - Quartermaster Miranda Breechlock
+- Race Master Kronkrider
 - Raena Flinthammer
 - Ragged John
 - Ragnar Thunderbrew
@@ -515,6 +657,7 @@ dwarf:
 - Rudra Amberstill
 - Rutgar Glyphshaper
 - Sara Balloo
+- Seeth'rel
 - Senator Barin Redstone
 - Senator Mehr Stonehallow
 - Senir Whitebeard
@@ -542,6 +685,7 @@ dwarf:
 - Thalgus Thunderfist
 - Thamner Pol
 - Tharek Blackstone
+- Theldren
 - Theldurin the Lost
 - Thelman Slatefist
 - Theodrus Frostbeard
@@ -570,20 +714,135 @@ dwarf:
 - Uthrar Threx
 - Valgar Highforge
 - Valstag Ironjaw
+- Vanndar Stormpike
 - Veron Amberstill
 - Vidra Hearthstove
 - Vile'rel
 - Vosur Brakthel
 - Wagner Hammerstrike
 - Warg Deepwater
+- Watchman Doomgrip
 - Wilder Thistlenettle
 - Wing Commander Slidore
 - Xiggs Fuselighter
 - Yarr Hammerstone
 - Yori Crackhelm
 - Yorus Barleybrew
+elemental:
+- Aquementas
+- Arei
+- Avalanchion
+- Azure Templar
+- Baron Charr
+- Bogling
+- Crimson Templar
+- Duke Hydraxis
+- Earthen Templar
+- Elemental Slave
+- Fam'retor Guardian
+- Fireguard
+- Fireguard Destroyer
+- Hoary Templar
+- Hydraxian Honor Guard
+- Ironbark the Redeemed
+- Lord Incendius
+- Manifestation of Water
+- Minor Manifestation of Earth
+- Minor Manifestation of Water
+- Mushgog
+- Old Ironbark
+- Overmaster Pyron
+- Phalanx
+- Prince Thunderaan
+- Princess Tempestria
+- Ragnaros
+- Raze
+- Rethiel the Greenwarden
+- Rockbiter
+- Tendris Warpwood
+- Tsunaman
+furbolg:
+- Chief Murgut
+- Gorn One Eye
+- Grazle
+- Kernda
+- Krolg
+- Meilosh
+- Nafien
+- Ogtinc
+- Salfa
+giant:
+- Archaedas
+- Baron Kazum
+- Lord Arkkoroc
+- Lore Keeper of Norgannon
+- Maexxna
+- Magmus
+- Mok'rash
+- Negolash
+- Rockbiter
+- Stone Watcher of Norgannon
+- Thenan
+gnoll:
+- Ardo Dirtpaw
+- Gruff Swiftbite
+- Hogger
+- Mangletooth
+- Miblon Snarltooth
+- Mosshide Alpha
+- Mosshide Brute
+- Mosshide Fenrunner
+- Mosshide Gnoll
+- Mosshide Mistweaver
+- Mosshide Mongrel
+- Mosshide Mystic
+- Mosshide Trapper
+- Palemane Poacher
+- Palemane Skinner
+- Palemane Tanner
+- Rabid Shadowhide Gnoll
+- Redridge Alpha
+- Redridge Basher
+- Redridge Brute
+- Redridge Drudger
+- Redridge Mongrel
+- Redridge Mystic
+- Redridge Poacher
+- Riverpaw Bandit
+- Riverpaw Brute
+- Riverpaw Gnoll
+- Riverpaw Herbalist
+- Riverpaw Miner
+- Riverpaw Mongrel
+- Riverpaw Mystic
+- Riverpaw Outrunner
+- Riverpaw Overseer
+- Riverpaw Runt
+- Riverpaw Scout
+- Riverpaw Shaman
+- Riverpaw Taskmaster
+- Rot Hide Brute
+- Rot Hide Gladerunner
+- Rot Hide Gnoll
+- Rot Hide Graverobber
+- Rot Hide Mongrel
+- Rot Hide Plague Weaver
+- Rot Hide Savage
+- Sayge
+- Sergeant Brashclaw
+- Shadowhide Brute
+- Shadowhide Darkweaver
+- Shadowhide Gnoll
+- Shadowhide Warrior
+- Woodpaw Alpha
+- Woodpaw Brute
+- Woodpaw Mongrel
+- Woodpaw Mystic
+- Woodpaw Reaver
+- Woodpaw Trapper
 gnome:
-- Shawn
+- 7:XT
+- Addled Leper
 - Alamar Grimm
 - Andi Lynn
 - Andorgos
@@ -600,11 +859,14 @@ gnome:
 - Binjy Featherwhistle
 - Bink
 - Binny Springblade
+- Bixi Wobblebonk
+- Blastmaster Emi Shortfuse
 - Bodley
 - Bombus Finespindle
 - Briarthorn
 - Bubulo Acerbus
 - Burbik Gearspanner
+- Captured Leper Gnome
 - Caz Twosprocket
 - Chromie
 - Colossus Researcher Nestor
@@ -614,18 +876,21 @@ gnome:
 - Dink
 - Doc Mixilpixil
 - Doctor Draxlegauge
+- Electrocutioner 6000
 - Felix Whindlebolt
 - Fenthwick
 - Fillius Fizzlespinner
 - Fimble Finespindle
 - Finbus Geargrind
 - Finkle Einhorn
+- Fishbot 5000
 - Fizzle Brassbolts
 - Fremal Doohickey
 - Ganoosh
 - Gaxim Rustfizzle
 - Gearcutter Cogspinner
 - Gelkak Gyromast
+- Gibblewilt
 - Gimble Thistlefuzz
 - Gimrizz Shadowcog
 - Ginny Longberry
@@ -645,6 +910,7 @@ gnome:
 - Klockmort Spannerspan
 - Lago Blackwrench
 - Laris Geardawdle
+- Leper Gnome
 - Lilliam Sparkspindle
 - Linken
 - Lissyphus Finespindle
@@ -656,8 +922,10 @@ gnome:
 - Marta Finespindle
 - Master Mechanic Castpipe
 - Master Sergeant Fizzlebolt
+- Maxima Blastenheimer
 - Milli Featherwhistle
 - Milstaff Stormeye
+- Mobile Alert System
 - Monty
 - Myranda the Hag
 - Narain Soothfancy
@@ -669,11 +937,14 @@ gnome:
 - Outfitter Eric
 - Ozzie Togglevolt
 - Pithwick
+- Plugger Spazzring
 - Private Draxlegauge
 - Professor Phizzlethorpe
 - Prynne
 - Razzle Sprysprocket
+- Rizzle Brassbolts
 - Sarah Sadwhistle
+- Shawn
 - Shoni the Shilent
 - Silas Darkmoon
 - Slicky Gastronome
@@ -690,6 +961,7 @@ gnome:
 - Tink Sprocketwhistle
 - Tinkmaster Overspark
 - Tog Rustsprocket
+- Trade Master Kovic
 - Trixie Quikswitch
 - Tynnus Venomsprout
 - Tyrion
@@ -699,18 +971,15 @@ gnome:
 - Wizzle Brassbolts
 - Yebb Neblegear
 goblin:
-- Landro Longshot
-- Kwee Q. Peddlefeet
-- Gryfe
-- Bragok
-- Zggi
 - Alchemist Pestlezugg
 - Azzleby
 - Baron Revilgaz
 - Beetix Ficklespragg
 - Bibbly F'utzbuckle
 - Bijou
+- Blackwing Technician
 - Booty Bay Reveler
+- Bragok
 - Brikk Keencraft
 - Bronn Fitzwrench
 - Buzzek Bracketswing
@@ -719,6 +988,7 @@ goblin:
 - Cork Gizelton
 - Crane Operator Bigglefuzz
 - Crank Fizzlebub
+- Defias Dockmaster
 - Dirge Quikcleave
 - Drizzlik
 - Felnok Steelspring
@@ -727,18 +997,23 @@ goblin:
 - First Mate Nilzlix
 - Frezza
 - Gadgetzan Bruiser
+- Gazban
 - Gazlowe
 - Gelvas Grimegate
+- Gilnid
 - Goblin Pit Boss
 - Goblin Pit Crewman
 - Gorzeeki Wildeyes
 - Grarnik Goodstitch
+- Great-father Winter's Helper
+- Greatfather Winter's Helper
 - Gremnik Rizzlesprang
 - Grimble
 - Grimestack
 - Griniblix the Spectator
 - Grinkle
 - Grizzlowe
+- Gryfe
 - Guchie Jinglepocket
 - Harlo Wigglesworth
 - Haughty Modiste
@@ -762,6 +1037,8 @@ goblin:
 - Krakle
 - Krazek
 - Krinkle Goodsteel
+- Kwee Q. Peddlefeet
+- Landro Longshot
 - Laziphus
 - Liv Rizzlefix
 - Macey Jinglepocket
@@ -784,6 +1061,7 @@ goblin:
 - Orwin Gizzmick
 - Penney Copperpinch
 - Pikkle
+- Pilot Wizzlecrank
 - Pixel
 - Piznik
 - Pozzik
@@ -817,11 +1095,14 @@ goblin:
 - Sputtervalve
 - Squibby Overspeck
 - Tinkee Steamboil
+- Tinkerer Gizlock
 - Tinkerwiz
 - Tran'rek
 - Twizwick Sprocketgrind
 - Umi Rumplesnicker
 - Vazario Linkgrease
+- Venture Co. Lookout
+- Venture Co. Surveyor
 - Vizzklick
 - Weegli Blastfuse
 - Wenikee Boltbucket
@@ -830,6 +1111,7 @@ goblin:
 - Whulwert Copperpinch
 - Willix the Importer
 - Wizlo Bearingshiner
+- Wizzlecrank's Shredder
 - Wonderform Operator
 - Wrenix the Wretched
 - Wulmort Jinglepocket
@@ -839,20 +1121,36 @@ goblin:
 - Zamek
 - Zap Farflinger
 - Zapetta
+- Zggi
+- Zixil
 - Ziz Fizziks
 - Zorbin Fandazzle
-human:
-- Baron Longshore
-- Bloodmage Lynnore
-- Captain Hecklebury Smotts
-- Fleet Master Firallon
-- Lorax
-- Red Jack Flint
+harpy:
+- Bloodfeather Fury
+- Bloodfeather Harpy
+- Bloodfeather Matriarch
+- Bloodfeather Rogue
+- Bloodfeather Sorceress
+- Bloodfeather Wind Witch
+- Witchwing Ambusher
+- Witchwing Harpy
+- Witchwing Roguefeather
+- Witchwing Slayer
+- Witchwing Windcaller
+highelf:
+- Aurora Skycaller
+- Earthcaller Franzahl
+- Elsharin
+- Fiora Longears
+- Garek
+- Gilveradin Sunchaser
+- Haleh
+- Itharius
+- Jeziba
+- Scholomance Dark Summoner
 - Scholomance Student
-- Shakes O'Breen
-- Stanley
-- The Abominable Greench
-- Thomas
+- Vyrin Swiftwind
+human:
 - '"Auntie" Bernice Stonefield'
 - '"Pretty Boy" Duncan'
 - '"Sea Wolf" MacKinley'
@@ -880,6 +1178,8 @@ human:
 - Alliance Brigadier General
 - Alma Jainrose
 - Alyssa Griffith
+- Ambassador Berrybuck
+- Anachronos the Ancient
 - Ander Germaine
 - Angus Stern
 - Annora
@@ -901,20 +1201,26 @@ human:
 - Arnold Leland
 - Arthur the Faithful
 - Artist Renfray
+- Arugal
 - Aurius
 - Azore Aldamort
 - Bailiff Conacher
 - Balos Jacken
 - Barkeep Daniels
+- Barkeep Hann
+- Baron Longshore
 - Baros Alexston
 - Bartleby
 - Bartolo Ginsetti
+- Bazil Thredd
 - Belnistrasz
 - Ben Trias
 - Bernard Gump
 - Betty Quin
+- Big Will
 - Bishop DeLavey
 - Bishop Farthing
+- Bloodmage Lynnore
 - Bloodsail Traitor
 - Brant Jasperbloom
 - Brother Anton
@@ -938,6 +1244,7 @@ human:
 - Captain Danuvin
 - Captain Evencane
 - Captain Garran Vimes
+- Captain Hecklebury Smotts
 - Captain Nials
 - Captain Pentigast
 - Captain Vanessa Beltis
@@ -968,6 +1275,7 @@ human:
 - Commander Samaul
 - Commander Thomas Helleran
 - Connor Rivers
+- Corbett Schneider
 - Corporal Carnes
 - Corporal Kaleb
 - Corporal Keeshan
@@ -976,9 +1284,13 @@ human:
 - Councilman Millstipe
 - Count Remington Ridgewell
 - Crier Goodman
+- Crimson Courier
+- Crimson Hammersmith
+- Crimson Monk
 - Crusader Lord Valdelmar
 - Crystal Boughman
 - Cultist Engineer
+- Cursed Marine
 - Cylina Darkheart
 - Daio the Decrepit
 - Dane Lindgren
@@ -994,6 +1306,11 @@ human:
 - David Langston
 - Davil Crokford
 - Dawnwatcher Selgorm
+- Decedra Willham
+- Defias Knuckleduster
+- Defias Messenger
+- Defias Raider
+- Defias Tower Patroller
 - Delgren the Purifier
 - Deliana
 - Demisette Cloyce
@@ -1008,6 +1325,7 @@ human:
 - Donal Osgood
 - Donald Rabonne
 - Donyal Tovald
+- Drunken Footpad
 - Drusilla La Salle
 - Duke Nicholas Zverenhoff
 - Duncan Cullen
@@ -1015,6 +1333,7 @@ human:
 - Duthorian Rall
 - Eagan Peltskinner
 - Edna Mullby
+- Edwin VanCleef
 - Elaine Carevin
 - Elaine Trias
 - Eldrin
@@ -1031,9 +1350,12 @@ human:
 - Evan Larson
 - Evert Sorisam
 - Fahrad
+- Falgran Hastil
 - Falkhaan Isenstrider
+- Fallen Hero
 - Farmer Furlbrow
 - Farmer Saldean
+- Farrin Daris
 - Father Inigo Montoy
 - Feero Ironhand
 - Felicia Gump
@@ -1042,8 +1364,10 @@ human:
 - Field Marshal Oslight
 - Field Marshal Teravaine
 - First Mate Fitzsimmons
+- Fleet Master Firallon
 - Flint Shadowmore
 - Flora Silverwind
+- Foreman Bonds
 - Foreman Oslow
 - Frederick Stover
 - Gaeriyan
@@ -1054,7 +1378,9 @@ human:
 - Georgio Bolero
 - Gerard Tiller
 - Gerik Koen
+- Ghost of the Past
 - Gramma Stonefield
+- Grandpa Vishas
 - Gregor Greystone
 - Gregor MacVince
 - Gregory Ardus
@@ -1062,6 +1388,7 @@ human:
 - Guard Berton
 - Guard Byron
 - Guard Howe
+- Guard Lasiter
 - Guard Parker
 - Guard Thomas
 - Gunther Weller
@@ -1075,17 +1402,22 @@ human:
 - Henry Stern
 - Herbalist Pomeroy
 - Hermit Ortell
+- Herod
 - High Priestess Laurena
 - High Priestess MacDonnell
 - High Sorcerer Andromath
 - Highlord Bolvar Fordragon
 - Highlord Demitrian
+- Highlord Mograine
 - Highlord Taelan Fordring
+- Hogan Ference
 - Hol'anyee Marshal
+- Houndmaster Loksey
 - Huntsman Leopold
 - Ian Strom
 - Ilsa Corbin
 - Infiltrator Marksen
+- Injured Peasant
 - Innkeeper Allison
 - Innkeeper Anderson
 - Innkeeper Brianna
@@ -1093,6 +1425,7 @@ human:
 - Innkeeper Heather
 - Innkeeper Janene
 - Innkeeper Trelayne
+- Interrogator Vishas
 - Jalane Ayrole
 - James Halloran
 - Janey Anship
@@ -1102,6 +1435,7 @@ human:
 - Jenn Langston
 - Jennea Cannon
 - Jessara Cordell
+- Jessica Chambers
 - Jessica Redpath
 - Jillian Tanner
 - Jitters
@@ -1135,7 +1469,9 @@ human:
 - Kirsta Deepshadow
 - Kitta Firewind
 - Klannoc Macleod
+- Klaven Mortwake
 - Korfax, Champion of the Light
+- Kurzen's Agent
 - Kyra Boucher
 - Lady Hoteshem
 - Lady Jaina Proudmoore
@@ -1158,9 +1494,11 @@ human:
 - Lisan Pierce
 - Lisbeth Schneider
 - Llane Beshere
+- Lorax
 - Lord Baurles K. Wishock
 - Lord Ello Ebonlocke
 - Lord Grayson Shadowbreaker
+- Lord Gregor Lescovar
 - Lord Jorach Ravenholdt
 - Lord Maxwell Tyrosus
 - Lord Tirion Fordring
@@ -1189,6 +1527,7 @@ human:
 - Marshal Redpath
 - Marshal Windsor
 - Martie Jainrose
+- Marzon the Silent Blade
 - Master Craftsman Omarion
 - Master Mathias Shaw
 - Master Sergeant Maclure
@@ -1201,20 +1540,25 @@ human:
 - Mayda Thane
 - Mazen Mac'Nadir
 - McGavan
+- Melris Malagan
 - Menara Voidrender
 - Merideth Carlson
 - Merissa Stilwell
+- Meven Korgal
 - Michael
 - Michelle Belle
 - Midsummer Celebrant
 - Mikhail
 - Milly Osworth
+- Milton Beats
 - Milton Sheaf
+- Miss Danna
 - Mor'zul Bloodbringer
 - Morgan Pestle
 - Morgan Stern
 - Morris Lawry
 - Muigin
+- Nancy Vishas
 - Nat Pagle
 - Nathaniel Dumah
 - Newton Burnside
@@ -1234,18 +1578,24 @@ human:
 - Osborne the Night Man
 - Osric Strang
 - Owen Vaughn
+- Peasant
 - Penny
 - Peter Galen
 - Phin Odelic
+- Plagued Peasant
+- Postmaster Malown
 - Pratt McGrubben
 - Priestess Anetta
 - Priestess Josetta
 - Private Hendel
+- Private Merle
 - Private Porter
 - Private Thorsen
 - Privateer Bloads
 - Privateer Groy
 - Professor Thaddeus Paleo
+- Protector Bialon
+- Protector Gariel
 - Quae
 - Quartermaster Lewis
 - Quartermaster Lungertz
@@ -1255,6 +1605,7 @@ human:
 - Ravenholdt Assassin
 - Ravenholdt Guard
 - Rebecca Laughlin
+- Red Jack Flint
 - Reese Langston
 - Reginald Windsor
 - Rema Schneider
@@ -1264,6 +1615,7 @@ human:
 - Renato Gallina
 - Roberto Pupellyverbos
 - Rohan the Assassin
+- Role Dreuger
 - Rory
 - Royal Factor Bathrilor
 - Salma Saldean
@@ -1271,27 +1623,40 @@ human:
 - Sandahl
 - Sara Timberlain
 - Sarah Tanner
+- Scarlet Cavalier
+- Scarlet Commander Marjhan
+- Scarlet Commander Mograine
+- Scarlet Scryer
+- Scarlet Torturer
+- Scholomance Student
 - Scout Galiaan
 - Scout Riell
 - Seoman Griffith
 - Sergeant Bly
 - Sergeant Carnes
 - Sergeant Hartman
+- Sergeant Maclear
 - Sergeant Major Germaine
 - Sergeant Yohwa
 - Seril Scourgebane
 - Shaina Fuller
+- Shakes O'Breen
 - Shellei Brondir
 - Shellene
 - Simon Tanner
 - Sir S. J. Erlgadin
 - Sirra Von'Indi
+- Slim's Friend
 - Sloan McCoy
 - Smiling Jim
 - Smith Argus
 - Sorcerer Ashcrombe
+- Southsea Kidnapper
+- Southshore Crier
+- Spirit of Trey Lightforge
 - Squire Maltrake
 - Squire Rowe
+- Stanley
 - Stephanie Turner
 - Stephen Ryback
 - Steven Black
@@ -1302,6 +1667,7 @@ human:
 - Stormwind Commendation Officer
 - Stormwind Guard
 - Stormwind Reveler
+- Stormwind Royal Guard
 - Strahad Farsan
 - Supervisor Raelen
 - Suzanne
@@ -1313,23 +1679,33 @@ human:
 - Tapoke "Slim" Jahn
 - Tavernkeep Smitts
 - Terl Arakor
+- The Abominable Greench
 - The Defias Traitor
 - Theocritus
 - Theramore Lieutenant
+- Theresa
 - Theresa Moulaine
+- Thomas
 - Thomas Miller
 - Thor
 - Thurman Mullby
+- Thuzadin Acolyte
 - Timothy Worthington
 - Tirion Fordring
 - Tomas
 - Tommy Joe Stonefield
 - Topper McNabb
+- Town Crier
+- Treasure Hunting Buccaneer
+- Treasure Hunting Pirate
+- Treasure Hunting Swashbuckler
 - Umber
 - Umbranse the Spiritspeaker
+- Undead Postman
 - Unger Statforth
 - Ursula Deline
 - Vaelan
+- Venture Co. Drudger
 - Verna Furlbrow
 - Verner Osgood
 - Vikki Lonsav
@@ -1339,6 +1715,7 @@ human:
 - Watcher Backus
 - Watcher Biggs
 - Watcher Brownell
+- Watcher Cutford
 - Watcher Dodds
 - Watcher Ladimore
 - Watcher Mahar Ba
@@ -1358,19 +1735,420 @@ human:
 - Ysida Harmon
 - Zaldimar Wefhellt
 - Zardeth of the Black Claw
-night_elf:
-- Arei
+- Zem Leeward
+- test spirit healer (DND)
+humanoid:
+- Ambassador Ardalan
+- Anilia
+- Ardo Dirtpaw
+- Atal'alarion
+- Aurora Skycaller
+- Berserk Trogg
+- Billy
+- Billy Maclure
+- Bloodfeather Fury
+- Bloodfeather Harpy
+- Bloodfeather Matriarch
+- Bloodfeather Rogue
+- Bloodfeather Sorceress
+- Bloodfeather Wind Witch
+- Bloodmage Drazial
+- Bloodmage Lynnore
+- Bo
+- Boss Galgosh
+- Boss Tho'grun
+- Boulderfist Brute
+- Boulderfist Enforcer
+- Boulderfist Lord
+- Boulderfist Magus
+- Boulderfist Mauler
+- Boulderfist Ogre
+- Boulderfist Shaman
+- Braelyn Firehand
+- Bragok
+- Burth
+- Captain Hecklebury Smotts
+- Captain Kromcrush
+- Captain Thalo'thas Brightsun
 - Cavindra
 - Celebras the Redeemed
+- Celebrian Dryad
+- Centaur Pariah
+- Charlga Razorflank
+- Chief Murgut
+- Cho'Rush the Observer
+- Crushridge Brute
+- Crushridge Mage
+- Crushridge Mauler
+- Crushridge Ogre
+- Crushridge Plunderer
+- Crushridge Warmonger
+- Daggerspine Marauder
+- Death Talon Overseer
 - Deathly Usher
-- Haleh
+- Do'gol
+- Donna
+- Draz'Zilb
+- Dreadmaul Brute
+- Dreadmaul Mauler
+- Dreadmaul Ogre
+- Dreadmaul Ogre Mage
+- Dreadmaul Warlock
+- Dunemaul Brute
+- Dunemaul Enforcer
+- Dunemaul Ogre
+- Dunemaul Ogre Mage
+- Dunemaul Warlock
+- Dustbelcher Brute
+- Dustbelcher Lord
+- Dustbelcher Mauler
+- Dustbelcher Mystic
+- Dustbelcher Ogre
+- Dustbelcher Ogre Mage
+- Dustbelcher Shaman
+- Dustbelcher Warrior
+- Dustbelcher Wyrmhunter
+- Earthcaller Franzahl
+- Elsharin
+- Emogg the Crusher
+- Erk
+- Feeboz
+- Fiora Longears
+- Firegut Brute
+- Firegut Ogre
+- Firegut Ogre Mage
+- Fleet Master Firallon
+- Flik
+- Fobeed
+- Garek
+- Gil
+- Gilthares Firebough
+- Gilveradin Sunchaser
+- Glommus
+- Gogger Geomancer
+- Gogger Rock Keeper
+- Gogger Stonepounder
+- Goldtooth
+- Gordok Brute
+- Gordok Bushwacker
+- Gordok Captain
+- Gordok Enforcer
+- Gordok Mage-Lord
+- Gordok Mauler
+- Gordok Ogre-Mage
+- Gordok Reaver
+- Gordok Warlock
+- Gordunni Battlemaster
+- Gordunni Brute
+- Gordunni Mage-Lord
+- Gordunni Mauler
+- Gordunni Ogre
+- Gordunni Ogre Mage
+- Gordunni Shaman
+- Gordunni Warlock
+- Gordunni Warlord
+- Gorgon'och
+- Gorn One Eye
+- Grawmug
+- Grazle
+- Grel'borg the Miser
+- Grimlok
+- Grubbis
+- Gruff Swiftbite
+- Gruk
+- Gryfe
+- Guard Fengus
+- Guard Mol'dar
+- Guard Slip'kik
+- Hammerspine
+- Highlord Omokk
+- Hilary
+- Hogger
+- Human Orphan
+- Illiyana
+- Itharius
+- Jamin
+- Jesper
+- Jeziba
+- Jimmy
+- Jin'rokh the Breaker
 - Johnny McWeaksauce
-- Melisara
+- Justin
+- Karu
+- Keeper Albagorm
+- Keeper Marandis
+- Keeper Remulos
+- Kernda
+- King Gordok
+- Kobold Digger
+- Kobold Geomancer
+- Kobold Laborer
+- Kobold Miner
+- Kobold Tunneler
+- Kobold Vermin
+- Kobold Worker
+- Kolkar Bloodcharger
+- Kolkar Marauder
+- Kolkar Pack Runner
+- Kolkar Stormer
+- Kor'gresh Coldrage
+- Kormok
+- Krak
+- Krolg
+- Krom'Grul
+- Kum'isha the Collector
+- Kwee Q. Peddlefeet
+- Lady Sarevess
+- Lard
+- Lil Timmy
+- Lolo the Lookout
+- Lorax
+- Lord Valthalak
+- Lothos Riftwaker
+- Lunaclaw Spirit
+- Magosh
+- Magtoor
+- Mai'Zoth
+- Mangletooth
+- Mathredis Firestar
+- Matt
+- Meilosh
 - Meridith the Mermaiden
-- Remorseful Highborne
-- Sharlindra
+- Miblon Snarltooth
+- Minion of Sethir
+- Mizzle the Crafty
+- Mo'grosh Brute
+- Mo'grosh Enforcer
+- Mo'grosh Mystic
+- Mo'grosh Ogre
+- Mo'grosh Shaman
+- Mogg
+- Molok the Crusher
+- Mosh'Ogg Brute
+- Mosh'Ogg Butcher
+- Mosh'Ogg Lord
+- Mosh'Ogg Mauler
+- Mosh'Ogg Shaman
+- Mosh'Ogg Spellcrafter
+- Mosh'Ogg Warmonger
+- Mosh'Ogg Witch Doctor
+- Mosshide Alpha
+- Mosshide Brute
+- Mosshide Fenrunner
+- Mosshide Gnoll
+- Mosshide Mistweaver
+- Mosshide Mongrel
+- Mosshide Mystic
+- Mosshide Trapper
+- Mudcrush Durtfeet
+- Mug'thol
+- Myrokos Silentform
+- Nafien
+- Narg the Taskmaster
+- Ogron
+- Ogtinc
+- Okla
+- Or'Kalar
+- Orcish Orphan
+- Overlord Mok'Morokk
+- Overlord Ramtusk
+- Paige Chaddis
+- Palemane Poacher
+- Palemane Skinner
+- Palemane Tanner
+- Pat
+- Peasant
+- Priest
+- Priestess
+- Rabid Shadowhide Gnoll
+- Red Jack Flint
+- Redridge Alpha
+- Redridge Basher
+- Redridge Brute
+- Redridge Drudger
+- Redridge Mongrel
+- Redridge Mystic
+- Redridge Poacher
+- Rhahk'Zor
+- Riverpaw Bandit
+- Riverpaw Brute
+- Riverpaw Gnoll
+- Riverpaw Herbalist
+- Riverpaw Miner
+- Riverpaw Mongrel
+- Riverpaw Mystic
+- Riverpaw Outrunner
+- Riverpaw Overseer
+- Riverpaw Runt
+- Riverpaw Scout
+- Riverpaw Shaman
+- Riverpaw Taskmaster
+- Rockjaw Ambusher
+- Rockjaw Skullthumper
+- Roger
+- Sah'rhee
+- Salfa
+- Sanath Lim-yo
+- Sayge
+- Scholomance Dark Summoner
+- Scholomance Student
+- Selendra
+- Sergeant Brashclaw
+- Shadowhide Brute
+- Shadowhide Darkweaver
+- Shadowhide Gnoll
+- Shadowhide Warrior
+- Shael'dryn
+- Shakes O'Breen
+- Shawn
+- Skarr the Unbreakable
+- Sleeby
+- Spirestone Battle Lord
+- Spirestone Battle Mage
+- Spirestone Enforcer
+- Spirestone Lord Magus
+- Spirestone Mystic
+- Spirestone Ogre Magus
+- Spirestone Reaver
+- Spirestone Warlord
+- Spirit Healer
+- Spirit Healer (DND)
+- Spirit of Lord Valthalak
+- Splinter Fist Enslaver
+- Splinter Fist Fire Weaver
+- Splinter Fist Firemonger
+- Splinter Fist Ogre
+- Splinter Fist Taskmaster
+- Splinter Fist Warrior
+- Spoops
+- Steven
+- Stomper Kreeg
+- Stonesplinter Bonesnapper
+- Stonesplinter Digger
+- Stonesplinter Geomancer
+- Stonesplinter Scout
+- Stonesplinter Seer
+- Stonesplinter Shaman
+- Stonesplinter Skullthumper
+- Stonesplinter Trogg
+- Super-Seller 680
+- Targ
+- Tarindrella
+- Taskmaster Snivvle
+- Tharg
 - Therylune
 - Therysil
+- Thomas
+- Thurman Schneider
+- Trok
+- Tunnel Rat Digger
+- Tunnel Rat Forager
+- Tunnel Rat Geomancer
+- Tunnel Rat Kobold
+- Tunnel Rat Scout
+- Tunnel Rat Surveyor
+- Tunnel Rat Vermin
+- Urok Doomhowl
+- Urok Enforcer
+- Uthek the Wise
+- Vendor-Tron 1000
+- Verog the Dervish
+- Vyrin Swiftwind
+- Warosh
+- Warug
+- William
+- Windshear Geomancer
+- Windshear Overlord
+- Windshear Tunnel Rat
+- Winter Reveler
+- Witchwing Ambusher
+- Witchwing Harpy
+- Witchwing Roguefeather
+- Witchwing Slayer
+- Witchwing Windcaller
+- Wizzlecrank's Shredder
+- Wolf Master Nandos
+- Woodpaw Alpha
+- Woodpaw Brute
+- Woodpaw Mongrel
+- Woodpaw Mystic
+- Woodpaw Reaver
+- Woodpaw Trapper
+- Zenn Foulhoof
+- Znort
+- Zzarc' Vul
+imp:
+- Impsy
+- Pusillin
+keeper:
+- Anilia
+- Archaedas
+- Cavindra
+- Celebras the Redeemed
+- Celebrian Dryad
+- Fiora Longears
+- Illiyana
+- Illiyana Moonblaze
+- Keeper Albagorm
+- Keeper Marandis
+- Keeper Remulos
+- Lore Keeper of Norgannon
+- Selendra
+- Shael'dryn
+- Stone Watcher of Norgannon
+- Tarindrella
+- Therylune
+- Therysil
+- Zaetar's Spirit
+kobold:
+- Feeboz
+- Gogger Geomancer
+- Gogger Rock Keeper
+- Gogger Stonepounder
+- Goldtooth
+- Kobold Digger
+- Kobold Geomancer
+- Kobold Laborer
+- Kobold Miner
+- Kobold Tunneler
+- Kobold Vermin
+- Kobold Worker
+- Narg the Taskmaster
+- Sleeby
+- Taskmaster Snivvle
+- Tunnel Rat Digger
+- Tunnel Rat Forager
+- Tunnel Rat Geomancer
+- Tunnel Rat Kobold
+- Tunnel Rat Scout
+- Tunnel Rat Surveyor
+- Tunnel Rat Vermin
+- Windshear Geomancer
+- Windshear Overlord
+- Windshear Tunnel Rat
+- Znort
+draenei:
+- Kum'isha the Collector
+- Magtoor
+mechanical:
+- 7:XT
+- A-Me 01
+- Electrocutioner 6000
+- Fishbot 5000
+- Homing Robot OOX-09/HL
+- Homing Robot OOX-17/TN
+- Homing Robot OOX-22/FE
+- Mobile Alert System
+- Tyrion's Spybot
+- Wrenix's Gizmotronic Apparatus
+naga:
+- Daggerspine Marauder
+- Lady Sarevess
+- Meridith the Mermaiden
+naga_female:
+- Lady Sarevess
+- Meridith the Mermaiden
+night_elf:
 - Aayndia Floralwind
 - Aendel Windspear
 - Aethalas
@@ -1394,6 +2172,7 @@ night_elf:
 - Arch Druid Fandral Staghelm
 - Arch Druid Renferal
 - Archmage Tarsis Kir-Moldir
+- Arei
 - Argent Guard Manados
 - Argent Guard Thaelrid
 - Argos Nightwhisper
@@ -1418,7 +2197,9 @@ night_elf:
 - Calandrath
 - Captured Arko'narin
 - Caryssia Moonhunter
+- Cavindra
 - Caynrus
+- Celebras the Redeemed
 - Cenarion Emissary Jademoon
 - Cenarion Scout Azenel
 - Cenarion Scout Jalia
@@ -1447,6 +2228,7 @@ night_elf:
 - Daryn Lightwind
 - Dawnwatcher Shaedlass
 - Dazalar
+- Deathly Usher
 - Dellylah
 - Denalan
 - Denatharion
@@ -1503,6 +2285,7 @@ night_elf:
 - Gracina Spiritmight
 - Grondal Moonbreeze
 - Gwennyth Bly'Leggonde
+- Haleh
 - Helendis Riverhorn
 - Heralath Fallowbrook
 - Herald Moonstalker
@@ -1534,6 +2317,7 @@ night_elf:
 - Jer'kai Moonweaver
 - Jessir Moonbow
 - Jocaste
+- Johnny McWeaksauce
 - Kaela Shadowspear
 - Kaerbrus
 - Kal
@@ -1585,8 +2369,10 @@ night_elf:
 - Mathrengyl Bearwalker
 - Me'lynn
 - Melea
+- Melisara
 - Melithar Staghelm
 - Merelyssa
+- Meridith the Mermaiden
 - Merithra of the Dream
 - Milla Fairancora
 - Mishellena
@@ -1619,6 +2405,7 @@ night_elf:
 - Ranshalla
 - Rayne
 - Rellian Greenspyre
+- Remorseful Highborne
 - Rivern Frostwind
 - Saenorion
 - Sarin Starlight
@@ -1640,6 +2427,7 @@ night_elf:
 - Shalumon
 - Shanda
 - Shandris Feathermoon
+- Sharlindra
 - Shay Leafrunner
 - Sheldras Moontree
 - Shelgrayn
@@ -1677,6 +2465,8 @@ night_elf:
 - Thamarian
 - Tharnariun Treetender
 - Theridran
+- Therylune
+- Therysil
 - Thundris Windweaver
 - Thyn'tel Bladeweaver
 - Thyssiana
@@ -1710,9 +2500,480 @@ night_elf:
 - Yldan
 - Zamael Lunthistle
 - Zarrin
-
+nightelf:
+- Aayndia Floralwind
+- Aethalas
+- Ainethil
+- Alaindia
+- Alanna Raveneye
+- Alanndarian Nightsong
+- Aldris Fourclouds
+- Alegorn
+- Alenndaar Lapidaar
+- Alyissia
+- Anadyia
+- Anaya Dawnrunner
+- Androl Oakhand
+- Andrus
+- Angelas Moonbreeze
+- Anishar
+- Arantir
+- Arathandris Silversky
+- Arch Druid Fandral Staghelm
+- Arch Druid Renferal
+- Archmage Tarsis Kir-Moldir
+- Argent Guard Manados
+- Argent Guard Thaelrid
+- Argos Nightwhisper
+- Arias'ta Bladesinger
+- Ariyell Skyshadow
+- Astaia
+- Astarii Starseeker
+- Asterion
+- Athridas Bearmantle
+- Aurel Goldleaf
+- Ayanna Everstride
+- Azj'Tordin
+- Balthule Shadowstrike
+- Baristolth of the Shifting Sands
+- Baritanas Skyriver
+- Barithras Moonshade
+- Bolyun
+- Brannock
+- Byancie
+- Caelestrasz
+- Caelyb
+- Calandrath
+- Captured Arko'narin
+- Caryssia Moonhunter
+- Caylais Moonfeather
+- Caynrus
+- Cenarion Emissary Jademoon
+- Cenarion Scout Azenel
+- Cenarion Scout Jalia
+- Cenarion Scout Landion
+- Cerellean Whiteclaw
+- Chardryn
+- Cloud Skydancer
+- Commander Mar'alith
+- Conservator Ilthalaine
+- Corithras Moonrage
+- Crildor
+- Cylania
+- Cylania Rootstalker
+- Cyndra Kindwhisper
+- Cyridan
+- Cyroen
+- Daelyshia
+- Dalinda Malem
+- Danlaar Nightstride
+- Dannelor
+- Darianna
+- Darnassus Commendation Officer
+- Darnassus Reveler
+- Darnassus Sentinel
+- Darnath Bladesinger
+- Daryn Lightwind
+- Dawnwatcher Shaedlass
+- Dazalar
+- Denalan
+- Denatharion
+- Dendrite Starblaze
+- Dendrythis
+- Dirania Silvershine
+- Dorion
+- Ealyshia Dewwhisper
+- Ebru
+- Eladriel
+- Elanaria
+- Elder Bladeleaf
+- Elder Bladesing
+- Elder Bladeswift
+- Elder Brightspear
+- Elder Farwhisper
+- Elder Meadowrun
+- Elder Moonstrike
+- Elder Moonwarden
+- Elder Morningdew
+- Elder Nightwind
+- Elder Riversong
+- Elder Skygleam
+- Elder Starglade
+- Elder Starsong
+- Elder Starweave
+- Elder Windrun
+- Eldraeith
+- Elfarran
+- Ellandrieth
+- Elynna
+- Enslaved Druid of the Talon
+- Erelas Ambersky
+- Eridan Bluewind
+- Erion Shadewhisper
+- Faelyssa
+- Faldreas Goeth'Shael
+- Faldron
+- Falfindel Waywarder
+- Falrin Treeshaper
+- Fandral Staghelm
+- Fariel Starsong
+- Firodren Mooncaller
+- Frahun Shadewhisper
+- Fyldan
+- Fyldren Moonfeather
+- Fylerian Nightwing
+- Fyrenna
+- Gaerolas Talvethren
+- Gershala Nightwhisper
+- Gilshalan Windwalker
+- Ginro Hearthkindle
+- Glorandiir
+- Golhine the Hooded
+- Gracina Spiritmight
+- Grondal Moonbreeze
+- Gwennyth Bly'Leggonde
+- Helendis Riverhorn
+- Heralath Fallowbrook
+- Herald Moonstalker
+- High Priest Thel'danis
+- Highborne Summoner
+- Huntress Leafrunner
+- Huntress Ravenoak
+- Huntress Skymane
+- Huntress Swiftriver
+- Idriana
+- Illiyana Moonblaze
+- Ilyenia Moonfire
+- Innkeeper Faralia
+- Innkeeper Keldamyr
+- Innkeeper Kimlya
+- Innkeeper Lyshaerya
+- Innkeeper Saelienne
+- Innkeeper Shaussiy
+- Innkeeper Shyria
+- Isalien
+- Iverron
+- Ivy Leafrunner
+- Jaeana
+- Jandria
+- Jannok Breezesong
+- Jareth Wildwoods
+- Jarrodenus
+- Jartsam
+- Jayla
+- Jeen'ra Nightrunner
+- Jenal
+- Jer'kai Moonweaver
+- Jessir Moonbow
+- Jocaste
+- Kaela Shadowspear
+- Kaerbrus
+- Kal
+- Kalin Windflight
+- Kayneth Stillwind
+- Keeper Moonshade
+- Keldas
+- Kelek Skykeeper
+- Kerlonian Evershade
+- Keyl Swiftclaw
+- Kieran
+- Kindal Moonweaver
+- Kinelory
+- Kylanna
+- Kylanna Windwhisper
+- Kyra Windblade
+- Kyrai
+- Lady Anacondra
+- Laird
+- Lalina Summermoon
+- Landria
+- Lariia
+- Latronicus Moonspear
+- Laurna Morninglight
+- Layo Starstrike
+- Lelanai
+- Liladris Moonriver
+- Lilyssia Nightbreeze
+- Loganaar
+- Loramus Thalipedes
+- Lord Cobrahn
+- Lord Pythas
+- Lord Serpentis
+- Lorekeeper Javon
+- Lorekeeper Kildrath
+- Lorekeeper Lydros
+- Lorekeeper Mykos
+- Lotherias
+- Lunar Festival Emissary
+- Lylandris
+- Maethrya
+- Maldryn
+- Malfurion Stormrage
+- Malorne Bladeleaf
+- Malvor
+- Mardant Strongoak
+- Marli Wishrunner
+- Master Nightsong
+- Master Sergeant Moonshadow
+- Mathiel
+- Mathrengyl Bearwalker
+- Me'lynn
+- Melea
+- Melithar Staghelm
+- Merelyssa
+- Merithra of the Dream
+- Milla Fairancora
+- Mishellena
+- Mishta
+- Mistress Natalia Mar'alith
+- Moon Priestess Amara
+- Mydrannul
+- Myriam Moonsinger
+- Mythidan
+- Mythrin'dir
+- Nadyia Maneweaver
+- Nalesette Wildbringer
+- Nara Meideros
+- Naralex
+- Nessa Shadowsong
+- Oben Rageclaw
+- Officer Lunalight
+- Orendil Broadleaf
+- Orenthil Whisperwind
+- Pelturas Whitemoon
+- Porthannius
+- Priestess A'moora
+- Priestess Alathea
+- Priestess of Elune
+- Prince Tortheldrin
+- Quentin
+- Quintis Jonespyre
+- Rabine Saturna
+- Radnaal Maneweaver
+- Raedon Duskstriker
+- Raene Wolfrunner
+- Ralo'shan the Eternal Watcher
+- Ranshalla
+- Rayne
+- Rellian Greenspyre
+- Rivern Frostwind
+- Saenorion
+- Sarin Starlight
+- Scholar Runethorn
+- Sellandus
+- Sentinel Arynia Cloudsbreak
+- Sentinel Aynasha
+- Sentinel Elissa Starbreeze
+- Sentinel Farsong
+- Sentinel Glynda Nal'Shea
+- Sentinel Melyria Frostshadow
+- Sentinel Onaeya
+- Sentinel Selarin
+- Sentinel Silversky
+- Sentinel Thenysil
+- Sentinel Tysha Moonblade
+- Sentinel Velene Starstrike
+- Shailiea
+- Shanda
+- Shandris Feathermoon
+- Shay Leafrunner
+- Sheldras Moontree
+- Shen'dralar Ancient
+- Shen'dralar Zealot
+- Shindrell Swiftfire
+- Shylamiir
+- Shylenai
+- Sildanair
+- Silva Fil'naveth
+- Silvaria
+- Silverwing Emissary
+- Sindrayl
+- Sister Aquinne
+- Squire Leoren Mal'derath
+- Sylannia
+- Sylvanna Forestmoon
+- Syral Bladeleaf
+- Syurna
+- Tajarri
+- Taladan
+- Talaelar
+- Talen
+- Talendria
+- Tallonkai Swiftroot
+- Tannysa
+- Tel'Athir
+- Teldrassil Sentinel
+- Telonis
+- Teloren
+- Telurinon Moonshadow
+- Tenaron Stormgrip
+- Terenthis
+- Teronis' Corpse
+- Thamarian
+- Tharnariun Treetender
+- Theridran
+- Thundris Windweaver
+- Thyn'tel Bladeweaver
+- Thyssiana
+- Tortured Druid
+- Tortured Sentinel
+- Trenton Lighthammer
+- Treshala Fallowbrook
+- Trianna
+- Troyas Moonbreeze
+- Turian
+- Tyrande
+- Tyrande Whisperwind
+- Ulthir
+- Vaean
+- Vahlarriel Demonslayer
+- Valadar Starsong
+- Vesprystus
+- Vestia Moonspear
+- Vethsera
+- Vinasia
+- Vish Kozus
+- Volcor
+- Voloren
+- Windcaller Kaldon
+- Windcaller Yessendra
+- Wing Commander Vipore
+- World Alchemy Trainer
+- World Enchanting Trainer
+- World Engineering Trainer
+- World Leatherworking Trainer
+- World Tailoring Trainer
+- Wynd Nightchaser
+- Xylinnia Starshine
+- Yldan
+- Zamael Lunthistle
+- Zarrin
+object:
+- Strange Snowman
+- Winter Reveler
+ogre:
+- Boss Tho'grun
+- Boulderfist Brute
+- Boulderfist Enforcer
+- Boulderfist Lord
+- Boulderfist Magus
+- Boulderfist Mauler
+- Boulderfist Ogre
+- Boulderfist Shaman
+- Burth
+- Captain Kromcrush
+- Cho'Rush the Observer
+- Crushridge Brute
+- Crushridge Mage
+- Crushridge Mauler
+- Crushridge Ogre
+- Crushridge Plunderer
+- Crushridge Warmonger
+- Do'gol
+- Draz'Zilb
+- Dreadmaul Brute
+- Dreadmaul Mauler
+- Dreadmaul Ogre
+- Dreadmaul Ogre Mage
+- Dreadmaul Warlock
+- Dunemaul Brute
+- Dunemaul Enforcer
+- Dunemaul Ogre
+- Dunemaul Ogre Mage
+- Dunemaul Warlock
+- Dustbelcher Brute
+- Dustbelcher Lord
+- Dustbelcher Mauler
+- Dustbelcher Mystic
+- Dustbelcher Ogre
+- Dustbelcher Ogre Mage
+- Dustbelcher Shaman
+- Dustbelcher Warrior
+- Dustbelcher Wyrmhunter
+- Emogg the Crusher
+- Firegut Brute
+- Firegut Ogre
+- Firegut Ogre Mage
+- Fobeed
+- Glommus
+- Gordok Brute
+- Gordok Bushwacker
+- Gordok Captain
+- Gordok Enforcer
+- Gordok Mage-Lord
+- Gordok Mauler
+- Gordok Ogre-Mage
+- Gordok Reaver
+- Gordok Spirit
+- Gordok Warlock
+- Gordunni Battlemaster
+- Gordunni Brute
+- Gordunni Mage-Lord
+- Gordunni Mauler
+- Gordunni Ogre
+- Gordunni Ogre Mage
+- Gordunni Shaman
+- Gordunni Warlock
+- Gordunni Warlord
+- Gorgon'och
+- Grel'borg the Miser
+- Guard Fengus
+- Guard Mol'dar
+- Guard Slip'kik
+- Highlord Omokk
+- King Gordok
+- Kor'gresh Coldrage
+- Kormok
+- Krak
+- Krom'Grul
+- Lard
+- Lolo the Lookout
+- Mai'Zoth
+- Mizzle the Crafty
+- Mo'grosh Brute
+- Mo'grosh Enforcer
+- Mo'grosh Mystic
+- Mo'grosh Ogre
+- Mo'grosh Shaman
+- Molok the Crusher
+- Mosh'Ogg Brute
+- Mosh'Ogg Butcher
+- Mosh'Ogg Lord
+- Mosh'Ogg Mauler
+- Mosh'Ogg Shaman
+- Mosh'Ogg Spellcrafter
+- Mosh'Ogg Warmonger
+- Mosh'Ogg Witch Doctor
+- Mudcrush Durtfeet
+- Mug'thol
+- Ogron
+- Ogtinc
+- Or'Kalar
+- Overlord Mok'Morokk
+- Rhahk'Zor
+- Sah'rhee
+- Skarr the Unbreakable
+- Spirestone Battle Lord
+- Spirestone Battle Mage
+- Spirestone Enforcer
+- Spirestone Lord Magus
+- Spirestone Mystic
+- Spirestone Ogre Magus
+- Spirestone Reaver
+- Spirestone Warlord
+- Splinter Fist Enslaver
+- Splinter Fist Fire Weaver
+- Splinter Fist Firemonger
+- Splinter Fist Ogre
+- Splinter Fist Taskmaster
+- Splinter Fist Warrior
+- Stomper Kreeg
+- Targ
+- Tharg
+- Urok Doomhowl
+- Urok Enforcer
+- Zzarc' Vul
 orc:
-- Grizzle Halfmane
 - Acolyte Magaz
 - Ag'tor Bloodfist
 - Ak'Zeloth
@@ -1725,13 +2986,26 @@ orc:
 - Asoran
 - Aturk the Anvil
 - Barkeep Morag
+- Beaten Corpse
 - Belgrom Rockmaul
 - Bengor
+- Blackhand Elite
+- Blackrock Champion
+- Blackrock Grunt
+- Blackrock Hunter
+- Blackrock Outrunner
+- Blackrock Renegade
+- Blackrock Scout
+- Blackrock Sentry
+- Blackrock Shadowcaster
+- Blackrock Summoner
+- Blackrock Tracker
 - Bloodguard Rawtar
 - Borgosh Corebender
 - Borstan
 - Borya
 - Brakgul Deathbringer
+- Brakkar
 - Brawn
 - Brewmaster Drohn
 - Breyk
@@ -1739,6 +3013,7 @@ orc:
 - Bulkrek Ragefist
 - Captain Shatterskull
 - Cazul
+- Chieftain Nek'rosh
 - Commander Aggro'gosh
 - Commander Gor'shak
 - Cook Torka
@@ -1751,7 +3026,13 @@ orc:
 - Dhugru Gorelust
 - Dispatch Commander Ruag
 - Doras
+- Dragonmaw Centurion
+- Dragonmaw Grunt
+- Dragonmaw Raider
+- Dragonmaw Scout
+- Dragonmaw Swamprunner
 - Dran Droffers
+- Drek'Thar
 - Dreka'Sur
 - Drull
 - Drum Fel
@@ -1778,6 +3059,7 @@ orc:
 - Galthuk
 - Gan'rul Bloodeye
 - Gar'Thok
+- Garneg Charskull
 - Garyl
 - Gazrog
 - General Kirika
@@ -1798,17 +3080,22 @@ orc:
 - Great-father Winter
 - Greshka
 - Greth
+- Grethok the Controller
 - Grezz Ragefist
 - Grimtak
 - Gringer
+- Grisha
 - Grizzle Halfmane
 - Grokor
 - Grol'dar
 - Grub
 - Grunt Dogran
+- Grunt Gargal
 - Grunt Logmar
 - Grunt Maug
 - Grunt Mojka
+- Guard Kurall
+- Guard Taruc
 - Gurda Ragescar
 - Haggrum Bloodfist
 - Hagrus
@@ -1819,9 +3106,11 @@ orc:
 - Helgrum the Swift
 - Hgarth
 - High Overlord Saurfang
+- Horde Defender
 - Horde Warbringer
 - Horthus
 - Hraug
+- Initiate Amakkar
 - Innkeeper Grosk
 - Innkeeper Gryshka
 - Innkeeper Jayka
@@ -1874,7 +3163,9 @@ orc:
 - Kurden Bloodclaw
 - Kurgul
 - Lanti'gah
+- Lazy Peon
 - Lexlort
+- Lhara
 - Lieutenant Beitha
 - Lieutenant Rukag
 - Locke Okarr
@@ -1914,6 +3205,7 @@ orc:
 - Orgnil Soulscar
 - Orgrimmar Commendation Officer
 - Orgrimmar Grunt
+- Orgrimmar Legion Grunt
 - Orgrimmar Reveler
 - Ormak Grimshot
 - Ormok
@@ -1921,6 +3213,8 @@ orc:
 - Orokk Omosh
 - Orphan Matron Battlewail
 - Overlord Runthak
+- Petra Grossen
+- Pooka
 - Rashona Straglash
 - Rawrk
 - Razor Hill Grunt
@@ -1969,6 +3263,7 @@ orc:
 - Tamaro
 - Tarshaw Jaggedscar
 - Tatternack Steelforge
+- Tharil'zun
 - Tharl Stonebleeder
 - Tharlidun
 - Therzok
@@ -1987,6 +3282,7 @@ orc:
 - Trak'gen
 - Traugh
 - Trull Failbane
+- Twilight Lord Kelris
 - Ug'thok
 - Ukor
 - Ukra'nor
@@ -2021,11 +3317,21 @@ orc:
 - Zor Lonetree
 - Zudd
 - Zureetha Fargaze
-undead:
-- Blind Mary
-- Guard Fengus
-- Guard Mol'dar
-- Guard Slip'kik
+qiraji: []
+quilboar:
+- Charlga Razorflank
+- Mangletooth
+- Overlord Ramtusk
+satyr:
+- Aligar the Tormentor
+- Balizar the Umbrage
+- Lorax
+- Minion of Sethir
+- Twilight Corrupter
+- Xabraxxis
+- Xandivious
+- Zenn Foulhoof
+scourge:
 - Abigail Sawyer
 - Acolyte Wytula
 - Adrian Bartlett
@@ -2037,12 +3343,12 @@ undead:
 - Andrew Hartwell
 - Andron Gant
 - Angela Curthas
-- Anya Maulray
 - Apothecary Dithers
 - Apothecary Faustin
 - Apothecary Helbrim
 - Apothecary Jezel
 - Apothecary Johaan
+- Apothecary Jorell
 - Apothecary Katrina
 - Apothecary Lycanus
 - Apothecary Lydon
@@ -2068,6 +3374,7 @@ undead:
 - Brom Killian
 - Cain Firesong
 - Calvin Montague
+- Captain Halyndor
 - Carendin Halgar
 - Carolai Anise
 - Carolyn Ward
@@ -2085,6 +3392,7 @@ undead:
 - Clyde Kellen
 - Coleman Farthing
 - Commander Louis Philips
+- Cursed Sailor
 - Dalar Dawnweaver
 - Dan Golthas
 - Daniel Bartlett
@@ -2123,7 +3431,6 @@ undead:
 - Deathstalker Vincent
 - Deathstalker Zraedus
 - Defilers Emissary
-- Derak Nightfall
 - Deze Snowbane
 - Doctor Gregory Victor
 - Doctor Herbert Halsey
@@ -2146,13 +3453,15 @@ undead:
 - Felicia Doan
 - Fenstad Argyle
 - Festival Talespinner
+- Forsaken Scout
 - Francis Eliot
 - Franklin Lloyd
+- Fras Siabi
 - Genavie Callow
 - Geoffrey Hartwell
 - Georgia
+- Gerard Abernathy
 - Gillian Moore
-- Gina Lang
 - Godrick Farsan
 - Gordon Wendham
 - Gothard Winslow
@@ -2162,7 +3471,9 @@ undead:
 - Guillaume Sorouy
 - Gunther Arcanus
 - Hannah Akeley
+- Hans Zandin
 - Harbinger Balthazad
+- Helcular's Remains
 - Helena Atwood
 - Hepzibah Sedgewick
 - Hierophant Theodora Mulvadania
@@ -2176,8 +3487,8 @@ undead:
 - Innkeeper Shay
 - Isabella
 - James Van Brunt
+- Jarien
 - Jeremiah Payson
-- Joanna Whitehall
 - Johan Focht
 - Jonathan Chambers
 - Jorah Annison
@@ -2187,7 +3498,6 @@ undead:
 - Junior Apothecary Holland
 - Karos Razok
 - Katrina Alliestar
-- Kayla Smithe
 - Keeper Bel'dugur
 - Keeper Bel'varil
 - Killian Hagey
@@ -2211,7 +3521,6 @@ undead:
 - Marion Call
 - Marla Fowler
 - Martha Alliestar
-- Martha Strain
 - Martin Lindsey
 - Mary Edras
 - Master Apothecary Faranell
@@ -2219,7 +3528,6 @@ undead:
 - Maurin Bonesplitter
 - Maximillion
 - Mennet Carkad
-- Merill Pleasance
 - Michael Garrett
 - Mickey Levine
 - Miles Dexter
@@ -2228,7 +3536,7 @@ undead:
 - Miner Cromwell
 - Mirelle Tremayne
 - Monika Sengutz
-- Morganus
+- Mrs. Winters
 - Nathaniel Steenwick
 - Nathanos Blightcaller
 - Nicholas Atwood
@@ -2258,14 +3566,15 @@ undead:
 - Rutherford Twing
 - Salazar Bloch
 - Samuel Van Brunt
-- Sarah Goode
 - Sarah Killian
 - Seeker Cromwell
 - Seeker Nahr
 - Seeker Thompson
+- Selina Dourman
 - Selina Pickman
 - Senior Sergeant Grimsford
 - Serge Hinott
+- Sergeant Houser
 - Shadow Priest Allister
 - Shadow Priest Sarvis
 - Shadow Priestess Vandis
@@ -2274,14 +3583,16 @@ undead:
 - Shelene Rhobart
 - Silas Zimmer
 - Sir Malory Wheeler
+- Sothos
 - Spirit of Kirith
+- Stalvan Mistmantle
 - Susan Tillinghast
 - Sydney Upton
 - Tallow
+- Tarren Mill Deathguard
 - Tawny Grisette
 - Thaddeus Webb
 - Theodore Griffs
-- Theodore Mont Claire
 - Thomas Mordan
 - Thurston Xane
 - Timothy Weldon
@@ -2305,11 +3616,40 @@ undead:
 - Zachariah Post
 - Zane Bradford
 - Zarise
+spirit:
+- Aelthalyste
+- Ancient Equine Spirit
+- Captain Grayson
+- Cauldron Lord Soulwrath
+- Darkreaver's Fallen Charger
+- Deathly Usher
+- Dreadsteed Spirit
+- Feugen
+- Forest Wisp
+- Great Bear Spirit
+- Kaelystia Hatebringer
+- Lillith Nefara
+- Lunaclaw Spirit
+- Nightmare
+- Remorseful Highborne
+- Screecher Spirit
+- Spirit of Azuregos
+- Spirit of Lord Valthalak
+- Stalagg
+- Vectus
+- Zaetar's Spirit
+spirit_female:
+- Aelthalyste
+- Blind Mary
+- Forlorn Spirit
+- Kaelystia Hatebringer
+- Melisara
+- Remorseful Highborne
+- Sharlindra
+succubus:
+- Mistress Nagmara
+- Summoned Succubus
 tauren:
-- Do'gol
-- Tsunaman
-- Uthek the Wise
-- Warosh
 - Aboda
 - Ahanu
 - Ancestral Spirit
@@ -2356,6 +3696,7 @@ tauren:
 - Corporal Thund Splithoof
 - Delgo Ragetotem
 - Disciple of Naralex
+- Do'gol
 - Dorn Plainstalker
 - Dranh
 - Elder Bloodhoof
@@ -2470,6 +3811,7 @@ tauren:
 - Melor Stonehoof
 - Merok Longstride
 - Mooranta
+- Mor Grayhoof
 - Mor'rogal
 - Morin Cloudstalker
 - Mosarn
@@ -2524,6 +3866,10 @@ tauren:
 - Seikwa
 - Senani Thunderheart
 - Senior Sergeant Taiga
+- Servant of Allistarj
+- Servant of Grol
+- Servant of Razelikh
+- Servant of Sevine
 - Sewa Mistrunner
 - Shadi Mistrunner
 - Sheal Runetotem
@@ -2565,10 +3911,12 @@ tauren:
 - Torm Ragetotem
 - Torwa Pathfinder
 - Trackmaster Zherin
+- Tsunaman
 - Turak Runetotem
 - Una
 - Urek Thunderhorn
 - Uthan Stillwater
+- Uthek the Wise
 - Varg Windwhisper
 - Vargus
 - Vark Battlescar
@@ -2578,6 +3926,7 @@ tauren:
 - Vorn Skyseer
 - Waldor
 - Warden Haro
+- Warosh
 - Windcaller Proudhorn
 - Xanis Flameweaver
 - Yama Snowhoof
@@ -2585,18 +3934,21 @@ tauren:
 - Yonn Deepcut
 - Zangen Stonehoof
 - Zarlman Two-Moons
+trogg:
+- Warosh
 troll:
-- Jin'rokh the Breaker
-- Mistress Nagmara
-- Slave Worker
 - Al'tabim the All-Seeing
+- Antu'sul
 - Argent Outfitter
 - Argent Quartermaster Hasana
 - Atal'ai Exile
+- Atal'alarion
 - Bath'rah the Windwatcher
 - Batrider Pele'keiki
 - Bom'bay
 - Canaga Earthcaller
+- Captured Hakkari Zealot
+- Chief Ukorz Sandscalp
 - Darkspear Commendation Officer
 - Deino
 - Denni'ka
@@ -2607,15 +3959,20 @@ troll:
 - Exzhal
 - Falthir the Sightless
 - Fisherman Lin'do
+- Frostmane Seer
 - Frostwolf Stable Master
+- Great Father Arctikus
 - Hana'zua
 - Hanashi
 - Huntsman Markhor
+- Jammal'an the Prophet
 - Jandi
 - Jarkal Mossmeld
 - Je'neu Sancrea
 - Jen'shan
 - Jes'rimon
+- Jin'do the Hexxer
+- Jin'rokh the Breaker
 - Jin'sora
 - Jinar'Zillen
 - Kali Remik
@@ -2641,6 +3998,7 @@ troll:
 - Maywiki of Zuldazar
 - Miao'zan
 - Mishiki
+- Mistress Nagmara
 - Mitsuwa
 - Molthor
 - Mor'vek
@@ -2651,10 +4009,12 @@ troll:
 - Pephredo
 - Primal Torntusk
 - Qeeju
+- Razal'blade
 - Rhinag
 - Rin'ji
 - Rin'wosho the Trader
 - Rinling
+- Sandfury Executioner
 - Se'Jib
 - Searn Firewarder
 - Senior Sergeant Kai'jin
@@ -2667,8 +4027,10 @@ troll:
 - Shoja'my
 - Sian'dur
 - Sian'tsu
+- Simone the Inconspicuous
 - Skinner Jamani
 - Skullsplitter Speaker
+- Slave Worker
 - Tai'jin
 - Telf Joolam
 - Thal'trak Proudtusk
@@ -2699,6 +4061,7 @@ troll:
 - Yeh'kinya
 - Yenniku
 - Zamja
+- Zandalar Enforcer
 - Zandalarian Emissary
 - Zando'zan
 - Zanza the Restless
@@ -2709,3 +4072,852 @@ troll:
 - Zengu
 - Zilzibin Drumlore
 - Zjolnir
+undead:
+- Abigail Sawyer
+- Acolyte Wytula
+- Adrian Bartlett
+- Aelthalyste
+- Ageron Kargal
+- Alessandro Luca
+- Alexi Barov
+- Algernon
+- Anastasia Hartwell
+- Andrew Brownell
+- Andrew Hartwell
+- Andron Gant
+- Angela Curthas
+- Anya Maulray
+- Apothecary Dithers
+- Apothecary Faustin
+- Apothecary Helbrim
+- Apothecary Jezel
+- Apothecary Johaan
+- Apothecary Katrina
+- Apothecary Lycanus
+- Apothecary Lydon
+- Apothecary Renferrel
+- Apothecary Staffron Lerent
+- Apothecary Vallia
+- Apothecary Zamah
+- Apothecary Zinge
+- Aranae Venomblood
+- Archibald
+- Archmage Shymm
+- Armand Cromwell
+- Arthur Moore
+- Astor Hadren
+- Augustus the Touched
+- Austil de Mon
+- Baltus Fowler
+- Baron Rivendare
+- Basil Frye
+- Benijah Fenner
+- Bethor Iceshard
+- Birgitte Cranston
+- Black Guard Swordsmith
+- Blind Mary
+- Bloodmage Thalnos
+- Bowen Brisboise
+- Boyle
+- Brom Killian
+- Cain Firesong
+- Calvin Montague
+- Captain Grayson
+- Carendin Halgar
+- Carolai Anise
+- Carolyn Ward
+- Cauldron Lord Bilemaw
+- Cauldron Lord Malvinious
+- Cauldron Lord Razarch
+- Cauldron Lord Soulwrath
+- Cedric Stumpel
+- Charles Seaton
+- Chemist Cuely
+- Chemist Fuely
+- Chloe Curthas
+- Christoph Jeffcoat
+- Christoph Walker
+- Christopher Drakul
+- Chronos
+- Claire Willower
+- Clarice Foster
+- Clyde Kellen
+- Coleman Farthing
+- Commander Louis Philips
+- Dalar Dawnweaver
+- Dan Golthas
+- Daniel Bartlett
+- Dannal Stern
+- Dark Cleric Beryl
+- Dark Cleric Duesten
+- Darkcaller Yanka
+- Daryl Stack
+- David Trias
+- Davitt Hickson
+- Deathguard Abraham
+- Deathguard Bartholomew
+- Deathguard Burgess
+- Deathguard Cyrus
+- Deathguard Dillinger
+- Deathguard Gavin
+- Deathguard Humbert
+- Deathguard Lawrence
+- Deathguard Linnea
+- Deathguard Lundmark
+- Deathguard Morris
+- Deathguard Mort
+- Deathguard Podrig
+- Deathguard Royann
+- Deathguard Saltain
+- Deathguard Samsa
+- Deathguard Simmer
+- Deathguard Terrence
+- Deathguard Tor
+- Deathmaster Dwire
+- Deathstalker Adamant
+- Deathstalker Erland
+- Deathstalker Faerleia
+- Deathstalker Lesh
+- Deathstalker Mortis
+- Deathstalker Vincent
+- Deathstalker Zraedus
+- Decrepit Guardian
+- Defilers Emissary
+- Derak Nightfall
+- Devlin Agamand
+- Deze Snowbane
+- Doctor Gregory Victor
+- Doctor Herbert Halsey
+- Doctor Marsh
+- Doctor Martin Felben
+- Doctor Serratus
+- Edrick Killian
+- Eleanor Rusk
+- Elenia Haydon
+- Eliza
+- Elizabeth Van Talen
+- Estelle Gendry
+- Eunice Burch
+- Executor Arren
+- Executor Zygand
+- Eye of Naxxramas
+- Ezekiel Graves
+- Faruza
+- Father Cobb
+- Father Lankester
+- Father Lazarus
+- Felicia Doan
+- Fenstad Argyle
+- Festival Talespinner
+- Feugen
+- Forlorn Spirit
+- Francis Eliot
+- Franklin Lloyd
+- Genavie Callow
+- Geoffrey Hartwell
+- Georgia
+- Gillian Moore
+- Gina Lang
+- Glutton
+- Godrick Farsan
+- Gordo
+- Gordok Spirit
+- Gordon Wendham
+- Gothard Winslow
+- Graham Van Talen
+- Gregory Charles
+- Gretchen Dedmar
+- Guard Fengus
+- Guard Mol'dar
+- Guard Slip'kik
+- Guillaume Sorouy
+- Gunther Arcanus
+- Hannah Akeley
+- Harbinger Balthazad
+- Helena Atwood
+- Hepzibah Sedgewick
+- Hierophant Theodora Mulvadania
+- High Executor Darthalia
+- High Executor Derrington
+- High Executor Hadrec
+- High Inquisitor Fairbanks
+- Innkeeper Bates
+- Innkeeper Norman
+- Innkeeper Renee
+- Innkeeper Shay
+- Isabella
+- James Van Brunt
+- Jeremiah Payson
+- Joanna Whitehall
+- Johan Focht
+- Jonathan Chambers
+- Jorah Annison
+- Josef Gregorian
+- Joseph Moore
+- Josephine Lister
+- Junior Apothecary Holland
+- Kaelystia Hatebringer
+- Karos Razok
+- Katrina Alliestar
+- Kayla Smithe
+- Keeper Bel'dugur
+- Keeper Bel'varil
+- Killian Hagey
+- Lady Callow
+- Lauren Newcomb
+- Lavinia Crowe
+- Leonid Barthalomew the Revered
+- Lexington Mortaim
+- Lilith the Lithe
+- Lillith Nefara
+- Lizbeth Cromwell
+- Loatheb
+- Louis Warren
+- Lucian Fenner
+- Lucille Castleton
+- Luther Pickman
+- Magistrate Sevren
+- Magus Wordeen Voidglare
+- Malakai Cross
+- Malcomb Wynn
+- Mara Rennick
+- Marduk Blackpool
+- Marion Call
+- Marla Fowler
+- Martha Alliestar
+- Martha Strain
+- Martin Lindsey
+- Mary Edras
+- Master Apothecary Faranell
+- Mattie Alred
+- Maurin Bonesplitter
+- Maximillion
+- Melia
+- Melisara
+- Mennet Carkad
+- Merill Pleasance
+- Michael Garrett
+- Mickey Levine
+- Miles Dexter
+- Miles Welsh
+- Millie Gregorian
+- Miner Cromwell
+- Mirelle Tremayne
+- Monika Sengutz
+- Mordresh Fire Eye
+- Morganus
+- Nathaniel Steenwick
+- Nathanos Blightcaller
+- Nicholas Atwood
+- Novice Elreth
+- Novice Thaivand
+- Nurse Neela
+- Officer Gothena
+- Oran Snakewrithe
+- Pamela Redpath
+- Parqual Fintallas
+- Patchwerk
+- Patrick Garrett
+- Pierce Shackleton
+- Quinn Yorick
+- Raleigh Andrean
+- Ralston Farnsley
+- Rand Rhobart
+- Rane Yorick
+- Reginald Grimsford
+- Remains of a Paladin
+- Remorseful Highborne
+- Rhiannon Davis
+- Richard Kerwin
+- Richard Van Brunt
+- Riley Walker
+- Robert Gossom
+- Ronald Burch
+- Rot Hide Brute
+- Rot Hide Gladerunner
+- Rot Hide Gnoll
+- Rot Hide Graverobber
+- Rot Hide Mongrel
+- Rot Hide Plague Weaver
+- Rot Hide Savage
+- Royal Overseer Bauhaus
+- Rupert Boch
+- Rutherford Twing
+- Salazar Bloch
+- Sammy
+- Samuel Van Brunt
+- Sarah Goode
+- Sarah Killian
+- Seeker Cromwell
+- Seeker Nahr
+- Seeker Thompson
+- Selina Pickman
+- Senior Sergeant Grimsford
+- Serge Hinott
+- Shadow Priest Allister
+- Shadow Priest Sarvis
+- Shadow Priestess Vandis
+- Shadowmage Vivian Lagrave
+- Sharlindra
+- Sheldon Von Croy
+- Shelene Rhobart
+- Silas Zimmer
+- Sir Malory Wheeler
+- Spirit of Kirith
+- Stalagg
+- Stitches
+- Susan Tillinghast
+- Sydney Upton
+- Tallow
+- Tawny Grisette
+- Thaddeus Webb
+- Thaddius
+- Theodore Griffs
+- Theodore Mont Claire
+- Thomas Mordan
+- Thurston Xane
+- Timmy the Cruel
+- Timothy Weldon
+- Undercity Commendation Officer
+- Undercity Guardian
+- Undercity Reveler
+- Undertaker Mordo
+- Ursyn Ghull
+- Vance Undergloom
+- Vectus
+- Velma Warnam
+- Velora Nitely
+- Venya Marthand
+- Victor Bartholomew
+- Victor Ward
+- Vorrel Sengutz
+- Walter Ellingson
+- Willow
+- Wing Commander Jeztor
+- Winifred Kerwin
+- Winna Hazzard
+- Yvette Farthing
+- Zachariah Post
+- Zaetar's Spirit
+- Zane Bradford
+- Zarise
+unknown:
+- ' Polly'
+- 7:XT
+- A
+- A-Me 01
+- Aelthalyste
+- Algernon
+- Aligar the Tormentor
+- Ambassador Ardalan
+- Anachronos
+- Ancient Equine Spirit
+- Anilia
+- Aquementas
+- Archaedas
+- Ardo Dirtpaw
+- Arei
+- Atal'alarion
+- Aurora Skycaller
+- Avalanchion
+- Avatar of Hakkar
+- Awbee
+- Azure Templar
+- Azuregos
+- Balizar the Umbrage
+- Baron Charr
+- Baron Kazum
+- Baron Rivendare
+- Berserk Trogg
+- Billy
+- Billy Maclure
+- Black Guard Swordsmith
+- Blackwing
+- Blind Mary
+- Bloodfeather Fury
+- Bloodfeather Harpy
+- Bloodfeather Matriarch
+- Bloodfeather Rogue
+- Bloodfeather Sorceress
+- Bloodfeather Wind Witch
+- Bloodmage Drazial
+- Bloodmage Lynnore
+- Bloodmage Thalnos
+- Bo
+- Bogling
+- Boss Galgosh
+- Boss Tho'grun
+- Boulderfist Brute
+- Boulderfist Enforcer
+- Boulderfist Lord
+- Boulderfist Magus
+- Boulderfist Mauler
+- Boulderfist Ogre
+- Boulderfist Shaman
+- Boyle
+- Braelyn Firehand
+- Bragok
+- Burth
+- Captain Grayson
+- Captain Hecklebury Smotts
+- Captain Kromcrush
+- Captain Thalo'thas Brightsun
+- Captain Tuubid
+- Cauldron Lord Bilemaw
+- Cauldron Lord Malvinious
+- Cauldron Lord Razarch
+- Cauldron Lord Soulwrath
+- Cavindra
+- Celebras the Redeemed
+- Celebrian Dryad
+- Centaur Pariah
+- Charlga Razorflank
+- Chicken
+- Chief Murgut
+- Cho'Rush the Observer
+- Cracked Necrotic Crystal
+- Crimson Templar
+- Crushridge Brute
+- Crushridge Mage
+- Crushridge Mauler
+- Crushridge Ogre
+- Crushridge Plunderer
+- Crushridge Warmonger
+- Cyrus Therepentous
+- Dadanga
+- Daggerspine Marauder
+- Darkreaver's Fallen Charger
+- Death Talon Overseer
+- Deathly Usher
+- Decrepit Guardian
+- Devlin Agamand
+- Do'gol
+- Donna
+- Draz'Zilb
+- Dreadmaul Brute
+- Dreadmaul Mauler
+- Dreadmaul Ogre
+- Dreadmaul Ogre Mage
+- Dreadmaul Warlock
+- Dreadsteed Spirit
+- Dreamscythe
+- Duke Hydraxis
+- Dunemaul Brute
+- Dunemaul Enforcer
+- Dunemaul Ogre
+- Dunemaul Ogre Mage
+- Dunemaul Warlock
+- Dustbelcher Brute
+- Dustbelcher Lord
+- Dustbelcher Mauler
+- Dustbelcher Mystic
+- Dustbelcher Ogre
+- Dustbelcher Ogre Mage
+- Dustbelcher Shaman
+- Dustbelcher Warrior
+- Dustbelcher Wyrmhunter
+- Earthcaller Franzahl
+- Earthen Templar
+- Electrocutioner 6000
+- Elemental Slave
+- Eliza
+- Elsharin
+- Emberstrife
+- Emeriss
+- Emogg the Crusher
+- Erk
+- Eye of Naxxramas
+- Faint Necrotic Crystal
+- Fam'retor Guardian
+- Feeboz
+- Feugen
+- Fiora Longears
+- Fireguard
+- Fireguard Destroyer
+- Firegut Brute
+- Firegut Ogre
+- Firegut Ogre Mage
+- Fishbot 5000
+- Fleet Master Firallon
+- Flik
+- Flik's Frog
+- Fobeed
+- Forest Wisp
+- Forlorn Spirit
+- Freed Soul
+- Garek
+- General Rajaxx
+- Gil
+- Gilthares Firebough
+- Gilveradin Sunchaser
+- Glommus
+- Glutton
+- Gogger Geomancer
+- Gogger Rock Keeper
+- Gogger Stonepounder
+- Goldtooth
+- Gordo
+- Gordok Brute
+- Gordok Bushwacker
+- Gordok Captain
+- Gordok Enforcer
+- Gordok Mage-Lord
+- Gordok Mauler
+- Gordok Ogre-Mage
+- Gordok Reaver
+- Gordok Spirit
+- Gordok Warlock
+- Gordunni Battlemaster
+- Gordunni Brute
+- Gordunni Mage-Lord
+- Gordunni Mauler
+- Gordunni Ogre
+- Gordunni Ogre Mage
+- Gordunni Shaman
+- Gordunni Warlock
+- Gordunni Warlord
+- Gorgon'och
+- Gorn One Eye
+- Grawmug
+- Grazle
+- Great Bear Spirit
+- Green Dragonspawn
+- Grel'borg the Miser
+- Grimlok
+- Grubbis
+- Gruff Swiftbite
+- Gruk
+- Gryfe
+- Guard Fengus
+- Guard Mol'dar
+- Guard Slip'kik
+- Hakkar
+- Haleh
+- Hammerspine
+- Hastat the Ancient
+- Highlord Omokk
+- Hilary
+- Hoary Templar
+- Hogger
+- Homing Robot OOX-09/HL
+- Homing Robot OOX-17/TN
+- Homing Robot OOX-22/FE
+- Human Orphan
+- Illiyana
+- Impsy
+- Ironbark the Redeemed
+- Itharius
+- J'eevee
+- Jade
+- Jamin
+- Jesper
+- Jeziba
+- Jimmy
+- Jin'rokh the Breaker
+- Johnny McWeaksauce
+- Justin
+- Kaelystia Hatebringer
+- Karu
+- Keeper Albagorm
+- Keeper Marandis
+- Keeper Remulos
+- Kernda
+- King Gordok
+- Kobold Digger
+- Kobold Geomancer
+- Kobold Laborer
+- Kobold Miner
+- Kobold Tunneler
+- Kobold Vermin
+- Kobold Worker
+- Kolkar Bloodcharger
+- Kolkar Marauder
+- Kolkar Pack Runner
+- Kolkar Stormer
+- Kor'gresh Coldrage
+- Kormok
+- Krak
+- Krakle's Thermometer
+- Krolg
+- Krom'Grul
+- Kum'isha the Collector
+- Kwee Q. Peddlefeet
+- Lady
+- Lady Sarevess
+- Lard
+- Lethon
+- Lil Timmy
+- Lillith Nefara
+- Loatheb
+- Lolo the Lookout
+- Lorax
+- Lord Arkkoroc
+- Lord Banehollow
+- Lord Hel'nurath
+- Lord Incendius
+- Lord Valthalak
+- Lore Keeper of Norgannon
+- Lothos Riftwaker
+- Lunaclaw Spirit
+- Maexxna
+- Magmus
+- Magosh
+- Magtoor
+- Mai'Zoth
+- Mangletooth
+- Manifestation of Water
+- Mathredis Firestar
+- Matt
+- Maws
+- Meilosh
+- Melia
+- Melisara
+- Meridith the Mermaiden
+- Metzen the Reindeer
+- Miblon Snarltooth
+- Minion of Sethir
+- Minor Manifestation of Earth
+- Minor Manifestation of Water
+- Mist
+- Mistress Nagmara
+- Mizzle the Crafty
+- Mo'grosh Brute
+- Mo'grosh Enforcer
+- Mo'grosh Mystic
+- Mo'grosh Ogre
+- Mo'grosh Shaman
+- Mobile Alert System
+- Mogg
+- Mok'rash
+- Molok the Crusher
+- Mordresh Fire Eye
+- Mosh'Ogg Brute
+- Mosh'Ogg Butcher
+- Mosh'Ogg Lord
+- Mosh'Ogg Mauler
+- Mosh'Ogg Shaman
+- Mosh'Ogg Spellcrafter
+- Mosh'Ogg Warmonger
+- Mosh'Ogg Witch Doctor
+- Mosshide Alpha
+- Mosshide Brute
+- Mosshide Fenrunner
+- Mosshide Gnoll
+- Mosshide Mistweaver
+- Mosshide Mongrel
+- Mosshide Mystic
+- Mosshide Trapper
+- Mudcrush Durtfeet
+- Mug'thol
+- Mushgog
+- Myrokos Silentform
+- Nafien
+- Nag
+- Narg the Taskmaster
+- Nefarian
+- Negolash
+- Nightmare
+- Nightmare Suppressor
+- Ogron
+- Ogtinc
+- Okla
+- Old Ironbark
+- Onu
+- Onyxia
+- Opus
+- Or'Kalar
+- Orcish Orphan
+- Overlord Mok'Morokk
+- Overlord Ramtusk
+- Overmaster Pyron
+- Paige Chaddis
+- Palemane Poacher
+- Palemane Skinner
+- Palemane Tanner
+- Pamela Redpath
+- Pat
+- Patchwerk
+- Peasant
+- Phalanx
+- Polly
+- Precious
+- Priest
+- Priestess
+- Prince Thunderaan
+- Princess Tempestria
+- Pusillin
+- Rabid Shadowhide Gnoll
+- Ragnaros
+- Raze
+- Razelikh the Defiler
+- Red Jack Flint
+- Redridge Alpha
+- Redridge Basher
+- Redridge Brute
+- Redridge Drudger
+- Redridge Mongrel
+- Redridge Mystic
+- Redridge Poacher
+- Remorseful Highborne
+- Rethiel the Greenwarden
+- Rhahk'Zor
+- Riverpaw Bandit
+- Riverpaw Brute
+- Riverpaw Gnoll
+- Riverpaw Herbalist
+- Riverpaw Miner
+- Riverpaw Mongrel
+- Riverpaw Mystic
+- Riverpaw Outrunner
+- Riverpaw Overseer
+- Riverpaw Runt
+- Riverpaw Scout
+- Riverpaw Shaman
+- Riverpaw Taskmaster
+- Roc
+- Rockbiter
+- Rockjaw Ambusher
+- Rockjaw Skullthumper
+- Roger
+- Rookery Hatcher
+- Rot Hide Brute
+- Rot Hide Gladerunner
+- Rot Hide Gnoll
+- Rot Hide Graverobber
+- Rot Hide Mongrel
+- Rot Hide Plague Weaver
+- Rot Hide Savage
+- Sah'rhee
+- Salfa
+- Sammy
+- Sanath Lim-yo
+- Sayge
+- Scholomance Dark Summoner
+- Scholomance Student
+- Screecher Spirit
+- Selendra
+- Sergeant Brashclaw
+- Shade of Eranikus
+- Shadowhide Brute
+- Shadowhide Darkweaver
+- Shadowhide Gnoll
+- Shadowhide Warrior
+- Shael'dryn
+- Shakes O'Breen
+- Sharlindra
+- Shawn
+- Skarr the Unbreakable
+- Sleeby
+- Solakar Flamewreath
+- Spirestone Battle Lord
+- Spirestone Battle Mage
+- Spirestone Enforcer
+- Spirestone Lord Magus
+- Spirestone Mystic
+- Spirestone Ogre Magus
+- Spirestone Reaver
+- Spirestone Warlord
+- Spirit Healer
+- Spirit Healer (DND)
+- Spirit of Azuregos
+- Spirit of Lord Valthalak
+- Splinter Fist Enslaver
+- Splinter Fist Fire Weaver
+- Splinter Fist Firemonger
+- Splinter Fist Ogre
+- Splinter Fist Taskmaster
+- Splinter Fist Warrior
+- Spoops
+- Stalagg
+- Stanley
+- Steven
+- Stitches
+- Stoma the Ancient
+- Stomper Kreeg
+- Stone Watcher of Norgannon
+- Stonesplinter Bonesnapper
+- Stonesplinter Digger
+- Stonesplinter Geomancer
+- Stonesplinter Scout
+- Stonesplinter Seer
+- Stonesplinter Shaman
+- Stonesplinter Skullthumper
+- Stonesplinter Trogg
+- Strange Snowman
+- Summoned Succubus
+- Summoned Voidwalker
+- Super-Seller 680
+- Taerar
+- Tamed Kodo
+- Targ
+- Tarindrella
+- Taskmaster Snivvle
+- Tendris Warpwood
+- Thaddius
+- Tharg
+- The Abominable Greench
+- The Cleaner
+- The Master's Eye
+- Thenan
+- Therylune
+- Therysil
+- Thomas
+- Thurman Schneider
+- Timmy the Cruel
+- Tooga
+- Torta
+- Trok
+- Tsunaman
+- Tunnel Rat Digger
+- Tunnel Rat Forager
+- Tunnel Rat Geomancer
+- Tunnel Rat Kobold
+- Tunnel Rat Scout
+- Tunnel Rat Surveyor
+- Tunnel Rat Vermin
+- Twilight Corrupter
+- Tyrion's Spybot
+- Umpi
+- Undercity Guardian
+- Urok Doomhowl
+- Urok Enforcer
+- Uthek the Wise
+- Vaelastrasz
+- Vaelastrasz the Corrupt
+- Varimathras
+- Vartrus the Ancient
+- Vectus
+- Vendor-Tron 1000
+- Verog the Dervish
+- Voice of Elune
+- Vyrin Swiftwind
+- Warcaller Finster
+- Warosh
+- Warug
+- William
+- Windshear Geomancer
+- Windshear Overlord
+- Windshear Tunnel Rat
+- Winter Reveler
+- Witchwing Ambusher
+- Witchwing Harpy
+- Witchwing Roguefeather
+- Witchwing Slayer
+- Witchwing Windcaller
+- Wizzlecrank's Shredder
+- Wolf Master Nandos
+- Woodpaw Alpha
+- Woodpaw Brute
+- Woodpaw Mongrel
+- Woodpaw Mystic
+- Woodpaw Reaver
+- Woodpaw Trapper
+- Wrenix's Gizmotronic Apparatus
+- Xabraxxis
+- Xandivious
+- Ysondre
+- Zaetar's Spirit
+- Zenn Foulhoof
+- Zggi
+- Znort
+- Zzarc' Vul

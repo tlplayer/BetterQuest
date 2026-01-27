@@ -443,8 +443,58 @@ MariaDB [classicmangos]> SELECT * FROM dbscripts_on_quest_start WHERE id = 5713 
 21 rows in set (0.001 sec)
 
 MariaDB [classicmangos]> 
+select * from db_CreatureDisplayInfo            |
+    -> ^C
+MariaDB [classicmangos]> select * from db_CreatureDisplayInfo  limit 1;  
++----+---------+---------+-----------------------+--------------------+--------------------+--------------------+--------------------+--------------------+---------------------+------------+---------+------------+-----------------+--------------------+-----------------------+
+| ID | ModelID | SoundID | ExtendedDisplayInfoID | CreatureModelScale | CreatureModelAlpha | TextureVariation_1 | TextureVariation_2 | TextureVariation_3 | PortraitTextureName | BloodLevel | BloodID | NPCSoundID | ParticleColorID | CreatureGeosetData | ObjectEffectPackageID |
++----+---------+---------+-----------------------+--------------------+--------------------+--------------------+--------------------+--------------------+---------------------+------------+---------+------------+-----------------+--------------------+-----------------------+
+|  4 |       4 |       0 |                     0 |                  1 |                255 |                    |                    |                    |                     |          1 |       0 |          0 |               0 |                  0 |                     0 |
++----+---------+---------+-----------------------+--------------------+--------------------+--------------------+--------------------+--------------------+---------------------+------------+---------+------------+-----------------+--------------------+-----------------------+
+1 row in set (0.001 sec)
 
+MariaDB [classicmangos]> select count(*) from db_CreatureDisplayInfo  limit 1;
++----------+
+| count(*) |
++----------+
+|    24262 |
++----------+
+1 row in set (0.000 sec)
 
+MariaDB [classicmangos]> select count(*) from db_CreatureDisplayInfoExtra  limit 1;
++----------+
+| count(*) |
++----------+
+|    15475 |
++----------+
+1 row in set (0.000 sec)
+
+MariaDB [classicmangos]> select * from db_CreatureDisplayInfoExtra  limit 1;
++----+---------------+--------------+--------+--------+-------------+-------------+--------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+-------------------+-------------------+-------+--------------------------------------+
+| ID | DisplayRaceID | DisplaySexID | SkinID | FaceID | HairStyleID | HairColorID | FacialHairID | NPCItemDisplay_1 | NPCItemDisplay_2 | NPCItemDisplay_3 | NPCItemDisplay_4 | NPCItemDisplay_5 | NPCItemDisplay_6 | NPCItemDisplay_7 | NPCItemDisplay_8 | NPCItemDisplay_9 | NPCItemDisplay_10 | NPCItemDisplay_11 | Flags | BakeName                             |
++----+---------------+--------------+--------+--------+-------------+-------------+--------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+-------------------+-------------------+-------+--------------------------------------+
+| 23 |             3 |            0 |      1 |      1 |           6 |           3 |            2 |             8815 |             8815 |             3900 |                0 |             8328 |             5848 |             8816 |                0 |             3052 |                 0 |                 0 |     0 | 973e54e79012eea3f2658f2897e681d9.blp |
++----+---------------+--------------+--------+--------+-------------+-------------+--------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+------------------+-------------------+-------------------+-------+--------------------------------------+
+1 row in set (0.001 sec)
+
+MariaDB [classicmangos]> 
+
+> SELECT   ct.Entry,   ct.Name,   d.id AS script_id,   d.command,   d.dataint AS broadcast_id,   b.Text FROM dbscripts_on_creature_movement d JOIN creature_template ct ON ct.Entry = FLOOR(d.id / 100) LEFT JOIN broadcast_text b ON b.Id = d.dataint WHERE d.command IN (0,1,2,6,7,15) ORDER BY ct.Name;
++-------+------------------------------+-----------+---------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Entry | Name                         | script_id | command | broadcast_id | Text                                                                                                                                                                                                                                                                                                                                                                     |
++-------+------------------------------+-----------+---------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|  1478 | Aedis Brom                   |    147801 |       0 |          431 | Hey Reese, give me an' Christoph another round.                                                                                                                                                                                                                                                                                                                          |
+|  1478 | Aedis Brom                   |    147802 |       0 |          432 | A warm tavern and a cold ale. What more could we ask for?                                                                                                                                                                                                                                                                                                                |
+| 11056 | Alchemist Arbington          |   1105601 |       0 |         7279 | It's done $N, and I think you'll be satisfied with the results.                                                                                                                                                                                                                                                                                                          |
+| 15381 | Anachronos the Ancient       |   1538101 |       1 |            0 | NULL                                                                                                                                                                                                                                                                                                                                                                     |
+| 15381 | Anachronos the Ancient       |   1538101 |       1 |            0 | NULL                                                                                                                                                                                                                                                                                                                                                                     |
+| 15381 | Anachronos the Ancient       |   1538101 |       1 |            0 | NULL                                                                                                                                                                                                                                                                                                                                                                     |
+| 15381 | Anachronos the Ancient       |   1538101 |       0 |        10909 | We must act quickly or all shall be lost!                                                                                                                                                                                                                                                                                                                                |
+| 15381 | Anachronos the Ancient       |   1538101 |       1 |            0 | NULL                                                                                                                                                                                                                                                                                                                                                                     |
+| 15381 | Anachronos the Ancient       |   1538101 |       1 |            0 | NULL                                                                                                                                                                                                                                                                                                                                                                     |
+| 15381 | Anachronos the Ancient       |   1538101 |       1 |            0 | NULL                                                                                                                                                                                                                                                                                                                                                                     |
+| 15381 | Anachronos the Ancient       |   1538101 |       1 |            0 | NULL                                                                                                                                                                                                                                                                                                                                                                     |
+| 15381 | Anachronos the Ancient       |   1538101 |       0 |        10910 | My forces cannot overcome the Qiraji defenses. We will not be able to get close enough to place your precious barrier, dragon. 
 
 ## Core Components
 
