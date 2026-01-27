@@ -329,26 +329,21 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_m
         base_dir = os.path.join(output_dir, race, npc_dirname)
         os.makedirs(base_dir, exist_ok=True)
 
-        if "gossip" in dialog_type:
-            # Find index for this gossip text
-            idx = 0
-            if gossip_map and npc_name in gossip_map:
-                try:
-                    idx = gossip_map[npc_name].index(row["text"])
-                except ValueError:
-                    idx = len(gossip_map[npc_name])
-            
-            filename = f"gossip_{idx}.wav"
-        else:
-            qid = row.get("quest_id")
-            nid = row.get("npc_name")
+        # 1. Check if it is a valid Quest
+        qid = row.get("quest_id")
+        has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
 
-            if pd.notna(qid):
-                quest_id = str(int(qid))
-            else:
-                quest_id = "0"
-
+        if has_quest_id:
+            quest_id = str(int(qid))
             filename = f"{quest_id}_{dialog_type}.wav"
+        
+        # 2. Default to Gossip (use text content for filename)
+        else:
+            # Sanitize text to be filesystem safe and truncate to 50 chars
+            clean_text = sanitize_filename(row["text"])
+            if not clean_text:
+                clean_text = "unknown_dialog"
+            filename = f"{clean_text[:50]}.wav"
 
 
     print(f"Generating {base_dir}/{filename}")
