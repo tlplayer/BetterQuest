@@ -25,8 +25,7 @@ local function NormalizePath(path)
     return string.gsub(path, "/+", "\\")
 end
 
-local prev_MusicEnabled
-local prev_MusicVolume
+
 
 function SoundQueue:PlaySound(soundData)
     if not soundData then return end
@@ -34,19 +33,9 @@ function SoundQueue:PlaySound(soundData)
     -- 1. Normalize path for 1.12.1
     soundData.filePath = NormalizePath(soundData.filePath)
 
-    -- 2. Save and Set CVars (1.12.1 Names)
-    if prev_MusicEnabled == nil then
-        prev_MusicEnabled = GetCVar("MusicEnabled")
-        prev_MusicVolume = GetCVar("MusicVolume")
-    end
-    
-    -- Ensure music is on and set to high volume for the VO
-    SetCVar("MusicEnabled", 1)
-    SetCVar("MusicVolume", 1.0) -- You can change 1.0 to a preferred VO volume
+    PlaySoundFile(soundData.filePath)
+    soundData.handle = 1 -- Just put something here to flag the sound as stoppable
 
-    -- 3. Play the file
-    -- In 1.12, PlayMusic is the only way to reliably play external wavs on a dedicated channel
-    PlayMusic(soundData.filePath)
     
     -- 4. Handle timing for Resume vs New Play
     if soundData.isResuming then
@@ -71,22 +60,10 @@ function SoundQueue:PlaySound(soundData)
     self:UpdateUI()
 end
 
-function SoundQueue:StopCurrentInternal()
-    if self.currentSound then
-        -- In 1.12, the best way to stop PlayMusic is to play a silent file 
-        -- or toggle the music CVar off/on
-        StopMusic() 
-        
-        -- Restore original user music settings
-        if prev_MusicEnabled ~= nil then
-            SetCVar("MusicEnabled", prev_MusicEnabled)
-            SetCVar("MusicVolume", prev_MusicVolume)
-            prev_MusicEnabled = nil
-            prev_MusicVolume = nil
-        end
-        
-        self.isPlaying = false
-    end
+function SoundQueue:StopSound(soundData)
+    SetCVar("MasterSoundEffects", 0)
+    SetCVar("MasterSoundEffects", 1)
+    soundData.handle = nil
 end
 
 function SoundQueue:TogglePause()
@@ -94,21 +71,7 @@ function SoundQueue:TogglePause()
     if not current then return end
 
     if not self.isPaused then
-        -- PAUSING
-        self.isPaused = true
-        local elapsed = GetTime() - current.startTime
-        current.remaining = current.duration - elapsed
-        if current.remaining < 0 then current.remaining = 0 end
-        
-        -- We stop the sound because 1.12 music can't be "frozen"
-        self:StopCurrentInternal()
-        Debug("Paused. Remaining: " .. string.format("%.1fs", current.remaining))
-    else
-        -- RESUMING
-        current.isResuming = true
-        -- Restarts the file but uses the "remaining" time logic in PlaySound
-        self:PlaySound(current) 
-        Debug("Resumed")
+        self:StopSound(current) 
     end
 
     self:UpdateUI()
@@ -118,7 +81,8 @@ function SoundQueue:SkipCurrent()
     if not self.currentSound then return end
     Debug("Skipping: " .. (self.currentSound.npcName or "Unknown"))
     
-    self:StopCurrentInternal()
+    local current = self.currentSound
+
     self:RemoveSound(self.currentSound)
 end
 -------------------------------------------------
