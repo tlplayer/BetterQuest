@@ -376,6 +376,7 @@ function SoundQueue:InitializeUI()
     self.frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 150)
     self.frame:SetMovable(true)
     self.frame:EnableMouse(true)
+    self.frame:SetClampedToScreen(true) -- Prevent from being dragged off-screen
     self.frame:RegisterForDrag("LeftButton")
     
     -- Make the frame draggable
@@ -550,12 +551,12 @@ function SoundQueue:InitializeUI()
     -- Create pause icon (two vertical bars)
     self.frame.pauseBtn.pauseIcon = self.frame.pauseBtn:CreateTexture(nil, "ARTWORK")
     self.frame.pauseBtn.pauseIcon:SetAllPoints()
-    self.frame.pauseBtn.pauseIcon:SetTexture("Interface\\TimeManager\\PauseButton")
+    self.frame.pauseBtn.pauseIcon:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestLogStopButton")
     
     -- Create play icon (triangle pointing right)
     self.frame.pauseBtn.playIcon = self.frame.pauseBtn:CreateTexture(nil, "ARTWORK")
     self.frame.pauseBtn.playIcon:SetAllPoints()
-    self.frame.pauseBtn.playIcon:SetTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up")
+    self.frame.pauseBtn.playIcon:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestLogPlayButton")
     
     self.frame.pauseBtn:SetScript("OnClick", function() 
         SoundQueue:TogglePause() 
