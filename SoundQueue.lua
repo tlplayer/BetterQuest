@@ -11,6 +11,15 @@ SoundQueue = {
     history = {}, -- NEW: History cache
     maxHistorySize = 50, -- NEW: Max history entries
     maxQueueDisplay = 5, -- Max queue items to show
+    
+    -- Portrait configuration
+    portraitConfig = {
+        WIDTH = 64,
+        HEIGHT = 64,
+        PATH = "Interface\\AddOns\\BetterQuest\\Textures\\",
+        DEFAULT_NPC = "Interface\\Icons\\INV_Misc_QuestionMark",
+        DEFAULT_BOOK = "Interface\\AddOns\\BetterQuest\\Textures\\Book",
+    },
 }
 -------------------------------------------------
 -- DEBUG & UTILS
@@ -26,6 +35,55 @@ local function NormalizePath(path)
         return nil
     end
     return string.gsub(path, "/+", "\\")
+end
+
+-------------------------------------------------
+-- PORTRAIT HELPERS
+-------------------------------------------------
+
+local function GetNPCMetadata(npcName)
+    -- Try to get NPC metadata if NPC_DATABASE exists
+    if GetNPCMetadata then
+        return GetNPCMetadata(npcName)
+    elseif NPC_DATABASE and npcName then
+        local normalized = string.gsub(npcName, "['']", "")
+        return NPC_DATABASE[normalized]
+    end
+    return nil
+end
+
+local function IsBookInteraction()
+    -- Check if ItemTextFrame exists and is shown (reading a book/letter)
+    return ItemTextFrame and ItemTextFrame:IsShown()
+end
+
+local function GetPortraitTexture(soundData)
+    if not soundData then
+        return SoundQueue.portraitConfig.DEFAULT_NPC
+    end
+    
+    -- Check if it's a book interaction
+    if IsBookInteraction() then
+        return SoundQueue.portraitConfig.DEFAULT_BOOK
+    end
+    
+    -- Try to get NPC portrait
+    local npcName = soundData.npcName
+    if npcName then
+        local metadata = GetNPCMetadata(npcName)
+        if metadata and metadata.race then
+            -- Build portrait path: race.tga or race_female.tga
+            local filename = metadata.race
+            if metadata.sex == "female" then
+                filename = filename .. "_female"
+            end
+            local path = SoundQueue.portraitConfig.PATH .. filename .. ".tga"
+            return path
+        end
+    end
+    
+    -- Fallback to default
+    return SoundQueue.portraitConfig.DEFAULT_NPC
 end
 
 -------------------------------------------------
@@ -313,7 +371,7 @@ function SoundQueue:InitializeUI()
     if self.frame then return end
     
     self.frame = CreateFrame("Frame", "BetterQuestVoiceOverFrame", UIParent)
-    self.frame:SetWidth(300)
+    self.frame:SetWidth(370) -- Wider to accommodate portrait
     self.frame:SetHeight(120)
     self.frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 150)
     self.frame:SetMovable(true)
@@ -332,16 +390,38 @@ function SoundQueue:InitializeUI()
     self.frame.bg:SetAllPoints()
     self.frame.bg:SetTexture(0, 0, 0, 0.8)
     
+    -- PORTRAIT FRAME
+    self.frame.portrait = CreateFrame("Frame", nil, self.frame)
+    self.frame.portrait:SetWidth(self.portraitConfig.WIDTH)
+    self.frame.portrait:SetHeight(self.portraitConfig.HEIGHT)
+    self.frame.portrait:SetPoint("TOPLEFT", 10, -10)
+    
+    -- Portrait background
+    self.frame.portrait.bg = self.frame.portrait:CreateTexture(nil, "BACKGROUND")
+    self.frame.portrait.bg:SetAllPoints()
+    self.frame.portrait.bg:SetTexture(0, 0, 0, 1)
+    
+    -- Portrait texture
+    self.frame.portrait.texture = self.frame.portrait:CreateTexture(nil, "ARTWORK")
+    self.frame.portrait.texture:SetAllPoints()
+    self.frame.portrait.texture:SetTexCoord(0.1, 0.9, 0.1, 0.9) -- Slight crop for better framing
+    
+    -- Portrait border (optional decorative frame)
+    self.frame.portrait.border = self.frame.portrait:CreateTexture(nil, "OVERLAY")
+    self.frame.portrait.border:SetAllPoints()
+    self.frame.portrait.border:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\PortraitFrameAtlas")
+    self.frame.portrait.border:SetTexCoord(0, 0.8125, 0, 0.8125)
+    
     -- Currently Playing Header
     self.frame.header = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.header:SetPoint("TOPLEFT", 10, -8)
+    self.frame.header:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, 0)
     self.frame.header:SetText("Now Playing:")
     self.frame.header:SetTextColor(0.5, 0.5, 0.5)
     
     -- Currently playing area as a clickable button
     self.frame.currentBtn = CreateFrame("Button", nil, self.frame)
-    self.frame.currentBtn:SetPoint("TOPLEFT", 10, -22)
-    self.frame.currentBtn:SetPoint("BOTTOMRIGHT", self.frame, "TOPRIGHT", -10, -52)
+    self.frame.currentBtn:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, -14)
+    self.frame.currentBtn:SetPoint("BOTTOMRIGHT", self.frame, "TOPRIGHT", -30, -52)
     
     -- Background highlight on hover
     self.frame.currentBtn.bg = self.frame.currentBtn:CreateTexture(nil, "BACKGROUND")
@@ -379,13 +459,15 @@ function SoundQueue:InitializeUI()
         local current = SoundQueue:GetCurrentSound()
         if current then
             Debug("Skipping current: " .. (current.npcName or "Unknown"))
+            -- Stop the sound first
+            SoundQueue:StopSound(current)
             SoundQueue:RemoveSound(current)
         end
     end)
     
     -- Queue List Container
     self.frame.queueContainer = CreateFrame("Frame", nil, self.frame)
-    self.frame.queueContainer:SetPoint("TOPLEFT", 10, -55)
+    self.frame.queueContainer:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, -55)
     self.frame.queueContainer:SetPoint("BOTTOMRIGHT", -10, 35)
     
     -- Queue header
@@ -411,6 +493,23 @@ function SoundQueue:InitializeUI()
     -- Status text with time
     self.frame.status = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     self.frame.status:SetPoint("BOTTOMLEFT", 10, 10)
+
+    -- CLOSE BUTTON (X) - Hide frame but keep playing
+    self.frame.closeBtn = CreateFrame("Button", nil, self.frame, "UIPanelCloseButton")
+    self.frame.closeBtn:SetPoint("TOPRIGHT", -2, -2)
+    self.frame.closeBtn:SetWidth(20)
+    self.frame.closeBtn:SetHeight(20)
+    self.frame.closeBtn:SetScript("OnClick", function()
+        SoundQueue.frame:Hide()
+    end)
+    self.frame.closeBtn:SetScript("OnEnter", function()
+        GameTooltip:SetOwner(this, "ANCHOR_LEFT")
+        GameTooltip:SetText("Hide (keeps playing)")
+        GameTooltip:Show()
+    end)
+    self.frame.closeBtn:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
 
     -- BACK BUTTON (<<) - Replay previous from history
     self.frame.backBtn = CreateFrame("Button", nil, self.frame)
@@ -486,6 +585,10 @@ function SoundQueue:UpdateUI()
         return
     end
     
+    -- Update portrait
+    local portraitTexture = GetPortraitTexture(current)
+    self.frame.portrait.texture:SetTexture(portraitTexture)
+    
     -- Update currently playing info
     self.frame.npcName:SetText(current.npcName or "Unknown")
     self.frame.title:SetText(current.title or "")
@@ -548,7 +651,12 @@ SLASH_SOUNDQUEUE2 = "/soundqueue"
 SlashCmdList["SOUNDQUEUE"] = function(msg)
     msg = string.lower(msg or "")
     
-    if msg == "history" then
+    if msg == "show" then
+        if SoundQueue.frame then
+            SoundQueue.frame:Show()
+            SoundQueue:UpdateUI()
+        end
+    elseif msg == "history" then
         if table.getn(SoundQueue.history) == 0 then
             Debug("No history available")
         else
@@ -571,6 +679,7 @@ SlashCmdList["SOUNDQUEUE"] = function(msg)
         SoundQueue:TogglePause()
     else
         Debug("Commands:")
+        Debug("/bq show - Show the frame")
         Debug("/bq history - Show recent voiceovers")
         Debug("/bq play <number> - Replay from history")
         Debug("/bq clear - Clear history")
