@@ -6,8 +6,11 @@ SoundQueue = {
     sounds = {},
     currentSound = nil,
     isPlaying = false,
-    isPaused = false, -- NEW: Track pause state
+    isPaused = false,
     updateFrame = nil,
+    history = {}, -- NEW: History cache
+    maxHistorySize = 50, -- NEW: Max history entries
+    maxQueueDisplay = 5, -- Max queue items to show
 }
 -------------------------------------------------
 -- DEBUG & UTILS
@@ -25,7 +28,72 @@ local function NormalizePath(path)
     return string.gsub(path, "/+", "\\")
 end
 
+-------------------------------------------------
+-- HISTORY MANAGEMENT
+-------------------------------------------------
 
+function SoundQueue:AddToHistory(soundData)
+    -- Create a copy for history
+    local historyEntry = {
+        npcName = soundData.npcName,
+        text = soundData.text,
+        title = soundData.title,
+        filePath = soundData.filePath,
+        dialogType = soundData.dialogType,
+        questID = soundData.questID,
+        duration = soundData.duration,
+        timestamp = time(),
+    }
+    
+    table.insert(self.history, 1, historyEntry)
+    
+    -- Trim history if too large
+    while table.getn(self.history) > self.maxHistorySize do
+        table.remove(self.history)
+    end
+end
+
+function SoundQueue:PlayFromHistory(index)
+    if not self.history[index] then
+        Debug("History entry " .. index .. " not found")
+        return
+    end
+    
+    local entry = self.history[index]
+    Debug("Replaying from history: " .. (entry.npcName or "Unknown"))
+    
+    -- Create a new sound data from history
+    local soundData = {
+        npcName = entry.npcName,
+        text = entry.text,
+        title = entry.title,
+        filePath = entry.filePath,
+        dialogType = entry.dialogType,
+        questID = entry.questID,
+        duration = entry.duration,
+        startTime = 0,
+        pauseOffset = 0,
+    }
+    
+    -- Add to front of queue
+    table.insert(self.sounds, 1, soundData)
+    
+    -- If nothing playing, start immediately
+    if not self.currentSound or not self.isPlaying then
+        self:PlaySound(soundData)
+    end
+    
+    self:UpdateUI()
+end
+
+function SoundQueue:ClearHistory()
+    self.history = {}
+    Debug("History cleared")
+end
+
+-------------------------------------------------
+-- PLAYBACK
+-------------------------------------------------
 
 function SoundQueue:PlaySound(soundData)
     if not soundData then return end
@@ -39,10 +107,12 @@ function SoundQueue:PlaySound(soundData)
     
     -- 4. Handle timing for Resume vs New Play
     if soundData.isResuming then
-        soundData.startTime = GetTime() - (soundData.duration - soundData.remaining)
+        soundData.startTime = GetTime() - soundData.pauseOffset
         soundData.isResuming = nil
+        Debug("Resuming from offset: " .. soundData.pauseOffset)
     else
         soundData.startTime = GetTime()
+        soundData.pauseOffset = 0
     end
 
     self.currentSound = soundData
@@ -61,6 +131,7 @@ function SoundQueue:PlaySound(soundData)
 end
 
 function SoundQueue:StopSound(soundData)
+    if not soundData then return end
     SetCVar("MasterSoundEffects", 0)
     SetCVar("MasterSoundEffects", 1)
     soundData.handle = nil
@@ -71,20 +142,23 @@ function SoundQueue:TogglePause()
     if not current then return end
 
     if not self.isPaused then
-        self:StopSound(current) 
+        -- PAUSE
+        Debug("Pausing")
+        local elapsed = GetTime() - current.startTime
+        current.pauseOffset = elapsed
+        self:StopSound(current)
+        self.isPaused = true
+        self.isPlaying = false
+    else
+        -- RESUME
+        Debug("Resuming from: " .. current.pauseOffset)
+        current.isResuming = true
+        self:PlaySound(current)
     end
 
     self:UpdateUI()
 end
 
-function SoundQueue:SkipCurrent()
-    if not self.currentSound then return end
-    Debug("Skipping: " .. (self.currentSound.npcName or "Unknown"))
-    
-    local current = self.currentSound
-
-    self:RemoveSound(self.currentSound)
-end
 -------------------------------------------------
 -- QUEUE MANAGEMENT
 -------------------------------------------------
@@ -133,21 +207,6 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     self:UpdateUI()
 end
 
--------------------------------------------------
--- PLAYBACK
--------------------------------------------------
-
-function SoundQueue:CheckSoundFinished()
-    -- If paused, we don't tick the timer forward
-    if not self.currentSound or self.isPaused then return end
-    
-    local elapsed = GetTime() - self.currentSound.startTime
-    if elapsed >= self.currentSound.duration then
-        Debug("Sound finished naturally")
-        self:RemoveSound(self.currentSound)
-    end
-end
-
 function SoundQueue:RemoveSound(soundData)
     local removedIndex = nil
     for i, queuedSound in ipairs(self.sounds) do
@@ -159,6 +218,9 @@ function SoundQueue:RemoveSound(soundData)
     end
     
     if removedIndex == 1 then
+        -- Add to history before removing
+        self:AddToHistory(soundData)
+        
         self.currentSound = nil
         self.isPlaying = false
         self.isPaused = false
@@ -175,6 +237,75 @@ function SoundQueue:RemoveSound(soundData)
 end
 
 -------------------------------------------------
+-- PLAYBACK
+-------------------------------------------------
+
+function SoundQueue:CheckSoundFinished()
+    -- If paused, we don't tick the timer forward
+    if not self.currentSound or self.isPaused then return end
+    
+    local elapsed = GetTime() - self.currentSound.startTime
+    if elapsed >= self.currentSound.duration then
+        Debug("Sound finished naturally")
+        self:RemoveSound(self.currentSound)
+    end
+end
+
+-------------------------------------------------
+-- UI - QUEUE BUTTONS
+-------------------------------------------------
+
+function SoundQueue:CreateQueueButton(parent, index)
+    local button = CreateFrame("Button", nil, parent)
+    button:SetHeight(18)
+    button.index = index
+    
+    -- Background highlight on hover
+    button.bg = button:CreateTexture(nil, "BACKGROUND")
+    button.bg:SetAllPoints()
+    button.bg:SetTexture(1, 0.2, 0.2, 0.3)
+    button.bg:Hide()
+    
+    -- Text label
+    button.text = button:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    button.text:SetPoint("LEFT", 5, 0)
+    button.text:SetPoint("RIGHT", -5, 0)
+    button.text:SetJustifyH("LEFT")
+    button.text:SetTextColor(0.7, 0.7, 0.7)
+    
+    button:SetScript("OnEnter", function()
+        this.bg:Show()
+        this.text:SetTextColor(1, 0.3, 0.3)
+        GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
+        GameTooltip:SetText("Click to remove from queue")
+        GameTooltip:Show()
+    end)
+    
+    button:SetScript("OnLeave", function()
+        this.bg:Hide()
+        local soundData = SoundQueue.sounds[this.index]
+        if soundData then
+            if this.index == 1 then
+                this.text:SetTextColor(1, 1, 1)
+            else
+                this.text:SetTextColor(0.7, 0.7, 0.7)
+            end
+        end
+        GameTooltip:Hide()
+    end)
+    
+    button:SetScript("OnClick", function()
+        local soundData = SoundQueue.sounds[this.index]
+        if soundData then
+            Debug("Removing from queue: " .. (soundData.npcName or "Unknown"))
+            SoundQueue:RemoveSound(soundData)
+        end
+    end)
+    
+    return button
+end
+
+-------------------------------------------------
 -- UI
 -------------------------------------------------
 
@@ -183,38 +314,165 @@ function SoundQueue:InitializeUI()
     
     self.frame = CreateFrame("Frame", "BetterQuestVoiceOverFrame", UIParent)
     self.frame:SetWidth(300)
-    self.frame:SetHeight(80)
+    self.frame:SetHeight(120)
     self.frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 150)
+    self.frame:SetMovable(true)
+    self.frame:EnableMouse(true)
+    self.frame:RegisterForDrag("LeftButton")
+    
+    -- Make the frame draggable
+    self.frame:SetScript("OnDragStart", function()
+        this:StartMoving()
+    end)
+    self.frame:SetScript("OnDragStop", function()
+        this:StopMovingOrSizing()
+    end)
     
     self.frame.bg = self.frame:CreateTexture(nil, "BACKGROUND")
     self.frame.bg:SetAllPoints()
-    self.frame.bg:SetTexture(0, 0, 0, 0.7)
+    self.frame.bg:SetTexture(0, 0, 0, 0.8)
     
-    self.frame.npcName = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    self.frame.npcName:SetPoint("TOPLEFT", 10, -10)
+    -- Currently Playing Header
+    self.frame.header = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    self.frame.header:SetPoint("TOPLEFT", 10, -8)
+    self.frame.header:SetText("Now Playing:")
+    self.frame.header:SetTextColor(0.5, 0.5, 0.5)
     
-    self.frame.title = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.title:SetPoint("TOPLEFT", 10, -25)
-    self.frame.title:SetTextColor(0.7, 0.7, 0.7)
+    -- Currently playing area as a clickable button
+    self.frame.currentBtn = CreateFrame("Button", nil, self.frame)
+    self.frame.currentBtn:SetPoint("TOPLEFT", 10, -22)
+    self.frame.currentBtn:SetPoint("BOTTOMRIGHT", self.frame, "TOPRIGHT", -10, -52)
     
+    -- Background highlight on hover
+    self.frame.currentBtn.bg = self.frame.currentBtn:CreateTexture(nil, "BACKGROUND")
+    self.frame.currentBtn.bg:SetAllPoints()
+    self.frame.currentBtn.bg:SetTexture(1, 0.2, 0.2, 0.3)
+    self.frame.currentBtn.bg:Hide()
+    
+    -- Currently playing NPC name (bigger, brighter)
+    self.frame.npcName = self.frame.currentBtn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    self.frame.npcName:SetPoint("TOPLEFT", 0, 0)
+    self.frame.npcName:SetTextColor(1, 1, 1)
+    
+    -- Quest/Dialog title
+    self.frame.title = self.frame.currentBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    self.frame.title:SetPoint("TOPLEFT", 0, -16)
+    self.frame.title:SetTextColor(0.9, 0.9, 0.5)
+    
+    self.frame.currentBtn:SetScript("OnEnter", function()
+        this.bg:Show()
+        self.frame.npcName:SetTextColor(1, 0.3, 0.3)
+        self.frame.title:SetTextColor(1, 0.5, 0.5)
+        GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
+        GameTooltip:SetText("Click to skip")
+        GameTooltip:Show()
+    end)
+    
+    self.frame.currentBtn:SetScript("OnLeave", function()
+        this.bg:Hide()
+        self.frame.npcName:SetTextColor(1, 1, 1)
+        self.frame.title:SetTextColor(0.9, 0.9, 0.5)
+        GameTooltip:Hide()
+    end)
+    
+    self.frame.currentBtn:SetScript("OnClick", function()
+        local current = SoundQueue:GetCurrentSound()
+        if current then
+            Debug("Skipping current: " .. (current.npcName or "Unknown"))
+            SoundQueue:RemoveSound(current)
+        end
+    end)
+    
+    -- Queue List Container
+    self.frame.queueContainer = CreateFrame("Frame", nil, self.frame)
+    self.frame.queueContainer:SetPoint("TOPLEFT", 10, -55)
+    self.frame.queueContainer:SetPoint("BOTTOMRIGHT", -10, 35)
+    
+    -- Queue header
+    self.frame.queueHeader = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    self.frame.queueHeader:SetPoint("BOTTOMLEFT", self.frame.queueContainer, "TOPLEFT", 0, 2)
+    self.frame.queueHeader:SetText("Queue:")
+    self.frame.queueHeader:SetTextColor(0.5, 0.5, 0.5)
+    
+    -- Create queue buttons
+    self.frame.queueButtons = {}
+    for i = 1, self.maxQueueDisplay do
+        local btn = self:CreateQueueButton(self.frame.queueContainer, i + 1) -- +1 because index 1 is currently playing
+        if i == 1 then
+            btn:SetPoint("TOPLEFT", 0, 0)
+            btn:SetPoint("TOPRIGHT", 0, 0)
+        else
+            btn:SetPoint("TOPLEFT", self.frame.queueButtons[i-1], "BOTTOMLEFT", 0, -2)
+            btn:SetPoint("TOPRIGHT", self.frame.queueButtons[i-1], "BOTTOMRIGHT", 0, -2)
+        end
+        self.frame.queueButtons[i] = btn
+    end
+    
+    -- Status text with time
     self.frame.status = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     self.frame.status:SetPoint("BOTTOMLEFT", 10, 10)
 
-    -- SKIP BUTTON (X)
-    self.frame.skipBtn = CreateFrame("Button", nil, self.frame, "UIPanelCloseButton")
-    self.frame.skipBtn:SetPoint("TOPRIGHT", -2, -2)
-    self.frame.skipBtn:SetWidth(24)
-    self.frame.skipBtn:SetHeight(24)
-    self.frame.skipBtn:SetScript("OnClick", function() SoundQueue:SkipCurrent() end)
+    -- BACK BUTTON (<<) - Replay previous from history
+    self.frame.backBtn = CreateFrame("Button", nil, self.frame)
+    self.frame.backBtn:SetWidth(20)
+    self.frame.backBtn:SetHeight(20)
+    self.frame.backBtn:SetPoint("BOTTOMRIGHT", -50, 10)
+    self.frame.backBtn:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up")
+    self.frame.backBtn:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Down")
+    self.frame.backBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
+    self.frame.backBtn:SetScript("OnClick", function()
+        if table.getn(SoundQueue.history) > 0 then
+            SoundQueue:PlayFromHistory(1)
+        else
+            Debug("No history available")
+        end
+    end)
+    self.frame.backBtn:SetScript("OnEnter", function()
+        GameTooltip:SetOwner(this, "ANCHOR_TOP")
+        GameTooltip:SetText("Replay Last")
+        if table.getn(SoundQueue.history) > 0 then
+            GameTooltip:AddLine(SoundQueue.history[1].npcName or "Unknown", 1, 1, 1)
+        else
+            GameTooltip:AddLine("No history", 0.5, 0.5, 0.5)
+        end
+        GameTooltip:Show()
+    end)
+    self.frame.backBtn:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
 
-    -- PAUSE BUTTON (Arrow)
+    -- PAUSE/PLAY BUTTON - Shows || for pause, > for play
     self.frame.pauseBtn = CreateFrame("Button", nil, self.frame)
-    self.frame.pauseBtn:SetWidth(20)
-    self.frame.pauseBtn:SetHeight(20)
-    self.frame.pauseBtn:SetPoint("BOTTOMRIGHT", -10, 10)
-    self.frame.pauseBtn:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up")
-    self.frame.pauseBtn:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Down")
-    self.frame.pauseBtn:SetScript("OnClick", function() SoundQueue:TogglePause() end)
+    self.frame.pauseBtn:SetWidth(24)
+    self.frame.pauseBtn:SetHeight(24)
+    self.frame.pauseBtn:SetPoint("BOTTOMRIGHT", -25, 8)
+    self.frame.pauseBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
+    
+    -- Create pause icon (two vertical bars)
+    self.frame.pauseBtn.pauseIcon = self.frame.pauseBtn:CreateTexture(nil, "ARTWORK")
+    self.frame.pauseBtn.pauseIcon:SetAllPoints()
+    self.frame.pauseBtn.pauseIcon:SetTexture("Interface\\TimeManager\\PauseButton")
+    
+    -- Create play icon (triangle pointing right)
+    self.frame.pauseBtn.playIcon = self.frame.pauseBtn:CreateTexture(nil, "ARTWORK")
+    self.frame.pauseBtn.playIcon:SetAllPoints()
+    self.frame.pauseBtn.playIcon:SetTexture("Interface\\Buttons\\UI-SpellbookIcon-NextPage-Up")
+    
+    self.frame.pauseBtn:SetScript("OnClick", function() 
+        SoundQueue:TogglePause() 
+    end)
+    self.frame.pauseBtn:SetScript("OnEnter", function()
+        GameTooltip:SetOwner(this, "ANCHOR_TOP")
+        if SoundQueue.isPaused then
+            GameTooltip:SetText("Resume")
+        else
+            GameTooltip:SetText("Pause")
+        end
+        GameTooltip:Show()
+    end)
+    self.frame.pauseBtn:SetScript("OnLeave", function()
+        GameTooltip:Hide()
+    end)
     
     self.frame:Hide()
 end
@@ -228,16 +486,96 @@ function SoundQueue:UpdateUI()
         return
     end
     
+    -- Update currently playing info
     self.frame.npcName:SetText(current.npcName or "Unknown")
     self.frame.title:SetText(current.title or "")
     
+    -- Update pause button texture based on state
     if self.isPaused then
+        -- Show PLAY icon (triangle) when paused
+        self.frame.pauseBtn.pauseIcon:Hide()
+        self.frame.pauseBtn.playIcon:Show()
         self.frame.status:SetText("|cffff0000PAUSED|r")
     else
-        self.frame.status:SetText("|cff00ff00Playing...|r")
+        -- Show PAUSE icon (||) when playing  
+        self.frame.pauseBtn.pauseIcon:Show()
+        self.frame.pauseBtn.playIcon:Hide()
+        
+        -- Show elapsed time
+        local elapsed = GetTime() - current.startTime
+        local remaining = current.duration - elapsed
+        if remaining < 0 then remaining = 0 end
+        self.frame.status:SetText(string.format("|cff00ff00Playing|r %.0fs", remaining))
+    end
+    
+    -- Update queue list (skip index 1 which is currently playing)
+    local queueSize = table.getn(self.sounds)
+    local displayCount = 0
+    
+    for i = 2, queueSize do
+        displayCount = displayCount + 1
+        if displayCount <= self.maxQueueDisplay then
+            local soundData = self.sounds[i]
+            local btn = self.frame.queueButtons[displayCount]
+            btn.index = i
+            btn.text:SetText(string.format("%d. %s - %s", displayCount, soundData.npcName or "Unknown", soundData.title or ""))
+            btn:Show()
+        end
+    end
+    
+    -- Hide unused buttons
+    for i = displayCount + 1, self.maxQueueDisplay do
+        self.frame.queueButtons[i]:Hide()
+    end
+    
+    -- Show/hide queue header
+    if displayCount > 0 then
+        self.frame.queueHeader:Show()
+    else
+        self.frame.queueHeader:Hide()
     end
     
     self.frame:Show()
+end
+
+-------------------------------------------------
+-- SLASH COMMANDS
+-------------------------------------------------
+
+SLASH_SOUNDQUEUE1 = "/bq"
+SLASH_SOUNDQUEUE2 = "/soundqueue"
+
+SlashCmdList["SOUNDQUEUE"] = function(msg)
+    msg = string.lower(msg or "")
+    
+    if msg == "history" then
+        if table.getn(SoundQueue.history) == 0 then
+            Debug("No history available")
+        else
+            Debug("=== History (" .. table.getn(SoundQueue.history) .. " entries) ===")
+            for i = 1, math.min(10, table.getn(SoundQueue.history)) do
+                local entry = SoundQueue.history[i]
+                Debug(i .. ". " .. (entry.npcName or "Unknown") .. " - " .. (entry.title or ""))
+            end
+        end
+    elseif msg == "clear" or msg == "clearhistory" then
+        SoundQueue:ClearHistory()
+    elseif string.find(msg, "play ") == 1 then
+        local index = tonumber(string.sub(msg, 6))
+        if index then
+            SoundQueue:PlayFromHistory(index)
+        else
+            Debug("Usage: /bq play <number>")
+        end
+    elseif msg == "pause" then
+        SoundQueue:TogglePause()
+    else
+        Debug("Commands:")
+        Debug("/bq history - Show recent voiceovers")
+        Debug("/bq play <number> - Replay from history")
+        Debug("/bq clear - Clear history")
+        Debug("/bq pause - Toggle pause/resume")
+    end
 end
 
 -------------------------------------------------
@@ -271,6 +609,8 @@ function SoundQueue:Initialize()
             -- Better to let it finish playing as the player walks away.
         end
     end)
+    
+    Debug("Initialized - Type /bq for commands")
 end
 
 SoundQueue:Initialize()
