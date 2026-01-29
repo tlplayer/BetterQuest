@@ -19,6 +19,7 @@ SoundQueue = {
         PATH = "Interface\\AddOns\\BetterQuest\\Textures\\",
         DEFAULT_NPC = "Interface\\Icons\\INV_Misc_QuestionMark",
         DEFAULT_BOOK = "Interface\\AddOns\\BetterQuest\\Textures\\Book",
+        PORTRAIT_PATH = "Interface\\AddOns\\BetterQuest\\portraits\\"
     },
 }
 
@@ -54,6 +55,7 @@ local function GetPortraitTexture(soundData)
     end
     
     local npcName = soundData.npcName
+    print(npcName)
     if npcName then
         local metadata = GetNPCMetadata(npcName)
         if metadata and metadata.race then
@@ -61,7 +63,7 @@ local function GetPortraitTexture(soundData)
             if metadata.sex == "female" then
                 filename = filename .. "_female"
             end
-            return SoundQueue.portraitConfig.PATH .. filename .. ".tga"
+            return SoundQueue.portraitConfig.PORTRAIT_PATH .. filename .. ".tga"
         end
     end
     

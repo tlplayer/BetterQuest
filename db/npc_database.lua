@@ -39403,6 +39403,8 @@ function GetNPCMetadata(npcName)
   if not npcName then return nil end
   local lookupName = NormalizeNPCName(npcName)
   local npc = NPC_DATABASE[lookupName]
+    print(npcName)
+
   
   if npc then
     return {
