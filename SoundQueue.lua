@@ -8,6 +8,7 @@ SoundQueue = {
     isPlaying = false,
     isPaused = false,
     updateFrame = nil,
+    delayFrame = nil,
     history = {},
     maxHistorySize = 50,
     maxQueueDisplay = 5,
@@ -38,15 +39,6 @@ end
 -- PORTRAIT HELPERS
 -------------------------------------------------
 
-local function GetNPCMetadata(npcName)
-    if GetNPCMetadata then
-        return GetNPCMetadata(npcName)
-    elseif NPC_DATABASE and npcName then
-        local normalized = string.gsub(npcName, "['']", "")
-        return NPC_DATABASE[normalized]
-    end
-    return nil
-end
 
 local function IsBookInteraction()
     return ItemTextFrame and ItemTextFrame:IsShown()
@@ -708,39 +700,66 @@ SlashCmdList["SOUNDQUEUE"] = function(msg)
     end
 end
 
+
+-------------------------------------------------
+-- DELAYED TRIGGER LOGIC
+-------------------------------------------------
+
+-- This function waits 0.1s to ensure Quest/Gossip text is fully loaded
+function SoundQueue:QueueTrigger(npcName, eventType)
+    if self.delayFrameActive then return end
+    self.delayFrameActive = true
+    if not self.delayFrame then
+        self.delayFrame = CreateFrame("Frame")
+    end
+
+    local waitTime = 0.1
+    local startTime = GetTime()
+
+    self.delayFrame:SetScript("OnUpdate", function()
+        if GetTime() - startTime >= waitTime then
+            this:SetScript("OnUpdate", nil) -- Stop the loop
+            
+            local text, title
+            if eventType == "QUEST_DETAIL" then
+                text, title = GetQuestText(), GetTitleText()
+            elseif eventType == "QUEST_PROGRESS" then
+                text, title = GetProgressText(), GetTitleText()
+            elseif eventType == "QUEST_COMPLETE" then
+                text, title = GetRewardText(), GetTitleText()
+            elseif eventType == "GOSSIP_SHOW" then
+                text, title = GetGossipText(), "Gossip"
+            end
+
+            if text and text ~= "" then
+                SoundQueue:AddSound(npcName, text, title)
+            end
+        end
+    end)
+    delayFrame = false
+end
+
 -------------------------------------------------
 -- INITIALIZE
 -------------------------------------------------
 
 function SoundQueue:Initialize()
-    Debug("Initializing...")
-    
-    if not FindDialogSound then 
-        Debug("ERROR: FindDialogSound not found!")
-        return 
-    end
-    
     self:InitializeUI()
     
-    local eventFrame = CreateFrame("Frame")
-    eventFrame:RegisterEvent("QUEST_DETAIL")
-    eventFrame:RegisterEvent("QUEST_PROGRESS")
-    eventFrame:RegisterEvent("QUEST_COMPLETE")
-    eventFrame:RegisterEvent("GOSSIP_SHOW")
+    local f = CreateFrame("Frame")
+    f:RegisterEvent("QUEST_DETAIL")
+    f:RegisterEvent("QUEST_PROGRESS")
+    f:RegisterEvent("QUEST_COMPLETE")
+    f:RegisterEvent("GOSSIP_SHOW")
     
-    eventFrame:SetScript("OnEvent", function()
-        if event == "QUEST_DETAIL" then
-            SoundQueue:AddSound(UnitName("npc"), GetQuestText(), GetTitleText())
-        elseif event == "QUEST_PROGRESS" then
-            SoundQueue:AddSound(UnitName("npc"), GetProgressText(), GetTitleText())
-        elseif event == "QUEST_COMPLETE" then
-            SoundQueue:AddSound(UnitName("npc"), GetRewardText(), GetTitleText())
-        elseif event == "GOSSIP_SHOW" then
-            SoundQueue:AddSound(UnitName("npc"), GetGossipText(), UnitName("npc"))
-        end
+    f:SetScript("OnEvent", function()
+        -- Use the QueueTrigger logic instead of calling AddSound directly
+        -- This ensures text is available when we query it.
+        SoundQueue:QueueTrigger(UnitName("npc"), event)
     end)
     
-    Debug("Ready! Type /bq for commands")
+    Debug("SoundQueue Initialized with Delay Logic.")
 end
+
 
 SoundQueue:Initialize()
