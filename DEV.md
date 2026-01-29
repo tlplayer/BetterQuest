@@ -6,6 +6,11 @@
 
 # BetterQuest Development Guide
 
+# TODO
+examples:
+The Alliance of Lordaeron
+Historian Karnik
+
 ## System Overview
 
 BetterQuest is a WoW 1.12.1 (Vanilla) addon that adds voice-over narration and enhanced NPC portraits to quest and gossip dialogs.

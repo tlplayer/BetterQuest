@@ -50,9 +50,8 @@ animal:
 - Tamed Kodo
 - The Abominable Greench
 - Tooga
-- Torta
 - Umpi
-- Voice of Elune
+
 blood_elf:
 - Ambassador Ardalan
 - Aurora Skycaller
@@ -61,23 +60,12 @@ blood_elf:
 - Bloodmage Lynnore
 - Braelyn Firehand
 - Captain Thalo'thas Brightsun
-- Earthcaller Franzahl
-- Elsharin
-- Garek
-- Gilthares Firebough
-- Gilveradin Sunchaser
-- Haleh
-- Itharius
-- Jeziba
-- Lady Sylvanas Windrunner
-- Lothos Riftwaker
-- Mathredis Firestar
-- Myrokos Silentform
-- Raze
-- Red Jack Flint
-- Sanath Lim-yo
-- The Banshee Queen
 - Vyrin Swiftwind
+- Lady Sylvanas Windrunner
+
+draenei:
+- Magtoor
+
 centaur:
 - Centaur Pariah
 - Kolkar Bloodcharger
@@ -88,7 +76,7 @@ centaur:
 - Verog the Dervish
 - Warug
 child:
-- Billy
+- Thurman Schneider
 - Billy Maclure
 - Bo
 - Donna
@@ -136,13 +124,7 @@ construct:
 - Wizzlecrank's Shredder
 - Wrenix's Gizmotronic Apparatus
 demon:
-- A
-- Aligar the Tormentor
-- Balizar the Umbrage
-- Dreadsteed Spirit
-- Impsy
-- J'eevee
-- Lorax
+- Vi'el
 - Lord Banehollow
 - Lord Hel'nurath
 - Mistress Nagmara
@@ -172,24 +154,71 @@ dragon:
 - Death Talon Overseer
 - Dreamscythe
 - Emberstrife
-- Emeriss
-- Green Dragonspawn
-- Haleh
-- Jade
-- Lethon
-- Lord Valthalak
-- Nefarian
-- Nightmare Suppressor
-- Onyxia
-- Rookery Hatcher
-- Shade of Eranikus
-- Solakar Flamewreath
+- Itharius
+- Lord Arkkoroc
+- Vaelastrasz the Corrupt
+
+elemental:
+- Duke Hydraxis
+- Hydraxian Honor Guard
+- Minor Manifestation of Earth
+- Minor Manifestation of Water
+- Rockbiter
+- Rethiel the Greenwarden
+
+furbolg:
+- Grazle
+- Gorn One Eye
+- Kernda
+- Meilosh
+- Salfa
+
+
+mechanical:
+- A-Me 01
+
+naga:
+- Sah'rhee
+
+
+
+object:
+- Flik's Frog
+- Metzen the Reindeer
+- Strange Snowman
+- Winter Reveler
+
+ogre:
+- Cho'Rush the Observer
+- Gordok Brute
+- Gordok Bushwacker
+- Gordok Captain
+- Gordok Mage-Lord
+- Gordok Reaver
+- Gordok Warlock
+- Stomper Kreeg
+
+
+qiraji:
+- Kum'isha the Collector
+
+spirit:
+- Captain Grayson
+- Ancient Equine Spirit
+- Darkreaver's Fallen Charger
+- Dreadsteed Spirit
+- Forest Wisp
+- Great Bear Spirit
+- Hastat the Ancient
+- Lunaclaw Spirit
+- Nightmare
+- Screecher Spirit
 - Spirit of Azuregos
 - Spirit of Lord Valthalak
-- Taerar
-- Vaelastrasz
-- Vaelastrasz the Corrupt
-- Ysondre
+- Stoma the Ancient
+- Vartrus the Ancient
+
+
 dwarf:
 - Advisor Belgrum
 - Aedis Brom
@@ -829,6 +858,11 @@ gnome:
 - Wizzle Brassbolts
 - Yebb Neblegear
 goblin:
+- Gryfe
+- Bragok
+- Wizzlecrank's Shredder
+- Impsy
+- Zggi
 - Alchemist Pestlezugg
 - Azzleby
 - Baron Revilgaz
@@ -997,18 +1031,30 @@ harpy:
 - Witchwing Windcaller
 highelf:
 - Aurora Skycaller
-- Earthcaller Franzahl
-- Elsharin
+- Baron Longshore
+- Bloodmage Drazial
+- Bloodmage Lynnore
+- Boyle
+- Braelyn Firehand
+- Captain Hecklebury Smotts
+- Dadanga
 - Fiora Longears
 - Garek
 - Gilveradin Sunchaser
-- Haleh
-- Itharius
-- Jeziba
-- Scholomance Dark Summoner
+- Jesper
+- Lorax
+- Lothos Riftwaker
+- Mathredis Firestar
+- Pamela Redpath
+- Red Jack Flint
+- Sanath Lim-yo
+- Sayge
 - Scholomance Student
-- Vyrin Swiftwind
-human:
+- Shakes O'Breen
+- Stanley
+- The Abominable Greench
+- Thomas
+- Vectus
 - '"Auntie" Bernice Stonefield'
 - '"Pretty Boy" Duncan'
 - '"Sea Wolf" MacKinley'
@@ -1593,12 +1639,9 @@ human:
 - Ysida Harmon
 - Zaldimar Wefhellt
 - Zardeth of the Black Claw
-- Zem Leeward
-- test spirit healer (DND)
-imp:
-- Impsy
-- Pusillin
-keeper:
+night_elf:
+- Tarindrella #deer lady
+- Arei
 - Anilia
 - Archaedas
 - Cavindra
@@ -1617,53 +1660,6 @@ keeper:
 - Tarindrella
 - Therylune
 - Therysil
-- Zaetar's Spirit
-kobold:
-- Feeboz
-- Gogger Geomancer
-- Gogger Rock Keeper
-- Gogger Stonepounder
-- Goldtooth
-- Kobold Digger
-- Kobold Geomancer
-- Kobold Laborer
-- Kobold Miner
-- Kobold Tunneler
-- Kobold Vermin
-- Kobold Worker
-- Narg the Taskmaster
-- Sleeby
-- Taskmaster Snivvle
-- Tunnel Rat Digger
-- Tunnel Rat Forager
-- Tunnel Rat Geomancer
-- Tunnel Rat Kobold
-- Tunnel Rat Scout
-- Tunnel Rat Surveyor
-- Tunnel Rat Vermin
-- Windshear Geomancer
-- Windshear Overlord
-- Windshear Tunnel Rat
-- Znort
-mechanical:
-- 7:XT
-- A-Me 01
-- Electrocutioner 6000
-- Fishbot 5000
-- Homing Robot OOX-09/HL
-- Homing Robot OOX-17/TN
-- Homing Robot OOX-22/FE
-- Mobile Alert System
-- Tyrion's Spybot
-- Wrenix's Gizmotronic Apparatus
-naga:
-- Daggerspine Marauder
-- Lady Sarevess
-- Meridith the Mermaiden
-naga_female:
-- Lady Sarevess
-- Meridith the Mermaiden
-night_elf:
 - Aayndia Floralwind
 - Aendel Windspear
 - Aethalas
@@ -2015,367 +2011,9 @@ night_elf:
 - Yldan
 - Zamael Lunthistle
 - Zarrin
-nightelf:
-- Aayndia Floralwind
-- Aethalas
-- Ainethil
-- Alaindia
-- Alanna Raveneye
-- Alanndarian Nightsong
-- Aldris Fourclouds
-- Alegorn
-- Alenndaar Lapidaar
-- Alyissia
-- Anadyia
-- Anaya Dawnrunner
-- Androl Oakhand
-- Andrus
-- Angelas Moonbreeze
-- Anishar
-- Arantir
-- Arathandris Silversky
-- Arch Druid Fandral Staghelm
-- Arch Druid Renferal
-- Archmage Tarsis Kir-Moldir
-- Argent Guard Manados
-- Argent Guard Thaelrid
-- Argos Nightwhisper
-- Arias'ta Bladesinger
-- Ariyell Skyshadow
-- Astaia
-- Astarii Starseeker
-- Asterion
-- Athridas Bearmantle
-- Aurel Goldleaf
-- Ayanna Everstride
-- Azj'Tordin
-- Balthule Shadowstrike
-- Baristolth of the Shifting Sands
-- Baritanas Skyriver
-- Barithras Moonshade
-- Bolyun
-- Brannock
-- Byancie
-- Caelestrasz
-- Caelyb
-- Calandrath
-- Captured Arko'narin
-- Caryssia Moonhunter
-- Caylais Moonfeather
-- Caynrus
-- Cenarion Emissary Jademoon
-- Cenarion Scout Azenel
-- Cenarion Scout Jalia
-- Cenarion Scout Landion
-- Cerellean Whiteclaw
-- Chardryn
-- Cloud Skydancer
-- Commander Mar'alith
-- Conservator Ilthalaine
-- Corithras Moonrage
-- Crildor
-- Cylania
-- Cylania Rootstalker
-- Cyndra Kindwhisper
-- Cyridan
-- Cyroen
-- Daelyshia
-- Dalinda Malem
-- Danlaar Nightstride
-- Dannelor
-- Darianna
-- Darnassus Commendation Officer
-- Darnassus Reveler
-- Darnassus Sentinel
-- Darnath Bladesinger
-- Daryn Lightwind
-- Dawnwatcher Shaedlass
-- Dazalar
-- Denalan
-- Denatharion
-- Dendrite Starblaze
-- Dendrythis
-- Dirania Silvershine
-- Dorion
-- Ealyshia Dewwhisper
-- Ebru
-- Eladriel
-- Elanaria
-- Elder Bladeleaf
-- Elder Bladesing
-- Elder Bladeswift
-- Elder Brightspear
-- Elder Farwhisper
-- Elder Meadowrun
-- Elder Moonstrike
-- Elder Moonwarden
-- Elder Morningdew
-- Elder Nightwind
-- Elder Riversong
-- Elder Skygleam
-- Elder Starglade
-- Elder Starsong
-- Elder Starweave
-- Elder Windrun
-- Eldraeith
-- Elfarran
-- Ellandrieth
-- Elynna
-- Enslaved Druid of the Talon
-- Erelas Ambersky
-- Eridan Bluewind
-- Erion Shadewhisper
-- Faelyssa
-- Faldreas Goeth'Shael
-- Faldron
-- Falfindel Waywarder
-- Falrin Treeshaper
-- Fandral Staghelm
-- Fariel Starsong
-- Firodren Mooncaller
-- Frahun Shadewhisper
-- Fyldan
-- Fyldren Moonfeather
-- Fylerian Nightwing
-- Fyrenna
-- Gaerolas Talvethren
-- Gershala Nightwhisper
-- Gilshalan Windwalker
-- Ginro Hearthkindle
-- Glorandiir
-- Golhine the Hooded
-- Gracina Spiritmight
-- Grondal Moonbreeze
-- Gwennyth Bly'Leggonde
-- Helendis Riverhorn
-- Heralath Fallowbrook
-- Herald Moonstalker
-- High Priest Thel'danis
-- Highborne Summoner
-- Huntress Leafrunner
-- Huntress Ravenoak
-- Huntress Skymane
-- Huntress Swiftriver
-- Idriana
-- Illiyana Moonblaze
-- Ilyenia Moonfire
-- Innkeeper Faralia
-- Innkeeper Keldamyr
-- Innkeeper Kimlya
-- Innkeeper Lyshaerya
-- Innkeeper Saelienne
-- Innkeeper Shaussiy
-- Innkeeper Shyria
-- Isalien
-- Iverron
-- Ivy Leafrunner
-- Jaeana
-- Jandria
-- Jannok Breezesong
-- Jareth Wildwoods
-- Jarrodenus
-- Jartsam
-- Jayla
-- Jeen'ra Nightrunner
-- Jenal
-- Jer'kai Moonweaver
-- Jessir Moonbow
-- Jocaste
-- Kaela Shadowspear
-- Kaerbrus
-- Kal
-- Kalin Windflight
-- Kayneth Stillwind
-- Keeper Moonshade
-- Keldas
-- Kelek Skykeeper
-- Kerlonian Evershade
-- Keyl Swiftclaw
-- Kieran
-- Kindal Moonweaver
-- Kinelory
-- Kylanna
-- Kylanna Windwhisper
-- Kyra Windblade
-- Kyrai
-- Lady Anacondra
-- Laird
-- Lalina Summermoon
-- Landria
-- Lariia
-- Latronicus Moonspear
-- Laurna Morninglight
-- Layo Starstrike
-- Lelanai
-- Liladris Moonriver
-- Lilyssia Nightbreeze
-- Loganaar
-- Loramus Thalipedes
-- Lord Cobrahn
-- Lord Pythas
-- Lord Serpentis
-- Lorekeeper Javon
-- Lorekeeper Kildrath
-- Lorekeeper Lydros
-- Lorekeeper Mykos
-- Lotherias
-- Lunar Festival Emissary
-- Lylandris
-- Maethrya
-- Maldryn
-- Malfurion Stormrage
-- Malorne Bladeleaf
-- Malvor
-- Mardant Strongoak
-- Marli Wishrunner
-- Master Nightsong
-- Master Sergeant Moonshadow
-- Mathiel
-- Mathrengyl Bearwalker
-- Me'lynn
-- Melea
-- Melithar Staghelm
-- Merelyssa
-- Merithra of the Dream
-- Milla Fairancora
-- Mishellena
-- Mishta
-- Mistress Natalia Mar'alith
-- Moon Priestess Amara
-- Mydrannul
-- Myriam Moonsinger
-- Mythidan
-- Mythrin'dir
-- Nadyia Maneweaver
-- Nalesette Wildbringer
-- Nara Meideros
-- Naralex
-- Nessa Shadowsong
-- Oben Rageclaw
-- Officer Lunalight
-- Orendil Broadleaf
-- Orenthil Whisperwind
-- Pelturas Whitemoon
-- Porthannius
-- Priestess A'moora
-- Priestess Alathea
-- Priestess of Elune
-- Prince Tortheldrin
-- Quentin
-- Quintis Jonespyre
-- Rabine Saturna
-- Radnaal Maneweaver
-- Raedon Duskstriker
-- Raene Wolfrunner
-- Ralo'shan the Eternal Watcher
-- Ranshalla
-- Rayne
-- Rellian Greenspyre
-- Rivern Frostwind
-- Saenorion
-- Sarin Starlight
-- Scholar Runethorn
-- Sellandus
-- Sentinel Arynia Cloudsbreak
-- Sentinel Aynasha
-- Sentinel Elissa Starbreeze
-- Sentinel Farsong
-- Sentinel Glynda Nal'Shea
-- Sentinel Melyria Frostshadow
-- Sentinel Onaeya
-- Sentinel Selarin
-- Sentinel Silversky
-- Sentinel Thenysil
-- Sentinel Tysha Moonblade
-- Sentinel Velene Starstrike
-- Shailiea
-- Shanda
-- Shandris Feathermoon
-- Shay Leafrunner
-- Sheldras Moontree
-- Shen'dralar Ancient
-- Shen'dralar Zealot
-- Shindrell Swiftfire
-- Shylamiir
-- Shylenai
-- Sildanair
-- Silva Fil'naveth
-- Silvaria
-- Silverwing Emissary
-- Sindrayl
-- Sister Aquinne
-- Squire Leoren Mal'derath
-- Sylannia
-- Sylvanna Forestmoon
-- Syral Bladeleaf
-- Syurna
-- Tajarri
-- Taladan
-- Talaelar
-- Talen
-- Talendria
-- Tallonkai Swiftroot
-- Tannysa
-- Tel'Athir
-- Teldrassil Sentinel
-- Telonis
-- Teloren
-- Telurinon Moonshadow
-- Tenaron Stormgrip
-- Terenthis
-- Teronis' Corpse
-- Thamarian
-- Tharnariun Treetender
-- Theridran
-- Thundris Windweaver
-- Thyn'tel Bladeweaver
-- Thyssiana
-- Tortured Druid
-- Tortured Sentinel
-- Trenton Lighthammer
-- Treshala Fallowbrook
-- Trianna
-- Troyas Moonbreeze
-- Turian
-- Tyrande
-- Tyrande Whisperwind
-- Ulthir
-- Vaean
-- Vahlarriel Demonslayer
-- Valadar Starsong
-- Vesprystus
-- Vestia Moonspear
-- Vethsera
-- Vinasia
-- Vish Kozus
-- Volcor
-- Voloren
-- Windcaller Kaldon
-- Windcaller Yessendra
-- Wing Commander Vipore
-- World Alchemy Trainer
-- World Enchanting Trainer
-- World Engineering Trainer
-- World Leatherworking Trainer
-- World Tailoring Trainer
-- Wynd Nightchaser
-- Xylinnia Starshine
-- Yldan
-- Zamael Lunthistle
-- Zarrin
-object:
-- Strange Snowman
-- Winter Reveler
-ogre:
-- Boss Tho'grun
-- Boulderfist Brute
-- Boulderfist Enforcer
-- Boulderfist Lord
-- Boulderfist Magus
-- Boulderfist Mauler
-- Boulderfist Ogre
-- Boulderfist Shaman
-- Burth
+
+orc:
+- Grizzle Halfmane
 - Captain Kromcrush
 - Cho'Rush the Observer
 - Crushridge Brute
@@ -3165,6 +2803,12 @@ succubus:
 - Mistress Nagmara
 - Summoned Succubus
 tauren:
+- Do'gol
+- Earthcaller Franzahl
+- Onu
+- Tsunaman
+- Uthek the Wise
+- Warosh
 - Aboda
 - Ahanu
 - Ancestral Spirit
@@ -3452,6 +3096,23 @@ tauren:
 trogg:
 - Warosh
 troll:
+- Awbee
+- Burth
+- Flik
+- Gordo
+- Jeziba
+- Jin'rokh the Breaker
+- Kwee Q. Peddlefeet
+- Lard
+- Mistress Nagmara
+- Myrokos Silentform
+- Ogtinc
+- Phalanx
+- Pusillin
+- Raze
+- Slave Worker
+- Spoops
+- Torta
 - Al'tabim the All-Seeing
 - Antu'sul
 - Argent Outfitter

@@ -3,6 +3,7 @@
 pretrain*
 checkpoint*
 .vscode
-sounds*
-samples*
+sounds/*
+samples/*
 assets*
+portraits/*
