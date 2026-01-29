@@ -185,7 +185,6 @@ function SoundQueue:PlaySound(soundData)
         end)
     end
     self.updateFrame:Show()
-    self:UpdateUI()
 end
 
 function SoundQueue:StopSound(soundData)
@@ -207,14 +206,16 @@ function SoundQueue:TogglePause()
         self:StopSound(current)
         self.isPaused = true
         self.isPlaying = false
+                self.frame.pauseBtn.pauseIcon:Hide()
+        self.frame.pauseBtn.playIcon:Show() -- Show Play Triangle
     else
         -- RESUME
         Debug("Resuming from: " .. current.pauseOffset)
         current.isResuming = true
         self:PlaySound(current)
+                self.frame.pauseBtn.pauseIcon:Show() -- Show Stop Square
+        self.frame.pauseBtn.playIcon:Hide()
     end
-
-    self:UpdateUI()
 end
 
 -------------------------------------------------
