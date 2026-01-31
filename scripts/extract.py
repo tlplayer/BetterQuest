@@ -686,97 +686,163 @@ def extract_dbscripts_gossip(cursor, npc_meta):
         seen.add(row["bt_id"])
 
     return rows, seen
-
-def collect_all_gossip_menus(cursor, npc_meta):
+def find_menu_owners(cursor, start_menu_id, max_depth=10):
     """
-    Traverse all gossip menus reachable from creature_template.GossipMenuId.
+    Find owners for a gossip_menu entry by walking upward via gossip_menu_option.action_menu_id.
+    Returns a dict with keys:
+      - 'creatures': list of (entry, name)
+      - 'gameobjects': list of (entry, name)
+    If none found, lists will be empty.
 
-    cmangos rules:
-    - gossip_menu_option.action_menu_id points to another gossip_menu.entry
-    - action_menu_id = 0 or -1 means no next menu
-    - Menus can loop; must guard against revisits
+    max_depth prevents infinite loops; visited guards against cycles.
     """
+    owners = {"creatures": [], "gameobjects": []}
+    visited = set()
+    queue = [start_menu_id]
+    depth = 0
 
-    # Seed menus from NPCs
-    root_menus = {
-        npc["gossip_menu_id"]
-        for npc in npc_meta.values()
-        if npc.get("gossip_menu_id")
-    }
+    while queue and depth < max_depth:
+        next_queue = []
+        for menu_id in queue:
+            if menu_id in visited:
+                continue
+            visited.add(menu_id)
 
-    visited = set(root_menus)
-    stack = list(root_menus)
+            # 1) Direct creature owners
+            cursor.execute("""
+                SELECT Entry, Name FROM creature_template
+                WHERE GossipMenuId = %s
+            """, (menu_id,))
+            for r in cursor.fetchall():
+                owners["creatures"].append((r["Entry"], r["Name"]))
 
-    while stack:
-        menu_id = stack.pop()
+            if owners["creatures"]:
+                # If we found creature owners for this menu_id, they are canonical — stop searching up from this branch
+                continue
 
-        cursor.execute("""
-            SELECT action_menu_id
-            FROM gossip_menu_option
-            WHERE menu_id = %s
-              AND action_menu_id IS NOT NULL
-              AND action_menu_id NOT IN (0, -1)
-        """, (menu_id,))
+            # 2) Direct gameobject owner (data3 is commonly used for gossip/quest GO links in many mangos schemas)
+            # If your DB uses another field, change data3 -> dataN accordingly.
+            cursor.execute("""
+                SELECT entry, name FROM gameobject_template
+                WHERE data3 = %s
+            """, (menu_id,))
+            for r in cursor.fetchall():
+                owners["gameobjects"].append((r["entry"], r["name"]))
 
-        for row in cursor.fetchall():
-            next_menu = row["action_menu_id"]
+            if owners["gameobjects"]:
+                # If go owners found, canonical for this branch
+                continue
 
-            if next_menu not in visited:
-                visited.add(next_menu)
-                stack.append(next_menu)
+            # 3) Find parent menus (options that point to this menu as action_menu_id)
+            cursor.execute("""
+                SELECT DISTINCT menu_id
+                FROM gossip_menu_option
+                WHERE action_menu_id = %s
+                  AND action_menu_id IS NOT NULL
+                  AND action_menu_id NOT IN (0, -1)
+            """, (menu_id,))
+            for r in cursor.fetchall():
+                parent_menu_id = r["menu_id"]
+                if parent_menu_id not in visited:
+                    next_queue.append(parent_menu_id)
 
-    return visited
+        queue = next_queue
+        depth += 1
+
+    return owners
+
 
 def extract_gossip_menu_text(cursor, npc_meta):
     """
-    Extract all gossip text from every reachable gossip_menu.
-    """
+    Extract gossip menu text and attempt to attribute it to creatures or gameobjects.
 
+    - If creature owners found -> add as gossip with npc_name
+    - If gameobject owners found -> add as item_text with go name
+    - If none -> leave as Unknown_gossip_menu (will be separated to investigation later)
+    """
     rows = []
     seen = set()
 
-    all_menus = collect_all_gossip_menus(cursor, npc_meta)
+    # Load all gossip_menu entries with their text_id, then expand to broadcast_text rows
+    cursor.execute("""
+        SELECT gm.entry AS menu_id, gm.text_id AS ntbt_id
+        FROM gossip_menu gm
+    """)
+    menu_to_ntbt = {r["menu_id"]: r["ntbt_id"] for r in cursor.fetchall()}
 
-    if not all_menus:
+    if not menu_to_ntbt:
         return rows, seen
 
-    placeholders = ",".join(["%s"] * len(all_menus))
-
+    # Build a map of ntbt -> broadcast_text rows for efficient lookup.
+    ntbt_ids = list(set(menu_to_ntbt.values()))
+    placeholders = ",".join(["%s"] * len(ntbt_ids))
     cursor.execute(f"""
-        SELECT
-            gm.entry AS menu_id,
-            bt.Id AS bt_id,
-            bt.Text,
-            bt.Text1
-        FROM gossip_menu gm
-        JOIN npc_text_broadcast_text ntbt
-            ON ntbt.Id = gm.text_id
-        JOIN broadcast_text bt
-            ON bt.Id IN (
-                ntbt.BroadcastTextId0, ntbt.BroadcastTextId1,
-                ntbt.BroadcastTextId2, ntbt.BroadcastTextId3,
-                ntbt.BroadcastTextId4, ntbt.BroadcastTextId5,
-                ntbt.BroadcastTextId6, ntbt.BroadcastTextId7
-            )
-        WHERE gm.entry IN ({placeholders})
-          AND bt.Id > 0
-    """, tuple(all_menus))
+        SELECT ntbt.Id AS ntbt_id,
+               bt.Id AS bt_id,
+               bt.Text,
+               bt.Text1
+        FROM npc_text_broadcast_text ntbt
+        JOIN broadcast_text bt ON bt.Id IN (
+            ntbt.BroadcastTextId0, ntbt.BroadcastTextId1, ntbt.BroadcastTextId2,
+            ntbt.BroadcastTextId3, ntbt.BroadcastTextId4, ntbt.BroadcastTextId5,
+            ntbt.BroadcastTextId6, ntbt.BroadcastTextId7
+        )
+        WHERE ntbt.Id IN ({placeholders}) AND bt.Id > 0
+    """, tuple(ntbt_ids))
 
-    for row in cursor.fetchall():
-        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
-        if not is_clean_text(txt):
-            continue
+    # Map ntbt_id -> list of broadcast rows
+    ntbt_to_bts = defaultdict(list)
+    for r in cursor.fetchall():
+        ntbt_to_bts[r["ntbt_id"]].append(r)
 
-        # NPC attribution is fuzzy here — menu may be shared
-        rows.append({
-            "npc_name": "Unknown_gossip_menu",
-            "sex": None,
-            "dialog_type": DIALOG_TYPES["GOSSIP"],
-            "quest_id": None,
-            "text": txt.strip(),
-        })
+    # For every gossip_menu, attempt to attribute
+    for menu_id, ntbt_id in menu_to_ntbt.items():
+        # find owner(s)
+        owners = find_menu_owners(cursor, menu_id)
 
-        seen.add(row["bt_id"])
+        # if we have owners, iterate their broadcast_texts
+        bts = ntbt_to_bts.get(ntbt_id, [])
+        for bt_row in bts:
+            txt = bt_row["Text"] if is_clean_text(bt_row["Text"]) else bt_row["Text1"]
+            if not is_clean_text(txt):
+                continue
+
+            # Creature owners
+            if owners["creatures"]:
+                for (creature_entry, creature_name) in owners["creatures"]:
+                    npc = npc_meta.get(creature_entry)
+                    rows.append({
+                        "npc_name": npc["npc_name"] if npc else creature_name or "Unknown",
+                        "sex": npc["sex"] if npc else None,
+                        "dialog_type": DIALOG_TYPES["GOSSIP"],
+                        "quest_id": None,
+                        "text": txt.strip(),
+                    })
+                    seen.add(bt_row["bt_id"])
+                continue  # processed this bt_row
+
+            # Gameobject owners -> treat as ITEM_TEXT
+            if owners["gameobjects"]:
+                for (go_entry, go_name) in owners["gameobjects"]:
+                    rows.append({
+                        "npc_name": go_name or f"GameObject_{go_entry}",
+                        "sex": None,
+                        "dialog_type": DIALOG_TYPES["ITEM_TEXT"],
+                        "quest_id": None,
+                        "text": txt.strip(),
+                    })
+                    seen.add(bt_row["bt_id"])
+                continue
+
+            # No owners: fallback to Unknown_gossip_menu
+            rows.append({
+                "npc_name": "Unknown_gossip_menu",
+                "sex": None,
+                "dialog_type": DIALOG_TYPES["GOSSIP"],
+                "quest_id": None,
+                "text": txt.strip(),
+            })
+            seen.add(bt_row["bt_id"])
 
     return rows, seen
 
@@ -1296,14 +1362,12 @@ def extract_all_dialog():
     """
     Main orchestrator - calls all extraction functions in order.
 
-    Additional logic:
-    - Deduplicate identical rows
-    - Treat all Unknown_* speakers as the same speaker
-    - Detect duplicated text involving Unknown speakers
-    - Write Unknown-duplicate text to a separate audit file
+    Output policy:
+    - Main CSV contains ONLY known NPC dialog
+    - All Unknown_* dialog is deduped and written to investigation CSV
     """
 
-    DUPLICATE_AUDIT_CSV = "../data/duplicate_unknown_gossip.csv"
+    INVESTIGATION_CSV = "../data/unknown_dialog_investigation.csv"
 
     db = get_connection()
     cursor = db.cursor(dictionary=True)
@@ -1342,73 +1406,73 @@ def extract_all_dialog():
     cursor.close()
 
     # =========================================================
-    # DEDUPLICATION
+    # SEPARATE KNOWN vs UNKNOWN
     # =========================================================
 
-    deduped_rows = []
-    seen_keys = set()
-    text_index = defaultdict(list)
+    known_rows = []
+    unknown_rows = []
 
-    def normalize_speaker(name):
-        """Collapse all Unknown_* variants into a single bucket."""
-        if not name:
-            return "Unknown"
-        return "Unknown" if name.startswith("Unknown") else name
+    def is_unknown(name):
+        return not name or name.startswith("Unknown")
 
     for row in all_rows:
-        normalized_speaker = normalize_speaker(row["npc_name"])
+        if is_unknown(row["npc_name"]):
+            unknown_rows.append(row)
+        else:
+            known_rows.append(row)
 
-        dedupe_key = (
-            normalized_speaker,
-            row["sex"],
-            row["dialog_type"],
-            row["quest_id"],
-            row["text"],
+    # =========================================================
+    # DEDUPE KNOWN ROWS (STRICT)
+    # =========================================================
+
+    deduped_known = []
+    seen_known = set()
+
+    for r in known_rows:
+        key = (
+            r["npc_name"],
+            r["sex"],
+            r["dialog_type"],
+            r["quest_id"],
+            r["text"],
         )
-
-        if dedupe_key not in seen_keys:
-            seen_keys.add(dedupe_key)
-            deduped_rows.append(row)
-
-        text_index[row["text"]].append(row)
+        if key not in seen_known:
+            seen_known.add(key)
+            deduped_known.append(r)
 
     # =========================================================
-    # FIND DUPLICATED TEXT WITH UNKNOWN SPEAKERS
+    # DEDUPE UNKNOWN ROWS (TEXT-ONLY)
     # =========================================================
 
-    duplicate_unknown_rows = []
+    deduped_unknown = []
+    seen_text = set()
 
-    for text, rows_for_text in text_index.items():
-        if len(rows_for_text) < 2:
-            continue
-
-        has_unknown = any(
-            r["npc_name"] and r["npc_name"].startswith("Unknown")
-            for r in rows_for_text
-        )
-
-        if has_unknown:
-            duplicate_unknown_rows.extend(rows_for_text)
+    for r in unknown_rows:
+        text = r["text"]
+        if text not in seen_text:
+            seen_text.add(text)
+            deduped_unknown.append(r)
 
     # =========================================================
-    # WRITE AUDIT FILE
+    # WRITE INVESTIGATION CSV
     # =========================================================
 
-    if duplicate_unknown_rows:
-        with open(DUPLICATE_AUDIT_CSV, "w", encoding="utf-8", newline="") as f:
+    if deduped_unknown:
+        with open(INVESTIGATION_CSV, "w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(
                 f,
                 fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"]
             )
             writer.writeheader()
-            writer.writerows(duplicate_unknown_rows)
+            writer.writerows(deduped_unknown)
 
-        print(f"⚠ Wrote {len(duplicate_unknown_rows)} duplicated Unknown rows to:")
-        print(f"   {DUPLICATE_AUDIT_CSV}")
+        print(f"🔍 Wrote {len(deduped_unknown)} Unknown dialog rows to:")
+        print(f"   {INVESTIGATION_CSV}")
 
-    print(f"✓ Deduped {len(all_rows)} → {len(deduped_rows)} dialog lines")
+    print(f"✓ Known dialog rows: {len(deduped_known)}")
+    print(f"✓ Unknown dialog rows (investigation): {len(deduped_unknown)}")
 
-    return deduped_rows, db
+    return deduped_known, db
 
 
 
