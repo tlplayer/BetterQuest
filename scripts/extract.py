@@ -917,7 +917,7 @@ def extract_gossip_text(cursor, npc_meta):
     return rows, seen
 
 
-def extract_gameobject_text(cursor):
+def extract_gameobject_text(cursor, __):
     """
     Extract readable gameobject text (plaques, books, etc).
     
@@ -964,7 +964,7 @@ def extract_gameobject_text(cursor):
     return rows, set()  # No broadcast_text tracking for gameobject text
 
 
-def extract_item_text(cursor):
+def extract_item_text(cursor,__):
     """
     Extract item-contained text (letters, books).
     
