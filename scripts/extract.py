@@ -482,7 +482,7 @@ def extract_dbscripts_relay(cursor, npc_meta):
 
         # Relay scripts have no inherent speaker
         rows.append({
-            "npc_name": "Unknown",
+            "npc_name": "Unknown_relaydb",
             "sex": None,
             "dialog_type": DIALOG_TYPES["GOSSIP"],
             "quest_id": None,
@@ -530,7 +530,7 @@ def extract_dbscripts_quest_start(cursor, npc_meta):
         
         if is_clean_text(txt):
             rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "npc_name": npc["npc_name"] if npc else "Unknown_quest_start",
                 "sex": npc["sex"] if npc else None,
                 "dialog_type": DIALOG_TYPES["QUEST_ACCEPT"],
                 "quest_id": row["quest_id"],
@@ -577,7 +577,7 @@ def extract_dbscripts_quest_end(cursor, npc_meta):
         
         if is_clean_text(txt):
             rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "npc_name": npc["npc_name"] if npc else "Unknown_dbscripts_quest_end",
                 "sex": npc["sex"] if npc else None,
                 "dialog_type": DIALOG_TYPES["QUEST_COMPLETE"],
                 "quest_id": row["quest_id"],
@@ -676,7 +676,7 @@ def extract_dbscripts_gossip(cursor, npc_meta):
         npc = npc_meta.get(speaker_entry) if speaker_entry else None
 
         rows.append({
-            "npc_name": npc["npc_name"] if npc else "Unknown",
+            "npc_name": npc["npc_name"] if npc else "Unknown_dbscripts_gossip",
             "sex": npc["sex"] if npc else None,
             "dialog_type": DIALOG_TYPES["GOSSIP"],
             "quest_id": None,
@@ -686,6 +686,100 @@ def extract_dbscripts_gossip(cursor, npc_meta):
         seen.add(row["bt_id"])
 
     return rows, seen
+
+def collect_all_gossip_menus(cursor, npc_meta):
+    """
+    Traverse all gossip menus reachable from creature_template.GossipMenuId.
+
+    cmangos rules:
+    - gossip_menu_option.action_menu_id points to another gossip_menu.entry
+    - action_menu_id = 0 or -1 means no next menu
+    - Menus can loop; must guard against revisits
+    """
+
+    # Seed menus from NPCs
+    root_menus = {
+        npc["gossip_menu_id"]
+        for npc in npc_meta.values()
+        if npc.get("gossip_menu_id")
+    }
+
+    visited = set(root_menus)
+    stack = list(root_menus)
+
+    while stack:
+        menu_id = stack.pop()
+
+        cursor.execute("""
+            SELECT action_menu_id
+            FROM gossip_menu_option
+            WHERE menu_id = %s
+              AND action_menu_id IS NOT NULL
+              AND action_menu_id NOT IN (0, -1)
+        """, (menu_id,))
+
+        for row in cursor.fetchall():
+            next_menu = row["action_menu_id"]
+
+            if next_menu not in visited:
+                visited.add(next_menu)
+                stack.append(next_menu)
+
+    return visited
+
+def extract_gossip_menu_text(cursor, npc_meta):
+    """
+    Extract all gossip text from every reachable gossip_menu.
+    """
+
+    rows = []
+    seen = set()
+
+    all_menus = collect_all_gossip_menus(cursor, npc_meta)
+
+    if not all_menus:
+        return rows, seen
+
+    placeholders = ",".join(["%s"] * len(all_menus))
+
+    cursor.execute(f"""
+        SELECT
+            gm.entry AS menu_id,
+            bt.Id AS bt_id,
+            bt.Text,
+            bt.Text1
+        FROM gossip_menu gm
+        JOIN npc_text_broadcast_text ntbt
+            ON ntbt.Id = gm.text_id
+        JOIN broadcast_text bt
+            ON bt.Id IN (
+                ntbt.BroadcastTextId0, ntbt.BroadcastTextId1,
+                ntbt.BroadcastTextId2, ntbt.BroadcastTextId3,
+                ntbt.BroadcastTextId4, ntbt.BroadcastTextId5,
+                ntbt.BroadcastTextId6, ntbt.BroadcastTextId7
+            )
+        WHERE gm.entry IN ({placeholders})
+          AND bt.Id > 0
+    """, tuple(all_menus))
+
+    for row in cursor.fetchall():
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        if not is_clean_text(txt):
+            continue
+
+        # NPC attribution is fuzzy here — menu may be shared
+        rows.append({
+            "npc_name": "Unknown_gossip_menu",
+            "sex": None,
+            "dialog_type": DIALOG_TYPES["GOSSIP"],
+            "quest_id": None,
+            "text": txt.strip(),
+        })
+
+        seen.add(row["bt_id"])
+
+    return rows, seen
+
 
 
 def extract_dbscripts_misc(cursor, npc_meta):
@@ -744,7 +838,7 @@ def extract_dbscripts_misc(cursor, npc_meta):
             npc = npc_meta.get(speaker_entry) if speaker_entry else None
             
             rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "npc_name": npc["npc_name"] if npc else "Unknown_dbscripts_misc",
                 "sex": npc["sex"] if npc else None,
                 "dialog_type": DIALOG_TYPES["GOSSIP"],
                 "quest_id": None,
@@ -776,7 +870,7 @@ def extract_dbscripts_misc(cursor, npc_meta):
             npc = npc_meta.get(speaker_entry) if speaker_entry else None
             
             rows.append({
-                "npc_name": npc["npc_name"] if npc else row["go_name"] or "Unknown",
+                "npc_name": npc["npc_name"] if npc else row["go_name"] or "Unknown_dbscripts_misc",
                 "sex": npc["sex"] if npc else None,
                 "dialog_type": DIALOG_TYPES["GOSSIP"],
                 "quest_id": None,
@@ -810,7 +904,7 @@ def extract_dbscripts_misc(cursor, npc_meta):
             npc = npc_meta.get(speaker_entry) if speaker_entry else None
             
             rows.append({
-                "npc_name": npc["npc_name"] if npc else row["go_name"] or "Unknown",
+                "npc_name": npc["npc_name"] if npc else row["go_name"] or "Unknown_dbscripts_misc",
                 "sex": npc["sex"] if npc else None,
                 "dialog_type": DIALOG_TYPES["GOSSIP"],
                 "quest_id": None,
@@ -857,7 +951,7 @@ def extract_ai_scripts(cursor, npc_meta):
         
         if is_clean_text(txt):
             rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "npc_name": npc["npc_name"] if npc else "Unknown_ai_scripts",
                 "sex": npc["sex"] if npc else None,
                 "dialog_type": DIALOG_TYPES["GOSSIP"],  # Combat text
                 "quest_id": None,
@@ -906,7 +1000,7 @@ def extract_gossip_text(cursor, npc_meta):
         
         if is_clean_text(txt):
             rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown",
+                "npc_name": npc["npc_name"] if npc else "Unknown_gossip_text",
                 "sex": npc["sex"] if npc else None,
                 "dialog_type": DIALOG_TYPES["GOSSIP"],
                 "quest_id": None,
@@ -1119,6 +1213,52 @@ def extract_quest_texts(cursor, npc_meta):
                 })
 
     return rows, set()
+def extract_dbscripts_spell(cursor, npc_meta):
+    """
+    Extract spell-triggered NPC dialogue.
+
+    SOURCE: dbscripts_on_spell
+    CONTEXT: Activated when an NPC casts a scripted spell
+    ATTRIBUTION: HEURISTIC-CANONICAL - caster_entry = creature_template.entry
+    """
+    rows = []
+    seen = set()
+
+    cursor.execute("""
+        SELECT
+            ds.id AS spell_script_id,
+            ds.caster_entry,
+            ds.caster_type,
+            ds.target_entry,
+            ds.target_type,
+            ds.dataint AS bt_id,
+            bt.Text,
+            bt.Text1
+        FROM dbscripts_on_spell ds
+        JOIN broadcast_text bt ON bt.Id = ds.dataint
+        WHERE ds.command = 0
+          AND bt.Id > 0
+    """)
+
+    for row in cursor.fetchall():
+        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
+        if not is_clean_text(txt):
+            continue
+
+        # Determine speaker: caster_entry is preferred
+        npc_id = row["caster_entry"]
+        npc = npc_meta.get(npc_id) if npc_id else None
+
+        rows.append({
+            "npc_name": npc["npc_name"] if npc else "Unknown_spell",
+            "sex": npc["sex"] if npc else None,
+            "dialog_type": DIALOG_TYPES["GOSSIP"],
+            "quest_id": None,
+            "text": txt.strip(),
+        })
+        seen.add(row["bt_id"])
+
+    return rows, seen
 
 
 def extract_orphan_broadcast_text(cursor, seen_broadcast_ids):
@@ -1139,7 +1279,7 @@ def extract_orphan_broadcast_text(cursor, seen_broadcast_ids):
             txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
             if is_clean_text(txt):
                 rows.append({
-                    "npc_name": "Unknown",
+                    "npc_name": "Unknown_broadcast",
                     "sex": None,
                     "dialog_type": DIALOG_TYPES["GOSSIP"],  # Unknown context
                     "quest_id": None,
@@ -1152,21 +1292,27 @@ def extract_orphan_broadcast_text(cursor, seen_broadcast_ids):
 # =========================
 # MAIN EXTRACTION
 # =========================
-
 def extract_all_dialog():
     """
     Main orchestrator - calls all extraction functions in order.
+
+    Additional logic:
+    - Deduplicate identical rows
+    - Treat all Unknown_* speakers as the same speaker
+    - Detect duplicated text involving Unknown speakers
+    - Write Unknown-duplicate text to a separate audit file
     """
+
+    DUPLICATE_AUDIT_CSV = "../data/duplicate_unknown_gossip.csv"
+
     db = get_connection()
     cursor = db.cursor(dictionary=True)
 
-    rows = []
+    all_rows = []
     seen_broadcast_ids = set()
 
-    # Load NPC metadata once
     npc_meta = load_npc_metadata(cursor)
 
-    # Run all extractors
     extractors = [
         extract_scriptdev2_texts,
         extract_dbscripts_creature_death,
@@ -1178,6 +1324,7 @@ def extract_all_dialog():
         extract_dbscripts_misc,
         extract_ai_scripts,
         extract_gossip_text,
+        extract_gossip_menu_text,
         extract_gameobject_text,
         extract_item_text,
         extract_quest_greetings,
@@ -1186,15 +1333,83 @@ def extract_all_dialog():
 
     for extractor in extractors:
         new_rows, new_seen = extractor(cursor, npc_meta)
-        rows.extend(new_rows)
+        all_rows.extend(new_rows)
         seen_broadcast_ids |= new_seen
 
-    # Final orphan sweep
     orphan_rows = extract_orphan_broadcast_text(cursor, seen_broadcast_ids)
-    rows.extend(orphan_rows)
+    all_rows.extend(orphan_rows)
 
     cursor.close()
-    return rows, db
+
+    # =========================================================
+    # DEDUPLICATION
+    # =========================================================
+
+    deduped_rows = []
+    seen_keys = set()
+    text_index = defaultdict(list)
+
+    def normalize_speaker(name):
+        """Collapse all Unknown_* variants into a single bucket."""
+        if not name:
+            return "Unknown"
+        return "Unknown" if name.startswith("Unknown") else name
+
+    for row in all_rows:
+        normalized_speaker = normalize_speaker(row["npc_name"])
+
+        dedupe_key = (
+            normalized_speaker,
+            row["sex"],
+            row["dialog_type"],
+            row["quest_id"],
+            row["text"],
+        )
+
+        if dedupe_key not in seen_keys:
+            seen_keys.add(dedupe_key)
+            deduped_rows.append(row)
+
+        text_index[row["text"]].append(row)
+
+    # =========================================================
+    # FIND DUPLICATED TEXT WITH UNKNOWN SPEAKERS
+    # =========================================================
+
+    duplicate_unknown_rows = []
+
+    for text, rows_for_text in text_index.items():
+        if len(rows_for_text) < 2:
+            continue
+
+        has_unknown = any(
+            r["npc_name"] and r["npc_name"].startswith("Unknown")
+            for r in rows_for_text
+        )
+
+        if has_unknown:
+            duplicate_unknown_rows.extend(rows_for_text)
+
+    # =========================================================
+    # WRITE AUDIT FILE
+    # =========================================================
+
+    if duplicate_unknown_rows:
+        with open(DUPLICATE_AUDIT_CSV, "w", encoding="utf-8", newline="") as f:
+            writer = csv.DictWriter(
+                f,
+                fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"]
+            )
+            writer.writeheader()
+            writer.writerows(duplicate_unknown_rows)
+
+        print(f"⚠ Wrote {len(duplicate_unknown_rows)} duplicated Unknown rows to:")
+        print(f"   {DUPLICATE_AUDIT_CSV}")
+
+    print(f"✓ Deduped {len(all_rows)} → {len(deduped_rows)} dialog lines")
+
+    return deduped_rows, db
+
 
 
 # =========================
