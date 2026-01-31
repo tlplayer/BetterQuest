@@ -686,6 +686,8 @@ def extract_dbscripts_gossip(cursor, npc_meta):
         seen.add(row["bt_id"])
 
     return rows, seen
+
+
 def find_menu_owners(cursor, start_menu_id, max_depth=10):
     """
     Find owners for a gossip_menu entry by walking upward via gossip_menu_option.action_menu_id.
@@ -756,6 +758,10 @@ def extract_gossip_menu_text(cursor, npc_meta):
     """
     Extract gossip menu text and attempt to attribute it to creatures or gameobjects.
 
+    Strategy:
+    1. First capture all DIRECT creature/gameobject links (fast, canonical)
+    2. Then traverse upward for orphan menus (finds sub-menus)
+    
     - If creature owners found -> add as gossip with npc_name
     - If gameobject owners found -> add as item_text with go name
     - If none -> leave as Unknown_gossip_menu (will be separated to investigation later)
@@ -763,18 +769,89 @@ def extract_gossip_menu_text(cursor, npc_meta):
     rows = []
     seen = set()
 
-    # Load all gossip_menu entries with their text_id, then expand to broadcast_text rows
+    # PHASE 1: Direct creature links (canonical, fast)
+    # This captures all menus directly referenced by creature_template.GossipMenuId
+    print("  Phase 1: Direct creature gossip links...")
+    cursor.execute("""
+        SELECT DISTINCT
+            ct.Entry AS npc_id,
+            gm.entry AS menu_id,
+            gm.text_id AS ntbt_id
+        FROM creature_template ct
+        JOIN gossip_menu gm ON gm.entry = ct.GossipMenuId
+        WHERE ct.GossipMenuId > 0
+    """)
+    
+    direct_creature_menus = {}  # menu_id -> [(creature_entry, creature_name), ...]
+    menu_to_ntbt = {}
+    
+    for row in cursor.fetchall():
+        menu_id = row["menu_id"]
+        npc_id = row["npc_id"]
+        ntbt_id = row["ntbt_id"]
+        
+        if menu_id not in direct_creature_menus:
+            direct_creature_menus[menu_id] = []
+        
+        npc = npc_meta.get(npc_id)
+        if npc:
+            direct_creature_menus[menu_id].append((npc_id, npc["npc_name"]))
+        
+        menu_to_ntbt[menu_id] = ntbt_id
+    
+    print(f"    Found {len(direct_creature_menus)} menus with direct creature links")
+
+    # PHASE 2: Direct gameobject links
+    print("  Phase 2: Direct gameobject gossip links...")
+    cursor.execute("""
+        SELECT DISTINCT
+            got.entry AS go_entry,
+            got.name AS go_name,
+            gm.entry AS menu_id,
+            gm.text_id AS ntbt_id
+        FROM gameobject_template got
+        JOIN gossip_menu gm ON gm.entry = got.data3
+        WHERE got.data3 > 0
+    """)
+    
+    direct_go_menus = {}  # menu_id -> [(go_entry, go_name), ...]
+    
+    for row in cursor.fetchall():
+        menu_id = row["menu_id"]
+        go_entry = row["go_entry"]
+        go_name = row["go_name"]
+        ntbt_id = row["ntbt_id"]
+        
+        if menu_id not in direct_go_menus:
+            direct_go_menus[menu_id] = []
+        
+        direct_go_menus[menu_id].append((go_entry, go_name))
+        menu_to_ntbt[menu_id] = ntbt_id
+    
+    print(f"    Found {len(direct_go_menus)} menus with direct gameobject links")
+
+    # PHASE 3: All remaining menus (for indirect traversal)
+    print("  Phase 3: Loading all gossip menus for traversal...")
     cursor.execute("""
         SELECT gm.entry AS menu_id, gm.text_id AS ntbt_id
         FROM gossip_menu gm
     """)
-    menu_to_ntbt = {r["menu_id"]: r["ntbt_id"] for r in cursor.fetchall()}
+    
+    for row in cursor.fetchall():
+        menu_id = row["menu_id"]
+        if menu_id not in menu_to_ntbt:  # Don't overwrite direct links
+            menu_to_ntbt[menu_id] = row["ntbt_id"]
+    
+    print(f"    Total {len(menu_to_ntbt)} gossip menus to process")
 
     if not menu_to_ntbt:
         return rows, seen
 
-    # Build a map of ntbt -> broadcast_text rows for efficient lookup.
+    # Build a map of ntbt -> broadcast_text rows for efficient lookup
     ntbt_ids = list(set(menu_to_ntbt.values()))
+    if not ntbt_ids:
+        return rows, seen
+        
     placeholders = ",".join(["%s"] * len(ntbt_ids))
     cursor.execute(f"""
         SELECT ntbt.Id AS ntbt_id,
@@ -795,19 +872,40 @@ def extract_gossip_menu_text(cursor, npc_meta):
     for r in cursor.fetchall():
         ntbt_to_bts[r["ntbt_id"]].append(r)
 
-    # For every gossip_menu, attempt to attribute
+    # PHASE 4: Process all menus
+    print("  Phase 4: Extracting text and attributing to owners...")
+    processed_menus = 0
+    direct_attributed = 0
+    indirect_attributed = 0
+    unknown_count = 0
+    
     for menu_id, ntbt_id in menu_to_ntbt.items():
-        # find owner(s)
-        owners = find_menu_owners(cursor, menu_id)
+        processed_menus += 1
+        
+        # Determine ownership
+        owners = {"creatures": [], "gameobjects": []}
+        
+        # Check direct links first (fast, canonical)
+        if menu_id in direct_creature_menus:
+            owners["creatures"] = direct_creature_menus[menu_id]
+            direct_attributed += 1
+        elif menu_id in direct_go_menus:
+            owners["gameobjects"] = direct_go_menus[menu_id]
+            direct_attributed += 1
+        else:
+            # No direct link - try BFS traversal
+            owners = find_menu_owners(cursor, menu_id)
+            if owners["creatures"] or owners["gameobjects"]:
+                indirect_attributed += 1
 
-        # if we have owners, iterate their broadcast_texts
+        # Extract broadcast texts for this menu
         bts = ntbt_to_bts.get(ntbt_id, [])
         for bt_row in bts:
             txt = bt_row["Text"] if is_clean_text(bt_row["Text"]) else bt_row["Text1"]
             if not is_clean_text(txt):
                 continue
 
-            # Creature owners
+            # Attribute based on ownership
             if owners["creatures"]:
                 for (creature_entry, creature_name) in owners["creatures"]:
                     npc = npc_meta.get(creature_entry)
@@ -835,6 +933,7 @@ def extract_gossip_menu_text(cursor, npc_meta):
                 continue
 
             # No owners: fallback to Unknown_gossip_menu
+            unknown_count += 1
             rows.append({
                 "npc_name": "Unknown_gossip_menu",
                 "sex": None,
@@ -844,8 +943,12 @@ def extract_gossip_menu_text(cursor, npc_meta):
             })
             seen.add(bt_row["bt_id"])
 
-    return rows, seen
+    print(f"    Processed {processed_menus} menus:")
+    print(f"      - Direct attribution: {direct_attributed}")
+    print(f"      - Indirect attribution: {indirect_attributed}")
+    print(f"      - Unknown: {unknown_count}")
 
+    return rows, seen
 
 
 def extract_dbscripts_misc(cursor, npc_meta):
@@ -1006,7 +1109,7 @@ def extract_ai_scripts(cursor, npc_meta):
         JOIN broadcast_text bt ON (
             (cas.action1_type = 1 AND bt.Id = cas.action1_param1) OR
             (cas.action2_type = 1 AND bt.Id = cas.action2_param1) OR
-            (cas.action3_type = 1 AND bt.Id = cas.action3_param1)
+            (cas.action3_type = 1 AND bt.Id = cas.action3_param3)
         )
         WHERE bt.Id > 0
     """)
@@ -1020,55 +1123,6 @@ def extract_ai_scripts(cursor, npc_meta):
                 "npc_name": npc["npc_name"] if npc else "Unknown_ai_scripts",
                 "sex": npc["sex"] if npc else None,
                 "dialog_type": DIALOG_TYPES["GOSSIP"],  # Combat text
-                "quest_id": None,
-                "text": txt.strip(),
-            })
-            seen.add(row["bt_id"])
-
-    return rows, seen
-
-
-def extract_gossip_text(cursor, npc_meta):
-    """
-    Extract NPC gossip menu text.
-    
-    SOURCE: creature_template, gossip_menu, npc_text_broadcast_text, broadcast_text
-    ATTRIBUTION: CANONICAL - follows foreign key chain
-    
-    FLOW:
-    creature_template.GossipMenuId = gossip_menu.entry
-    -> gossip_menu.text_id = npc_text_broadcast_text.Id
-    -> npc_text_broadcast_text.BroadcastTextId0..7 = broadcast_text.Id
-    """
-    rows = []
-    seen = set()
-
-    cursor.execute("""
-        SELECT DISTINCT
-            ct.Entry AS npc_id,
-            bt.Id AS bt_id,
-            bt.Text,
-            bt.Text1
-        FROM creature_template ct
-        JOIN gossip_menu gm ON gm.entry = ct.GossipMenuId
-        JOIN npc_text_broadcast_text ntbt ON ntbt.Id = gm.text_id
-        JOIN broadcast_text bt ON bt.Id IN (
-            ntbt.BroadcastTextId0, ntbt.BroadcastTextId1, ntbt.BroadcastTextId2,
-            ntbt.BroadcastTextId3, ntbt.BroadcastTextId4, ntbt.BroadcastTextId5,
-            ntbt.BroadcastTextId6, ntbt.BroadcastTextId7
-        )
-        WHERE bt.Id > 0
-    """)
-
-    for row in cursor.fetchall():
-        npc = npc_meta.get(row["npc_id"])
-        txt = row["Text"] if is_clean_text(row["Text"]) else row["Text1"]
-        
-        if is_clean_text(txt):
-            rows.append({
-                "npc_name": npc["npc_name"] if npc else "Unknown_gossip_text",
-                "sex": npc["sex"] if npc else None,
-                "dialog_type": DIALOG_TYPES["GOSSIP"],
                 "quest_id": None,
                 "text": txt.strip(),
             })
@@ -1279,27 +1333,36 @@ def extract_quest_texts(cursor, npc_meta):
                 })
 
     return rows, set()
+
+
 def extract_dbscripts_spell(cursor, npc_meta):
     """
     Extract spell-triggered NPC dialogue.
 
     SOURCE: dbscripts_on_spell
-    CONTEXT: Activated when an NPC casts a scripted spell
-    ATTRIBUTION: HEURISTIC-CANONICAL - caster_entry = creature_template.entry
+    CONTEXT: Activated when a spell script is triggered
+    ATTRIBUTION: UNKNOWN - spell IDs don't map to creatures
+    
+    FLOW:
+    dbscripts_on_spell.id = spell ID (from spell_template or spell effects)
+    -> dataint = broadcast_text.Id
+    -> buddy_entry may indicate speaker (optional)
+    
+    NOTE: Similar to dbscripts_on_relay - spell IDs are not creature entries.
+    Attribution is only possible via buddy_entry field.
     """
     rows = []
     seen = set()
 
     cursor.execute("""
         SELECT
-            ds.id AS spell_script_id,
-            ds.caster_entry,
-            ds.caster_type,
-            ds.target_entry,
-            ds.target_type,
+            ds.id AS spell_id,
+            ds.buddy_entry,
+            ds.data_flags,
             ds.dataint AS bt_id,
             bt.Text,
-            bt.Text1
+            bt.Text1,
+            ds.comments
         FROM dbscripts_on_spell ds
         JOIN broadcast_text bt ON bt.Id = ds.dataint
         WHERE ds.command = 0
@@ -1311,9 +1374,9 @@ def extract_dbscripts_spell(cursor, npc_meta):
         if not is_clean_text(txt):
             continue
 
-        # Determine speaker: caster_entry is preferred
-        npc_id = row["caster_entry"]
-        npc = npc_meta.get(npc_id) if npc_id else None
+        # Try to determine speaker via buddy_entry
+        speaker_entry = row["buddy_entry"] if row["buddy_entry"] else None
+        npc = npc_meta.get(speaker_entry) if speaker_entry else None
 
         rows.append({
             "npc_name": npc["npc_name"] if npc else "Unknown_spell",
@@ -1387,21 +1450,25 @@ def extract_all_dialog():
         extract_dbscripts_gossip,
         extract_dbscripts_misc,
         extract_ai_scripts,
-        extract_gossip_text,
-        extract_gossip_menu_text,
+        extract_gossip_menu_text,  # UPDATED: Now properly handles indirect attribution
         extract_gameobject_text,
         extract_item_text,
         extract_quest_greetings,
         extract_quest_texts,
+        extract_dbscripts_spell,
     ]
 
     for extractor in extractors:
+        print(f"Running {extractor.__name__}...")
         new_rows, new_seen = extractor(cursor, npc_meta)
         all_rows.extend(new_rows)
         seen_broadcast_ids |= new_seen
+        print(f"  Added {len(new_rows)} rows, {len(new_seen)} broadcast_text IDs")
 
+    print("\nExtracting orphan broadcast_text...")
     orphan_rows = extract_orphan_broadcast_text(cursor, seen_broadcast_ids)
     all_rows.extend(orphan_rows)
+    print(f"  Added {len(orphan_rows)} orphan rows")
 
     cursor.close()
 
@@ -1466,10 +1533,10 @@ def extract_all_dialog():
             writer.writeheader()
             writer.writerows(deduped_unknown)
 
-        print(f"🔍 Wrote {len(deduped_unknown)} Unknown dialog rows to:")
+        print(f"\n🔍 Wrote {len(deduped_unknown)} Unknown dialog rows to:")
         print(f"   {INVESTIGATION_CSV}")
 
-    print(f"✓ Known dialog rows: {len(deduped_known)}")
+    print(f"\n✓ Known dialog rows: {len(deduped_known)}")
     print(f"✓ Unknown dialog rows (investigation): {len(deduped_unknown)}")
 
     return deduped_known, db

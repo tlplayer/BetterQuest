@@ -36,6 +36,87 @@ local function NormalizePath(path)
     return string.gsub(path, "/+", "\\")
 end
 
+-- Database hookup code
+function NormalizeDialogText(text)
+  if not text then return "" end
+
+  text = string.gsub(text, "%$B+", " ")
+  text = string.gsub(text, "%$[nNrRcC]", "adventurer")
+  text = string.gsub(text, "%$g[^;]*;", "adventurer")
+  text = string.gsub(text, "%$%w+", "")
+  text = string.gsub(text, "%b[]", "")
+  text = string.gsub(text, "%b()", "")
+  text = string.gsub(text, "%b<>", "")
+  text = string.gsub(text, "%*[^%*]+%*", "")
+  text = string.gsub(text, "[^%w%s]", "")
+  text = string.gsub(text, "%s+", " ")
+
+  text = string.gsub(text, "^%s+", "")
+  text = string.gsub(text, "%s+$", "")
+
+  text = string.lower(text)
+
+  return string.sub(text, 1, 50)
+end
+
+local function NormalizeNPCName(name)
+  if not name then return nil end
+  name = string.gsub(name, "['']", "")
+  return name
+end
+
+function GetNPCMetadata(npcName)
+  if not npcName then return nil end
+  local lookupName = NormalizeNPCName(npcName)
+  local npc = NPC_DATABASE[lookupName]
+    print(npcName)
+
+  
+  if npc then
+    return {
+      race = npc.race,
+      sex = npc.sex,
+      portrait = npc.portrait,
+      zone = npc.zone,
+      model_id = npc.model_id,
+      narrator = npc.narrator
+    }
+  end
+  
+  return nil
+end
+
+function FindDialogSound(npcName, dialogText)
+  if not npcName or not dialogText then return nil end
+
+  local lookupName = NormalizeNPCName(npcName)
+  local key = NormalizeDialogText(dialogText)
+  if key == "" then return nil end
+
+  -- 1) Normal lookup (expected case)
+  local npc = NPC_DATABASE[lookupName]
+  if npc and npc.dialogs and npc.dialogs[key] then
+    local entry = npc.dialogs[key]
+    return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+  end
+
+  -- 2) Fallback: search all NPCs by text hash
+  -- Useful for shared generic dialogue (e.g. guards) or slight name mismatches
+  for otherNpcName, data in pairs(NPC_DATABASE) do
+    if data.dialogs then
+      local entry = data.dialogs[key]
+      if entry then
+        -- Optional: Debug print for mismatches
+        -- DEFAULT_CHAT_FRAME:AddMessage("|cffff8800[SoundQueue]|r NPC mismatch: '" .. lookupName .. "' -> '" .. otherNpcName .. "'")
+        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+      end
+    end
+  end
+
+  return nil
+end
+
+
 -------------------------------------------------
 -- PORTRAIT HELPERS
 -------------------------------------------------

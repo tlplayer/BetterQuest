@@ -148,7 +148,24 @@ def chunk_text_robust(text, min_chars=150, max_chars=300):
 
     return final_chunks
 
-def get_narrator_from_metadata(row):
+def get_narrator_from_metadata(row, narrator_override=None):
+    """
+    Determine which narrator/voice to use for a given row.
+    
+    Args:
+        row: DataFrame row containing dialog data
+        narrator_override: Optional string specifying the wav filename (without extension) to use
+        
+    Returns:
+        Narrator key (string) or None if not found
+    """
+    # If narrator override is specified, use it if it exists
+    if narrator_override:
+        if narrator_override in REF_CODES:
+            return narrator_override
+        else:
+            print(f"[WARNING] Narrator override '{narrator_override}' not found in samples. Falling back to default logic.")
+    
     dialog_type = str(row.get("dialog_type", "")).lower()
 
     # ✅ BOOKS / ITEM TEXT
@@ -308,25 +325,42 @@ def build_gossip_index_map(df):
     return gossip_map
 
 
-def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_map=None):
-    race = get_narrator_from_metadata(row)
-    if not race or race not in REF_CODES:
+def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_map=None, narrator_override=None):
+    """
+    Generate TTS audio for a single row.
+    
+    Args:
+        row: DataFrame row with dialog data
+        output_dir: Output directory for audio files
+        regenerate: Whether to regenerate existing files
+        gossip_map: Pre-built gossip index map
+        narrator_override: Optional wav filename (without extension) to use instead of race/sex lookup
+    """
+    # Get the narrator voice to use for TTS generation
+    narrator_voice = get_narrator_from_metadata(row, narrator_override=narrator_override)
+    if not narrator_voice or narrator_voice not in REF_CODES:
         print(f"[SKIP] No narrator metadata for NPC: {row['npc_name']}")
         return None
+
+    # Get the original race/sex for folder structure (ignore override for folder naming)
+    folder_race = get_narrator_from_metadata(row, narrator_override=None)
+    if not folder_race:
+        # If we can't determine original race, fall back to using narrator_voice for folders too
+        folder_race = narrator_voice
 
     npc_name = row.get("npc_name") or "narrator"
     dialog_type = row.get("dialog_type", "gossip").lower()
 
     # ✅ BOOKS
     if dialog_type in ("book", "item_text"):
-        base_dir = os.path.join(output_dir, race)
+        base_dir = os.path.join(output_dir, folder_race)
         os.makedirs(base_dir, exist_ok=True)
         filename = f"{sanitize_filename(npc_name)}.wav"
 
     # ---------- NPCs ----------
     else:
         npc_dirname = sanitize_filename(npc_name)
-        base_dir = os.path.join(output_dir, race, npc_dirname)
+        base_dir = os.path.join(output_dir, folder_race, npc_dirname)
         os.makedirs(base_dir, exist_ok=True)
 
         # 1. Check if it is a valid Quest
@@ -346,14 +380,15 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_m
             filename = f"{clean_text[:50]}.wav"
 
 
-    print(f"Generating {base_dir}/{filename}")
+    print(f"Generating {base_dir}/{filename} (using voice: {narrator_voice})")
     filepath = os.path.join(base_dir, filename)
 
     if os.path.exists(filepath) and not regenerate:
         print(f"[SKIP] File already exists: {filepath}")
         return filepath
 
-    ref = REF_CODES[race]
+    # Use the narrator_voice (which may be overridden) for actual TTS generation
+    ref = REF_CODES[narrator_voice]
     text_chunks = chunk_text_robust(row["text"])
     SAMPLE_RATE = 24000
 
@@ -394,13 +429,14 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_m
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--race", type=str)
+    parser.add_argument("--race", type=str, help="Filter by NPC race")
     parser.add_argument("--sex", type=str, help="Filter by NPC sex (male/female)")
-    parser.add_argument("--npc", type=str)
-    parser.add_argument("--zone", type=str)
-    parser.add_argument("--type", type=str)
-    parser.add_argument("--limit", type=int, default=None)
-    parser.add_argument("--regenerate", action="store_true")
+    parser.add_argument("--npc", type=str, help="Filter by specific NPC name")
+    parser.add_argument("--narrator", type=str, help="Name of wav file (without .wav extension) to use for voice generation override. This will use that wav file instead of the race/sex-based lookup.")
+    parser.add_argument("--zone", type=str, help="Filter by zone")
+    parser.add_argument("--type", type=str, help="Filter by dialog type")
+    parser.add_argument("--limit", type=int, default=None, help="Limit number of rows to process")
+    parser.add_argument("--regenerate", action="store_true", help="Regenerate existing audio files")
     parser.add_argument("--clean-orphans", action="store_true", 
                         help="Delete sound files for NPCs not in metadata or with wrong race/sex")
     return parser.parse_args()
@@ -569,10 +605,19 @@ if __name__ == "__main__":
     # Build gossip index map once at start
     gossip_map = build_gossip_index_map(df)
 
+    # Validate narrator override if provided
+    if args.narrator:
+        if args.narrator not in REF_CODES:
+            print(f"[ERROR] Narrator '{args.narrator}' not found in ../samples/")
+            print(f"Available narrators: {', '.join(sorted(REF_CODES.keys()))}")
+            sys.exit(1)
+        print(f"[INFO] Using narrator override: {args.narrator}")
+
     for _, row in df.iterrows():
         generate_tts_for_row(
             row,
             output_dir="../sounds",
             regenerate=args.regenerate,
-            gossip_map=gossip_map
+            gossip_map=gossip_map,
+            narrator_override=args.narrator
         )
