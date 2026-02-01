@@ -1102,6 +1102,31 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
     npc_sex = invert_mapping(read_yaml(SEX_FILE))
     npc_zone = invert_mapping(read_yaml(ZONE_FILE))
 
+    # Merge item_text blocks (books/items are split into multiple rows in DB but generated as one file)
+    item_text_rows = df[df["dialog_type"].str.lower().isin(["item_text", "book"])]
+    merged_rows = []
+    seen_text_blocks = set()
+
+    for _, group in item_text_rows.groupby("npc_name"):
+        merged = []
+        for text in group["text"]:
+            if text not in seen_text_blocks:
+                merged.append(text)
+                seen_text_blocks.add(text)
+
+        if not merged:
+            continue
+
+        # Create a single merged row
+        row = group.iloc[0].copy()
+        row["text"] = " ".join(merged).strip()
+        merged_rows.append(row)
+
+    # Remove original item rows and append merged ones
+    df = df[~df["dialog_type"].str.lower().isin(["item_text", "book"])]
+    if merged_rows:
+        df = pd.concat([df, pd.DataFrame(merged_rows)], ignore_index=True)
+
     npc_database = {}
     missing_race = {}
 
@@ -1334,7 +1359,7 @@ def run_pipeline(args, betterquest_path=None):
     else:
         print("\n=== STEP 1: Syncing game data [SKIPPED] ===")
     
-    # Load full dataframe (for audio generation, we'll filter it)
+    # Load full dataframe
     df_full = pd.read_csv(NPC_DIALOG_CSV_PATH)
     df_full = df_full[df_full["text"].notna()]
     
@@ -1361,13 +1386,13 @@ def run_pipeline(args, betterquest_path=None):
     
     # Step 3: Sync metadata (uses FULL dataframe to include all existing audio)
     if not args.skip_metadata:
-        # Prepare full dataframe for metadata sync
+        # Prepare full dataframe for metadata sync (apply same transformations)
         df_for_metadata = df_full.copy()
         df_for_metadata = df_for_metadata.drop_duplicates(subset=["npc_name", "text"])
         df_for_metadata["text"] = df_for_metadata["text"].apply(normalize_dialog_text)
-        df_for_metadata = merge_item_text_rows(df_for_metadata)
+        # Note: merge_item_text_rows is called INSIDE sync_metadata, so don't call it here
         
-        print(f"\n[INFO] Syncing metadata for ALL {len(df_for_metadata)} dialogs (not just filtered {len(df_filtered)})")
+        print(f"\n[INFO] Syncing metadata for ALL rows from CSV (not just filtered {len(df_filtered)})")
         sync_metadata(df_for_metadata)
     else:
         print("\n=== STEP 3: Syncing metadata [SKIPPED] ===")
