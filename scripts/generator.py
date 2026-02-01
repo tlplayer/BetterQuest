@@ -2,7 +2,6 @@ import io
 import os
 import sys
 from pathlib import Path
-
 import argparse
 import re
 import pandas as pd
@@ -10,33 +9,59 @@ import soundfile as sf
 from pydub import AudioSegment
 import json
 from pydub.effects import normalize
+import csv
+import wave
+import contextlib
+import yaml
 
+# =========================
+# CONFIGURATION
+# =========================
 
+# CSV and data paths
+NPC_DIALOG_CSV_PATH = "../data/all_npc_dialog.csv"
+NPC_METADATA_JSON = "../data/npc_metadata.json"
+RACE_FILE = "../data/npc_race.yaml"
+SEX_FILE = "../data/npc_sex.yaml"
+ZONE_FILE = "../data/npc_zone.yaml"
+MISSING_RACE_FILE = "../data/missing_race.yaml"
+
+# Output paths
+OUTPUT_LUA = "../db/npc_database.lua"
+SOUNDS_DIR = "../sounds"
+
+# BetterQuest integration
+BETTERQUEST_LUA = "../../../../WTF/Account/ADMIN/SavedVariables/BetterQuest.lua"
+
+SEX_MAP = {0: "male", 1: "female"}
+
+# =========================
+# LOAD NPC METADATA
+# =========================
+
+def load_npc_metadata():
+    """Load and normalize NPC metadata from JSON"""
+    with open(NPC_METADATA_JSON, "r", encoding="utf-8") as f:
+        metadata = json.load(f)
+    
+    # Normalize metadata to dict[name → meta]
+    if isinstance(metadata, list):
+        lookup = {npc["name"]: npc for npc in metadata}
+    elif isinstance(metadata, dict):
+        lookup = {
+            name: {"name": name, **meta}
+            for name, meta in metadata.items()
+        }
+    else:
+        raise ValueError("npc_metadata.json has an unsupported format")
+    
+    return lookup
+
+NPC_LOOKUP = load_npc_metadata()
 
 # =========================
 # INITIALIZE TTS
 # =========================
-
-
-
-# All quest/gossip/text we narrate and what id is linked to that
-NPC_DIALOG_CSV_PATH = "../data/all_npc_dialog.csv"
-# How we link the npc to narrator traits:race, sex, zone for ambience /refinement
-NPC_METADATA_JSON = "../data/npc_metadata.json"
-
-with open(NPC_METADATA_JSON, "r", encoding="utf-8") as f:
-    NPC_METADATA = json.load(f)
-
-# Normalize metadata to dict[name → meta]
-if isinstance(NPC_METADATA, list):
-    NPC_LOOKUP = {npc["name"]: npc for npc in NPC_METADATA}
-elif isinstance(NPC_METADATA, dict):
-    NPC_LOOKUP = {
-        name: {"name": name, **meta}
-        for name, meta in NPC_METADATA.items()
-    }
-else:
-    raise ValueError("npc_metadata.json has an unsupported format")
 
 import torch
 import torchaudio as ta
@@ -44,17 +69,14 @@ from chatterbox.tts_turbo import ChatterboxTurboTTS
 
 tts = ChatterboxTurboTTS.from_pretrained(device="cuda")
 
-
-
 # =========================
-# REFERENCE DATA
+# REFERENCE AUDIO DISCOVERY
 # =========================
 
-# Map narrator keys to reference text
 def discover_narrators(samples_root="../samples"):
     """
     Discover narrator reference files from the filesystem.
-    Now supports flat structure where .wav files are directly in samples_root.
+    Supports flat structure where .wav files are directly in samples_root.
     """
     narrators = {}
 
@@ -81,16 +103,339 @@ def build_ref_codes(samples_root="../samples"):
 
     return ref_codes
 
-
-
 REF_CODES = build_ref_codes("../samples")
 
-
-
 # =========================
-# UTILITY FUNCTIONS
+# PART 1: SYNC GAME DATA (BetterQuest.lua)
 # =========================
 
+def _find_matching_brace(s, start_idx):
+    """
+    Given s[start_idx] == '{', return index of matching '}'.
+    Skips over quoted strings and handles nested braces.
+    Returns -1 on failure.
+    """
+    i = start_idx
+    n = len(s)
+    if i >= n or s[i] != "{":
+        return -1
+    depth = 0
+    while i < n:
+        ch = s[i]
+        if ch == '"' or ch == "'":
+            # skip quoted string
+            quote = ch
+            i += 1
+            while i < n:
+                if s[i] == "\\":
+                    i += 2  # skip escaped char
+                elif s[i] == quote:
+                    i += 1
+                    break
+                else:
+                    i += 1
+            continue
+        if ch == "{":
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth == 0:
+                return i
+        i += 1
+    return -1
+
+def _parse_lua_string(s, start_idx):
+    """
+    Parse a Lua string literal starting at start_idx where s[start_idx] is a quote.
+    Returns (unescaped_python_string, idx_after_closing_quote) or (None, start_idx) on failure.
+    Handles \" and \\ escapes.
+    """
+    n = len(s)
+    if start_idx >= n or s[start_idx] not in ('"', "'"):
+        return None, start_idx
+    quote = s[start_idx]
+    i = start_idx + 1
+    out_chars = []
+    while i < n:
+        ch = s[i]
+        if ch == "\\":
+            # handle escape
+            i += 1
+            if i >= n:
+                break
+            esc = s[i]
+            # keep common escapes; otherwise keep the escaped char
+            if esc == "n":
+                out_chars.append("\n")
+            elif esc == "t":
+                out_chars.append("\t")
+            elif esc == "r":
+                out_chars.append("\r")
+            else:
+                out_chars.append(esc)
+            i += 1
+        elif ch == quote:
+            return "".join(out_chars), i + 1
+        else:
+            out_chars.append(ch)
+            i += 1
+    return None, start_idx
+
+def _extract_missing_npcs_from_lua(lua_text):
+    """
+    Parse the BetterQuestDB.lua text and extract a dict:
+      { npc_name: [ { 'text':..., 'dialog_type':..., 'count':... , 'originalName':... }, ... ] }
+    """
+    result = {}
+    marker = '["missingNPCs"]'
+    idx = lua_text.find(marker)
+    if idx == -1:
+        return result
+
+    # find the '=' after the marker, then the opening '{'
+    eq_idx = lua_text.find("=", idx)
+    if eq_idx == -1:
+        return result
+    brace_idx = lua_text.find("{", eq_idx)
+    if brace_idx == -1:
+        return result
+    end_brace = _find_matching_brace(lua_text, brace_idx)
+    if end_brace == -1:
+        return result
+
+    block = lua_text[brace_idx:end_brace+1]
+
+    i = 0
+    L = len(block)
+    # iterate through entries like ["Kaltunk"] = { ... },
+    while i < L:
+        # find next ["<name>"]
+        start_key = block.find('["', i)
+        if start_key == -1:
+            break
+        key_start = start_key + 2
+        key_end = block.find('"]', key_start)
+        if key_end == -1:
+            break
+        npc_key = block[key_start:key_end]
+        # find '=' after key_end
+        eq = block.find("=", key_end)
+        if eq == -1:
+            i = key_end + 2
+            continue
+        # find opening brace for this npc table
+        npc_brace = block.find("{", eq)
+        if npc_brace == -1:
+            i = eq + 1
+            continue
+        npc_end = _find_matching_brace(block, npc_brace)
+        if npc_end == -1:
+            break
+        npc_block = block[npc_brace:npc_end+1]
+
+        # find originalName inside npc_block (optional)
+        original_name = None
+        on = npc_block.find('["originalName"]')
+        if on != -1:
+            # find '=' and string after it
+            on_eq = npc_block.find("=", on)
+            if on_eq != -1:
+                # find first quote
+                qpos = npc_block.find('"', on_eq)
+                if qpos == -1:
+                    qpos = npc_block.find("'", on_eq)
+                if qpos != -1:
+                    parsed, after = _parse_lua_string(npc_block, qpos)
+                    if parsed is not None:
+                        original_name = parsed
+
+        # find dialogs table inside npc_block
+        dialogs_marker = '["dialogs"]'
+        dpos = npc_block.find(dialogs_marker)
+        dialogs = []
+        if dpos != -1:
+            d_eq = npc_block.find("=", dpos)
+            if d_eq != -1:
+                d_brace = npc_block.find("{", d_eq)
+                if d_brace != -1:
+                    d_end = _find_matching_brace(npc_block, d_brace)
+                    if d_end != -1:
+                        dialogs_block = npc_block[d_brace:d_end+1]
+                        # parse individual dialog entries: ["key"] = { ... },
+                        j = 0
+                        M = len(dialogs_block)
+                        while j < M:
+                            kstart = dialogs_block.find('["', j)
+                            if kstart == -1:
+                                break
+                            k_s = kstart + 2
+                            k_e = dialogs_block.find('"]', k_s)
+                            if k_e == -1:
+                                break
+                            dialog_hash = dialogs_block[k_s:k_e]
+
+                            # find '=' and then opening brace for this dialog entry
+                            keq = dialogs_block.find("=", k_e)
+                            if keq == -1:
+                                j = k_e + 2
+                                continue
+                            kbrace = dialogs_block.find("{", keq)
+                            if kbrace == -1:
+                                j = keq + 1
+                                continue
+                            k_end = _find_matching_brace(dialogs_block, kbrace)
+                            if k_end == -1:
+                                break
+                            entry_block = dialogs_block[kbrace:k_end+1]
+
+                            # extract fields dialog_text, dialogType, count
+                            def _find_field_string(block, fieldname):
+                                marker = '["' + fieldname + '"]'
+                                pos = block.find(marker)
+                                if pos == -1:
+                                    return None
+                                eqpos = block.find("=", pos)
+                                if eqpos == -1:
+                                    return None
+                                # find first quote after eqpos
+                                q = block.find('"', eqpos)
+                                if q == -1:
+                                    q = block.find("'", eqpos)
+                                if q == -1:
+                                    return None
+                                parsed, after = _parse_lua_string(block, q)
+                                return parsed
+
+                            def _find_field_token(block, fieldname):
+                                # simple numeric or word token after =
+                                marker = '["' + fieldname + '"]'
+                                pos = block.find(marker)
+                                if pos == -1:
+                                    return None
+                                eqpos = block.find("=", pos)
+                                if eqpos == -1:
+                                    return None
+                                # read token until comma or brace
+                                tstart = eqpos + 1
+                                while tstart < len(block) and block[tstart].isspace():
+                                    tstart += 1
+                                tend = tstart
+                                while tend < len(block) and block[tend] not in [",", "}"]:
+                                    tend += 1
+                                token = block[tstart:tend].strip()
+                                return token or None
+
+                            dialog_text = _find_field_string(entry_block, "dialog_text")
+                            dialog_type = _find_field_string(entry_block, "dialogType")
+                            if dialog_type is None:
+                                dt_tok = _find_field_token(entry_block, "dialogType")
+                                if dt_tok:
+                                    dialog_type = dt_tok.strip('"').strip("'")
+                            count_tok = _find_field_token(entry_block, "count")
+                            count = None
+                            if count_tok:
+                                try:
+                                    count = int(count_tok)
+                                except Exception:
+                                    count = None
+
+                            dialogs.append({
+                                "hash": dialog_hash,
+                                "dialog_text": dialog_text,
+                                "dialogType": dialog_type or "gossip",
+                                "count": count or 1,
+                            })
+
+                            j = k_end + 1
+
+        # add to result using originalName if available, otherwise npc_key
+        npc_name_key = original_name or npc_key
+        npc_name_key = npc_name_key.strip() if isinstance(npc_name_key, str) else npc_key
+
+        if dialogs:
+            result[npc_name_key] = dialogs
+
+        i = npc_end + 1
+
+    return result
+
+def _load_csv_index(csv_path):
+    """Load existing CSV into a set of tuples: (npc_name, dialog_type, quest_id, text)"""
+    existing = set()
+    if not os.path.exists(csv_path):
+        return existing
+    with open(csv_path, "r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        for r in reader:
+            key = (
+                (r.get("npc_name") or "").strip(),
+                (r.get("dialog_type") or "").strip(),
+                (r.get("quest_id") or "").strip() if r.get("quest_id") is not None else "",
+                (r.get("text") or "").strip()
+            )
+            existing.add(key)
+    return existing
+
+def sync_game_data(csv_path=NPC_DIALOG_CSV_PATH, lua_path=BETTERQUEST_LUA):
+    """
+    Parse BetterQuestDB.lua and append any missing dialog lines to CSV.
+    Returns number of rows appended.
+    """
+    print("\n=== STEP 1: Syncing game data from BetterQuest.lua ===")
+    
+    if not os.path.exists(lua_path):
+        print(f"BetterQuest DB not found at: {lua_path}")
+        return 0
+
+    with open(lua_path, "r", encoding="utf-8") as f:
+        lua_text = f.read()
+
+    missing = _extract_missing_npcs_from_lua(lua_text)
+    if not missing:
+        print("No missingNPCs found in BetterQuestDB.lua")
+        return 0
+
+    existing = _load_csv_index(csv_path)
+
+    to_append = []
+    for npc_name, dialogs in missing.items():
+        for d in dialogs:
+            text = (d.get("dialog_text") or "").strip()
+            if not text:
+                continue
+            dialog_type = (d.get("dialogType") or "gossip").lower()
+            key = (npc_name.strip(), dialog_type, "", text)
+            if key not in existing:
+                to_append.append({
+                    "npc_name": npc_name.strip(),
+                    "sex": "",
+                    "dialog_type": dialog_type,
+                    "quest_id": "",
+                    "text": text
+                })
+                existing.add(key)
+
+    if not to_append:
+        print("No new missingNPC dialogs to add.")
+        return 0
+
+    # Ensure CSV exists with header
+    write_header = not os.path.exists(csv_path)
+    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+
+    with open(csv_path, "a", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"])
+        if write_header:
+            writer.writeheader()
+        for row in to_append:
+            writer.writerow(row)
+
+    print(f"✓ Appended {len(to_append)} missingNPC dialog rows to {csv_path}")
+    return len(to_append)
+
+# =========================
+# PART 2: GENERATE AUDIO
+# =========================
 
 def chunk_text_robust(text, min_chars=150, max_chars=300):
     """
@@ -151,13 +496,6 @@ def chunk_text_robust(text, min_chars=150, max_chars=300):
 def get_narrator_from_metadata(row, narrator_override=None):
     """
     Determine which narrator/voice to use for a given row.
-    
-    Args:
-        row: DataFrame row containing dialog data
-        narrator_override: Optional string specifying the wav filename (without extension) to use
-        
-    Returns:
-        Narrator key (string) or None if not found
     """
     # If narrator override is specified, use it if it exists
     if narrator_override:
@@ -170,7 +508,6 @@ def get_narrator_from_metadata(row, narrator_override=None):
 
     # ✅ BOOKS / ITEM TEXT
     if dialog_type in ("book", "item_text"):
-        # must exist in ../samples/narrator/narrator.wav
         if "narrator" in REF_CODES:
             return "narrator"
         print("[SKIP] No narrator voice sample found")
@@ -203,66 +540,35 @@ def get_narrator_from_metadata(row, narrator_override=None):
     print(f"[SKIP] No voice sample for narrator '{narrator}' ({name})")
     return None
 
-
-
-
 def sanitize_filename(name: str) -> str:
-    """
-    Make a string safe for filenames by removing/replacing problematic characters.
-    """
+    """Make a string safe for filenames by removing/replacing problematic characters."""
     name = name.strip()
     name = re.sub(r"[^\w\s-]", "", name)  # remove special characters
     name = re.sub(r"\s+", "_", name)      # replace spaces with underscores
     return name.lower()
 
 def remove_audio_cues(text: str) -> str:
-    """
-    Remove non-spoken audio / onomatopoeia cues that break TTS.
-    """
+    """Remove non-spoken audio / onomatopoeia cues that break TTS."""
     if not isinstance(text, str):
         return text
 
     patterns = [
-        # Bracketed or parenthetical audio directions
-        r"\[[^\]]*\]",          # [laughs]
-        r"\([^\)]*\)",          # (sighs)
-        r"<[^>]*>",              # <roars>
-        r"\*[^*]+\*",            # *chuckles*
-
-        # Explicit audio labels
+        r"\[[^\]]*\]",
+        r"\([^\)]*\)",
+        r"<[^>]*>",
+        r"\*[^*]+\*",
         r"\b(?:sfx|audio|sound)\s*:\s*[^\n]+",
-
-        # Standalone onomatopoeia words (conservative)
-        '''
-        r"""\b(?: 
-        ah+ | eh+ | uh+ | oh+ | um+ | erm+ | hmm+ | hrr+ |
-        mmm+ | nng+ | ngh+ |
-        ugh+ | agh+ | argh+ | grr+ |
-        ach+ | auch+ | och+ |
-        oof+ | uff+ | pff+ | pfft+ |
-        hah+ | hehe+ | heh+ | hoh+ |
-        huh+ | eek+ | eeek+ |
-        whew+ | wheee+ |
-        sniff+ | snrk+ | snort+ |
-        gasp+ | cough+ | choke+ |
-        groan+ | grunt+ | sigh+
-        )\b[.!?,…]*"""
-        '''
     ]
-    # Remove leftover short interjections (1–4 chars) on their own line
-    text = re.sub(r"(?m)^\s*[a-z]{1,4}[.!?…]*\s*$", "", text, flags=re.IGNORECASE)
 
+    text = re.sub(r"(?m)^\s*[a-z]{1,4}[.!?…]*\s*$", "", text, flags=re.IGNORECASE)
 
     for pattern in patterns:
         text = re.sub(pattern, "", text, flags=re.IGNORECASE | re.VERBOSE)
 
     return text
 
-
 def normalize_dialog_text(text: str) -> str:
-    """
-    Normalize WoW dialog tokens so TTS output is stable and natural.
-    """
+    """Normalize WoW dialog tokens so TTS output is stable and natural."""
     if not isinstance(text, str):
         return text
 
@@ -271,16 +577,9 @@ def normalize_dialog_text(text: str) -> str:
     text = remove_audio_cues(text)
 
     replacements = [
-        # Gendered address — consume phrase until punctuation
         (r"\$(lad|lass)\b[^.?!;\n]*", "adventurer"),
-
-        # Player references
         (r"\$(n|N|r|R|c|C)\b", "adventurer"),
-
-        # Gender switch token: $g he:she; etc → adventurer
         (r"\$g[^;]*;", "adventurer"),
-
-        # Any remaining $tokens (failsafe)
         (r"\$\w+", ""),
     ]
 
@@ -293,8 +592,6 @@ def normalize_dialog_text(text: str) -> str:
 
     return text.strip()
 
-
-# Build gossip index map from CSV
 def build_gossip_index_map(df):
     """
     Pre-index all gossip lines per NPC from the CSV.
@@ -318,34 +615,21 @@ def build_gossip_index_map(df):
         if npc_name not in gossip_map:
             gossip_map[npc_name] = []
         
-        # Only add unique texts
         if text not in gossip_map[npc_name]:
             gossip_map[npc_name].append(text)
     
     return gossip_map
 
-
-def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_map=None, narrator_override=None):
-    """
-    Generate TTS audio for a single row.
-    
-    Args:
-        row: DataFrame row with dialog data
-        output_dir: Output directory for audio files
-        regenerate: Whether to regenerate existing files
-        gossip_map: Pre-built gossip index map
-        narrator_override: Optional wav filename (without extension) to use instead of race/sex lookup
-    """
-    # Get the narrator voice to use for TTS generation
+def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_map=None, narrator_override=None):
+    """Generate TTS audio for a single row."""
     narrator_voice = get_narrator_from_metadata(row, narrator_override=narrator_override)
     if not narrator_voice or narrator_voice not in REF_CODES:
         print(f"[SKIP] No narrator metadata for NPC: {row['npc_name']}")
         return None
 
-    # Get the original race/sex for folder structure (ignore override for folder naming)
+    # Get the original race/sex for folder structure
     folder_race = get_narrator_from_metadata(row, narrator_override=None)
     if not folder_race:
-        # If we can't determine original race, fall back to using narrator_voice for folders too
         folder_race = narrator_voice
 
     npc_name = row.get("npc_name") or "narrator"
@@ -363,22 +647,17 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_m
         base_dir = os.path.join(output_dir, folder_race, npc_dirname)
         os.makedirs(base_dir, exist_ok=True)
 
-        # 1. Check if it is a valid Quest
         qid = row.get("quest_id")
         has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
 
         if has_quest_id and dialog_type != "gossip":
             quest_id = str(int(qid))
             filename = f"{quest_id}_{dialog_type}.wav"
-        
-        # 2. Default to Gossip (use text content for filename)
         else:
-            # Sanitize text to be filesystem safe and truncate to 50 chars
             clean_text = sanitize_filename(row["text"])
             if not clean_text:
                 clean_text = "unknown_dialog"
             filename = f"{clean_text[:50]}.wav"
-
 
     print(f"Generating {base_dir}/{filename} (using voice: {narrator_voice})")
     filepath = os.path.join(base_dir, filename)
@@ -387,7 +666,6 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_m
         print(f"[SKIP] File already exists: {filepath}")
         return filepath
 
-    # Use the narrator_voice (which may be overridden) for actual TTS generation
     ref = REF_CODES[narrator_voice]
     text_chunks = chunk_text_robust(row["text"])
     SAMPLE_RATE = 24000
@@ -413,36 +691,314 @@ def generate_tts_for_row(row, output_dir="../sounds", regenerate=False, gossip_m
                 wav = wav.detach().cpu().numpy()
 
             wav = wav.squeeze()
-
-            # float → int16
             wav = (wav * 32767).clip(-32768, 32767).astype("int16")
-
             f.write(wav)
 
-            # HARD MEMORY RELEASE
             del wav
             torch.cuda.empty_cache()
 
     return filepath
 
+def merge_item_text_rows(df):
+    """Only merge item_text rows"""
+    item_rows = df[df["dialog_type"].str.lower() == "item_text"]
 
+    merged_rows = []
+    seen_text_blocks = set()
+
+    for item_id, group in item_rows.groupby("npc_name"):
+        merged_texts = []
+        for text in group["text"]:
+            if text not in seen_text_blocks:
+                merged_texts.append(text)
+                seen_text_blocks.add(text)
+
+        if not merged_texts:
+            continue
+
+        merged_text = " ".join(merged_texts).strip()
+        row = group.iloc[0].copy()
+        row["text"] = merged_text
+        merged_rows.append(row)
+
+    df = df[df["dialog_type"].str.lower() != "item_text"]
+
+    if merged_rows:
+        df = pd.concat([df, pd.DataFrame(merged_rows)], ignore_index=True)
+
+    return df
+
+def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_override=None):
+    """Generate TTS audio for all rows in dataframe."""
+    print("\n=== STEP 2: Generating TTS audio ===")
+    
+    gossip_map = build_gossip_index_map(df)
+    missing_narrators = []
+    
+    for idx, row in df.iterrows():
+        result = generate_tts_for_row(
+            row,
+            output_dir=output_dir,
+            regenerate=regenerate,
+            gossip_map=gossip_map,
+            narrator_override=narrator_override
+        )
+        if not result:
+            missing_narrators.append({
+                "npc_name": row["npc_name"],
+                "dialog_type": row["dialog_type"]
+            })
+
+    if missing_narrators:
+        missing_csv = os.path.join(output_dir, "missing_narrators.csv")
+        pd.DataFrame(missing_narrators).to_csv(missing_csv, index=False)
+        print(f"✓ Saved {len(missing_narrators)} rows with missing narrators → {missing_csv}")
+    
+    print(f"✓ Audio generation complete")
+
+# =========================
+# PART 3: SYNC METADATA
+# =========================
+
+def normalize_name(name):
+    """Normalize NPC name for metadata lookup"""
+    if not isinstance(name, str):
+        return None
+    return name.strip().replace('"', '').replace("'", "")
+
+def normalize_text_for_matching(text: str) -> str:
+    """Used for the Lua lookup key (text_hash), not the filename."""
+    if not isinstance(text, str):
+        return ""
+
+    text = re.sub(r"\$B+", " ", text, flags=re.IGNORECASE)
+    text = re.sub(r"\$(lad|lass)\b[^.?!;\n]*", "adventurer", text, flags=re.IGNORECASE)
+    text = re.sub(r"\$(n|N|r|R|c|C)\b", "adventurer", text)
+    text = re.sub(r"\$g[^;]*;", "adventurer", text, flags=re.IGNORECASE)
+    text = re.sub(r"\$\w+", "", text, flags=re.IGNORECASE)
+
+    for pattern in [r"\[[^\]]*\]", r"\([^\)]*\)", r"<[^>]*>", r"\*[^*]+\*"]:
+        text = re.sub(pattern, "", text)
+
+    text = re.sub(r"[^\w\s]", "", text)
+    text = re.sub(r"\s+", " ", text)
+
+    return text.strip().lower()
+
+def create_text_hash(text: str) -> str:
+    """Create a hash key for text matching"""
+    normalized = normalize_text_for_matching(text)
+    return normalized[:50] if normalized else ""
+
+def sound_path_to_fs(sound_path: str) -> Path | None:
+    """Convert Lua path to filesystem path"""
+    parts = sound_path.split("BetterQuest\\", 1)
+    if len(parts) != 2:
+        return None
+    return Path("..") / parts[1].replace("\\", "/")
+
+def get_wav_duration_seconds(path: Path) -> float | None:
+    """Get duration of WAV file in seconds"""
+    try:
+        with contextlib.closing(wave.open(str(path), "rb")) as wf:
+            return round(wf.getnframes() / wf.getframerate(), 3)
+    except Exception:
+        return None
+
+def read_yaml(path):
+    """Read YAML file"""
+    with open(path, encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+def invert_mapping(mapping):
+    """Convert {category: [names]} -> {normalized_name: category}"""
+    inverted = {}
+    for key, names in mapping.items():
+        if isinstance(names, list):
+            for name in names:
+                n = normalize_name(name)
+                if n:
+                    inverted[n] = key
+        elif isinstance(names, str):
+            n = normalize_name(names)
+            if n:
+                inverted[n] = key
+    return inverted
+
+def sync_metadata(df, output_lua=OUTPUT_LUA):
+    """Build and write unified NPC database to Lua"""
+    print("\n=== STEP 3: Syncing metadata to Lua database ===")
+    
+    # Load YAML mappings
+    npc_race = invert_mapping(read_yaml(RACE_FILE))
+    npc_sex = invert_mapping(read_yaml(SEX_FILE))
+    npc_zone = invert_mapping(read_yaml(ZONE_FILE))
+
+    npc_database = {}
+    missing_race = {}
+
+    for _, row in df.iterrows():
+        npc_name = normalize_name(row.get("npc_name"))
+        if not npc_name:
+            continue
+
+        # Initialize NPC entry if not exists
+        if npc_name not in npc_database:
+            race = npc_race.get(npc_name)
+            sex = row.get("sex")
+            if pd.notna(sex):
+                sex = SEX_MAP.get(int(sex))
+            if not sex:
+                sex = npc_sex.get(npc_name, "male")
+            
+            zone = npc_zone.get(npc_name, "")
+            model_id = int(row.get("model_id")) if pd.notna(row.get("model_id")) else None
+            
+            if not race:
+                missing_race[npc_name] = None
+            
+            # Determine narrator info
+            if race:
+                narrator = f"{race}_female" if sex == "female" else race
+                portrait = race
+            else:
+                narrator = "narrator"
+                portrait = "default"
+            
+            npc_database[npc_name] = {
+                "race": race,
+                "sex": sex,
+                "portrait": portrait,
+                "zone": zone,
+                "model_id": model_id,
+                "narrator": narrator,
+                "dialogs": {}
+            }
+
+        # Add dialog entry
+        dialog_type = str(row.get("dialog_type", "gossip")).lower()
+        text = row.get("text", "")
+        text_hash = create_text_hash(text)
+        
+        if not text_hash:
+            continue
+
+        narrator = npc_database[npc_name]["narrator"]
+        npc_dirname = sanitize_filename(npc_name)
+        quest_id = None
+
+        # Path generation logic (must match TTS script)
+        if dialog_type in ("book", "item_text"):
+            filename = f"{npc_dirname}.wav"
+            sound_path = (
+                f"Interface\\AddOns\\BetterQuest\\sounds\\"
+                f"{narrator}\\{filename}"
+            )
+        else:
+            qid = row.get("quest_id")
+            has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
+
+            if has_quest_id:
+                quest_id = int(qid)
+                filename = f"{quest_id}_{dialog_type}.wav"
+            else:
+                clean_text = sanitize_filename(text)
+                if not clean_text:
+                    continue
+                filename = f"{clean_text[:50]}.wav"
+
+            sound_path = (
+                f"Interface\\AddOns\\BetterQuest\\sounds\\"
+                f"{narrator}\\{npc_dirname}\\{filename}"
+            )
+
+        # Check if file exists
+        fs_path = sound_path_to_fs(sound_path)
+        if not fs_path or not fs_path.exists():
+            continue
+
+        seconds = get_wav_duration_seconds(fs_path)
+        if seconds is None:
+            continue
+
+        # Add to dialogs
+        npc_database[npc_name]["dialogs"][text_hash] = {
+            "path": sound_path,
+            "dialog_type": dialog_type,
+            "quest_id": quest_id,
+            "seconds": seconds,
+        }
+
+    # Write missing races
+    with open(MISSING_RACE_FILE, "w", encoding="utf-8") as f:
+        yaml.dump(missing_race, f, default_flow_style=False, allow_unicode=True)
+
+    # Write Lua database
+    with open(output_lua, "w", encoding="utf-8") as f:
+        f.write("-- Auto-generated unified NPC database\n")
+        f.write("-- Contains metadata + dialog mappings\n")
+        f.write("-- DO NOT EDIT MANUALLY\n\n")
+        f.write("NPC_DATABASE = {\n")
+
+        for npc_name, data in sorted(npc_database.items()):
+            if not data["dialogs"]:
+                continue
+
+            f.write(f'  ["{npc_name}"] = {{\n')
+            
+            # Metadata
+            f.write(f'    race = "{data["race"] or ""}",\n')
+            f.write(f'    sex = "{data["sex"]}",\n')
+            f.write(f'    portrait = "{data["portrait"]}",\n')
+            f.write(f'    zone = "{data["zone"]}",\n')
+            f.write(f'    model_id = {data["model_id"] if data["model_id"] else "nil"},\n')
+            f.write(f'    narrator = "{data["narrator"]}",\n')
+            
+            # Dialogs
+            f.write('    dialogs = {\n')
+            for text_hash, info in sorted(data["dialogs"].items()):
+                path = info["path"].replace("\\", "\\\\")
+                quest_id = info["quest_id"] if info["quest_id"] is not None else "nil"
+                
+                f.write(
+                    f'      ["{text_hash}"] = {{ '
+                    f'path="{path}", '
+                    f'dialog_type="{info["dialog_type"]}", '
+                    f'quest_id={quest_id}, '
+                    f'seconds={info["seconds"]} '
+                    f'}},\n'
+                )
+            f.write('    },\n')
+            f.write('  },\n')
+
+        f.write("}\n\n")
+
+    print(f"✓ Generated unified database for {len(npc_database)} NPCs")
+    print(f"✓ Total dialog entries linked: {sum(len(v['dialogs']) for v in npc_database.values())}")
+    print(f"✓ Missing races: {len(missing_race)}")
+    print(f"✓ Output written to: {output_lua}")
+
+# =========================
+# MAIN PIPELINE
+# =========================
 
 def parse_args():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Unified TTS Pipeline: Sync → Generate → Link")
     parser.add_argument("--race", type=str, help="Filter by NPC race")
     parser.add_argument("--sex", type=str, help="Filter by NPC sex (male/female)")
     parser.add_argument("--npc", type=str, help="Filter by specific NPC name")
-    parser.add_argument("--narrator", type=str, help="Name of wav file (without .wav extension) to use for voice generation override. This will use that wav file instead of the race/sex-based lookup.")
+    parser.add_argument("--narrator", type=str, help="Voice override (wav filename without .wav)")
     parser.add_argument("--zone", type=str, help="Filter by zone")
     parser.add_argument("--type", type=str, help="Filter by dialog type")
     parser.add_argument("--limit", type=int, default=None, help="Limit number of rows to process")
     parser.add_argument("--regenerate", action="store_true", help="Regenerate existing audio files")
-    parser.add_argument("--clean-orphans", action="store_true", 
-                        help="Delete sound files for NPCs not in metadata or with wrong race/sex")
+    parser.add_argument("--skip-sync", action="store_true", help="Skip game data sync step")
+    parser.add_argument("--skip-audio", action="store_true", help="Skip audio generation step")
+    parser.add_argument("--skip-metadata", action="store_true", help="Skip metadata sync step")
     return parser.parse_args()
 
-
 def filter_dataframe(df, args):
+    """Apply command-line filters to dataframe"""
     if args.npc:
         df = df[df["npc_name"] == args.npc]
 
@@ -475,136 +1031,13 @@ def filter_dataframe(df, args):
 
     return df
 
-
-def clean_orphaned_files(output_dir="../sounds"):
-    """
-    Delete sound files for NPCs that:
-    1. Don't exist in NPC_LOOKUP
-    2. Are in the wrong race/sex folder
-    """
-    deleted_count = 0
-    
-    for race_sex in os.listdir(output_dir):
-        race_sex_dir = os.path.join(output_dir, race_sex)
-        if not os.path.isdir(race_sex_dir):
-            continue
-        
-        # Skip narrator directory
-        if race_sex == "narrator":
-            continue
-        
-        for npc_dirname in os.listdir(race_sex_dir):
-            npc_dir = os.path.join(race_sex_dir, npc_dirname)
-            if not os.path.isdir(npc_dir):
-                continue
-            
-            # Reconstruct original NPC name (reverse sanitization is imperfect but close enough)
-            npc_name = npc_dirname.replace("_", " ").title()
-            
-            # Check all possible name variations
-            found = False
-            for lookup_name in NPC_LOOKUP.keys():
-                if sanitize_filename(lookup_name) == npc_dirname:
-                    meta = NPC_LOOKUP[lookup_name]
-                    expected_race_sex = f"{meta.get('race', '')}_{meta.get('sex', '')}".lower()
-                    
-                    # Check if in correct folder
-                    if race_sex == expected_race_sex or race_sex == meta.get('race', '').lower():
-                        found = True
-                        break
-            
-            if not found:
-                # Delete the entire NPC directory
-                import shutil
-                print(f"[DELETE] Orphaned NPC directory: {npc_dir}")
-                shutil.rmtree(npc_dir)
-                deleted_count += 1
-    
-    print(f"Deleted {deleted_count} orphaned NPC directories")
-
-
-# =========================
-# PROCESS DATAFRAME
-# =========================
-
-# df = original dataframe loaded from CSV
-# Only merge item_text rows
-def merge_item_text_rows(df):
-    # Only keep item_text rows
-    item_rows = df[df["dialog_type"].str.lower() == "item_text"]
-
-    merged_rows = []
-    seen_text_blocks = set()
-
-    # Group by item ID (or item_name if available)
-    for item_id, group in item_rows.groupby("npc_name"):
-        merged_texts = []
-        for text in group["text"]:
-            # Deduplicate exact repeated blocks
-            if text not in seen_text_blocks:
-                merged_texts.append(text)
-                seen_text_blocks.add(text)
-
-        if not merged_texts:
-            continue
-
-        # Merge into a single block, first-come-first-serve
-        merged_text = " ".join(merged_texts).strip()
-
-        # Create a single row representing the entire book/item_text
-        row = group.iloc[0].copy()
-        row["text"] = merged_text
-        merged_rows.append(row)
-
-    # Remove the original item_text rows from df
-    df = df[df["dialog_type"].str.lower() != "item_text"]
-
-    # Append merged rows
-    if merged_rows:
-        df = pd.concat([df, pd.DataFrame(merged_rows)], ignore_index=True)
-
-    return df
-
-
-def process_dataframe(df, output_dir="../sounds"):
-    """
-    Process the dataframe row-by-row, generate TTS files.
-    """
-    missing_narrators = []
-    for idx, row in df.iterrows():
-        result = generate_tts_for_row(row, output_dir=output_dir)
-        if not result:
-            missing_narrators.append({
-                "npc_name": row["npc_name"],
-                "dialog_type": row["dialog_type"]
-            })
-
-    if missing_narrators:
-        missing_csv = os.path.join(output_dir, "missing_narrators.csv")
-        pd.DataFrame(missing_narrators).to_csv(missing_csv, index=False)
-        print(f"Saved {len(missing_narrators)} rows with missing/ambiguous narrators → {missing_csv}")
-
-# =========================
-# EXAMPLE USAGE
-# =========================
-if __name__ == "__main__":
+def main():
     args = parse_args()
-
-    if args.clean_orphans:
-        clean_orphaned_files("../sounds")
-        sys.exit(0)
-
-    df = pd.read_csv(NPC_DIALOG_CSV_PATH)
-    df = df[df["text"].notna()]
-
-    df = filter_dataframe(df, args)
-    df = df.drop_duplicates(subset=["npc_name", "text"])
-    df["text"] = df["text"].apply(normalize_dialog_text)
-    df = merge_item_text_rows(df)
     
-    # Build gossip index map once at start
-    gossip_map = build_gossip_index_map(df)
-
+    print("=" * 60)
+    print("UNIFIED TTS PIPELINE")
+    print("=" * 60)
+    
     # Validate narrator override if provided
     if args.narrator:
         if args.narrator not in REF_CODES:
@@ -612,12 +1045,36 @@ if __name__ == "__main__":
             print(f"Available narrators: {', '.join(sorted(REF_CODES.keys()))}")
             sys.exit(1)
         print(f"[INFO] Using narrator override: {args.narrator}")
+    
+    # Step 1: Sync game data
+    if not args.skip_sync:
+        sync_game_data()
+    else:
+        print("\n=== STEP 1: Syncing game data [SKIPPED] ===")
+    
+    # Load and prepare dataframe
+    df = pd.read_csv(NPC_DIALOG_CSV_PATH)
+    df = df[df["text"].notna()]
+    df = filter_dataframe(df, args)
+    df = df.drop_duplicates(subset=["npc_name", "text"])
+    df["text"] = df["text"].apply(normalize_dialog_text)
+    df = merge_item_text_rows(df)
+    
+    # Step 2: Generate audio
+    if not args.skip_audio:
+        generate_audio(df, regenerate=args.regenerate, narrator_override=args.narrator)
+    else:
+        print("\n=== STEP 2: Generating TTS audio [SKIPPED] ===")
+    
+    # Step 3: Sync metadata
+    if not args.skip_metadata:
+        sync_metadata(df)
+    else:
+        print("\n=== STEP 3: Syncing metadata [SKIPPED] ===")
+    
+    print("\n" + "=" * 60)
+    print("PIPELINE COMPLETE")
+    print("=" * 60)
 
-    for _, row in df.iterrows():
-        generate_tts_for_row(
-            row,
-            output_dir="../sounds",
-            regenerate=args.regenerate,
-            gossip_map=gossip_map,
-            narrator_override=args.narrator
-        )
+if __name__ == "__main__":
+    main()

@@ -222,7 +222,7 @@ for _, row in df.iterrows():
             # Sanitize text, truncate to 50 chars
             clean_text = sanitize_filename(text)
             if not clean_text:
-                clean_text = "unknown_dialog"
+                continue
             filename = f"{clean_text[:50]}.wav"
 
         sound_path = (
