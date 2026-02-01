@@ -14,8 +14,8 @@ SoundQueue = {
     maxQueueDisplay = 5,
     
     portraitConfig = {
-        WIDTH = 64,
-        HEIGHT = 64,
+        WIDTH = 80,
+        HEIGHT = 80,
         PATH = "Interface\\AddOns\\BetterQuest\\Textures\\",
         DEFAULT_NPC = "Interface\\Icons\\INV_Misc_QuestionMark",
         DEFAULT_BOOK = "Interface\\AddOns\\BetterQuest\\Textures\\Book",
@@ -803,7 +803,7 @@ function SoundQueue:InitializeUI()
     self.frame.portrait.border = self.frame.portrait:CreateTexture(nil, "OVERLAY")
     self.frame.portrait.border:SetAllPoints()
     self.frame.portrait.border:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\PortraitFrameAtlas")
-    self.frame.portrait.border:SetTexCoord(0, 0.8125, 0, 0.8125)
+    self.frame.portrait.border:SetTexCoord(0, 1.1, 0, 1.1)
     
     -- HEADER
     self.frame.header = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
