@@ -162,65 +162,93 @@ end
 -- FUZZY TEXT MATCHING (Levenshtein Distance)
 -------------------------------------------------
 
-local function LevenshteinDistance(s1, s2)
-    local len1 = string.len(s1)
-    local len2 = string.len(s2)
-    local matrix = {}
-    
-    for i = 0, len1 do
-        matrix[i] = {[0] = i}
+-- Compute Jaro distance
+local function jaro(s1,s2)
+  local n1,n2 = #s1, #s2
+  if n1 == 0 and n2 == 0 then return 1 end
+  local matchdist = math.floor(math.max(n1,n2)/2) - 1
+  if matchdist < 0 then matchdist = 0 end
+  local s1m, s2m = {}, {}  -- matched flags
+  local matches = 0
+  -- find matching chars
+  for i = 1,n1 do
+    local low = math.max(1, i - matchdist)
+    local high = math.min(n2, i + matchdist)
+    for j = low, high do
+      if not s2m[j] and s1:sub(i,i) == s2:sub(j,j) then
+        s1m[i], s2m[j] = true, true
+        matches = matches + 1
+        break
+      end
     end
-    for j = 0, len2 do
-        matrix[0][j] = j
+  end
+  if matches == 0 then return 0 end
+  -- count transpositions
+  local t = 0
+  local k = 1
+  for i = 1,n1 do
+    if s1m[i] then
+      while not s2m[k] do k = k + 1 end
+      if s1:sub(i,i) ~= s2:sub(k,k) then t = t + 1 end
+      k = k + 1
     end
-    
-    for i = 1, len1 do
-        for j = 1, len2 do
-            local cost = (string.sub(s1, i, i) == string.sub(s2, j, j)) and 0 or 1
-            matrix[i][j] = math.min(
-                matrix[i-1][j] + 1,
-                matrix[i][j-1] + 1,
-                matrix[i-1][j-1] + cost
-            )
-        end
-    end
-    
-    return matrix[len1][len2]
+  end
+  t = t/2
+  -- Jaro similarity
+  return (matches/n1 + matches/n2 + (matches - t)/matches) / 3
 end
+
+-- Jaro–Winkler similarity (with default prefix scaling = 0.1)
+function jaroWinkler(s1,s2)
+  local j = jaro(s1,s2)
+  -- common prefix length up to 4
+  local prefix = 0
+  for i = 1, math.min(4, #s1, #s2) do
+    if s1:sub(i,i) == s2:sub(i,i) then
+      prefix = prefix + 1
+    else break end
+  end
+  -- apply Winkler boost: sim + ℓ*p*(1−sim)
+  local p = 0.1
+  return j + prefix * p * (1 - j)
+end
+
+-- Example usage:
+-- local threshold = 0.8
+-- for _, str in ipairs(corpus) do
+--   if jaroWinkler(query, str) >= threshold then
+--     -- collect str as a match
+--   end
+-- end
+
 
 function FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
-    
-    -- Get target NPC race/sex directly from database (no GetNPCMetadata to avoid loops)
+
     local lookupName = NormalizeNPCName(npcName)
     local targetNpc = NPC_DATABASE[lookupName]
     local targetSex = targetNpc and targetNpc.sex
     local targetRace = targetNpc and targetNpc.race
-    
+
     local normalizedInput = NormalizeDialogText(dialogText)
-    
     if normalizedInput == "" then return nil end
-    
+
     local bestMatch = nil
-    local bestDistance = 999999
+    local bestScore = 0
     local bestRaceMatch = false
     local bestSexMatch = false
-    
-    -- Search through all NPCs
-    for otherNpcName, data in pairs(NPC_DATABASE) do
+
+    local JW_THRESHOLD = 0.88
+
+    for _, data in pairs(NPC_DATABASE) do
         if data.dialogs then
             for dialogKey, entry in pairs(data.dialogs) do
-                local distance = LevenshteinDistance(normalizedInput, dialogKey)
-                
-                -- Only consider if reasonably close (within 30% character difference)
-                local maxLen = math.max(string.len(normalizedInput), string.len(dialogKey))
-                if distance <= maxLen * 0.3 then
-                    local otherRace = data.race
-                    local otherSex = data.sex
-                    local raceMatch = (targetRace and otherRace == targetRace)
-                    local sexMatch = (targetSex and otherSex == targetSex)
-                    
-                    -- Prioritize: race+sex > race > sex > just distance
+                local score = jaroWinkler(normalizedInput, dialogKey)
+
+                if score >= JW_THRESHOLD then
+                    local raceMatch = targetRace and data.race == targetRace
+                    local sexMatch  = targetSex  and data.sex  == targetSex
+
                     local isBetter = false
                     if raceMatch and sexMatch and not (bestRaceMatch and bestSexMatch) then
                         isBetter = true
@@ -228,13 +256,15 @@ function FuzzyFindDialogSound(npcName, dialogText)
                         isBetter = true
                     elseif sexMatch and not bestSexMatch and not bestRaceMatch then
                         isBetter = true
-                    elseif distance < bestDistance and (raceMatch == bestRaceMatch) and (sexMatch == bestSexMatch) then
+                    elseif score > bestScore
+                        and raceMatch == bestRaceMatch
+                        and sexMatch  == bestSexMatch then
                         isBetter = true
                     end
-                    
+
                     if isBetter then
                         bestMatch = entry
-                        bestDistance = distance
+                        bestScore = score
                         bestRaceMatch = raceMatch
                         bestSexMatch = sexMatch
                     end
@@ -242,17 +272,20 @@ function FuzzyFindDialogSound(npcName, dialogText)
             end
         end
     end
-    
+
     if bestMatch then
-        Debug(string.format("Fuzzy match: distance=%d, race=%s, sex=%s", 
-            bestDistance, 
-            bestRaceMatch and "yes" or "no", 
-            bestSexMatch and "yes" or "no"))
+        Debug(string.format(
+            "Fuzzy match: jw=%.3f, race=%s, sex=%s",
+            bestScore,
+            bestRaceMatch and "yes" or "no",
+            bestSexMatch and "yes" or "no"
+        ))
         return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
     end
-    
+
     return nil
 end
+
 
 function FindDialogSound(npcName, dialogText)
   if not npcName or not dialogText then return nil end
