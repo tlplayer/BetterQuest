@@ -67,7 +67,8 @@ import torch
 import torchaudio as ta
 from chatterbox.tts_turbo import ChatterboxTurboTTS
 
-tts = ChatterboxTurboTTS.from_pretrained(device="cuda")
+# TTS model will be initialized in main() after parsing args
+tts = None
 
 # =========================
 # REFERENCE AUDIO DISCOVERY
@@ -437,6 +438,65 @@ def sync_game_data(csv_path=NPC_DIALOG_CSV_PATH, lua_path=BETTERQUEST_LUA):
 # PART 2: GENERATE AUDIO
 # =========================
 
+def get_gpu_memory_info():
+    """
+    Get current GPU memory usage information.
+    Returns dict with allocated, reserved, total (in GB) and usage percentage.
+    Returns None if CUDA is not available.
+    """
+    if not torch.cuda.is_available():
+        return None
+    
+    allocated = torch.cuda.memory_allocated() / (1024**3)  # Convert to GB
+    reserved = torch.cuda.memory_reserved() / (1024**3)
+    total = torch.cuda.get_device_properties(0).total_memory / (1024**3)
+    usage_percent = allocated / total if total > 0 else 0
+    
+    return {
+        "allocated_gb": allocated,
+        "reserved_gb": reserved,
+        "total_gb": total,
+        "usage_percent": usage_percent
+    }
+
+def wait_for_gpu_memory(threshold=0.85, wait_seconds=5, max_retries=10):
+    """
+    Wait for GPU memory to drop below threshold.
+    
+    Args:
+        threshold: Memory usage percentage threshold (0.0-1.0)
+        wait_seconds: Seconds to wait between checks
+        max_retries: Maximum number of wait attempts before giving up
+    
+    Returns:
+        True if memory is below threshold, False if max retries exceeded
+    """
+    if not torch.cuda.is_available():
+        return True  # No GPU to monitor
+    
+    import time
+    
+    for attempt in range(max_retries):
+        mem_info = get_gpu_memory_info()
+        
+        if mem_info["usage_percent"] < threshold:
+            if attempt > 0:
+                print(f"[GPU] Memory freed: {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
+            return True
+        
+        print(f"[GPU] High memory usage: {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
+        print(f"[GPU] Waiting {wait_seconds}s for memory to free up... (attempt {attempt+1}/{max_retries})")
+        
+        # Force garbage collection
+        import gc
+        gc.collect()
+        torch.cuda.empty_cache()
+        
+        time.sleep(wait_seconds)
+    
+    print(f"[GPU] WARNING: Memory still high after {max_retries} attempts. Proceeding anyway...")
+    return False
+
 def chunk_text_robust(text, min_chars=150, max_chars=300):
     """
     Split text into TTS-friendly chunks of roughly 150-300 characters.
@@ -728,14 +788,42 @@ def merge_item_text_rows(df):
 
     return df
 
-def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_override=None):
-    """Generate TTS audio for all rows in dataframe."""
+def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_override=None, 
+                   gpu_threshold=0.85, gpu_wait=5, gpu_check_interval=10):
+    """
+    Generate TTS audio for all rows in dataframe.
+    
+    Args:
+        df: DataFrame with dialog data
+        output_dir: Output directory for audio files
+        regenerate: Whether to regenerate existing files
+        narrator_override: Optional narrator voice override
+        gpu_threshold: GPU memory usage threshold (0.0-1.0) before waiting
+        gpu_wait: Seconds to wait when GPU memory is high
+        gpu_check_interval: Check GPU memory every N files
+    """
     print("\n=== STEP 2: Generating TTS audio ===")
+    
+    # Display GPU info at start
+    if torch.cuda.is_available():
+        mem_info = get_gpu_memory_info()
+        print(f"[GPU] Initial memory: {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
+        print(f"[GPU] Memory threshold: {gpu_threshold*100:.0f}%")
+        print(f"[GPU] Check interval: every {gpu_check_interval} files")
     
     gossip_map = build_gossip_index_map(df)
     missing_narrators = []
+    files_processed = 0
     
     for idx, row in df.iterrows():
+        # Check GPU memory periodically
+        if torch.cuda.is_available() and files_processed > 0 and files_processed % gpu_check_interval == 0:
+            mem_info = get_gpu_memory_info()
+            print(f"\n[GPU] Status check ({files_processed} files): {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
+            
+            if mem_info['usage_percent'] >= gpu_threshold:
+                wait_for_gpu_memory(threshold=gpu_threshold, wait_seconds=gpu_wait)
+        
         result = generate_tts_for_row(
             row,
             output_dir=output_dir,
@@ -743,7 +831,10 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
             gossip_map=gossip_map,
             narrator_override=narrator_override
         )
-        if not result:
+        
+        if result:
+            files_processed += 1
+        else:
             missing_narrators.append({
                 "npc_name": row["npc_name"],
                 "dialog_type": row["dialog_type"]
@@ -754,7 +845,12 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
         pd.DataFrame(missing_narrators).to_csv(missing_csv, index=False)
         print(f"✓ Saved {len(missing_narrators)} rows with missing narrators → {missing_csv}")
     
-    print(f"✓ Audio generation complete")
+    # Final GPU memory report
+    if torch.cuda.is_available():
+        mem_info = get_gpu_memory_info()
+        print(f"\n[GPU] Final memory: {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
+    
+    print(f"✓ Audio generation complete ({files_processed} files processed)")
 
 # =========================
 # PART 3: SYNC METADATA
@@ -995,6 +1091,14 @@ def parse_args():
     parser.add_argument("--skip-sync", action="store_true", help="Skip game data sync step")
     parser.add_argument("--skip-audio", action="store_true", help="Skip audio generation step")
     parser.add_argument("--skip-metadata", action="store_true", help="Skip metadata sync step")
+    parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default="cuda", 
+                        help="Device to use for TTS model (default: cuda)")
+    parser.add_argument("--gpu-threshold", type=float, default=0.85, 
+                        help="GPU memory usage threshold (0.0-1.0) before waiting (default: 0.85)")
+    parser.add_argument("--gpu-wait", type=int, default=5, 
+                        help="Seconds to wait when GPU memory is high (default: 5)")
+    parser.add_argument("--gpu-check-interval", type=int, default=10, 
+                        help="Check GPU memory every N files (default: 10)")
     return parser.parse_args()
 
 def filter_dataframe(df, args):
@@ -1032,11 +1136,19 @@ def filter_dataframe(df, args):
     return df
 
 def main():
+    global tts
+    
     args = parse_args()
     
     print("=" * 60)
     print("UNIFIED TTS PIPELINE")
     print("=" * 60)
+    
+    # Initialize TTS model with selected device
+    if not args.skip_audio:
+        print(f"\n[INFO] Initializing TTS model on device: {args.device}")
+        tts = ChatterboxTurboTTS.from_pretrained(device=args.device)
+        print(f"[INFO] TTS model loaded successfully")
     
     # Validate narrator override if provided
     if args.narrator:
@@ -1062,7 +1174,14 @@ def main():
     
     # Step 2: Generate audio
     if not args.skip_audio:
-        generate_audio(df, regenerate=args.regenerate, narrator_override=args.narrator)
+        generate_audio(
+            df, 
+            regenerate=args.regenerate, 
+            narrator_override=args.narrator,
+            gpu_threshold=args.gpu_threshold,
+            gpu_wait=args.gpu_wait,
+            gpu_check_interval=args.gpu_check_interval
+        )
     else:
         print("\n=== STEP 2: Generating TTS audio [SKIPPED] ===")
     
