@@ -26183,18 +26183,5 @@ Marshal Bluewall,0,quest_accept,9419,"We recently found out that the Horde has b
 Marshal Bluewall,0,quest_progress,9419,"Be careful out there, but also be quick. We have no time to lose."
 Marshal Bluewall,0,quest_complete,9419,"Thank the Light you were successful.$B$BNow if we could only have started this sooner, our need would not be so desperate. We must keep the bounty of the desert from falling into the hands of the Horde."
 Marshal Bluewall,0,quest_objective,9419,"Find and deliver Silithyst to the Silithyst Extractor, then speak with Marshal Bluewall at the Alliance encampment near Hive'Zora."
-Kaltunk,,unknown,,"Finally, you are of age, Grog... of age to battle in the name of the Horde. To conquer for the glory of the Warchief.
-
-Yes...
-
-<Kaltunk looks you over.>
-
-You will do nicely.
-
-No doubt you wish to find a great dragon or demon and strangle it with your bare hands, but perhaps it would be wise to start on something less... dangerous.
-
-<Kaltunk laughs.>
-
-Report to Gornek, he should be able to assign a task better suited to a young warrior. You will find Gornek in the Den, to the west."
-Ironforge Guard,,unknown,,Where is the Auction House?  Why it's right by the gates of Ironforge as you enter our fine city.  Ye'll find it just across from The Vault.
-Impsy,,unknown,,"Awe inspiring, master. Your ineptitude is awe inspiring."
+Ironforge Guard,,gossip,,Where is the Auction House?  Why it's right by the gates of Ironforge as you enter our fine city.  Ye'll find it just across from The Vault.
+Impsy,,gossip,,"Awe inspiring, master. Your ineptitude is awe inspiring."
