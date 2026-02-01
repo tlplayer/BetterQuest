@@ -256,37 +256,35 @@ function FuzzyFindDialogSound(npcName, dialogText)
 
     local JW_THRESHOLD = 0.88
 
-    local bestMatch = nil
-    local bestScore = 0
+    -- Early check: same NPC first
+    if targetNpc and targetNpc.dialogs then
+        for dialogKey, entry in pairs(targetNpc.dialogs) do
+            local score = JaroWinkler(normalizedInput, dialogKey)
+            if score >= JW_THRESHOLD then
+                -- Immediately return first high-confidence match
+                return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+            end
+        end
+    end
 
+    -- Fallback: search other NPCs with same sex + race
     for _, data in pairs(NPC_DATABASE) do
-        -- HARD FILTER: same race + sex only
-        if (not targetRace or data.race == targetRace)
-           and (not targetSex  or data.sex  == targetSex) then
+        if data ~= targetNpc
+           and (not targetRace or data.race == targetRace)
+           and (not targetSex  or data.sex  == targetSex) 
+           and data.dialogs then
 
-            if data.dialogs then
-                for dialogKey, entry in pairs(data.dialogs) do
-                    local score = JaroWinkler(normalizedInput, dialogKey)
-                    if score >= JW_THRESHOLD and score > bestScore then
-                        bestMatch = entry
-                        bestScore = score
-                        return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
-                    end
+            for dialogKey, entry in pairs(data.dialogs) do
+                local score = JaroWinkler(normalizedInput, dialogKey)
+                if score >= JW_THRESHOLD then
+                    -- Early return on first match
+                    return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
                 end
             end
         end
     end
 
-    if bestMatch then
-        Debug(string.format(
-            "Fuzzy match: jw=%.3f, race=%s, sex=%s",
-            bestScore,
-            targetRace or "any",
-            targetSex or "any"
-        ))
-        return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
-    end
-
+    -- Nothing found
     return nil
 end
 
