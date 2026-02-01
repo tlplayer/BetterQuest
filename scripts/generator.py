@@ -36,6 +36,100 @@ BETTERQUEST_LUA = "../../../../WTF/Account/ADMIN/SavedVariables/BetterQuest.lua"
 SEX_MAP = {0: "male", 1: "female"}
 
 # =========================
+# FILE DISCOVERY & MONITORING
+# =========================
+
+import glob
+import time
+from datetime import datetime
+
+def find_betterquest_file(base_path="../../../../WTF"):
+    """
+    Find BetterQuest.lua file in WTF directory, account-name agnostic.
+    Searches for any file matching pattern: WTF/*/SavedVariables/BetterQuest.lua
+    
+    Returns:
+        Path to BetterQuest.lua if found, None otherwise
+    """
+    # Try multiple search patterns
+    patterns = [
+        os.path.join(base_path, "Account", "*", "SavedVariables", "BetterQuest.lua"),
+        os.path.join(base_path, "*", "SavedVariables", "BetterQuest.lua"),
+        os.path.join(base_path, "SavedVariables", "BetterQuest.lua"),
+    ]
+    
+    for pattern in patterns:
+        matches = glob.glob(pattern)
+        if matches:
+            # Return the first match (or most recently modified if multiple)
+            if len(matches) > 1:
+                matches.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+                print(f"[INFO] Found {len(matches)} BetterQuest.lua files, using most recent: {matches[0]}")
+            return matches[0]
+    
+    return None
+
+def monitor_file_changes(filepath, check_interval=5, callback=None):
+    """
+    Monitor a file for changes and execute callback when modified.
+    
+    Args:
+        filepath: Path to file to monitor
+        check_interval: Seconds between checks
+        callback: Function to call when file changes (receives filepath as argument)
+    """
+    if not os.path.exists(filepath):
+        print(f"[ERROR] File not found: {filepath}")
+        return
+    
+    print(f"[DAEMON] Monitoring file: {filepath}")
+    print(f"[DAEMON] Check interval: {check_interval}s")
+    print(f"[DAEMON] Press Ctrl+C to stop\n")
+    
+    last_mtime = os.path.getmtime(filepath)
+    last_processed = datetime.now()
+    
+    try:
+        while True:
+            time.sleep(check_interval)
+            
+            try:
+                current_mtime = os.path.getmtime(filepath)
+                
+                if current_mtime > last_mtime:
+                    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    print(f"\n{'='*60}")
+                    print(f"[DAEMON] File modified at {timestamp}")
+                    print(f"{'='*60}")
+                    
+                    last_mtime = current_mtime
+                    
+                    if callback:
+                        try:
+                            callback(filepath)
+                        except Exception as e:
+                            print(f"[ERROR] Callback failed: {e}")
+                            import traceback
+                            traceback.print_exc()
+                    
+                    last_processed = datetime.now()
+                    print(f"\n[DAEMON] Waiting for next change...")
+                
+            except FileNotFoundError:
+                print(f"[WARNING] File disappeared: {filepath}")
+                print(f"[DAEMON] Waiting for file to reappear...")
+                time.sleep(check_interval)
+                
+            except Exception as e:
+                print(f"[ERROR] Monitoring error: {e}")
+                time.sleep(check_interval)
+                
+    except KeyboardInterrupt:
+        print(f"\n\n[DAEMON] Monitoring stopped by user")
+        elapsed = (datetime.now() - last_processed).total_seconds() / 60
+        print(f"[DAEMON] Last processed: {elapsed:.1f} minutes ago")
+
+# =========================
 # LOAD NPC METADATA
 # =========================
 
@@ -680,8 +774,20 @@ def build_gossip_index_map(df):
     
     return gossip_map
 
-def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_map=None, narrator_override=None):
-    """Generate TTS audio for a single row."""
+def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_map=None, narrator_override=None, 
+                         max_retries=3, retry_wait=10):
+    """
+    Generate TTS audio for a single row with retry logic for memory errors.
+    
+    Args:
+        row: DataFrame row with dialog data
+        output_dir: Output directory for audio files
+        regenerate: Whether to regenerate existing files
+        gossip_map: Pre-built gossip index map
+        narrator_override: Optional narrator voice override
+        max_retries: Maximum number of retries on memory errors
+        retry_wait: Seconds to wait between retries
+    """
     narrator_voice = get_narrator_from_metadata(row, narrator_override=narrator_override)
     if not narrator_voice or narrator_voice not in REF_CODES:
         print(f"[SKIP] No narrator metadata for NPC: {row['npc_name']}")
@@ -733,31 +839,92 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
     if not text_chunks:
         return None
 
-    with sf.SoundFile(
-        filepath,
-        mode="w",
-        samplerate=SAMPLE_RATE,
-        channels=1,
-        subtype="PCM_16",
-    ) as f, torch.no_grad():
+    # Retry logic for TTS generation
+    for attempt in range(max_retries):
+        try:
+            with sf.SoundFile(
+                filepath,
+                mode="w",
+                samplerate=SAMPLE_RATE,
+                channels=1,
+                subtype="PCM_16",
+            ) as f, torch.no_grad():
 
-        for chunk in text_chunks:
-            wav = tts.generate(
-                chunk,
-                audio_prompt_path=ref["audio_path"]
-            )
+                for chunk_idx, chunk in enumerate(text_chunks):
+                    try:
+                        wav = tts.generate(
+                            chunk,
+                            audio_prompt_path=ref["audio_path"]
+                        )
 
-            if isinstance(wav, torch.Tensor):
-                wav = wav.detach().cpu().numpy()
+                        if isinstance(wav, torch.Tensor):
+                            wav = wav.detach().cpu().numpy()
 
-            wav = wav.squeeze()
-            wav = (wav * 32767).clip(-32768, 32767).astype("int16")
-            f.write(wav)
+                        wav = wav.squeeze()
+                        wav = (wav * 32767).clip(-32768, 32767).astype("int16")
+                        f.write(wav)
 
-            del wav
-            torch.cuda.empty_cache()
+                        del wav
+                        torch.cuda.empty_cache()
+                    
+                    except RuntimeError as e:
+                        if "out of memory" in str(e).lower() or "cuda" in str(e).lower():
+                            print(f"[ERROR] GPU memory error on chunk {chunk_idx+1}/{len(text_chunks)}: {e}")
+                            raise  # Re-raise to trigger outer retry logic
+                        else:
+                            raise  # Re-raise non-memory errors
 
-    return filepath
+            # Success - return the filepath
+            return filepath
+
+        except RuntimeError as e:
+            error_msg = str(e).lower()
+            is_memory_error = "out of memory" in error_msg or "cuda" in error_msg
+            
+            if is_memory_error and attempt < max_retries - 1:
+                print(f"[RETRY] Memory error on attempt {attempt + 1}/{max_retries}")
+                print(f"[RETRY] Waiting {retry_wait}s for memory to free up...")
+                
+                # Aggressive memory cleanup
+                import gc
+                import time
+                
+                if torch.cuda.is_available():
+                    torch.cuda.empty_cache()
+                    torch.cuda.synchronize()
+                
+                gc.collect()
+                time.sleep(retry_wait)
+                
+                # Check memory status before retry
+                if torch.cuda.is_available():
+                    mem_info = get_gpu_memory_info()
+                    print(f"[RETRY] GPU memory after cleanup: {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
+                
+                # Remove partial file if it exists
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+                    print(f"[RETRY] Removed partial file, retrying...")
+                
+                continue  # Retry
+            else:
+                # Final attempt failed or non-memory error
+                print(f"[ERROR] Failed to generate audio after {attempt + 1} attempts: {e}")
+                # Remove partial file
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+                return None
+        
+        except Exception as e:
+            # Non-CUDA errors
+            print(f"[ERROR] Unexpected error generating audio: {e}")
+            # Remove partial file
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            return None
+    
+    # Should not reach here, but just in case
+    return None
 
 def merge_item_text_rows(df):
     """Only merge item_text rows"""
@@ -789,7 +956,7 @@ def merge_item_text_rows(df):
     return df
 
 def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_override=None, 
-                   gpu_threshold=0.85, gpu_wait=5, gpu_check_interval=10):
+                   gpu_threshold=0.85, gpu_wait=5, gpu_check_interval=10, max_retries=3, retry_wait=10):
     """
     Generate TTS audio for all rows in dataframe.
     
@@ -801,6 +968,8 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
         gpu_threshold: GPU memory usage threshold (0.0-1.0) before waiting
         gpu_wait: Seconds to wait when GPU memory is high
         gpu_check_interval: Check GPU memory every N files
+        max_retries: Maximum retries for failed TTS generation
+        retry_wait: Seconds to wait before retrying failed generation
     """
     print("\n=== STEP 2: Generating TTS audio ===")
     
@@ -810,6 +979,7 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
         print(f"[GPU] Initial memory: {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
         print(f"[GPU] Memory threshold: {gpu_threshold*100:.0f}%")
         print(f"[GPU] Check interval: every {gpu_check_interval} files")
+        print(f"[GPU] Retry settings: max {max_retries} retries, {retry_wait}s wait")
     
     gossip_map = build_gossip_index_map(df)
     missing_narrators = []
@@ -829,7 +999,9 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
             output_dir=output_dir,
             regenerate=regenerate,
             gossip_map=gossip_map,
-            narrator_override=narrator_override
+            narrator_override=narrator_override,
+            max_retries=max_retries,
+            retry_wait=retry_wait
         )
         
         if result:
@@ -1099,6 +1271,16 @@ def parse_args():
                         help="Seconds to wait when GPU memory is high (default: 5)")
     parser.add_argument("--gpu-check-interval", type=int, default=10, 
                         help="Check GPU memory every N files (default: 10)")
+    parser.add_argument("--max-retries", type=int, default=3, 
+                        help="Maximum retries for failed TTS generation (default: 3)")
+    parser.add_argument("--retry-wait", type=int, default=10, 
+                        help="Seconds to wait before retrying failed generation (default: 10)")
+    parser.add_argument("--daemon", action="store_true", 
+                        help="Run in daemon mode, monitoring BetterQuest.lua for changes")
+    parser.add_argument("--daemon-interval", type=int, default=5, 
+                        help="Seconds between file checks in daemon mode (default: 5)")
+    parser.add_argument("--wtf-path", type=str, default="../../../../WTF", 
+                        help="Path to WTF directory for finding BetterQuest.lua (default: ../../../../WTF)")
     return parser.parse_args()
 
 def filter_dataframe(df, args):
@@ -1135,32 +1317,20 @@ def filter_dataframe(df, args):
 
     return df
 
-def main():
-    global tts
+def run_pipeline(args, betterquest_path=None):
+    """
+    Execute the full TTS pipeline.
     
-    args = parse_args()
-    
-    print("=" * 60)
-    print("UNIFIED TTS PIPELINE")
-    print("=" * 60)
-    
-    # Initialize TTS model with selected device
-    if not args.skip_audio:
-        print(f"\n[INFO] Initializing TTS model on device: {args.device}")
-        tts = ChatterboxTurboTTS.from_pretrained(device=args.device)
-        print(f"[INFO] TTS model loaded successfully")
-    
-    # Validate narrator override if provided
-    if args.narrator:
-        if args.narrator not in REF_CODES:
-            print(f"[ERROR] Narrator '{args.narrator}' not found in ../samples/")
-            print(f"Available narrators: {', '.join(sorted(REF_CODES.keys()))}")
-            sys.exit(1)
-        print(f"[INFO] Using narrator override: {args.narrator}")
+    Args:
+        args: Parsed command-line arguments
+        betterquest_path: Optional override for BetterQuest.lua path
+    """
+    # Use provided path or default
+    lua_path = betterquest_path or BETTERQUEST_LUA
     
     # Step 1: Sync game data
     if not args.skip_sync:
-        sync_game_data()
+        sync_game_data(lua_path=lua_path)
     else:
         print("\n=== STEP 1: Syncing game data [SKIPPED] ===")
     
@@ -1180,7 +1350,9 @@ def main():
             narrator_override=args.narrator,
             gpu_threshold=args.gpu_threshold,
             gpu_wait=args.gpu_wait,
-            gpu_check_interval=args.gpu_check_interval
+            gpu_check_interval=args.gpu_check_interval,
+            max_retries=args.max_retries,
+            retry_wait=args.retry_wait
         )
     else:
         print("\n=== STEP 2: Generating TTS audio [SKIPPED] ===")
@@ -1194,6 +1366,70 @@ def main():
     print("\n" + "=" * 60)
     print("PIPELINE COMPLETE")
     print("=" * 60)
+
+def main():
+    global tts
+    
+    args = parse_args()
+    
+    print("=" * 60)
+    print("UNIFIED TTS PIPELINE")
+    print("=" * 60)
+    
+    # Validate narrator override if provided
+    if args.narrator:
+        if args.narrator not in REF_CODES:
+            print(f"[ERROR] Narrator '{args.narrator}' not found in ../samples/")
+            print(f"Available narrators: {', '.join(sorted(REF_CODES.keys()))}")
+            sys.exit(1)
+        print(f"[INFO] Using narrator override: {args.narrator}")
+    
+    # Daemon mode
+    if args.daemon:
+        print(f"\n[DAEMON MODE ENABLED]")
+        
+        # Find BetterQuest.lua file
+        betterquest_path = find_betterquest_file(args.wtf_path)
+        
+        if not betterquest_path:
+            print(f"[ERROR] Could not find BetterQuest.lua in {args.wtf_path}")
+            print(f"[ERROR] Searched patterns:")
+            print(f"  - {args.wtf_path}/Account/*/SavedVariables/BetterQuest.lua")
+            print(f"  - {args.wtf_path}/*/SavedVariables/BetterQuest.lua")
+            print(f"  - {args.wtf_path}/SavedVariables/BetterQuest.lua")
+            sys.exit(1)
+        
+        print(f"[DAEMON] Found BetterQuest.lua: {betterquest_path}")
+        
+        # Initialize TTS model once if not skipping audio
+        if not args.skip_audio:
+            print(f"\n[INFO] Initializing TTS model on device: {args.device}")
+            tts = ChatterboxTurboTTS.from_pretrained(device=args.device)
+            print(f"[INFO] TTS model loaded successfully")
+        
+        # Define callback for file changes
+        def on_file_changed(filepath):
+            print(f"[DAEMON] Processing changes from: {filepath}")
+            run_pipeline(args, betterquest_path=filepath)
+        
+        # Start monitoring
+        monitor_file_changes(
+            betterquest_path, 
+            check_interval=args.daemon_interval,
+            callback=on_file_changed
+        )
+        
+        return
+    
+    # Normal mode (single run)
+    # Initialize TTS model with selected device
+    if not args.skip_audio:
+        print(f"\n[INFO] Initializing TTS model on device: {args.device}")
+        tts = ChatterboxTurboTTS.from_pretrained(device=args.device)
+        print(f"[INFO] TTS model loaded successfully")
+    
+    # Run pipeline once
+    run_pipeline(args)
 
 if __name__ == "__main__":
     main()
