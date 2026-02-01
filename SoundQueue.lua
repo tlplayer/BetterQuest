@@ -1,7 +1,6 @@
 -- SoundQueue.lua
 -- All-in-one voice-over system for WoW 1.12.1
 -- NO CENTRAL UpdateUI - Each function handles its own UI
--- Includes SavedVariables persistence for missing NPCs with fuzzy search
 
 SoundQueue = {
     sounds = {},
@@ -70,6 +69,8 @@ function GetNPCMetadata(npcName)
   if not npcName then return nil end
   local lookupName = NormalizeNPCName(npcName)
   local npc = NPC_DATABASE[lookupName]
+    print(npcName)
+
   
   if npc then
     return {
@@ -90,7 +91,6 @@ end
 -------------------------------------------------
 
 function SoundQueue:InitializeBetterQuestDB()
-    -- Initialize the SavedVariables structure if it doesn't exist
     if not BetterQuestDB then
         BetterQuestDB = {
             missingNPCs = {}
@@ -107,7 +107,6 @@ function SoundQueue:LogMissingNPC(npcName, dialogText, dialogType)
     
     if normalizedText == "" then return end
     
-    -- Initialize NPC entry if it doesn't exist
     if not BetterQuestDB.missingNPCs[normalizedName] then
         BetterQuestDB.missingNPCs[normalizedName] = {
             originalName = npcName,
@@ -117,7 +116,6 @@ function SoundQueue:LogMissingNPC(npcName, dialogText, dialogType)
     
     local npcEntry = BetterQuestDB.missingNPCs[normalizedName]
     
-    -- Log the dialog
     if not npcEntry.dialogs[normalizedText] then
         npcEntry.dialogs[normalizedText] = {
             dialog_text = dialogText,
@@ -162,13 +160,36 @@ function SoundQueue:ClearMissingNPCs()
 end
 
 -------------------------------------------------
--- FUZZY SOUND SEARCH
+-- FUZZY TEXT MATCHING (Levenshtein Distance)
 -------------------------------------------------
 
-function FuzzyFindDialogSound(npcName, dialogText)
-    -- Attempt to find a sound file using fuzzy matching
-    -- Prioritizes: same race+sex > same race > same sex > any fallback
+local function LevenshteinDistance(s1, s2)
+    local len1 = string.len(s1)
+    local len2 = string.len(s2)
+    local matrix = {}
     
+    for i = 0, len1 do
+        matrix[i] = {[0] = i}
+    end
+    for j = 0, len2 do
+        matrix[0][j] = j
+    end
+    
+    for i = 1, len1 do
+        for j = 1, len2 do
+            local cost = (string.sub(s1, i, i) == string.sub(s2, j, j)) and 0 or 1
+            matrix[i][j] = math.min(
+                matrix[i-1][j] + 1,
+                matrix[i][j-1] + 1,
+                matrix[i-1][j-1] + cost
+            )
+        end
+    end
+    
+    return matrix[len1][len2]
+end
+
+function FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
     
     local npcMeta = GetNPCMetadata(npcName)
@@ -176,70 +197,62 @@ function FuzzyFindDialogSound(npcName, dialogText)
     
     local targetSex = npcMeta.sex
     local targetRace = npcMeta.race
+    local normalizedInput = NormalizeDialogText(dialogText)
     
-    -- Search priorities:
-    -- 1. Same race_sex combination
-    -- 2. Same race (any sex)
-    -- 3. Same sex (any race)
-    -- 4. Any NPC with dialog
+    if normalizedInput == "" then return nil end
     
-    local candidates = {
-        race_sex = {},
-        race_only = {},
-        sex_only = {},
-        any = {}
-    }
+    local bestMatch = nil
+    local bestDistance = 999999
+    local bestRaceMatch = false
+    local bestSexMatch = false
     
-    -- Collect all NPCs that have this dialog text
-    local key = NormalizeDialogText(dialogText)
-    if key == "" then return nil end
-    
+    -- Search through all NPCs
     for otherNpcName, data in pairs(NPC_DATABASE) do
-        if data.dialogs and data.dialogs[key] then
-            local otherRace = data.race
-            local otherSex = data.sex
-            
-            if otherRace and otherSex then
-                if otherRace == targetRace and otherSex == targetSex then
-                    table.insert(candidates.race_sex, {npc = otherNpcName, entry = data.dialogs[key]})
-                elseif otherRace == targetRace then
-                    table.insert(candidates.race_only, {npc = otherNpcName, entry = data.dialogs[key]})
-                elseif otherSex == targetSex then
-                    table.insert(candidates.sex_only, {npc = otherNpcName, entry = data.dialogs[key]})
-                else
-                    table.insert(candidates.any, {npc = otherNpcName, entry = data.dialogs[key]})
+        if data.dialogs then
+            for dialogKey, entry in pairs(data.dialogs) do
+                local distance = LevenshteinDistance(normalizedInput, dialogKey)
+                
+                -- Only consider if reasonably close (within 30% character difference)
+                local maxLen = math.max(string.len(normalizedInput), string.len(dialogKey))
+                if distance <= maxLen * 0.3 then
+                    local otherRace = data.race
+                    local otherSex = data.sex
+                    local raceMatch = (otherRace == targetRace)
+                    local sexMatch = (otherSex == targetSex)
+                    
+                    -- Prioritize: race+sex > race > sex > just distance
+                    local isBetter = false
+                    if raceMatch and sexMatch and not (bestRaceMatch and bestSexMatch) then
+                        isBetter = true
+                    elseif raceMatch and not bestRaceMatch then
+                        isBetter = true
+                    elseif sexMatch and not bestSexMatch and not bestRaceMatch then
+                        isBetter = true
+                    elseif distance < bestDistance and (raceMatch == bestRaceMatch) and (sexMatch == bestSexMatch) then
+                        isBetter = true
+                    end
+                    
+                    if isBetter then
+                        bestMatch = entry
+                        bestDistance = distance
+                        bestRaceMatch = raceMatch
+                        bestSexMatch = sexMatch
+                    end
                 end
             end
         end
     end
     
-    -- Return best match
-    local bestMatch = nil
-    if table.getn(candidates.race_sex) > 0 then
-        bestMatch = candidates.race_sex[1]
-        Debug("Fuzzy match (race+sex): " .. npcName .. " -> " .. bestMatch.npc)
-    elseif table.getn(candidates.race_only) > 0 then
-        bestMatch = candidates.race_only[1]
-        Debug("Fuzzy match (race): " .. npcName .. " -> " .. bestMatch.npc)
-    elseif table.getn(candidates.sex_only) > 0 then
-        bestMatch = candidates.sex_only[1]
-        Debug("Fuzzy match (sex): " .. npcName .. " -> " .. bestMatch.npc)
-    elseif table.getn(candidates.any) > 0 then
-        bestMatch = candidates.any[1]
-        Debug("Fuzzy match (any): " .. npcName .. " -> " .. bestMatch.npc)
-    end
-    
     if bestMatch then
-        local entry = bestMatch.entry
-        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+        Debug(string.format("Fuzzy match: distance=%d, race=%s, sex=%s", 
+            bestDistance, 
+            bestRaceMatch and "yes" or "no", 
+            bestSexMatch and "yes" or "no"))
+        return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
     end
     
     return nil
 end
-
--------------------------------------------------
--- DIALOG FINDING WITH FUZZY SEARCH
--------------------------------------------------
 
 function FindDialogSound(npcName, dialogText)
   if not npcName or not dialogText then return nil end
@@ -256,25 +269,21 @@ function FindDialogSound(npcName, dialogText)
   end
 
   -- 2) Fallback: search all NPCs by text hash
-  -- Useful for shared generic dialogue (e.g. guards) or slight name mismatches
   for otherNpcName, data in pairs(NPC_DATABASE) do
     if data.dialogs then
       local entry = data.dialogs[key]
       if entry then
-        -- Optional: Debug print for mismatches
-        -- DEFAULT_CHAT_FRAME:AddMessage("|cffff8800[SoundQueue]|r NPC mismatch: '" .. lookupName .. "' -> '" .. otherNpcName .. "'")
         return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
       end
     end
   end
 
-  -- 3) Fuzzy search - try to find similar dialog from same race/sex
+  -- 3) Fuzzy text search with Levenshtein distance
   local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds = FuzzyFindDialogSound(npcName, dialogText)
   if fuzzyPath then
     return fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds
   end
 
-  -- 4) Not found anywhere - return nil (logging happens in AddSound)
   return nil
 end
 
@@ -298,6 +307,7 @@ local function GetPortraitTexture(soundData)
     end
     
     local npcName = soundData.npcName
+    print(npcName)
     if npcName then
         local metadata = GetNPCMetadata(npcName)
         if metadata and metadata.race then
@@ -587,7 +597,6 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     
     if not soundPath then 
         Debug("No sound found - logging to BetterQuestDB")
-        -- Log to persistence layer when no sound is found
         self:LogMissingNPC(npcName, dialogText, dialogType or "unknown")
         return 
     end
@@ -995,21 +1004,14 @@ end
 -------------------------------------------------
 
 function SoundQueue:Initialize()
-    -- Wait for ADDON_LOADED to initialize SavedVariables
     local initFrame = CreateFrame("Frame")
     initFrame:RegisterEvent("ADDON_LOADED")
-    initFrame:RegisterEvent("PLAYER_LOGOUT")
     
     initFrame:SetScript("OnEvent", function()
         if event == "ADDON_LOADED" and arg1 == "BetterQuest" then
-            -- Initialize SavedVariables
             SoundQueue:InitializeBetterQuestDB()
-            Debug("BetterQuestDB loaded")
-            
-            -- Initialize UI
             SoundQueue:InitializeUI()
             
-            -- Register game events
             local gameEventFrame = CreateFrame("Frame")
             gameEventFrame:RegisterEvent("QUEST_DETAIL")
             gameEventFrame:RegisterEvent("QUEST_PROGRESS")
@@ -1020,11 +1022,7 @@ function SoundQueue:Initialize()
                 SoundQueue:QueueTrigger(UnitName("npc"), event)
             end)
             
-            Debug("SoundQueue Initialized with Missing NPC Tracking and Fuzzy Search")
-            
-        elseif event == "PLAYER_LOGOUT" then
-            -- SavedVariables will be automatically saved
-            Debug("Logging out - saving BetterQuestDB")
+            Debug("SoundQueue Initialized with Missing NPC Tracking and Fuzzy Text Matching")
         end
     end)
 end
