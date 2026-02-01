@@ -1,6 +1,7 @@
 -- SoundQueue.lua
 -- All-in-one voice-over system for WoW 1.12.1
 -- NO CENTRAL UpdateUI - Each function handles its own UI
+-- Includes SavedVariables persistence for missing NPCs with fuzzy search
 
 SoundQueue = {
     sounds = {},
@@ -69,8 +70,6 @@ function GetNPCMetadata(npcName)
   if not npcName then return nil end
   local lookupName = NormalizeNPCName(npcName)
   local npc = NPC_DATABASE[lookupName]
-    print(npcName)
-
   
   if npc then
     return {
@@ -85,6 +84,162 @@ function GetNPCMetadata(npcName)
   
   return nil
 end
+
+-------------------------------------------------
+-- MISSING NPC TRACKING
+-------------------------------------------------
+
+function SoundQueue:InitializeBetterQuestDB()
+    -- Initialize the SavedVariables structure if it doesn't exist
+    if not BetterQuestDB then
+        BetterQuestDB = {
+            missingNPCs = {}
+        }
+        Debug("BetterQuestDB initialized")
+    end
+end
+
+function SoundQueue:LogMissingNPC(npcName, dialogText, dialogType)
+    if not BetterQuestDB or not npcName or not dialogText then return end
+    
+    local normalizedName = NormalizeNPCName(npcName)
+    local normalizedText = NormalizeDialogText(dialogText)
+    
+    if normalizedText == "" then return end
+    
+    -- Initialize NPC entry if it doesn't exist
+    if not BetterQuestDB.missingNPCs[normalizedName] then
+        BetterQuestDB.missingNPCs[normalizedName] = {
+            originalName = npcName,
+            dialogs = {}
+        }
+    end
+    
+    local npcEntry = BetterQuestDB.missingNPCs[normalizedName]
+    
+    -- Log the dialog
+    if not npcEntry.dialogs[normalizedText] then
+        npcEntry.dialogs[normalizedText] = {
+            dialog_text = dialogText,
+            dialogType = dialogType or "gossip",
+            count = 0
+        }
+    end
+    
+    npcEntry.dialogs[normalizedText].count = npcEntry.dialogs[normalizedText].count + 1
+end
+
+function SoundQueue:ExportMissingNPCs()
+    if not BetterQuestDB or not BetterQuestDB.missingNPCs then
+        Debug("No missing NPC data to export")
+        return
+    end
+    
+    local npcCount = 0
+    local totalDialogs = 0
+    
+    Debug("=== MISSING NPCs ===")
+    for normalizedName, data in pairs(BetterQuestDB.missingNPCs) do
+        npcCount = npcCount + 1
+        local dialogCount = 0
+        
+        for _, dialogData in pairs(data.dialogs) do
+            dialogCount = dialogCount + 1
+            totalDialogs = totalDialogs + 1
+        end
+        
+        Debug(string.format("%d. %s (%d dialog(s))", npcCount, data.originalName, dialogCount))
+    end
+    
+    Debug(string.format("Total: %d missing NPCs, %d missing dialogs", npcCount, totalDialogs))
+end
+
+function SoundQueue:ClearMissingNPCs()
+    if BetterQuestDB then
+        BetterQuestDB.missingNPCs = {}
+        Debug("Missing NPC database cleared")
+    end
+end
+
+-------------------------------------------------
+-- FUZZY SOUND SEARCH
+-------------------------------------------------
+
+function FuzzyFindDialogSound(npcName, dialogText)
+    -- Attempt to find a sound file using fuzzy matching
+    -- Prioritizes: same race+sex > same race > same sex > any fallback
+    
+    if not npcName or not dialogText then return nil end
+    
+    local npcMeta = GetNPCMetadata(npcName)
+    if not npcMeta then return nil end
+    
+    local targetSex = npcMeta.sex
+    local targetRace = npcMeta.race
+    
+    -- Search priorities:
+    -- 1. Same race_sex combination
+    -- 2. Same race (any sex)
+    -- 3. Same sex (any race)
+    -- 4. Any NPC with dialog
+    
+    local candidates = {
+        race_sex = {},
+        race_only = {},
+        sex_only = {},
+        any = {}
+    }
+    
+    -- Collect all NPCs that have this dialog text
+    local key = NormalizeDialogText(dialogText)
+    if key == "" then return nil end
+    
+    for otherNpcName, data in pairs(NPC_DATABASE) do
+        if data.dialogs and data.dialogs[key] then
+            local otherRace = data.race
+            local otherSex = data.sex
+            
+            if otherRace and otherSex then
+                if otherRace == targetRace and otherSex == targetSex then
+                    table.insert(candidates.race_sex, {npc = otherNpcName, entry = data.dialogs[key]})
+                elseif otherRace == targetRace then
+                    table.insert(candidates.race_only, {npc = otherNpcName, entry = data.dialogs[key]})
+                elseif otherSex == targetSex then
+                    table.insert(candidates.sex_only, {npc = otherNpcName, entry = data.dialogs[key]})
+                else
+                    table.insert(candidates.any, {npc = otherNpcName, entry = data.dialogs[key]})
+                end
+            end
+        end
+    end
+    
+    -- Return best match
+    local bestMatch = nil
+    if table.getn(candidates.race_sex) > 0 then
+        bestMatch = candidates.race_sex[1]
+        Debug("Fuzzy match (race+sex): " .. npcName .. " -> " .. bestMatch.npc)
+    elseif table.getn(candidates.race_only) > 0 then
+        bestMatch = candidates.race_only[1]
+        Debug("Fuzzy match (race): " .. npcName .. " -> " .. bestMatch.npc)
+    elseif table.getn(candidates.sex_only) > 0 then
+        bestMatch = candidates.sex_only[1]
+        Debug("Fuzzy match (sex): " .. npcName .. " -> " .. bestMatch.npc)
+    elseif table.getn(candidates.any) > 0 then
+        bestMatch = candidates.any[1]
+        Debug("Fuzzy match (any): " .. npcName .. " -> " .. bestMatch.npc)
+    end
+    
+    if bestMatch then
+        local entry = bestMatch.entry
+        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+    end
+    
+    return nil
+end
+
+-------------------------------------------------
+-- DIALOG FINDING WITH FUZZY SEARCH
+-------------------------------------------------
 
 function FindDialogSound(npcName, dialogText)
   if not npcName or not dialogText then return nil end
@@ -113,6 +268,13 @@ function FindDialogSound(npcName, dialogText)
     end
   end
 
+  -- 3) Fuzzy search - try to find similar dialog from same race/sex
+  local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds = FuzzyFindDialogSound(npcName, dialogText)
+  if fuzzyPath then
+    return fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds
+  end
+
+  -- 4) Not found anywhere - return nil (logging happens in AddSound)
   return nil
 end
 
@@ -136,7 +298,6 @@ local function GetPortraitTexture(soundData)
     end
     
     local npcName = soundData.npcName
-    print(npcName)
     if npcName then
         local metadata = GetNPCMetadata(npcName)
         if metadata and metadata.race then
@@ -425,7 +586,9 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     local soundPath, dialogType, questID, seconds = self:FindSound(npcName, dialogText)
     
     if not soundPath then 
-        Debug("No sound found")
+        Debug("No sound found - logging to BetterQuestDB")
+        -- Log to persistence layer when no sound is found
+        self:LogMissingNPC(npcName, dialogText, dialogType or "unknown")
         return 
     end
     
@@ -778,8 +941,12 @@ SlashCmdList["SOUNDQUEUE"] = function(msg)
         end
     elseif msg == "pause" then
         SoundQueue:TogglePause()
+    elseif msg == "missing" then
+        SoundQueue:ExportMissingNPCs()
+    elseif msg == "clearmissing" then
+        SoundQueue:ClearMissingNPCs()
     else
-        Debug("Commands: show, history, play <n>, clear, pause")
+        Debug("Commands: show, history, play <n>, clear, pause, missing, clearmissing")
     end
 end
 
@@ -817,9 +984,10 @@ function SoundQueue:QueueTrigger(npcName, eventType)
             if text and text ~= "" then
                 SoundQueue:AddSound(npcName, text, title)
             end
+            
+            SoundQueue.delayFrameActive = false
         end
     end)
-    delayFrame = false
 end
 
 -------------------------------------------------
@@ -827,21 +995,38 @@ end
 -------------------------------------------------
 
 function SoundQueue:Initialize()
-    self:InitializeUI()
+    -- Wait for ADDON_LOADED to initialize SavedVariables
+    local initFrame = CreateFrame("Frame")
+    initFrame:RegisterEvent("ADDON_LOADED")
+    initFrame:RegisterEvent("PLAYER_LOGOUT")
     
-    local f = CreateFrame("Frame")
-    f:RegisterEvent("QUEST_DETAIL")
-    f:RegisterEvent("QUEST_PROGRESS")
-    f:RegisterEvent("QUEST_COMPLETE")
-    f:RegisterEvent("GOSSIP_SHOW")
-    
-    f:SetScript("OnEvent", function()
-        -- Use the QueueTrigger logic instead of calling AddSound directly
-        -- This ensures text is available when we query it.
-        SoundQueue:QueueTrigger(UnitName("npc"), event)
+    initFrame:SetScript("OnEvent", function()
+        if event == "ADDON_LOADED" and arg1 == "BetterQuest" then
+            -- Initialize SavedVariables
+            SoundQueue:InitializeBetterQuestDB()
+            Debug("BetterQuestDB loaded")
+            
+            -- Initialize UI
+            SoundQueue:InitializeUI()
+            
+            -- Register game events
+            local gameEventFrame = CreateFrame("Frame")
+            gameEventFrame:RegisterEvent("QUEST_DETAIL")
+            gameEventFrame:RegisterEvent("QUEST_PROGRESS")
+            gameEventFrame:RegisterEvent("QUEST_COMPLETE")
+            gameEventFrame:RegisterEvent("GOSSIP_SHOW")
+            
+            gameEventFrame:SetScript("OnEvent", function()
+                SoundQueue:QueueTrigger(UnitName("npc"), event)
+            end)
+            
+            Debug("SoundQueue Initialized with Missing NPC Tracking and Fuzzy Search")
+            
+        elseif event == "PLAYER_LOGOUT" then
+            -- SavedVariables will be automatically saved
+            Debug("Logging out - saving BetterQuestDB")
+        end
     end)
-    
-    Debug("SoundQueue Initialized with Delay Logic.")
 end
 
 

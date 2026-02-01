@@ -5,8 +5,7 @@
 
     <!-- Databases -->
     <Include file="db\npc_database.lua"/>
-    <Include file="Environment.lua"/>
-    <Include file="Utils.lua"/>
+    <Script file="BetterQuestDB.lua"/>
 
     <!-- Core systems -->
     <Script file="SoundQueue.lua"/>

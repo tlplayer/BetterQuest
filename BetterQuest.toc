@@ -3,6 +3,7 @@
 ## Notes: Better Questing!
 ## Author: Timothy Player 
 ## Version: 1.0
+## SavedVariables: BetterQuestDB
 
 embeds.xml
 BetterQuest.xml
