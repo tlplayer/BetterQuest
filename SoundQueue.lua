@@ -1,6 +1,6 @@
--- SoundQueue.lua
--- All-in-one voice-over system for WoW 1.12.1
--- NO CENTRAL UpdateUI - Each function handles its own UI
+-- SoundQueue.lua (REFACTORED)
+-- Modular voice-over system for WoW 1.12.1
+-- UI components separated into individual initialization functions
 
 SoundQueue = {
     sounds = {},
@@ -159,10 +159,9 @@ function SoundQueue:ClearMissingNPCs()
 end
 
 -------------------------------------------------
--- FUZZY TEXT MATCHING (Levenshtein Distance)
+-- FUZZY TEXT MATCHING (Jaro-Winkler)
 -------------------------------------------------
 
--- Compute Jaro distance
 local function JaroSimilarity(s1, s2)
     local len1 = strlen(s1)
     local len2 = strlen(s2)
@@ -178,7 +177,6 @@ local function JaroSimilarity(s1, s2)
     local s2Match = {}
     local matches = 0
 
-    -- Find matches
     for i = 1, len1 do
         local c1 = strsub(s1, i, i)
         local start = i - matchDist
@@ -200,7 +198,6 @@ local function JaroSimilarity(s1, s2)
         return 0
     end
 
-    -- Count transpositions
     local t = 0
     local k = 1
     for i = 1, len1 do
@@ -261,7 +258,6 @@ function FuzzyFindDialogSound(npcName, dialogText)
         for dialogKey, entry in pairs(targetNpc.dialogs) do
             local score = JaroWinkler(normalizedInput, dialogKey)
             if score >= JW_THRESHOLD then
-                -- Immediately return first high-confidence match
                 return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
             end
         end
@@ -277,18 +273,14 @@ function FuzzyFindDialogSound(npcName, dialogText)
             for dialogKey, entry in pairs(data.dialogs) do
                 local score = JaroWinkler(normalizedInput, dialogKey)
                 if score >= JW_THRESHOLD then
-                    -- Early return on first match
                     return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
                 end
             end
         end
     end
 
-    -- Nothing found
     return nil
 end
-
-
 
 
 function FindDialogSound(npcName, dialogText)
@@ -298,7 +290,7 @@ function FindDialogSound(npcName, dialogText)
   local key = NormalizeDialogText(dialogText)
   if key == "" then return nil end
 
-  -- 1) Normal lookup (expected case)
+  -- 1) Normal lookup
   local npc = NPC_DATABASE[lookupName]
   if npc and npc.dialogs and npc.dialogs[key] then
     local entry = npc.dialogs[key]
@@ -315,7 +307,7 @@ function FindDialogSound(npcName, dialogText)
     end
   end
 
-  -- 3) Fuzzy text search with Levenshtein distance
+  -- 3) Fuzzy text search
   local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds = FuzzyFindDialogSound(npcName, dialogText)
   if fuzzyPath then
     return fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds
@@ -324,11 +316,9 @@ function FindDialogSound(npcName, dialogText)
   return nil
 end
 
-
 -------------------------------------------------
 -- PORTRAIT HELPERS
 -------------------------------------------------
-
 
 local function IsBookInteraction()
     return ItemTextFrame and ItemTextFrame:IsShown()
@@ -344,7 +334,6 @@ local function GetPortraitTexture(soundData)
     end
     
     local npcName = soundData.npcName
-    print(npcName)
     if npcName then
         local metadata = GetNPCMetadata(npcName)
         if metadata and metadata.race then
@@ -352,7 +341,9 @@ local function GetPortraitTexture(soundData)
             if metadata.sex == "female" then
                 filename = filename .. "_female"
             end
-            return SoundQueue.portraitConfig.PORTRAIT_PATH .. filename .. ".tga"
+            
+            local path = SoundQueue.portraitConfig.PORTRAIT_PATH .. filename
+            return path
         end
     end
     
@@ -360,39 +351,25 @@ local function GetPortraitTexture(soundData)
 end
 
 -------------------------------------------------
--- UI HELPERS - Direct updates, no central function
+-- UI UPDATE FUNCTIONS (Modular)
 -------------------------------------------------
-
-local function ShowFrame()
-    if SoundQueue.frame then
-        SoundQueue.frame:Show()
-    end
-end
-
-local function HideFrame()
-    if SoundQueue.frame then
-        SoundQueue.frame:Hide()
-    end
-end
 
 local function UpdatePortrait(soundData)
     if not SoundQueue.frame or not SoundQueue.frame.portrait then return end
     
-    local portraitTexture = GetPortraitTexture(soundData)
-    if SoundQueue.frame.portrait.texture then
-        SoundQueue.frame.portrait.texture:SetTexture(portraitTexture)
-    end
+    local texture = GetPortraitTexture(soundData)
+    SoundQueue.frame.portrait.texture:SetTexture(texture)
 end
 
 local function UpdateCurrentInfo(soundData)
     if not SoundQueue.frame then return end
     
-    if SoundQueue.frame.npcName and soundData then
+    if soundData then
         SoundQueue.frame.npcName:SetText(soundData.npcName or "Unknown")
-    end
-    
-    if SoundQueue.frame.title and soundData then
         SoundQueue.frame.title:SetText(soundData.title or "")
+    else
+        SoundQueue.frame.npcName:SetText("")
+        SoundQueue.frame.title:SetText("")
     end
 end
 
@@ -411,59 +388,59 @@ end
 local function UpdateStatusText()
     if not SoundQueue.frame or not SoundQueue.frame.status then return end
     
-    if SoundQueue.isPaused then
-        SoundQueue.frame.status:SetText("|cffff0000PAUSED|r")
-    else
-        local current = SoundQueue.currentSound
-        if current then
-            local elapsed = GetTime() - current.startTime
-            local remaining = current.duration - elapsed
-            if remaining < 0 then remaining = 0 end
-            SoundQueue.frame.status:SetText(string.format("|cff00ff00Playing|r %.0fs", remaining))
+    local current = SoundQueue.currentSound
+    if current then
+        local elapsed = GetTime() - current.startTime
+        local remaining = current.duration - elapsed
+        
+        if SoundQueue.isPaused then
+            elapsed = current.pauseOffset
+            remaining = current.duration - elapsed
         end
+        
+        local statusText = string.format("%.1fs / %.1fs", elapsed, current.duration)
+        SoundQueue.frame.status:SetText(statusText)
+    else
+        SoundQueue.frame.status:SetText("")
     end
 end
 
 local function UpdateQueueList()
     if not SoundQueue.frame or not SoundQueue.frame.queueButtons then return end
     
-    local queueSize = table.getn(SoundQueue.sounds)
-    local displayCount = 0
-    
-    for i = 2, queueSize do
-        displayCount = displayCount + 1
-        if displayCount <= SoundQueue.maxQueueDisplay then
-            local soundData = SoundQueue.sounds[i]
-            local btn = SoundQueue.frame.queueButtons[displayCount]
-            if btn and btn.text then
-                btn.index = i
-                btn.text:SetText(string.format("%d. %s - %s", displayCount, soundData.npcName or "Unknown", soundData.title or ""))
-                btn:Show()
-            end
-        end
-    end
-    
-    for i = displayCount + 1, SoundQueue.maxQueueDisplay do
-        if SoundQueue.frame.queueButtons[i] then
-            SoundQueue.frame.queueButtons[i]:Hide()
-        end
-    end
-    
-    if SoundQueue.frame.queueHeader then
-        if displayCount > 0 then
-            SoundQueue.frame.queueHeader:Show()
+    for i = 1, SoundQueue.maxQueueDisplay do
+        local button = SoundQueue.frame.queueButtons[i]
+        local soundData = SoundQueue.sounds[i + 1]
+        
+        if soundData then
+            button.text:SetText(string.format("%d. %s", i, soundData.npcName or "Unknown"))
+            button:Show()
         else
-            SoundQueue.frame.queueHeader:Hide()
+            button:Hide()
         end
     end
 end
 
+local function ShowFrame()
+    if SoundQueue.frame then
+        SoundQueue.frame:Show()
+    end
+end
+
+local function HideFrame()
+    if SoundQueue.frame then
+        SoundQueue.frame:Hide()
+    end
+end
+
 -------------------------------------------------
--- HISTORY MANAGEMENT
+-- HISTORY
 -------------------------------------------------
 
 function SoundQueue:AddToHistory(soundData)
-    local historyEntry = {
+    if not soundData then return end
+    
+    table.insert(self.history, 1, {
         npcName = soundData.npcName,
         text = soundData.text,
         title = soundData.title,
@@ -471,10 +448,9 @@ function SoundQueue:AddToHistory(soundData)
         dialogType = soundData.dialogType,
         questID = soundData.questID,
         duration = soundData.duration,
-        timestamp = time(),
-    }
-    
-    table.insert(self.history, 1, historyEntry)
+        startTime = 0,
+        pauseOffset = 0,
+    })
     
     while table.getn(self.history) > self.maxHistorySize do
         table.remove(self.history)
@@ -482,13 +458,8 @@ function SoundQueue:AddToHistory(soundData)
 end
 
 function SoundQueue:PlayFromHistory(index)
-    if not self.history[index] then
-        Debug("History entry " .. index .. " not found")
-        return
-    end
-    
     local entry = self.history[index]
-    Debug("Replaying from history: " .. (entry.npcName or "Unknown"))
+    if not entry then return end
     
     local soundData = {
         npcName = entry.npcName,
@@ -554,7 +525,7 @@ function SoundQueue:PlaySound(soundData)
     end
     self.updateFrame:Show()
     
-    -- Update UI directly - no central function
+    -- Update UI components
     UpdatePortrait(soundData)
     UpdateCurrentInfo(soundData)
     UpdatePauseButton()
@@ -585,7 +556,6 @@ function SoundQueue:TogglePause()
         self.isPaused = true
         self.isPlaying = false
         
-        -- Update UI directly
         UpdatePauseButton()
         UpdateStatusText()
     else
@@ -593,14 +563,12 @@ function SoundQueue:TogglePause()
         Debug("Resuming")
         current.isResuming = true
         self:PlaySound(current)
-        -- PlaySound handles all UI updates
     end
 end
 
 function SoundQueue:CheckSoundFinished()
     if not self.currentSound or self.isPaused then return end
     
-    -- Update time display while playing
     UpdateStatusText()
     
     local elapsed = GetTime() - self.currentSound.startTime
@@ -664,7 +632,6 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     if table.getn(self.sounds) == 1 then
         self:PlaySound(soundData)
     else
-        -- Just update the queue list
         UpdateQueueList()
     end
 end
@@ -716,7 +683,7 @@ function SoundQueue:RemoveSound(soundData)
 end
 
 -------------------------------------------------
--- UI - QUEUE BUTTONS
+-- UI COMPONENTS (Modular Initialization)
 -------------------------------------------------
 
 function SoundQueue:CreateQueueButton(parent, index)
@@ -759,13 +726,8 @@ function SoundQueue:CreateQueueButton(parent, index)
     return button
 end
 
--------------------------------------------------
--- UI INITIALIZATION
--------------------------------------------------
-
-function SoundQueue:InitializeUI()
-    if self.frame then return end
-    
+-- Initialize main frame
+function SoundQueue:InitMainFrame()
     self.frame = CreateFrame("Frame", "BetterQuestVoiceOverFrame", UIParent)
     self.frame:SetWidth(370)
     self.frame:SetHeight(120)
@@ -785,8 +747,10 @@ function SoundQueue:InitializeUI()
     self.frame.bg = self.frame:CreateTexture(nil, "BACKGROUND")
     self.frame.bg:SetAllPoints()
     self.frame.bg:SetTexture(0, 0, 0, 0.8)
-    
-    -- PORTRAIT
+end
+
+-- Initialize portrait (without embedded border)
+function SoundQueue:InitPortrait()
     self.frame.portrait = CreateFrame("Frame", nil, self.frame)
     self.frame.portrait:SetWidth(self.portraitConfig.WIDTH)
     self.frame.portrait:SetHeight(self.portraitConfig.HEIGHT)
@@ -800,18 +764,16 @@ function SoundQueue:InitializeUI()
     self.frame.portrait.texture:SetAllPoints()
     self.frame.portrait.texture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
     
-    self.frame.portrait.border = self.frame.portrait:CreateTexture(nil, "OVERLAY")
-    self.frame.portrait.border:SetAllPoints()
-    self.frame.portrait.border:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\PortraitFrameAtlas")
-    self.frame.portrait.border:SetTexCoord(0, 1.1, 0, 1.1)
-    
-    -- HEADER
+    -- Border removed - portraits should not have embedded borders
+end
+
+-- Initialize NPC info display
+function SoundQueue:InitNPCInfo()
     self.frame.header = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     self.frame.header:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, 0)
     self.frame.header:SetText("Now Playing:")
     self.frame.header:SetTextColor(0.5, 0.5, 0.5)
     
-    -- CURRENT PLAYING (clickable)
     self.frame.currentBtn = CreateFrame("Button", nil, self.frame)
     self.frame.currentBtn:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, -14)
     self.frame.currentBtn:SetPoint("BOTTOMRIGHT", self.frame, "TOPRIGHT", -30, -52)
@@ -852,8 +814,10 @@ function SoundQueue:InitializeUI()
             SoundQueue:RemoveSound(current)
         end
     end)
-    
-    -- QUEUE CONTAINER
+end
+
+-- Initialize queue container
+function SoundQueue:InitQueueContainer()
     self.frame.queueContainer = CreateFrame("Frame", nil, self.frame)
     self.frame.queueContainer:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, -55)
     self.frame.queueContainer:SetPoint("BOTTOMRIGHT", -10, 35)
@@ -875,12 +839,15 @@ function SoundQueue:InitializeUI()
         end
         self.frame.queueButtons[i] = btn
     end
-    
-    -- STATUS
+end
+
+-- Initialize control buttons (pause/play/back)
+function SoundQueue:InitControls()
+    -- Status text
     self.frame.status = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     self.frame.status:SetPoint("BOTTOMLEFT", 10, 10)
 
-    -- CLOSE BUTTON
+    -- Close button
     self.frame.closeBtn = CreateFrame("Button", nil, self.frame, "UIPanelCloseButton")
     self.frame.closeBtn:SetPoint("TOPRIGHT", -2, -2)
     self.frame.closeBtn:SetWidth(20)
@@ -897,7 +864,7 @@ function SoundQueue:InitializeUI()
         GameTooltip:Hide()
     end)
 
-    -- BACK BUTTON
+    -- Back button (replay last)
     self.frame.backBtn = CreateFrame("Button", nil, self.frame)
     self.frame.backBtn:SetWidth(20)
     self.frame.backBtn:SetHeight(20)
@@ -922,7 +889,7 @@ function SoundQueue:InitializeUI()
         GameTooltip:Hide()
     end)
 
-    -- PAUSE/PLAY BUTTON
+    -- Pause/Play button
     self.frame.pauseBtn = CreateFrame("Button", nil, self.frame)
     self.frame.pauseBtn:SetWidth(24)
     self.frame.pauseBtn:SetHeight(24)
@@ -949,9 +916,20 @@ function SoundQueue:InitializeUI()
     self.frame.pauseBtn:SetScript("OnLeave", function()
         GameTooltip:Hide()
     end)
+end
+
+-- Main UI initialization (now modular)
+function SoundQueue:InitializeUI()
+    if self.frame then return end
+    
+    self:InitMainFrame()
+    self:InitPortrait()
+    self:InitNPCInfo()
+    self:InitQueueContainer()
+    self:InitControls()
     
     self.frame:Hide()
-    Debug("UI Initialized")
+    Debug("UI Initialized (Modular)")
 end
 
 -------------------------------------------------
@@ -996,12 +974,10 @@ SlashCmdList["SOUNDQUEUE"] = function(msg)
     end
 end
 
-
 -------------------------------------------------
 -- DELAYED TRIGGER LOGIC
 -------------------------------------------------
 
--- This function waits 0.1s to ensure Quest/Gossip text is fully loaded
 function SoundQueue:QueueTrigger(npcName, eventType)
     if self.delayFrameActive then return end
     self.delayFrameActive = true
@@ -1014,7 +990,7 @@ function SoundQueue:QueueTrigger(npcName, eventType)
 
     self.delayFrame:SetScript("OnUpdate", function()
         if GetTime() - startTime >= waitTime then
-            this:SetScript("OnUpdate", nil) -- Stop the loop
+            this:SetScript("OnUpdate", nil)
             
             local text, title
             if eventType == "QUEST_DETAIL" then
@@ -1059,10 +1035,9 @@ function SoundQueue:Initialize()
                 SoundQueue:QueueTrigger(UnitName("npc"), event)
             end)
             
-            Debug("SoundQueue Initialized with Missing NPC Tracking and Fuzzy Text Matching")
+            Debug("SoundQueue Initialized (Refactored & Modular)")
         end
     end)
 end
-
 
 SoundQueue:Initialize()
