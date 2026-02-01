@@ -240,7 +240,7 @@ def _extract_missing_npcs_from_lua(lua_text):
                             dialogs.append({
                                 "hash": dialog_hash,
                                 "dialog_text": dialog_text,
-                                "dialogType": dialog_type or "unknown",
+                                "dialogType": dialog_type or "gossip",
                                 "count": count or 1,
                             })
 
@@ -303,7 +303,7 @@ def append_missing_to_csv(csv_path="../data/all_npc_dialog.csv", lua_path=BETTER
             text = (d.get("dialog_text") or "").strip()
             if not text:
                 continue
-            dialog_type = (d.get("dialogType") or "unknown").lower()
+            dialog_type = (d.get("dialogType") or "gossip").lower()
             key = (npc_name.strip(), dialog_type, "", text)
             if key not in existing:
                 to_append.append({
