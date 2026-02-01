@@ -1542,6 +1542,75 @@ def extract_all_dialog():
     return deduped_known, db
 
 
+# Prevent Regression
+def load_existing_csv_index(filepath):
+    """
+    Load existing OUTPUT_CSV as SOT.
+    Returns: dict[npc_name] -> set of (dialog_type, quest_id, text)
+    """
+    index = defaultdict(set)
+
+    if not os.path.exists(filepath):
+        return index
+
+    with open(filepath, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        for r in reader:
+            index[r["npc_name"]].add((
+                r["dialog_type"],
+                r["quest_id"] or None,
+                r["text"],
+            ))
+
+    return index
+
+
+def build_new_csv_index(rows):
+    """
+    Build dialog index from newly extracted rows.
+    """
+    index = defaultdict(set)
+    for r in rows:
+        index[r["npc_name"]].add((
+            r["dialog_type"],
+            r["quest_id"],
+            r["text"],
+        ))
+    return index
+
+
+def detect_regressions(old_index, new_index):
+    """
+    Detect deleted or replaced dialog lines per NPC.
+
+    Returns: dict[npc_name] -> set of missing dialog tuples
+    """
+    regressions = {}
+
+    for npc_name, old_dialogs in old_index.items():
+        new_dialogs = new_index.get(npc_name, set())
+        missing = old_dialogs - new_dialogs
+
+        if missing:
+            regressions[npc_name] = missing
+
+    return regressions
+
+
+def abort_on_regression(regressions):
+    """
+    Print regression details and abort.
+    """
+    print("\n🚨 DIALOG REGRESSION DETECTED 🚨\n")
+
+    for npc, missing in sorted(regressions.items()):
+        print(f"NPC: {npc}")
+        for dialog_type, quest_id, text in sorted(missing):
+            print(f"  - LOST [{dialog_type}] quest={quest_id}")
+            print(f"    \"{text[:140]}\"")
+        print()
+
+    raise RuntimeError("Refusing to overwrite SOT CSV due to dialog regression.")
 
 # =========================
 # MAIN
@@ -1550,13 +1619,35 @@ def extract_all_dialog():
 if __name__ == "__main__":
     print("Extracting dialog...")
     data, db = extract_all_dialog()
-    
+
+    # ---------------------------------------------------------
+    # SOT REGRESSION CHECK (BEFORE WRITING)
+    # ---------------------------------------------------------
+    print("\n🔒 Checking for dialog regressions...")
+
+    old_index = load_existing_csv_index(OUTPUT_CSV)
+    new_index = build_new_csv_index(data)
+
+    regressions = detect_regressions(old_index, new_index)
+
+    if regressions:
+        abort_on_regression(regressions)
+
+    print("✓ No regressions detected. Safe to write CSV.")
+
+    # ---------------------------------------------------------
+    # WRITE OUTPUT
+    # ---------------------------------------------------------
     print(f"\nWriting CSV with {len(data)} dialog lines...")
     with open(OUTPUT_CSV, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"])
+        writer = csv.DictWriter(
+            f,
+            fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"]
+        )
         writer.writeheader()
         writer.writerows(data)
+
     print(f"  ✓ {OUTPUT_CSV}")
-    
+
     db.close()
     print(f"\n✓ Extraction complete!")

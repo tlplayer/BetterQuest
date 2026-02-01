@@ -69,7 +69,6 @@ function GetNPCMetadata(npcName)
   if not npcName then return nil end
   local lookupName = NormalizeNPCName(npcName)
   local npc = NPC_DATABASE[lookupName]
-    print(npcName)
 
   
   if npc then
@@ -192,11 +191,12 @@ end
 function FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
     
-    local npcMeta = GetNPCMetadata(npcName)
-    if not npcMeta then return nil end
+    -- Get target NPC race/sex directly from database (no GetNPCMetadata to avoid loops)
+    local lookupName = NormalizeNPCName(npcName)
+    local targetNpc = NPC_DATABASE[lookupName]
+    local targetSex = targetNpc and targetNpc.sex
+    local targetRace = targetNpc and targetNpc.race
     
-    local targetSex = npcMeta.sex
-    local targetRace = npcMeta.race
     local normalizedInput = NormalizeDialogText(dialogText)
     
     if normalizedInput == "" then return nil end
@@ -217,8 +217,8 @@ function FuzzyFindDialogSound(npcName, dialogText)
                 if distance <= maxLen * 0.3 then
                     local otherRace = data.race
                     local otherSex = data.sex
-                    local raceMatch = (otherRace == targetRace)
-                    local sexMatch = (otherSex == targetSex)
+                    local raceMatch = (targetRace and otherRace == targetRace)
+                    local sexMatch = (targetSex and otherSex == targetSex)
                     
                     -- Prioritize: race+sex > race > sex > just distance
                     local isBetter = false
