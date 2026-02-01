@@ -1334,18 +1334,20 @@ def run_pipeline(args, betterquest_path=None):
     else:
         print("\n=== STEP 1: Syncing game data [SKIPPED] ===")
     
-    # Load and prepare dataframe
-    df = pd.read_csv(NPC_DIALOG_CSV_PATH)
-    df = df[df["text"].notna()]
-    df = filter_dataframe(df, args)
-    df = df.drop_duplicates(subset=["npc_name", "text"])
-    df["text"] = df["text"].apply(normalize_dialog_text)
-    df = merge_item_text_rows(df)
+    # Load full dataframe (for audio generation, we'll filter it)
+    df_full = pd.read_csv(NPC_DIALOG_CSV_PATH)
+    df_full = df_full[df_full["text"].notna()]
     
-    # Step 2: Generate audio
+    # Apply filters for audio generation
+    df_filtered = filter_dataframe(df_full.copy(), args)
+    df_filtered = df_filtered.drop_duplicates(subset=["npc_name", "text"])
+    df_filtered["text"] = df_filtered["text"].apply(normalize_dialog_text)
+    df_filtered = merge_item_text_rows(df_filtered)
+    
+    # Step 2: Generate audio (uses filtered dataframe)
     if not args.skip_audio:
         generate_audio(
-            df, 
+            df_filtered, 
             regenerate=args.regenerate, 
             narrator_override=args.narrator,
             gpu_threshold=args.gpu_threshold,
@@ -1357,9 +1359,16 @@ def run_pipeline(args, betterquest_path=None):
     else:
         print("\n=== STEP 2: Generating TTS audio [SKIPPED] ===")
     
-    # Step 3: Sync metadata
+    # Step 3: Sync metadata (uses FULL dataframe to include all existing audio)
     if not args.skip_metadata:
-        sync_metadata(df)
+        # Prepare full dataframe for metadata sync
+        df_for_metadata = df_full.copy()
+        df_for_metadata = df_for_metadata.drop_duplicates(subset=["npc_name", "text"])
+        df_for_metadata["text"] = df_for_metadata["text"].apply(normalize_dialog_text)
+        df_for_metadata = merge_item_text_rows(df_for_metadata)
+        
+        print(f"\n[INFO] Syncing metadata for ALL {len(df_for_metadata)} dialogs (not just filtered {len(df_filtered)})")
+        sync_metadata(df_for_metadata)
     else:
         print("\n=== STEP 3: Syncing metadata [SKIPPED] ===")
     

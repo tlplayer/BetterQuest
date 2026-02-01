@@ -187,6 +187,7 @@ NPC_DATABASE = {
       ["ah thanks these will do just the trick"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\abercrombie\\133_quest_complete.wav", dialog_type="quest_complete", quest_id=133, seconds=2.52 },
       ["delightful this will do splendidly here good adven"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\abercrombie\\157_quest_complete.wav", dialog_type="quest_complete", quest_id=157, seconds=7.48 },
       ["do you have my crate if so then pleasegive it to m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\abercrombie\\134_quest_progress.wav", dialog_type="quest_progress", quest_id=134, seconds=4.64 },
+      ["eh greetings young adventurer youre a brave one to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\abercrombie\\eh_greetings_young_adventurer_youre_a_brave_one_to.wav", dialog_type="gossip", quest_id=nil, seconds=11.04 },
       ["hehe oh yes of course the carevins no nothings wro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\abercrombie\\165_quest_complete.wav", dialog_type="quest_complete", quest_id=165, seconds=12.32 },
       ["i live so far from the protection of town its a wo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\abercrombie\\133_quest_accept.wav", dialog_type="quest_accept", quest_id=133, seconds=30.6 },
       ["i need a bottle of a certain liquor zombie juice t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\abercrombie\\158_quest_accept.wav", dialog_type="quest_accept", quest_id=158, seconds=14.96 },
@@ -532,12 +533,14 @@ NPC_DATABASE = {
     dialogs = {
       ["araj the summoner lords over andorhal from the rui"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5803_quest_accept.wav", dialog_type="quest_accept", quest_id=5803, seconds=33.8 },
       ["as morbid as it sounds well need a decent supply o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5537_quest_progress.wav", dialog_type="quest_progress", quest_id=5537, seconds=10.6 },
+      ["its done adventurer and i think youll be satisfied"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\its_done_adventurer_and_i_think_youll_be_satisfied.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
       ["the goblin you will need to speak with is krinkle "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5538_quest_accept.wav", dialog_type="quest_accept", quest_id=5538, seconds=33.48 },
       ["the key to scholomance is called a skeleton key it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5537_quest_accept.wav", dialog_type="quest_accept", quest_id=5537, seconds=33.72 },
       ["the solution is ready in my cauldron its just the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5803_quest_complete.wav", dialog_type="quest_complete", quest_id=5803, seconds=29.2 },
       ["thisll work adventurer my turn now i will imbue th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5537_quest_complete.wav", dialog_type="quest_complete", quest_id=5537, seconds=24.92 },
       ["well here you are adventurer the completed skeleto"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5505_quest_complete.wav", dialog_type="quest_complete", quest_id=5505, seconds=20.8 },
       ["well met adventurer ive dedicated a fair portion o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5533_quest_complete.wav", dialog_type="quest_complete", quest_id=5533, seconds=19.8 },
+      ["well now adventurer lets get to work on those caul"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\well_now_adventurer_lets_get_to_work_on_those_caul.wav", dialog_type="gossip", quest_id=nil, seconds=27.08 },
       ["weve got quite the costly skeleton key there dont "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5801_quest_complete.wav", dialog_type="quest_complete", quest_id=5801, seconds=27.64 },
       ["yeah i know who you are and i know why youre here "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5538_quest_progress.wav", dialog_type="quest_progress", quest_id=5538, seconds=33.92 },
       ["yes this is it i again im absolutely amazed at the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alchemist_arbington\\5803_quest_complete.wav", dialog_type="quest_complete", quest_id=5803, seconds=29.2 },
@@ -624,6 +627,7 @@ NPC_DATABASE = {
     dialogs = {
       ["ah zinge needs a kit does she it saddens me that z"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\alessandro_luca\\232_quest_complete.wav", dialog_type="quest_complete", quest_id=232, seconds=13.48 },
       ["the kit is ready adventurer no doubt that apotheca"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\alessandro_luca\\238_quest_accept.wav", dialog_type="quest_accept", quest_id=238, seconds=22.52 },
+      ["welcome to blue moon odds and ends adventurer if y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\alessandro_luca\\welcome_to_blue_moon_odds_and_ends_adventurer_if_y.wav", dialog_type="gossip", quest_id=nil, seconds=4.96 },
       ["yes i think luca is as disturbing as you do it mat"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\alessandro_luca\\238_quest_progress.wav", dialog_type="quest_progress", quest_id=238, seconds=15.04 },
     },
   },
@@ -638,6 +642,7 @@ NPC_DATABASE = {
       ["adventurer an imp in felwood by the name of impsy "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alexander_calder\\8419_quest_accept.wav", dialog_type="quest_accept", quest_id=8419, seconds=27.6 },
       ["do you have my felcloth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alexander_calder\\8419_quest_progress.wav", dialog_type="quest_progress", quest_id=8419, seconds=1.88 },
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alexander_calder\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
+      ["the darkness does not embrace you adventurer cease"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alexander_calder\\the_darkness_does_not_embrace_you_adventurer_cease.wav", dialog_type="gossip", quest_id=nil, seconds=7.52 },
     },
   },
   ["Alexandra Bolero"] = {
@@ -708,6 +713,7 @@ NPC_DATABASE = {
       ["tell me what are the news from the front"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alliance_brigadier_general\\8374_quest_progress.wav", dialog_type="quest_progress", quest_id=8374, seconds=2.64 },
       ["the battle in alterac valley rages on adventurer h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alliance_brigadier_general\\8383_quest_accept.wav", dialog_type="quest_accept", quest_id=8383, seconds=7.0 },
       ["the silverwing sentinels are at war with the warso"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alliance_brigadier_general\\8401_quest_accept.wav", dialog_type="quest_accept", quest_id=8401, seconds=33.44 },
+      ["the war against the horde has reached full tilt ad"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alliance_brigadier_general\\the_war_against_the_horde_has_reached_full_tilt_ad.wav", dialog_type="gossip", quest_id=nil, seconds=10.68 },
       ["well done adventurer youve served the alliance wel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alliance_brigadier_general\\8372_quest_complete.wav", dialog_type="quest_complete", quest_id=8372, seconds=3.52 },
       ["were not fighting isolated battles against the hor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alliance_brigadier_general\\8371_quest_accept.wav", dialog_type="quest_accept", quest_id=8371, seconds=29.44 },
       ["what news do you bring from the lands of the storm"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\alliance_brigadier_general\\8375_quest_progress.wav", dialog_type="quest_progress", quest_id=8375, seconds=6.4 },
@@ -916,6 +922,7 @@ NPC_DATABASE = {
       ["the plaguelands to the east are an aberration devi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\anastasia_hartwell\\1882_quest_accept.wav", dialog_type="quest_accept", quest_id=1882, seconds=31.92 },
       ["the troll mage deino has need of your assistance a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\anastasia_hartwell\\1943_quest_accept.wav", dialog_type="quest_accept", quest_id=1943, seconds=7.6 },
       ["very good adventurer the creatures within these co"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\anastasia_hartwell\\1960_quest_complete.wav", dialog_type="quest_complete", quest_id=1960, seconds=24.72 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\anastasia_hartwell\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=7.8 },
     },
   },
   ["Ancestral Spirit"] = {
@@ -1071,6 +1078,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead_female",
     dialogs = {
+      ["do not waste my time adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\angela_curthas\\do_not_waste_my_time_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.36 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\angela_curthas\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
     },
   },
@@ -1191,9 +1199,10 @@ NPC_DATABASE = {
       ["theldren is not one to willingly participate in a "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\anthion_harmon\\8948_quest_accept.wav", dialog_type="quest_accept", quest_id=8948, seconds=24.56 },
       ["valthalaks soul was stored in this amulet in our g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\anthion_harmon\\8951_quest_accept.wav", dialog_type="quest_accept", quest_id=8951, seconds=32.2 },
       ["we didnt realize the importance of valthalaks meda"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\anthion_harmon\\8947_quest_accept.wav", dialog_type="quest_accept", quest_id=8947, seconds=28.44 },
-      ["youre back adventurer you must tell me all about w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\anthion_harmon\\8951_quest_progress.wav", dialog_type="quest_progress", quest_id=8951, seconds=6.96 },
+      ["youre back adventurer you must tell me all about w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\anthion_harmon\\8957_quest_progress.wav", dialog_type="quest_progress", quest_id=8957, seconds=6.96 },
       ["youve recovered part of the medallion adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\anthion_harmon\\9015_quest_complete.wav", dialog_type="quest_complete", quest_id=9015, seconds=2.52 },
       ["youve returned and i see in your eyes that youve m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\anthion_harmon\\9022_quest_progress.wav", dialog_type="quest_progress", quest_id=9022, seconds=6.8 },
+      ["ysida lives thanks to your courage adventurer i am"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\anthion_harmon\\ysida_lives_thanks_to_your_courage_adventurer_i_am.wav", dialog_type="gossip", quest_id=nil, seconds=7.32 },
     },
   },
   ["Antur Fallow"] = {
@@ -1223,6 +1232,7 @@ NPC_DATABASE = {
       ["the key to scholomance is called a skeleton key it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\apothecary_dithers\\964_quest_accept.wav", dialog_type="quest_accept", quest_id=964, seconds=31.28 },
       ["the solution is ready in my cauldron its just the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\apothecary_dithers\\5804_quest_complete.wav", dialog_type="quest_complete", quest_id=5804, seconds=27.96 },
       ["thisll work adventurer my turn now i will imbue th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\apothecary_dithers\\964_quest_complete.wav", dialog_type="quest_complete", quest_id=964, seconds=24.72 },
+      ["well now adventurer lets get to work on those caul"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\apothecary_dithers\\well_now_adventurer_lets_get_to_work_on_those_caul.wav", dialog_type="gossip", quest_id=nil, seconds=30.64 },
       ["weve got quite the costly skeleton key there dont "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\apothecary_dithers\\5802_quest_complete.wav", dialog_type="quest_complete", quest_id=5802, seconds=27.68 },
       ["yeah i know who you are and i know why youre here "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\apothecary_dithers\\5514_quest_progress.wav", dialog_type="quest_progress", quest_id=5514, seconds=32.88 },
       ["yes adventurer the high executor mentioned you mig"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\apothecary_dithers\\838_quest_complete.wav", dialog_type="quest_complete", quest_id=838, seconds=24.08 },
@@ -1282,6 +1292,7 @@ NPC_DATABASE = {
       ["in fact it does appear that we are in need of even"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\apothecary_jezel\\8583_quest_accept.wav", dialog_type="quest_accept", quest_id=8583, seconds=20.8 },
       ["returned already with the purple lotus that i have"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\apothecary_jezel\\8582_quest_progress.wav", dialog_type="quest_progress", quest_id=8582, seconds=11.8 },
       ["the purple lotus adventurer is a reagent in a grea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\apothecary_jezel\\8582_quest_accept.wav", dialog_type="quest_accept", quest_id=8582, seconds=32.28 },
+      ["you are dutiful to inquire adventurer but all hord"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\apothecary_jezel\\you_are_dutiful_to_inquire_adventurer_but_all_hord.wav", dialog_type="gossip", quest_id=nil, seconds=14.56 },
     },
   },
   ["Apothecary Johaan"] = {
@@ -1498,6 +1509,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["archmage malin sent skuerto and i here to collect "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\apprentice_kryten\\691_quest_accept.wav", dialog_type="quest_accept", quest_id=691, seconds=25.16 },
+      ["dont mind skuerto adventurer he doesnt mean to be "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\apprentice_kryten\\dont_mind_skuerto_adventurer_he_doesnt_mean_to_be_.wav", dialog_type="gossip", quest_id=nil, seconds=11.6 },
       ["have you had any luck so far adventurer if my rese"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\apprentice_kryten\\691_quest_progress.wav", dialog_type="quest_progress", quest_id=691, seconds=24.36 },
       ["here you are adventurer the gem only needs to be p"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\apprentice_kryten\\695_quest_accept.wav", dialog_type="quest_accept", quest_id=695, seconds=23.96 },
       ["incredible i can see why malin asked you to come j"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\apprentice_kryten\\691_quest_complete.wav", dialog_type="quest_complete", quest_id=691, seconds=26.12 },
@@ -1554,6 +1566,7 @@ NPC_DATABASE = {
       ["i entered the land of dreams and dreamed of a cult"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\arch_druid_hamuul_runetotem\\1490_quest_accept.wav", dialog_type="quest_accept", quest_id=1490, seconds=37.92 },
       ["peace and serenity be yours friend you are here on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\arch_druid_hamuul_runetotem\\3782_quest_progress.wav", dialog_type="quest_progress", quest_id=3782, seconds=6.8 },
       ["the druids of thunder bluff sense a strange power "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\arch_druid_hamuul_runetotem\\886_quest_accept.wav", dialog_type="quest_accept", quest_id=886, seconds=36.52 },
+      ["the earth keeps many secrets adventurer it is our "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\arch_druid_hamuul_runetotem\\the_earth_keeps_many_secrets_adventurer_it_is_our_.wav", dialog_type="gossip", quest_id=nil, seconds=9.36 },
       ["the soil of ungoro crater is reportedly enriched w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\arch_druid_hamuul_runetotem\\3761_quest_accept.wav", dialog_type="quest_accept", quest_id=3761, seconds=33.28 },
       ["with what we call an evergreen pouch we have culti"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\arch_druid_hamuul_runetotem\\3782_quest_accept.wav", dialog_type="quest_accept", quest_id=3782, seconds=27.68 },
     },
@@ -1614,6 +1627,7 @@ NPC_DATABASE = {
     dialogs = {
       ["amnennar must be eradicated go swiftly"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archbishop_benedictus\\3636_quest_progress.wav", dialog_type="quest_progress", quest_id=3636, seconds=3.36 },
       ["an eye of paleth but this one has seen much sorrow"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archbishop_benedictus\\293_quest_complete.wav", dialog_type="quest_complete", quest_id=293, seconds=18.2 },
+      ["my blessings go to you adventurer and i pray they "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archbishop_benedictus\\my_blessings_go_to_you_adventurer_and_i_pray_they_.wav", dialog_type="gossip", quest_id=nil, seconds=15.0 },
       ["thank you adventurer the scourge will now think tw"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archbishop_benedictus\\3636_quest_complete.wav", dialog_type="quest_complete", quest_id=3636, seconds=8.12 },
       ["the scourge is a persistent threat to the alliance"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archbishop_benedictus\\3636_quest_accept.wav", dialog_type="quest_accept", quest_id=3636, seconds=33.56 },
     },
@@ -1709,6 +1723,7 @@ NPC_DATABASE = {
     narrator = "undead",
     dialogs = {
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\archmage_shymm\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=3.08 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\archmage_shymm\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=8.32 },
     },
   },
   ["Archmage Tervosh"] = {
@@ -1729,6 +1744,7 @@ NPC_DATABASE = {
       ["the man you seek the one known as hendel is not he"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archmage_tervosh\\1265_quest_complete.wav", dialog_type="quest_complete", quest_id=1265, seconds=19.2 },
       ["these are perfect adventurer i actually had other "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archmage_tervosh\\7070_quest_complete.wav", dialog_type="quest_complete", quest_id=7070, seconds=14.08 },
       ["we can only stay a few moments before returning to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archmage_tervosh\\we_can_only_stay_a_few_moments_before_returning_to.wav", dialog_type="gossip", quest_id=nil, seconds=6.92 },
+      ["well met adventurer we must be brief because there"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archmage_tervosh\\well_met_adventurer_we_must_be_brief_because_there.wav", dialog_type="gossip", quest_id=nil, seconds=4.6 },
       ["why dont we deal with you now hendel lady proudmoo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\archmage_tervosh\\why_dont_we_deal_with_you_now_hendel_lady_proudmoo.wav", dialog_type="gossip", quest_id=nil, seconds=5.16 },
     },
   },
@@ -1785,8 +1801,13 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "night_elf",
     dialogs = {
+      ["adventurer my form has now changed the true streng"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\adventurer_my_form_has_now_changed_the_true_streng.wav", dialog_type="gossip", quest_id=nil, seconds=7.8 },
       ["felwood was once a peaceful and serene land until "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\4261_quest_accept.wav", dialog_type="quest_accept", quest_id=4261, seconds=35.32 },
+      ["i can sense it now adventurer ashenvale lies down "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\i_can_sense_it_now_adventurer_ashenvale_lies_down_.wav", dialog_type="gossip", quest_id=nil, seconds=4.48 },
       ["i feel something strange"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\i_feel_something_strange.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["i sense the taint of corruption upon this adventur"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\i_sense_the_taint_of_corruption_upon_this_adventur.wav", dialog_type="gossip", quest_id=nil, seconds=4.04 },
+      ["please help me to get through this cursed forest a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\please_help_me_to_get_through_this_cursed_forest_a.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
+      ["thank you adventurer now my spirit will finally be"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\thank_you_adventurer_now_my_spirit_will_finally_be.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
       ["that i must fight against my own kind deeply sadde"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\that_i_must_fight_against_my_own_kind_deeply_sadde.wav", dialog_type="gossip", quest_id=nil, seconds=3.24 },
       ["the corruption of the fel has not left any of the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\the_corruption_of_the_fel_has_not_left_any_of_the_.wav", dialog_type="gossip", quest_id=nil, seconds=8.12 },
       ["this creature suffers from the effect of the fel w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\arei\\this_creature_suffers_from_the_effect_of_the_fel_w.wav", dialog_type="gossip", quest_id=nil, seconds=3.96 },
@@ -1898,6 +1919,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "human",
     dialogs = {
+      ["greetings adventurer if you bring me necrotic ston"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\argent_quartermaster\\greetings_adventurer_if_you_bring_me_necrotic_ston.wav", dialog_type="gossip", quest_id=nil, seconds=8.0 },
       ["here you are adventurer be careful out there our n"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\argent_quartermaster\\9321_quest_complete.wav", dialog_type="quest_complete", quest_id=9321, seconds=6.92 },
       ["i hope that you will find these items useful in fu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\argent_quartermaster\\9318_quest_complete.wav", dialog_type="quest_complete", quest_id=9318, seconds=3.32 },
       ["if you bring me eight necrotic runes from the scou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\argent_quartermaster\\9317_quest_progress.wav", dialog_type="quest_progress", quest_id=9317, seconds=12.08 },
@@ -1923,6 +1945,7 @@ NPC_DATABASE = {
       ["most impressive adventurer the chromatic mantle of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\argent_quartermaster_hasana\\5524_quest_complete.wav", dialog_type="quest_complete", quest_id=5524, seconds=22.72 },
       ["outstanding your tribute to the dawn is duly noted"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\argent_quartermaster_hasana\\5504_quest_complete.wav", dialog_type="quest_complete", quest_id=5504, seconds=21.44 },
       ["salutations mighty adventurer have you brought the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\argent_quartermaster_hasana\\5524_quest_progress.wav", dialog_type="quest_progress", quest_id=5524, seconds=11.04 },
+      ["the argent dawn salutes you adventurer i am hasana"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\argent_quartermaster_hasana\\the_argent_dawn_salutes_you_adventurer_i_am_hasana.wav", dialog_type="gossip", quest_id=nil, seconds=40.04 },
       ["your service to the argent dawn is to be commended"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\argent_quartermaster_hasana\\5504_quest_accept.wav", dialog_type="quest_accept", quest_id=5504, seconds=33.92 },
     },
   },
@@ -1939,6 +1962,7 @@ NPC_DATABASE = {
       ["most impressive adventurer the chromatic mantle of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\argent_quartermaster_lightspark\\5521_quest_complete.wav", dialog_type="quest_complete", quest_id=5521, seconds=19.88 },
       ["outstanding your tribute to the dawn is duly noted"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\argent_quartermaster_lightspark\\5507_quest_complete.wav", dialog_type="quest_complete", quest_id=5507, seconds=24.16 },
       ["salutations mighty adventurer have you brought the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\argent_quartermaster_lightspark\\5521_quest_progress.wav", dialog_type="quest_progress", quest_id=5521, seconds=11.92 },
+      ["the argent dawn salutes you adventurer the names l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\argent_quartermaster_lightspark\\the_argent_dawn_salutes_you_adventurer_the_names_l.wav", dialog_type="gossip", quest_id=nil, seconds=30.36 },
       ["your service to the argent dawn is to be commended"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\argent_quartermaster_lightspark\\5507_quest_accept.wav", dialog_type="quest_accept", quest_id=5507, seconds=30.92 },
     },
   },
@@ -2148,6 +2172,17 @@ NPC_DATABASE = {
       ["this remnant from the second war serves as a stirr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\narrator\\assassination_note.wav", dialog_type="item_text", quest_id=nil, seconds=9.24 },
     },
   },
+  ["Astor Hadren"] = {
+    race = "undead",
+    sex = "male",
+    portrait = "undead",
+    zone = "",
+    model_id = nil,
+    narrator = "undead",
+    dialogs = {
+      ["what do you want adventurer im running late and my"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\astor_hadren\\what_do_you_want_adventurer_im_running_late_and_my.wav", dialog_type="gossip", quest_id=nil, seconds=6.6 },
+    },
+  },
   ["Atalai Exile"] = {
     race = "troll",
     sex = "male",
@@ -2187,6 +2222,7 @@ NPC_DATABASE = {
     narrator = "undead",
     dialogs = {
       ["do you have my receipt book i cant wait to get bac"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\augustus_the_touched\\6164_quest_progress.wav", dialog_type="quest_progress", quest_id=6164, seconds=4.2 },
+      ["hi adventurer are you here to buy something or may"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\augustus_the_touched\\hi_adventurer_are_you_here_to_buy_something_or_may.wav", dialog_type="gossip", quest_id=nil, seconds=8.8 },
       ["im ready for business what you do want oh wait i c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\augustus_the_touched\\6164_quest_accept.wav", dialog_type="quest_accept", quest_id=6164, seconds=23.56 },
       ["there it is and oh my i forgot how full it was thi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\augustus_the_touched\\6164_quest_complete.wav", dialog_type="quest_complete", quest_id=6164, seconds=9.6 },
     },
@@ -2227,6 +2263,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead",
     dialogs = {
+      ["do not waste my time adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\austil_de_mon\\do_not_waste_my_time_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\austil_de_mon\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
       ["i was told deathguard dillinger has a job for some"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\austil_de_mon\\1818_quest_accept.wav", dialog_type="quest_accept", quest_id=1818, seconds=16.32 },
     },
@@ -2348,6 +2385,7 @@ NPC_DATABASE = {
       ["hello adventurer do you have the broken tools the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\baine_bloodhoof\\746_quest_progress.wav", dialog_type="quest_progress", quest_id=746, seconds=9.28 },
       ["if the palemanes had respected the land and its in"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\baine_bloodhoof\\745_quest_progress.wav", dialog_type="quest_progress", quest_id=745, seconds=5.76 },
       ["thank you adventurer this will calm the beasts of "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\baine_bloodhoof\\746_quest_complete.wav", dialog_type="quest_complete", quest_id=746, seconds=11.8 },
+      ["the land has been good to our people adventurer we"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\baine_bloodhoof\\the_land_has_been_good_to_our_people_adventurer_we.wav", dialog_type="gossip", quest_id=nil, seconds=5.64 },
       ["the rite of vision one of the rites of the earthmo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\baine_bloodhoof\\767_quest_accept.wav", dialog_type="quest_accept", quest_id=767, seconds=20.72 },
       ["there are dwarves preparing a dig site to the nort"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\baine_bloodhoof\\746_quest_accept.wav", dialog_type="quest_accept", quest_id=746, seconds=27.28 },
       ["word from my good friend chief hawkwind ah i can s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\baine_bloodhoof\\763_quest_complete.wav", dialog_type="quest_complete", quest_id=763, seconds=6.96 },
@@ -2410,9 +2448,21 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead",
     dialogs = {
+      ["do not waste my time adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\baltus_fowler\\do_not_waste_my_time_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\baltus_fowler\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=3.2 },
       ["i was told deathguard dillinger has a job for some"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\baltus_fowler\\1818_quest_accept.wav", dialog_type="quest_accept", quest_id=1818, seconds=13.28 },
       ["your renown as a warrior grows adventurer now it i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\baltus_fowler\\1718_quest_accept.wav", dialog_type="quest_accept", quest_id=1718, seconds=35.68 },
+    },
+  },
+  ["Bardu Sharpeye"] = {
+    race = "tauren",
+    sex = "male",
+    portrait = "tauren",
+    zone = "",
+    model_id = nil,
+    narrator = "tauren",
+    dialogs = {
+      ["hello adventurer ive set up camp here at the bulwa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\bardu_sharpeye\\hello_adventurer_ive_set_up_camp_here_at_the_bulwa.wav", dialog_type="gossip", quest_id=nil, seconds=28.4 },
     },
   },
   ["Barim Jurgenstaad"] = {
@@ -2578,6 +2628,7 @@ NPC_DATABASE = {
     narrator = "tauren_female",
     dialogs = {
       ["excellent this morrowgrain will no doubt help when"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\bashana_runetotem\\3804_quest_complete.wav", dialog_type="quest_complete", quest_id=3804, seconds=26.16 },
+      ["greetings noble adventurer this humble servant of "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\bashana_runetotem\\greetings_noble_adventurer_this_humble_servant_of_.wav", dialog_type="gossip", quest_id=nil, seconds=9.44 },
       ["heres your evergreen pouch that youll need to use "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\bashana_runetotem\\3786_quest_accept.wav", dialog_type="quest_accept", quest_id=3786, seconds=28.36 },
       ["kelris has eluded the argent dawn for some time fo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\bashana_runetotem\\6561_quest_complete.wav", dialog_type="quest_complete", quest_id=6561, seconds=36.92 },
       ["the arch druid is always looking for more morrowgr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\bashana_runetotem\\3804_quest_progress.wav", dialog_type="quest_progress", quest_id=3804, seconds=18.68 },
@@ -2774,6 +2825,7 @@ NPC_DATABASE = {
       ["belnistraszs sudden departure has left behind a bu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\3525_quest_complete.wav", dialog_type="quest_complete", quest_id=3525, seconds=33.04 },
       ["fantastic i thought you looked to be the heroic ty"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\3523_quest_complete.wav", dialog_type="quest_complete", quest_id=3523, seconds=16.4 },
       ["im not one for politics i care not if your affilia"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\3523_quest_progress.wav", dialog_type="quest_progress", quest_id=3523, seconds=29.64 },
+      ["incoming adventurer look sharp friends"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\incoming_adventurer_-_look_sharp_friends.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
       ["just two minutes to go were half way there but don"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\just_two_minutes_to_go_were_half_way_there_but_don.wav", dialog_type="gossip", quest_id=nil, seconds=4.4 },
       ["near the entrance is an idol that functions as a m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\3525_quest_accept.wav", dialog_type="quest_accept", quest_id=3525, seconds=33.68 },
       ["okay here we go its going to take about five minut"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\okay_here_we_go_its_going_to_take_about_five_minut.wav", dialog_type="gossip", quest_id=nil, seconds=10.88 },
@@ -2781,6 +2833,7 @@ NPC_DATABASE = {
       ["outstanding my name is belnistrasz and i thank you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\3523_quest_accept.wav", dialog_type="quest_accept", quest_id=3523, seconds=37.32 },
       ["thats it we made it the ritual is set in motion an"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\thats_it_--_we_made_it_the_ritual_is_set_in_motion.wav", dialog_type="gossip", quest_id=nil, seconds=9.84 },
       ["three minutes left i can feel the energy starting "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\three_minutes_left_--_i_can_feel_the_energy_starti.wav", dialog_type="gossip", quest_id=nil, seconds=5.0 },
+      ["youll rue the day you crossed me adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\belnistrasz\\youll_rue_the_day_you_crossed_me_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
     },
   },
   ["Ben Trias"] = {
@@ -3115,6 +3168,7 @@ NPC_DATABASE = {
       ["oh splendid day when i made the gizmonitor i never"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\bink\\1880_quest_complete.wav", dialog_type="quest_complete", quest_id=1880, seconds=21.04 },
       ["rumor is that tabetha a mage colleague who lives d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\bink\\2861_quest_accept.wav", dialog_type="quest_accept", quest_id=2861, seconds=25.0 },
       ["we mages do more than just waggle our fingers and "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\bink\\1880_quest_accept.wav", dialog_type="quest_accept", quest_id=1880, seconds=34.92 },
+      ["well met adventurer you want some advice befriend "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\bink\\well_met_adventurer_you_want_some_advice_befriend_.wav", dialog_type="gossip", quest_id=nil, seconds=9.0 },
     },
   },
   ["Binny Springblade"] = {
@@ -3177,7 +3231,7 @@ NPC_DATABASE = {
     dialogs = {
       ["i sense that you have seen blind mary you have my "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\blind_mary\\154_quest_progress.wav", dialog_type="quest_progress", quest_id=154, seconds=4.08 },
       ["i showed cog the beginnings of our starviewing mac"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\blind_mary\\177_quest_progress.wav", dialog_type="quest_progress", quest_id=177, seconds=7.8 },
-      ["no take it take this comb away from me im a monste"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\blind_mary\\154_quest_accept.wav", dialog_type="quest_accept", quest_id=154, seconds=5.24 },
+      ["take it take this comb away from me im a monster a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\blind_mary\\154_quest_accept.wav", dialog_type="quest_accept", quest_id=154, seconds=5.24 },
       ["the looking glass was one of my finest treasures u"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\blind_mary\\177_quest_accept.wav", dialog_type="quest_accept", quest_id=177, seconds=18.4 },
     },
   },
@@ -3192,6 +3246,7 @@ NPC_DATABASE = {
       ["as you can see adventurer we still need to pack aw"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\bloodguard_rawtar\\8612_quest_accept.wav", dialog_type="quest_accept", quest_id=8612, seconds=22.96 },
       ["im not standing here just to get a nice tan advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\bloodguard_rawtar\\8611_quest_accept.wav", dialog_type="quest_accept", quest_id=8611, seconds=32.08 },
       ["the sprite darters can be dangerous critters when "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\bloodguard_rawtar\\8611_quest_progress.wav", dialog_type="quest_progress", quest_id=8611, seconds=21.32 },
+      ["what is it adventurer the horde is done with all c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\bloodguard_rawtar\\what_is_it_adventurer_the_horde_is_done_with_all_c.wav", dialog_type="gossip", quest_id=nil, seconds=13.84 },
       ["wonderful adventurer these will do nicely there ar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\bloodguard_rawtar\\8611_quest_complete.wav", dialog_type="quest_complete", quest_id=8611, seconds=19.76 },
     },
   },
@@ -3307,6 +3362,7 @@ NPC_DATABASE = {
       ["the siblings jarien and sothos decided to join the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\bodley\\8991_quest_accept.wav", dialog_type="quest_accept", quest_id=8991, seconds=32.48 },
       ["then it is done you have retrieved the left piece "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\bodley\\8966_quest_progress.wav", dialog_type="quest_progress", quest_id=8966, seconds=10.12 },
       ["then it is done you have retrieved the right piece"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\bodley\\8989_quest_progress.wav", dialog_type="quest_progress", quest_id=8989, seconds=13.16 },
+      ["there there adventurer worry not which piece of th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\bodley\\there_there_adventurer_worry_not_which_piece_of_th.wav", dialog_type="gossip", quest_id=nil, seconds=7.24 },
       ["to be honest adventurer im surprised you made it b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\bodley\\8970_quest_complete.wav", dialog_type="quest_complete", quest_id=8970, seconds=17.24 },
       ["were nearly there adventurer all that is left is t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\bodley\\8994_quest_accept.wav", dialog_type="quest_accept", quest_id=8994, seconds=34.56 },
       ["weve come a long way adventurer and i just wanted "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\bodley\\8994_quest_progress.wav", dialog_type="quest_progress", quest_id=8994, seconds=16.36 },
@@ -3370,6 +3426,7 @@ NPC_DATABASE = {
       ["i dare say the alliance is going to be very happy "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\bonnie_stoneflayer\\8511_quest_complete.wav", dialog_type="quest_complete", quest_id=8511, seconds=14.5 },
       ["thank you for your generous donation adventurer im"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\bonnie_stoneflayer\\8512_quest_complete.wav", dialog_type="quest_complete", quest_id=8512, seconds=22.02 },
       ["we stoneflayers have a long history of being skinn"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\bonnie_stoneflayer\\8511_quest_accept.wav", dialog_type="quest_accept", quest_id=8511, seconds=29.52 },
+      ["well now adventurer it looks like the alliance has"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\bonnie_stoneflayer\\well_now_adventurer_it_looks_like_the_alliance_has.wav", dialog_type="gossip", quest_id=nil, seconds=20.08 },
     },
   },
   ["Book from Svens Farm"] = {
@@ -3420,6 +3477,7 @@ NPC_DATABASE = {
       ["i knew youd come through adventurer heres your rew"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\bor_wildmane\\8364_quest_complete.wav", dialog_type="quest_complete", quest_id=8364, seconds=3.44 },
       ["keep bringing me texts well soon force the twiligh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\bor_wildmane\\8319_quest_progress.wav", dialog_type="quest_progress", quest_id=8319, seconds=5.04 },
       ["some of the twilights hammer cultists carry around"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\bor_wildmane\\8318_quest_accept.wav", dialog_type="quest_accept", quest_id=8318, seconds=22.44 },
+      ["we have more than one enemy in silithus adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\bor_wildmane\\we_have_more_than_one_enemy_in_silithus_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=11.4 },
       ["well how did it go id do anything to leave my post"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\bor_wildmane\\8352_quest_progress.wav", dialog_type="quest_progress", quest_id=8352, seconds=6.4 },
       ["weve seen the twilights hammer cultists performing"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\bor_wildmane\\8361_quest_accept.wav", dialog_type="quest_accept", quest_id=8361, seconds=30.96 },
       ["yes thats right adventurer i have a very tough tas"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\bor_wildmane\\8351_quest_complete.wav", dialog_type="quest_complete", quest_id=8351, seconds=3.44 },
@@ -3440,6 +3498,7 @@ NPC_DATABASE = {
     dialogs = {
       ["care to learn how to turn the ore that you find in"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\borgosh_corebender\\care_to_learn_how_to_turn_the_ore_that_you_find_in.wav", dialog_type="gossip", quest_id=nil, seconds=5.2 },
       ["for the glory of the horde"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\borgosh_corebender\\5302_quest_progress.wav", dialog_type="quest_progress", quest_id=5302, seconds=1.88 },
+      ["hail adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\borgosh_corebender\\hail_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.56 },
       ["one day i will create a legendary hammer a hammer "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\borgosh_corebender\\5302_quest_accept.wav", dialog_type="quest_accept", quest_id=5302, seconds=30.4 },
       ["this is the final step before you begin your new c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\borgosh_corebender\\5302_quest_complete.wav", dialog_type="quest_complete", quest_id=5302, seconds=12.92 },
     },
@@ -3524,6 +3583,7 @@ NPC_DATABASE = {
     dialogs = {
       ["greetings adventurer good to see you here in our g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\braenna_flintcrag\\5633_quest_accept.wav", dialog_type="quest_accept", quest_id=5633, seconds=24.5 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\braenna_flintcrag\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.58 },
+      ["i hope the light is with you adventurer is there a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\braenna_flintcrag\\i_hope_the_light_is_with_you_adventurer_is_there_a.wav", dialog_type="gossip", quest_id=nil, seconds=4.82 },
       ["it is the way of the divine to help those in need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\braenna_flintcrag\\8254_quest_accept.wav", dialog_type="quest_accept", quest_id=8254, seconds=19.46 },
     },
   },
@@ -3536,6 +3596,17 @@ NPC_DATABASE = {
     narrator = "goblin",
     dialogs = {
       ["where would you like to fly to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\bragok\\where_would_you_like_to_fly_to.wav", dialog_type="gossip", quest_id=nil, seconds=1.96 },
+    },
+  },
+  ["Brakgul Deathbringer"] = {
+    race = "orc",
+    sex = "male",
+    portrait = "orc",
+    zone = "",
+    model_id = nil,
+    narrator = "orc",
+    dialogs = {
+      ["thromka adventurer are you ready to fight for the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\brakgul_deathbringer\\thromka_adventurer_are_you_ready_to_fight_for_the_.wav", dialog_type="gossip", quest_id=nil, seconds=5.24 },
     },
   },
   ["Brandur Ironhammer"] = {
@@ -3563,6 +3634,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\branstock_khalder\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
       ["hey adventurer got a minute ya been following the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\branstock_khalder\\5626_quest_accept.wav", dialog_type="quest_accept", quest_id=5626, seconds=23.72 },
+      ["i hope the light is with you adventurer is there a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\branstock_khalder\\i_hope_the_light_is_with_you_adventurer_is_there_a.wav", dialog_type="gossip", quest_id=nil, seconds=4.88 },
       ["im the one who can train ya as you start to find y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\branstock_khalder\\3110_quest_complete.wav", dialog_type="quest_complete", quest_id=3110, seconds=23.4 },
     },
   },
@@ -3587,6 +3659,7 @@ NPC_DATABASE = {
     dialogs = {
       ["bring me the book after youve studied it i will no"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\braug_dimspirit\\1154_quest_progress.wav", dialog_type="quest_progress", quest_id=1154, seconds=6.72 },
       ["life is full of questions adventurer you will neve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\braug_dimspirit\\6627_quest_progress.wav", dialog_type="quest_progress", quest_id=6627, seconds=9.04 },
+      ["my question to you is this adventurer which of the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\braug_dimspirit\\my_question_to_you_is_this_adventurer_which_of_the.wav", dialog_type="gossip", quest_id=nil, seconds=8.56 },
       ["the days and nights grow colder throughout the wor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\braug_dimspirit\\1152_quest_complete.wav", dialog_type="quest_complete", quest_id=1152, seconds=29.48 },
       ["this is the book i named there is hope you will an"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\braug_dimspirit\\1154_quest_complete.wav", dialog_type="quest_complete", quest_id=1154, seconds=13.16 },
       ["well done adventurer you have passed the first por"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\braug_dimspirit\\1159_quest_accept.wav", dialog_type="quest_accept", quest_id=1159, seconds=30.28 },
@@ -3868,12 +3941,12 @@ NPC_DATABASE = {
       ["i thought some bloodshed might ensue if you tried "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1535_quest_complete.wav", dialog_type="quest_complete", quest_id=1535, seconds=24.64 },
       ["islen will have one more task for you before rewar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\220_quest_accept.wav", dialog_type="quest_accept", quest_id=220, seconds=15.32 },
       ["long ago i followed some companions into the hills"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1536_quest_accept.wav", dialog_type="quest_accept", quest_id=1536, seconds=40.36 },
+      ["mmm i have a feeling i know what youre going to as"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1530_quest_complete.wav", dialog_type="quest_complete", quest_id=1530, seconds=34.0 },
       ["take this waterskin and head deep into the lush fo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1534_quest_accept.wav", dialog_type="quest_accept", quest_id=1534, seconds=35.6 },
       ["the well remaining pure within the town reminds me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1536_quest_progress.wav", dialog_type="quest_progress", quest_id=1536, seconds=34.4 },
       ["this is good adventurer youre dedicated to the tas"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1536_quest_complete.wav", dialog_type="quest_complete", quest_id=1536, seconds=14.76 },
       ["to find understanding and gain the sapta from me y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1535_quest_accept.wav", dialog_type="quest_accept", quest_id=1535, seconds=38.44 },
       ["wonderful adventurer with all three samples gather"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1534_quest_complete.wav", dialog_type="quest_complete", quest_id=1534, seconds=31.12 },
-      ["yes mmm i have a feeling i know what youre going t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\brine\\1530_quest_complete.wav", dialog_type="quest_complete", quest_id=1530, seconds=34.0 },
     },
   },
   ["Brock Stoneseeker"] = {
@@ -3886,6 +3959,7 @@ NPC_DATABASE = {
     dialogs = {
       ["have you had your fill of thelsamar so soon are yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\brock_stoneseeker\\6387_quest_progress.wav", dialog_type="quest_progress", quest_id=6387, seconds=5.58 },
       ["i see a lot of young dwarves at my door eager to l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\brock_stoneseeker\\6387_quest_accept.wav", dialog_type="quest_accept", quest_id=6387, seconds=32.44 },
+      ["the best miner has a firm grip on adventurer pick "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\brock_stoneseeker\\the_best_miner_has_a_firm_grip_on_adventurer_pick_.wav", dialog_type="gossip", quest_id=nil, seconds=8.16 },
       ["you brought the picks great ill get these to my mi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\brock_stoneseeker\\6392_quest_complete.wav", dialog_type="quest_complete", quest_id=6392, seconds=15.8 },
       ["you have not lived until you have dug deep into th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\brock_stoneseeker\\you_have_not_lived_until_you_have_dug_deep_into_th.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
     },
@@ -3899,6 +3973,17 @@ NPC_DATABASE = {
     narrator = "narrator",
     dialogs = {
       ["below is the list students who obtained a platinum"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\narrator\\brocks_list.wav", dialog_type="item_text", quest_id=nil, seconds=19.04 },
+    },
+  },
+  ["Brogun Stoneshield"] = {
+    race = "dwarf",
+    sex = "male",
+    portrait = "dwarf",
+    zone = "",
+    model_id = nil,
+    narrator = "dwarf",
+    dialogs = {
+      ["aye adventurer are ye ready to head to alterac val"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\brogun_stoneshield\\aye_adventurer_are_ye_ready_to_head_to_alterac_val.wav", dialog_type="gossip", quest_id=nil, seconds=6.12 },
     },
   },
   ["Brohann Caskbelly"] = {
@@ -3986,6 +4071,7 @@ NPC_DATABASE = {
     narrator = "goblin",
     dialogs = {
       ["thank you adventurer youre on a quick path to rede"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\bronn_fitzwrench\\9266_quest_complete.wav", dialog_type="quest_complete", quest_id=9266, seconds=5.2 },
+      ["what can i do for you adventurer make it quick i d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\bronn_fitzwrench\\what_can_i_do_for_you_adventurer_make_it_quick_i_d.wav", dialog_type="gossip", quest_id=nil, seconds=4.4 },
       ["you mustve done something really bad to us or our "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\bronn_fitzwrench\\9266_quest_progress.wav", dialog_type="quest_progress", quest_id=9266, seconds=28.52 },
     },
   },
@@ -4024,6 +4110,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "human",
     dialogs = {
+      ["do not turn your back on the light adventurer it m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\brother_benjamin\\do_not_turn_your_back_on_the_light_adventurer_it_m.wav", dialog_type="gossip", quest_id=nil, seconds=5.56 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\brother_benjamin\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
     },
   },
@@ -4059,6 +4146,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["a priestess recently visited our halls seeking you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\brother_joshua\\5631_quest_accept.wav", dialog_type="quest_accept", quest_id=5631, seconds=19.44 },
+      ["do not turn your back on the light adventurer it m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\brother_joshua\\do_not_turn_your_back_on_the_light_adventurer_it_m.wav", dialog_type="gossip", quest_id=nil, seconds=5.64 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\brother_joshua\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
       ["it is the way of the divine to help those in need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\brother_joshua\\8254_quest_accept.wav", dialog_type="quest_accept", quest_id=8254, seconds=20.04 },
       ["it is time for you to return to stormwind young on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\brother_joshua\\5676_quest_accept.wav", dialog_type="quest_accept", quest_id=5676, seconds=31.32 },
@@ -4320,6 +4408,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["i have a lot of pent up anger and hostility just g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_guardsman\\i_have_a_lot_of_pent_up_anger_and_hostility_just_g.wav", dialog_type="gossip", quest_id=nil, seconds=4.48 },
+      ["ive got my eye on you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_guardsman\\ive_got_my_eye_on_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.08 },
       ["theres no loitering pan handling cursing fighting "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_guardsman\\theres_no_loitering_pan_handling_cursing_fighting_.wav", dialog_type="gossip", quest_id=nil, seconds=6.64 },
       ["watch your step stranger we do not allow miscreant"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_guardsman\\watch_your_step_stranger_we_do_not_allow_miscreant.wav", dialog_type="gossip", quest_id=nil, seconds=4.28 },
       ["why you look like a common street urchin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_guardsman\\why_you_look_like_a_common_street_urchin.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
@@ -4334,6 +4423,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["i have a lot of pent up anger and hostility just g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_horseman\\i_have_a_lot_of_pent_up_anger_and_hostility_just_g.wav", dialog_type="gossip", quest_id=nil, seconds=4.68 },
+      ["ive got my eye on you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_horseman\\ive_got_my_eye_on_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.0 },
       ["theres no loitering pan handling cursing fighting "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_horseman\\theres_no_loitering_pan_handling_cursing_fighting_.wav", dialog_type="gossip", quest_id=nil, seconds=7.6 },
       ["watch your step stranger we do not allow miscreant"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_horseman\\watch_your_step_stranger_we_do_not_allow_miscreant.wav", dialog_type="gossip", quest_id=nil, seconds=4.04 },
       ["why you look like a common street urchin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\caer_darrow_horseman\\why_you_look_like_a_common_street_urchin.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
@@ -4349,6 +4439,7 @@ NPC_DATABASE = {
     dialogs = {
       ["adventurer anastasia hartwell has a task for someo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\cain_firesong\\1881_quest_accept.wav", dialog_type="quest_accept", quest_id=1881, seconds=12.4 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\cain_firesong\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\cain_firesong\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=8.12 },
     },
   },
   ["Cairne Bloodhoof"] = {
@@ -4421,8 +4512,8 @@ NPC_DATABASE = {
     dialogs = {
       ["hey mate do a favor for a young man whos been figh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\calvin_montague\\8_quest_accept.wav", dialog_type="quest_accept", quest_id=8, seconds=29.8 },
       ["incredible what skill thought youd be easy prey ad"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\calvin_montague\\590_quest_complete.wav", dialog_type="quest_complete", quest_id=590, seconds=15.52 },
-      ["what what you want money i dont owe you any money "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\calvin_montague\\590_quest_accept.wav", dialog_type="quest_accept", quest_id=590, seconds=10.48 },
       ["yes yes what is it the forsaken they certainly do "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\calvin_montague\\8_quest_progress.wav", dialog_type="quest_progress", quest_id=8, seconds=14.48 },
+      ["you want money i dont owe you any money letter wha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\calvin_montague\\590_quest_accept.wav", dialog_type="quest_accept", quest_id=590, seconds=10.48 },
     },
   },
   ["Canaga Earthcaller"] = {
@@ -4437,6 +4528,7 @@ NPC_DATABASE = {
       ["excellent the totem i will craft for you is more t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\canaga_earthcaller\\1518_quest_complete.wav", dialog_type="quest_complete", quest_id=1518, seconds=31.16 },
       ["excellent your success shows that you are prepared"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\canaga_earthcaller\\1516_quest_complete.wav", dialog_type="quest_complete", quest_id=1516, seconds=35.16 },
       ["i give you one in good faith you already proved yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\canaga_earthcaller\\1463_quest_complete.wav", dialog_type="quest_complete", quest_id=1463, seconds=7.08 },
+      ["i welcome you back adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\canaga_earthcaller\\i_welcome_you_back_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.2 },
       ["patience is earths greatest virtue the earth witne"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\canaga_earthcaller\\1516_quest_progress.wav", dialog_type="quest_progress", quest_id=1516, seconds=30.64 },
       ["the time is now young adventurer youve grown stron"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\canaga_earthcaller\\1516_quest_accept.wav", dialog_type="quest_accept", quest_id=1516, seconds=33.68 },
     },
@@ -5034,6 +5126,7 @@ NPC_DATABASE = {
       ["ah yes a nice clutch of legs you have there let me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\chef_grual\\93_quest_complete.wav", dialog_type="quest_complete", quest_id=93, seconds=15.96 },
       ["and here we are crab cakes ala grual"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\chef_grual\\240_quest_accept.wav", dialog_type="quest_accept", quest_id=240, seconds=3.88 },
       ["hail adventurer did you get those gooey spider leg"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\chef_grual\\93_quest_progress.wav", dialog_type="quest_progress", quest_id=93, seconds=4.6 },
+      ["hello hello welcome to my kitchen adventurer this "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\chef_grual\\hello_hello_welcome_to_my_kitchen_adventurer_this_.wav", dialog_type="gossip", quest_id=nil, seconds=10.56 },
       ["ill let you in on a little secret dusky crab cakes"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\chef_grual\\93_quest_accept.wav", dialog_type="quest_accept", quest_id=93, seconds=21.88 },
       ["seasoned wolf kabobs are a house favorite sure i c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\chef_grual\\90_quest_accept.wav", dialog_type="quest_accept", quest_id=90, seconds=24.0 },
       ["very nice work adventurer enjoy the delicacy known"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\chef_grual\\90_quest_complete.wav", dialog_type="quest_complete", quest_id=90, seconds=5.04 },
@@ -5183,6 +5276,7 @@ NPC_DATABASE = {
     dialogs = {
       ["all members of the tribe share in the harmony of l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\chief_hawkwind\\752_quest_accept.wav", dialog_type="quest_accept", quest_id=752, seconds=24.8 },
       ["for you to continue with the rites of the earthmot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\chief_hawkwind\\763_quest_accept.wav", dialog_type="quest_accept", quest_id=763, seconds=37.44 },
+      ["hail adventurer in my years i have seen many eager"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\chief_hawkwind\\hail_adventurer_in_my_years_i_have_seen_many_eager.wav", dialog_type="gossip", quest_id=nil, seconds=13.24 },
       ["many are the paths of the earth mother may your an"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\chief_hawkwind\\many_are_the_paths_of_the_earth_mother_may_your_an.wav", dialog_type="gossip", quest_id=nil, seconds=6.12 },
       ["this is quite alarming indeed but with this inform"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\chief_hawkwind\\781_quest_complete.wav", dialog_type="quest_complete", quest_id=781, seconds=10.92 },
       ["what brings you to my village adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\chief_hawkwind\\763_quest_progress.wav", dialog_type="quest_progress", quest_id=763, seconds=2.4 },
@@ -5263,6 +5357,7 @@ NPC_DATABASE = {
     narrator = "undead",
     dialogs = {
       ["did stoley cough up my booze"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\christoph_walker\\8417_quest_progress.wav", dialog_type="quest_progress", quest_id=8417, seconds=2.8 },
+      ["do not waste my time adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\christoph_walker\\do_not_waste_my_time_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\christoph_walker\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
       ["in the blasted lands there is a troubled spirit wh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\christoph_walker\\8417_quest_accept.wav", dialog_type="quest_accept", quest_id=8417, seconds=11.84 },
     },
@@ -5289,6 +5384,7 @@ NPC_DATABASE = {
       ["again i think you for your assistance please accep"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\chromie\\4973_quest_complete.wav", dialog_type="quest_complete", quest_id=4973, seconds=15.84 },
       ["ah yes there they are together they weave a powerf"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\chromie\\5941_quest_complete.wav", dialog_type="quest_complete", quest_id=5941, seconds=12.32 },
       ["did you find the book adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\chromie\\5154_quest_progress.wav", dialog_type="quest_progress", quest_id=5154, seconds=2.12 },
+      ["hello once again adventurer i sense that the flow "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\chromie\\hello_once_again_adventurer_i_sense_that_the_flow_.wav", dialog_type="gossip", quest_id=nil, seconds=17.44 },
       ["i need you to reach into the world beyond this roo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\chromie\\4972_quest_accept.wav", dialog_type="quest_accept", quest_id=4972, seconds=31.6 },
       ["i think i heard ghosts outside they whisper scary "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\chromie\\5721_quest_progress.wav", dialog_type="quest_progress", quest_id=5721, seconds=4.68 },
       ["if you are willing to help once more i can certain"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\chromie\\4973_quest_accept.wav", dialog_type="quest_accept", quest_id=4973, seconds=22.68 },
@@ -5523,6 +5619,7 @@ NPC_DATABASE = {
       ["did you find devlin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\coleman_farthing\\362_quest_progress.wav", dialog_type="quest_progress", quest_id=362, seconds=2.08 },
       ["do you have the heirlooms adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\coleman_farthing\\1821_quest_progress.wav", dialog_type="quest_progress", quest_id=1821, seconds=2.84 },
       ["do you have the remains of the agamands are those "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\coleman_farthing\\354_quest_progress.wav", dialog_type="quest_progress", quest_id=354, seconds=6.56 },
+      ["i hope youre well all things considered sit for a "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\coleman_farthing\\i_hope_youre_well_all_things_considered_sit_for_a_.wav", dialog_type="gossip", quest_id=nil, seconds=8.68 },
       ["i will keep three of the weapons you returned to m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\coleman_farthing\\1822_quest_complete.wav", dialog_type="quest_complete", quest_id=1822, seconds=14.2 },
       ["revenge has a sweet taste dont you think when you "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\coleman_farthing\\354_quest_complete.wav", dialog_type="quest_complete", quest_id=354, seconds=17.32 },
       ["thank you devlins bones will rest nicely on my man"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\coleman_farthing\\362_quest_complete.wav", dialog_type="quest_complete", quest_id=362, seconds=17.16 },
@@ -5615,6 +5712,7 @@ NPC_DATABASE = {
     dialogs = {
       ["adventurer im getting reports of an undead infesta"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\commander_althea_ebonlocke\\57_quest_accept.wav", dialog_type="quest_accept", quest_id=57, seconds=24.12 },
       ["as commander of the night watch it is my sworn dut"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\commander_althea_ebonlocke\\56_quest_accept.wav", dialog_type="quest_accept", quest_id=56, seconds=30.76 },
+      ["at ease adventurer if you are just passing though "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\commander_althea_ebonlocke\\at_ease_adventurer_if_you_are_just_passing_though_.wav", dialog_type="gossip", quest_id=nil, seconds=19.16 },
       ["back again adventurer what do you have this time"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\commander_althea_ebonlocke\\80_quest_progress.wav", dialog_type="quest_progress", quest_id=80, seconds=3.92 },
       ["from what my scouts tell me morladim wanders throu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\commander_althea_ebonlocke\\228_quest_accept.wav", dialog_type="quest_accept", quest_id=228, seconds=17.0 },
       ["have you killed those warriors and mages"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\commander_althea_ebonlocke\\56_quest_progress.wav", dialog_type="quest_progress", quest_id=56, seconds=2.92 },
@@ -5657,6 +5755,7 @@ NPC_DATABASE = {
       ["this is excellent adventurer i would say i am surp"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_ashlam_valorfist\\8418_quest_complete.wav", dialog_type="quest_complete", quest_id=8418, seconds=11.48 },
       ["through the use of a magical device known as a bea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_ashlam_valorfist\\5097_quest_accept.wav", dialog_type="quest_accept", quest_id=5097, seconds=31.12 },
       ["very well adventurer lets see what youre made of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_ashlam_valorfist\\8415_quest_complete.wav", dialog_type="quest_complete", quest_id=8415, seconds=3.52 },
+      ["welcome to the front lines adventurer the kingdom "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_ashlam_valorfist\\welcome_to_the_front_lines_adventurer_the_kingdom_.wav", dialog_type="gossip", quest_id=nil, seconds=28.8 },
       ["welcome to the plaguelands hero this is one of mos"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_ashlam_valorfist\\5066_quest_complete.wav", dialog_type="quest_complete", quest_id=5066, seconds=24.44 },
       ["welcome to the plaguelands hero this is one of the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_ashlam_valorfist\\5091_quest_complete.wav", dialog_type="quest_complete", quest_id=5091, seconds=23.04 },
       ["what evil have you brought me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_ashlam_valorfist\\8414_quest_progress.wav", dialog_type="quest_progress", quest_id=8414, seconds=2.12 },
@@ -5702,6 +5801,7 @@ NPC_DATABASE = {
       ["so why are you here what are we to do if there is "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_eligor_dawnbringer\\so_why_are_you_here_what_are_we_to_do_if_there_is_.wav", dialog_type="gossip", quest_id=nil, seconds=3.68 },
       ["tauren"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_eligor_dawnbringer\\tauren.wav", dialog_type="gossip", quest_id=nil, seconds=0.84 },
       ["the ashbringer is dead and there will never be ano"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_eligor_dawnbringer\\the_ashbringer_is_dead_and_there_will_never_be_ano.wav", dialog_type="gossip", quest_id=nil, seconds=15.4 },
+      ["watch your step adventurer we of the brotherhood o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_eligor_dawnbringer\\watch_your_step_adventurer_we_of_the_brotherhood_o.wav", dialog_type="gossip", quest_id=nil, seconds=19.16 },
       ["yet you think that recovering ashbringer will some"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_eligor_dawnbringer\\yet_you_think_that_recovering_ashbringer_will_some.wav", dialog_type="gossip", quest_id=nil, seconds=27.4 },
       ["you got some missing parts for the quest please go"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_eligor_dawnbringer\\9043_quest_progress.wav", dialog_type="quest_progress", quest_id=9043, seconds=3.32 },
       ["you lack tact commander this is not surprising how"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_eligor_dawnbringer\\you_lack_tact_commander_this_is_not_surprising_how.wav", dialog_type="gossip", quest_id=nil, seconds=12.32 },
@@ -5910,6 +6010,7 @@ NPC_DATABASE = {
       ["mister body guard are you going to earn your money"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\cork_gizelton\\mister_body_guard_are_you_going_to_earn_your_money.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
       ["under normal circumstances rigger and i would lead"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\cork_gizelton\\5821_quest_accept.wav", dialog_type="quest_accept", quest_id=5821, seconds=31.08 },
       ["why do i find myself waiting for that blasted cara"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\cork_gizelton\\5821_quest_progress.wav", dialog_type="quest_progress", quest_id=5821, seconds=5.76 },
+      ["youre fired i mean help"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\cork_gizelton\\youre_fired_i_mean_help.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
     },
   },
   ["Corporal Carnes"] = {
@@ -5965,6 +6066,17 @@ NPC_DATABASE = {
       ["ah the ears well done your service to the alliance"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\corporal_melkins\\1387_quest_complete.wav", dialog_type="quest_complete", quest_id=1387, seconds=10.92 },
       ["do you have a report adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\corporal_melkins\\1387_quest_progress.wav", dialog_type="quest_progress", quest_id=1387, seconds=2.04 },
       ["many clans make up the centaur race each has its o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\corporal_melkins\\1387_quest_accept.wav", dialog_type="quest_accept", quest_id=1387, seconds=29.48 },
+    },
+  },
+  ["Corporal Noreg Stormpike"] = {
+    race = "dwarf",
+    sex = "male",
+    portrait = "dwarf",
+    zone = "",
+    model_id = nil,
+    narrator = "dwarf",
+    dialogs = {
+      ["adventurer its good to see veterans like you in th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\corporal_noreg_stormpike\\adventurer_its_good_to_see_veterans_like_you_in_th.wav", dialog_type="gossip", quest_id=nil, seconds=13.12 },
     },
   },
   ["Corporal Sethman"] = {
@@ -6105,7 +6217,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "goblin",
     dialogs = {
-      ["oops had a little mishap as you can see the mornin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\crane_operator_bigglefuzz\\959_quest_accept.wav", dialog_type="quest_accept", quest_id=959, seconds=34.48 },
+      ["had a little mishap as you can see the morning car"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\crane_operator_bigglefuzz\\959_quest_accept.wav", dialog_type="quest_accept", quest_id=959, seconds=34.48 },
       ["superb and just as i was about to lose my job too "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\crane_operator_bigglefuzz\\959_quest_complete.wav", dialog_type="quest_complete", quest_id=959, seconds=10.52 },
       ["the dockmaster has been on my case ever since mad "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\crane_operator_bigglefuzz\\959_quest_progress.wav", dialog_type="quest_progress", quest_id=959, seconds=21.68 },
     },
@@ -6296,8 +6408,8 @@ NPC_DATABASE = {
       ["has the giant been felled"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\cyrus_therepentous\\4024_quest_progress.wav", dialog_type="quest_progress", quest_id=4024, seconds=2.28 },
       ["i wish to taste the searing flames of the mountain"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\cyrus_therepentous\\4024_quest_accept.wav", dialog_type="quest_accept", quest_id=4024, seconds=42.36 },
       ["only a fool would dare disturb me in my lair"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\cyrus_therepentous\\only_a_fool_would_dare_disturb_me_in_my_lair.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
+      ["take your prize and be gone leave my sight at once"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\cyrus_therepentous\\4024_quest_complete.wav", dialog_type="quest_complete", quest_id=4024, seconds=4.4 },
       ["the flight is aware of your work in the searing go"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\cyrus_therepentous\\4022_quest_accept.wav", dialog_type="quest_accept", quest_id=4022, seconds=8.08 },
-      ["yes take your prize and be gone leave my sight at "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\cyrus_therepentous\\4024_quest_complete.wav", dialog_type="quest_complete", quest_id=4024, seconds=4.4 },
       ["you have proven that you are not entirely useless "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\cyrus_therepentous\\4022_quest_complete.wav", dialog_type="quest_complete", quest_id=4022, seconds=3.6 },
       ["you seek out the flight present to me proof of you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\cyrus_therepentous\\4023_quest_accept.wav", dialog_type="quest_accept", quest_id=4023, seconds=4.08 },
     },
@@ -6329,6 +6441,7 @@ NPC_DATABASE = {
       ["the hederine demons that occupy the foothills of m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\daio_the_decrepit\\7582_quest_accept.wav", dialog_type="quest_accept", quest_id=7582, seconds=24.44 },
       ["the hederine will not give up their precious gems "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\daio_the_decrepit\\7582_quest_progress.wav", dialog_type="quest_progress", quest_id=7582, seconds=4.56 },
       ["the prison is ready now for the most difficult por"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\daio_the_decrepit\\7583_quest_accept.wav", dialog_type="quest_accept", quest_id=7583, seconds=31.44 },
+      ["you are certainly a long way from home adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\daio_the_decrepit\\you_are_certainly_a_long_way_from_home_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
       ["you have done as i have asked you are ready to be "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\daio_the_decrepit\\7583_quest_complete.wav", dialog_type="quest_complete", quest_id=7583, seconds=6.04 },
       ["you must retrieve bindings for the prison of the d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\daio_the_decrepit\\7581_quest_accept.wav", dialog_type="quest_accept", quest_id=7581, seconds=14.2 },
     },
@@ -6478,6 +6591,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead",
     dialogs = {
+      ["do not waste my time adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dannal_stern\\do_not_waste_my_time_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dannal_stern\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
       ["i will be here to train you as you grow in experie"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dannal_stern\\3095_quest_complete.wav", dialog_type="quest_complete", quest_id=3095, seconds=28.68 },
     },
@@ -6509,6 +6623,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["ah this should be perfect i cant wait to taste the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\dar\\1430_quest_complete.wav", dialog_type="quest_complete", quest_id=1430, seconds=10.68 },
+      ["good adventurer you are under the spells influence"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\dar\\good_adventurer_you_are_under_the_spells_influence.wav", dialog_type="gossip", quest_id=nil, seconds=6.56 },
       ["i have a cask of wine waiting for your success adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\dar\\1430_quest_progress.wav", dialog_type="quest_progress", quest_id=1430, seconds=8.72 },
       ["im working on getting some supplies together for o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\dar\\698_quest_accept.wav", dialog_type="quest_accept", quest_id=698, seconds=28.64 },
       ["loktar adventurer traveling through the swamps isn"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\dar\\698_quest_progress.wav", dialog_type="quest_progress", quest_id=698, seconds=7.8 },
@@ -6565,6 +6680,7 @@ NPC_DATABASE = {
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_beryl\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
       ["our power comes from darkness and shadow adventure"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_beryl\\5650_quest_accept.wav", dialog_type="quest_accept", quest_id=5650, seconds=34.84 },
       ["our powers make us ideal for so many situations ad"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_beryl\\5650_quest_progress.wav", dialog_type="quest_progress", quest_id=5650, seconds=27.0 },
+      ["what can this insignificant servant do for you adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_beryl\\what_can_this_insignificant_servant_do_for_you_adv.wav", dialog_type="gossip", quest_id=nil, seconds=5.32 },
       ["you have passed my test with ease good soon you wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_beryl\\5650_quest_complete.wav", dialog_type="quest_complete", quest_id=5650, seconds=26.72 },
     },
   },
@@ -6579,6 +6695,7 @@ NPC_DATABASE = {
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_duesten\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
       ["there are many lessons that the forsaken have lear"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_duesten\\5651_quest_accept.wav", dialog_type="quest_accept", quest_id=5651, seconds=35.2 },
       ["there is only one thing you must know we have surv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_duesten\\3097_quest_complete.wav", dialog_type="quest_complete", quest_id=3097, seconds=32.0 },
+      ["what can this insignificant servant do for you adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\dark_cleric_duesten\\what_can_this_insignificant_servant_do_for_you_adv.wav", dialog_type="gossip", quest_id=nil, seconds=4.72 },
     },
   },
   ["Dark Iron Script"] = {
@@ -6620,6 +6737,7 @@ NPC_DATABASE = {
       ["the burning of the wickerman will begin in thirty "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\darkcaller_yanka\\the_burning_of_the_wickerman_will_begin_in_thirty_.wav", dialog_type="gossip", quest_id=nil, seconds=10.44 },
       ["the humans of southshore love their ale and as suc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\darkcaller_yanka\\8322_quest_accept.wav", dialog_type="quest_accept", quest_id=8322, seconds=28.04 },
       ["the wickerman festival now begins power to the for"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\darkcaller_yanka\\the_wickerman_festival_now_begins_power_to_the_for.wav", dialog_type="gossip", quest_id=nil, seconds=3.68 },
+      ["welcome to the wickerman festival adventurer on th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\darkcaller_yanka\\welcome_to_the_wickerman_festival_adventurer_on_th.wav", dialog_type="gossip", quest_id=nil, seconds=28.44 },
     },
   },
   ["Darkmoon Faire Carnie"] = {
@@ -6656,6 +6774,7 @@ NPC_DATABASE = {
     narrator = "troll",
     dialogs = {
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\darkspear_commendation_officer\\8816_quest_progress.wav", dialog_type="quest_progress", quest_id=8816, seconds=30.28 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\darkspear_commendation_officer\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=30.44 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\darkspear_commendation_officer\\8824_quest_progress.wav", dialog_type="quest_progress", quest_id=8824, seconds=29.52 },
     },
   },
@@ -6784,11 +6903,12 @@ NPC_DATABASE = {
     dialogs = {
       ["i didnt mean anything by the comment bout you bein"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\1447_quest_progress.wav", dialog_type="quest_progress", quest_id=1447, seconds=6.2 },
       ["its okay boys back off youve done enough ill meet "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\its_okay_boys_back_off_youve_done_enough_ill_meet_.wav", dialog_type="gossip", quest_id=nil, seconds=4.44 },
+      ["now youre gonna get it good adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\now_youre_gonna_get_it_good_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
       ["okay okay enough fighting no one else needs to get"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\okay_okay_enough_fighting_no_one_else_needs_to_get.wav", dialog_type="gossip", quest_id=nil, seconds=3.68 },
       ["so yeah um i might know something bout that meetin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\1247_quest_accept.wav", dialog_type="quest_accept", quest_id=1247, seconds=22.92 },
       ["so you came to me for a reason what is it you need"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\1447_quest_complete.wav", dialog_type="quest_complete", quest_id=1447, seconds=4.0 },
-      ["what you come into me alley and ask questions abou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\1246_quest_complete.wav", dialog_type="quest_complete", quest_id=1246, seconds=7.6 },
       ["yeah youre obviously not the smartest adventurer t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\1447_quest_accept.wav", dialog_type="quest_accept", quest_id=1447, seconds=9.0 },
+      ["you come into me alley and ask questions about me "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dashel_stonefist\\1246_quest_complete.wav", dialog_type="quest_complete", quest_id=1246, seconds=7.6 },
     },
   },
   ["David Langston"] = {
@@ -6950,6 +7070,7 @@ NPC_DATABASE = {
     narrator = "undead_female",
     dialogs = {
       ["do you have a report of your patrol"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathguard_linnea\\356_quest_progress.wav", dialog_type="quest_progress", quest_id=356, seconds=1.8 },
+      ["greetings adventurer be wary as you travel east to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathguard_linnea\\greetings_adventurer_be_wary_as_you_travel_east_to.wav", dialog_type="gossip", quest_id=nil, seconds=10.52 },
       ["magistrate sevren wants a report very well the def"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathguard_linnea\\359_quest_complete.wav", dialog_type="quest_complete", quest_id=359, seconds=15.76 },
       ["now return to magistrate sevren with the informati"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathguard_linnea\\360_quest_accept.wav", dialog_type="quest_accept", quest_id=360, seconds=12.28 },
       ["the defenders on the bulwark protecting tirisfal f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathguard_linnea\\356_quest_accept.wav", dialog_type="quest_accept", quest_id=356, seconds=30.0 },
@@ -7089,6 +7210,17 @@ NPC_DATABASE = {
       ["we must not allow the alliance to expand their pow"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathmaster_dwire\\we_must_not_allow_the_alliance_to_expand_their_pow.wav", dialog_type="gossip", quest_id=nil, seconds=9.16 },
     },
   },
+  ["Deathstalker Adamant"] = {
+    race = "undead",
+    sex = "male",
+    portrait = "undead",
+    zone = "",
+    model_id = nil,
+    narrator = "undead",
+    dialogs = {
+      ["at last someone to free me from this cell high exe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\deathstalker_adamant\\at_last_someone_to_free_me_from_this_cell_high_exe.wav", dialog_type="gossip", quest_id=nil, seconds=32.32 },
+    },
+  },
   ["Deathstalker Erland"] = {
     race = "undead",
     sex = "male",
@@ -7109,6 +7241,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead_female",
     dialogs = {
+      ["be ready adventurer i hear the council returning p"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathstalker_faerleia\\be_ready_adventurer_i_hear_the_council_returning_p.wav", dialog_type="gossip", quest_id=nil, seconds=4.76 },
       ["well done a blow to arugal no doubt"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathstalker_faerleia\\well_done_a_blow_to_arugal_no_doubt.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
       ["you fought like a true disciple of the dark lady a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathstalker_faerleia\\452_quest_complete.wav", dialog_type="quest_complete", quest_id=452, seconds=12.0 },
       ["you got here just in the nick of time adventurer t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\deathstalker_faerleia\\452_quest_accept.wav", dialog_type="quest_accept", quest_id=452, seconds=29.8 },
@@ -7297,6 +7430,7 @@ NPC_DATABASE = {
       ["for your services i have arranged for the creation"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\deino\\1945_quest_accept.wav", dialog_type="quest_accept", quest_id=1945, seconds=26.84 },
       ["good you have come my task is not an easy one but "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\deino\\1943_quest_complete.wav", dialog_type="quest_complete", quest_id=1943, seconds=10.32 },
       ["greetings adventurer deino said you would come and"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\deino\\1945_quest_progress.wav", dialog_type="quest_progress", quest_id=1945, seconds=7.48 },
+      ["greetings adventurer i pity your kind for the secr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\deino\\greetings_adventurer_i_pity_your_kind_for_the_secr.wav", dialog_type="gossip", quest_id=nil, seconds=6.76 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\deino\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
       ["i am pleased you have returned with your skin inta"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\deino\\1944_quest_progress.wav", dialog_type="quest_progress", quest_id=1944, seconds=7.44 },
       ["now it is time for you to earn your mages wand to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\deino\\1947_quest_accept.wav", dialog_type="quest_accept", quest_id=1947, seconds=19.88 },
@@ -7328,6 +7462,7 @@ NPC_DATABASE = {
       ["athrikus came to us he told us that he could save "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\delgren_the_purifier\\970_quest_complete.wav", dialog_type="quest_complete", quest_id=970, seconds=5.08 },
       ["balthules letter is dire this cult of the dark str"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\delgren_the_purifier\\970_quest_accept.wav", dialog_type="quest_accept", quest_id=970, seconds=21.0 },
       ["before confronting athrikus it would probably be w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\delgren_the_purifier\\1167_quest_accept.wav", dialog_type="quest_accept", quest_id=1167, seconds=12.52 },
+      ["good day adventurer perhaps you could help me with"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\delgren_the_purifier\\good_day_adventurer_perhaps_you_could_help_me_with.wav", dialog_type="gossip", quest_id=nil, seconds=5.04 },
       ["have you acquired that soul gem"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\delgren_the_purifier\\970_quest_progress.wav", dialog_type="quest_progress", quest_id=970, seconds=2.4 },
       ["he worried that his power weakened that soon even "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\delgren_the_purifier\\970_quest_complete.wav", dialog_type="quest_complete", quest_id=970, seconds=5.08 },
       ["his lieutenant ilkrud magthrull possesses a tome w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\delgren_the_purifier\\970_quest_complete.wav", dialog_type="quest_complete", quest_id=970, seconds=5.08 },
@@ -7397,6 +7532,7 @@ NPC_DATABASE = {
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\demisette_cloyce\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
       ["hmm youve made it this far truly astonishing i wou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\demisette_cloyce\\4968_quest_accept.wav", dialog_type="quest_accept", quest_id=4968, seconds=20.32 },
       ["let us be clear about one thing adventurer i dont "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\demisette_cloyce\\4738_quest_accept.wav", dialog_type="quest_accept", quest_id=4738, seconds=35.72 },
+      ["the darkness does not embrace you adventurer cease"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\demisette_cloyce\\the_darkness_does_not_embrace_you_adventurer_cease.wav", dialog_type="gossip", quest_id=nil, seconds=7.96 },
     },
   },
   ["Demnul Farmountain"] = {
@@ -7487,6 +7623,7 @@ NPC_DATABASE = {
       ["garrick padfoot a cutthroat whos plagued our farme"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\deputy_willem\\6_quest_accept.wav", dialog_type="quest_accept", quest_id=6, seconds=22.8 },
       ["hah you caught him youve done elwynn a great servi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\deputy_willem\\6_quest_complete.wav", dialog_type="quest_complete", quest_id=6, seconds=4.44 },
       ["have you gathered those bandanas for me yet"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\deputy_willem\\18_quest_progress.wav", dialog_type="quest_progress", quest_id=18, seconds=2.56 },
+      ["hello there adventurer normally id be out on the b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\deputy_willem\\hello_there_adventurer_normally_id_be_out_on_the_b.wav", dialog_type="gossip", quest_id=nil, seconds=13.92 },
       ["i hope you strapped your belt on tight young adven"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\deputy_willem\\783_quest_accept.wav", dialog_type="quest_accept", quest_id=783, seconds=29.88 },
       ["recently a new group of thieves has been hanging a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\deputy_willem\\18_quest_accept.wav", dialog_type="quest_accept", quest_id=18, seconds=17.96 },
       ["youve shown yourself a dependable adventurer adven"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\deputy_willem\\3903_quest_accept.wav", dialog_type="quest_accept", quest_id=3903, seconds=19.12 },
@@ -7585,6 +7722,7 @@ NPC_DATABASE = {
     narrator = "gnome",
     dialogs = {
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\dink\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
+      ["well met adventurer you want some advice befriend "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\dink\\well_met_adventurer_you_want_some_advice_befriend_.wav", dialog_type="gossip", quest_id=nil, seconds=6.32 },
       ["your knowledge of the craft grows young adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\dink\\1919_quest_accept.wav", dialog_type="quest_accept", quest_id=1919, seconds=21.52 },
     },
   },
@@ -7638,6 +7776,7 @@ NPC_DATABASE = {
       ["beyond this corridor naralex lies in fitful sleep "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\disciple_of_naralex\\beyond_this_corridor_naralex_lies_in_fitful_sleep_.wav", dialog_type="gossip", quest_id=nil, seconds=7.44 },
       ["come we must continue there is much to be done bef"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\disciple_of_naralex\\come_we_must_continue_there_is_much_to_be_done_bef.wav", dialog_type="gossip", quest_id=nil, seconds=6.36 },
       ["i must make the necessary preparations before the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\disciple_of_naralex\\i_must_make_the_necessary_preparations_before_the_.wav", dialog_type="gossip", quest_id=nil, seconds=6.48 },
+      ["naralex sleeps again long ago naralex journeyed to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\disciple_of_naralex\\naralex_sleeps_again_long_ago_naralex_journeyed_to.wav", dialog_type="gossip", quest_id=nil, seconds=33.88 },
     },
   },
   ["Dispatch Commander Metz"] = {
@@ -7738,6 +7877,7 @@ NPC_DATABASE = {
       ["murlocs are becoming a problem larger groups of th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dockmaster_baren\\150_quest_accept.wav", dialog_type="quest_accept", quest_id=150, seconds=20.56 },
       ["pleasure doin business with you matey"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dockmaster_baren\\127_quest_complete.wav", dialog_type="quest_complete", quest_id=127, seconds=2.48 },
       ["well done adventurer i hope you didnt have too muc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dockmaster_baren\\150_quest_complete.wav", dialog_type="quest_complete", quest_id=150, seconds=12.36 },
+      ["well met adventurer if youre here for business the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dockmaster_baren\\well_met_adventurer_if_youre_here_for_business_the.wav", dialog_type="gossip", quest_id=nil, seconds=6.04 },
       ["you have some sunfish for me eh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dockmaster_baren\\127_quest_progress.wav", dialog_type="quest_progress", quest_id=127, seconds=1.96 },
     },
   },
@@ -7795,6 +7935,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead",
     dialogs = {
+      ["ready for training then try to keep up adventurer "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\doctor_herbert_halsey\\ready_for_training_then_try_to_keep_up_adventurer_.wav", dialog_type="gossip", quest_id=nil, seconds=4.96 },
       ["with alchemy you can turn found herbs into healing"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\doctor_herbert_halsey\\with_alchemy_you_can_turn_found_herbs_into_healing.wav", dialog_type="gossip", quest_id=nil, seconds=4.56 },
     },
   },
@@ -8002,8 +8143,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf",
     dialogs = {
+      ["im about to open a can on this adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dorius_stonetender\\im_about_to_open_a_can_on_this_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
       ["im badly injured adventurer feel light headed worl"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dorius_stonetender\\3367_quest_accept.wav", dialog_type="quest_accept", quest_id=3367, seconds=14.48 },
       ["im not going to make it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dorius_stonetender\\3367_quest_progress.wav", dialog_type="quest_progress", quest_id=3367, seconds=1.56 },
+      ["its on adventurer meet my fists fists say hello to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dorius_stonetender\\its_on_adventurer_meet_my_fists_fists_say_hello_to.wav", dialog_type="gossip", quest_id=nil, seconds=4.8 },
       ["ive got to quit smoking give me a minute to catch "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dorius_stonetender\\ive_got_to_quit_smoking_give_me_a_minute_to_catch_.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
       ["onward and be on guard this time im not going to c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dorius_stonetender\\onward_and_be_on_guard_this_time_im_not_going_to_c.wav", dialog_type="gossip", quest_id=nil, seconds=4.88 },
       ["stop need to catch my breath"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\dorius_stonetender\\stop_need_to_catch_my_breath.wav", dialog_type="gossip", quest_id=nil, seconds=3.4 },
@@ -8121,6 +8264,7 @@ NPC_DATABASE = {
     dialogs = {
       ["do you have the beasts claw yet adventurer it will"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\drekasur\\6162_quest_progress.wav", dialog_type="quest_progress", quest_id=6162, seconds=15.76 },
       ["my husband traveled felwood for the honor of our c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\drekasur\\6162_quest_accept.wav", dialog_type="quest_accept", quest_id=6162, seconds=34.16 },
+      ["thromka adventurer my mood is poor this day so ple"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\drekasur\\throm-ka_adventurer_my_mood_is_poor_this_day_so_pl.wav", dialog_type="gossip", quest_id=nil, seconds=8.52 },
       ["you bring honor to me for following through with y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\drekasur\\6162_quest_complete.wav", dialog_type="quest_complete", quest_id=6162, seconds=18.4 },
     },
   },
@@ -8189,6 +8333,7 @@ NPC_DATABASE = {
       ["excellent i was never able to gain access to this "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\drusilla_la_salle\\1598_quest_complete.wav", dialog_type="quest_complete", quest_id=1598, seconds=20.56 },
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\drusilla_la_salle\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=3.2 },
       ["it was too conspicuous for me to steal the book my"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\drusilla_la_salle\\1598_quest_progress.wav", dialog_type="quest_progress", quest_id=1598, seconds=7.04 },
+      ["the darkness does not embrace you adventurer cease"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\drusilla_la_salle\\the_darkness_does_not_embrace_you_adventurer_cease.wav", dialog_type="gossip", quest_id=nil, seconds=7.36 },
       ["you there adventurer right i hope youre sure about"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\drusilla_la_salle\\1598_quest_accept.wav", dialog_type="quest_accept", quest_id=1598, seconds=32.04 },
     },
   },
@@ -8223,6 +8368,7 @@ NPC_DATABASE = {
       ["have you defeated lucifron and the others adventur"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\elemental\\duke_hydraxis\\6824_quest_progress.wav", dialog_type="quest_progress", quest_id=6824, seconds=5.12 },
       ["if you truly wish an allegiance with us then i inv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\elemental\\duke_hydraxis\\6823_quest_accept.wav", dialog_type="quest_accept", quest_id=6823, seconds=21.24 },
       ["we the elementals of water wage war with those bei"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\elemental\\duke_hydraxis\\6805_quest_accept.wav", dialog_type="quest_accept", quest_id=6805, seconds=33.28 },
+      ["welcome back adventurer youve proven a worthy ally"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\elemental\\duke_hydraxis\\welcome_back_adventurer_youve_proven_a_worthy_ally.wav", dialog_type="gossip", quest_id=nil, seconds=6.72 },
       ["you have done well adventurer the corrupted elemen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\elemental\\duke_hydraxis\\6804_quest_complete.wav", dialog_type="quest_complete", quest_id=6804, seconds=15.24 },
       ["you have done what most of your kind would think i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\elemental\\duke_hydraxis\\6822_quest_complete.wav", dialog_type="quest_complete", quest_id=6822, seconds=17.56 },
       ["you have shown me that you can defeat our enemies "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\elemental\\duke_hydraxis\\6821_quest_accept.wav", dialog_type="quest_accept", quest_id=6821, seconds=33.96 },
@@ -8246,6 +8392,7 @@ NPC_DATABASE = {
       ["an invaders scourgestone is the insignia of the sc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\duke_nicholas_zverenhoff\\5509_quest_progress.wav", dialog_type="quest_progress", quest_id=5509, seconds=28.88 },
       ["anything taken to an extreme is hazardous to our w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\duke_nicholas_zverenhoff\\5251_quest_accept.wav", dialog_type="quest_accept", quest_id=5251, seconds=34.68 },
       ["congratulations adventurer i am pleased to award y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\duke_nicholas_zverenhoff\\5510_quest_complete.wav", dialog_type="quest_complete", quest_id=5510, seconds=29.8 },
+      ["greetings adventurer i am duke nicholas zverenhoff"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\duke_nicholas_zverenhoff\\greetings_adventurer_i_am_duke_nicholas_zverenhoff.wav", dialog_type="gossip", quest_id=nil, seconds=4.88 },
       ["i am about to bestow a great honor upon you advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\duke_nicholas_zverenhoff\\5264_quest_accept.wav", dialog_type="quest_accept", quest_id=5264, seconds=12.52 },
       ["it has been many years since i have ushered a cham"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\duke_nicholas_zverenhoff\\5263_quest_complete.wav", dialog_type="quest_complete", quest_id=5263, seconds=7.68 },
       ["outstanding adventurer years of intelligence lost "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\duke_nicholas_zverenhoff\\5251_quest_complete.wav", dialog_type="quest_complete", quest_id=5251, seconds=8.04 },
@@ -8290,6 +8437,7 @@ NPC_DATABASE = {
       ["guards help me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dungar_longdrink\\guards_help_me.wav", dialog_type="gossip", quest_id=nil, seconds=1.68 },
       ["the gryphon master in westfall is thor if youve sp"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dungar_longdrink\\6285_quest_accept.wav", dialog_type="quest_accept", quest_id=6285, seconds=27.88 },
       ["these great beasts know paths that ye cant find on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dungar_longdrink\\these_great_beasts_know_paths_that_ye_cant_find_on.wav", dialog_type="gossip", quest_id=nil, seconds=7.32 },
+      ["where is it ye would like to go adventurer for jus"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dungar_longdrink\\where_is_it_ye_would_like_to_go_adventurer_for_jus.wav", dialog_type="gossip", quest_id=nil, seconds=7.48 },
       ["youre back from stormwind did osric send the armor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\dungar_longdrink\\6285_quest_progress.wav", dialog_type="quest_progress", quest_id=6285, seconds=3.32 },
     },
   },
@@ -8487,6 +8635,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "orc",
     dialogs = {
+      ["greetings young adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\eitrigg\\greetings_young_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.92 },
       ["thromka adventurer i am eitrigg charged by thrall "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\eitrigg\\787_quest_accept.wav", dialog_type="quest_accept", quest_id=787, seconds=36.28 },
     },
   },
@@ -8499,6 +8648,7 @@ NPC_DATABASE = {
     narrator = "human_female",
     dialogs = {
       ["do you know sven now there is a man who does the w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\elaine_carevin\\164_quest_accept.wav", dialog_type="quest_accept", quest_id=164, seconds=19.28 },
+      ["its dark times that have come adventurer all too s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\elaine_carevin\\its_dark_times_that_have_come_adventurer_all_too_s.wav", dialog_type="gossip", quest_id=nil, seconds=11.04 },
       ["somethings amiss at raven hill adventurer calor sw"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\elaine_carevin\\163_quest_accept.wav", dialog_type="quest_accept", quest_id=163, seconds=22.32 },
       ["there was an old man who used to come into town to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\elaine_carevin\\165_quest_accept.wav", dialog_type="quest_accept", quest_id=165, seconds=16.24 },
       ["you look a sturdy type adventurer have you come to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\elaine_carevin\\164_quest_progress.wav", dialog_type="quest_progress", quest_id=164, seconds=4.44 },
@@ -9240,6 +9390,7 @@ NPC_DATABASE = {
     narrator = "troll_female",
     dialogs = {
       ["archmage xylem has been asking around lately for s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\enyo\\8250_quest_accept.wav", dialog_type="quest_accept", quest_id=8250, seconds=31.72 },
+      ["greetings adventurer i pity your kind for the secr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\enyo\\greetings_adventurer_i_pity_your_kind_for_the_secr.wav", dialog_type="gossip", quest_id=nil, seconds=6.8 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\enyo\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=3.08 },
     },
   },
@@ -9381,6 +9532,7 @@ NPC_DATABASE = {
     dialogs = {
       ["a great weight has been lifted from our hearts adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\eva_sarkhoff\\5515_quest_accept.wav", dialog_type="quest_accept", quest_id=5515, seconds=31.2 },
       ["be wary kirtonos is a seasoned fighter"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\eva_sarkhoff\\5384_quest_progress.wav", dialog_type="quest_progress", quest_id=5384, seconds=3.2 },
+      ["hello young adventurer i am eva sarkhoff and this "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\eva_sarkhoff\\hello_young_adventurer_i_am_eva_sarkhoff_and_this_.wav", dialog_type="gossip", quest_id=nil, seconds=8.6 },
       ["i can feel my spirit healing adventurer you have d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\eva_sarkhoff\\5382_quest_complete.wav", dialog_type="quest_complete", quest_id=5382, seconds=9.08 },
       ["krastinov is responsible for the deaths of thousan"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\eva_sarkhoff\\5382_quest_accept.wav", dialog_type="quest_accept", quest_id=5382, seconds=18.32 },
       ["the bag of horrors"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\eva_sarkhoff\\5515_quest_complete.wav", dialog_type="quest_complete", quest_id=5515, seconds=1.68 },
@@ -9503,6 +9655,7 @@ NPC_DATABASE = {
     dialogs = {
       ["do you have the collection of heads adventurer we "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\exzhal\\8201_quest_progress.wav", dialog_type="quest_progress", quest_id=8201, seconds=5.92 },
       ["do you know who i am zealot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\exzhal\\do_you_know_who_i_am_zealot.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
+      ["greetings adventurer i am exzhal servitor of rasta"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\exzhal\\greetings_adventurer_i_am_exzhal_servitor_of_rasta.wav", dialog_type="gossip", quest_id=nil, seconds=4.96 },
       ["guard bring forth the prisoner place him in the ci"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\exzhal\\guard_bring_forth_the_prisoner_place_him_in_the_ci.wav", dialog_type="gossip", quest_id=nil, seconds=4.72 },
       ["i could crush you with but a single motion do not "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\exzhal\\i_could_crush_you_with_but_a_single_motion_do_not_.wav", dialog_type="gossip", quest_id=nil, seconds=3.76 },
       ["i said kneel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\exzhal\\i_said_kneel.wav", dialog_type="gossip", quest_id=nil, seconds=1.88 },
@@ -9547,6 +9700,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "human",
     dialogs = {
+      ["do i look like a adventurer to you now run along b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\fahrad\\do_i_look_like_a_adventurer_to_you_now_run_along_b.wav", dialog_type="gossip", quest_id=nil, seconds=7.48 },
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\fahrad\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
       ["may these knives find a place in someones heart li"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\fahrad\\8249_quest_complete.wav", dialog_type="quest_complete", quest_id=8249, seconds=3.56 },
       ["most excellent young thief you look a bit beaten d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\fahrad\\6681_quest_complete.wav", dialog_type="quest_complete", quest_id=6681, seconds=19.84 },
@@ -9584,7 +9738,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "tauren_female",
     dialogs = {
-      ["may i help you with something"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\falla_sagewind\\3369_quest_progress.wav", dialog_type="quest_progress", quest_id=3369, seconds=1.52 },
+      ["may i help you with something"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\falla_sagewind\\3370_quest_progress.wav", dialog_type="quest_progress", quest_id=3370, seconds=1.52 },
       ["oh i have never seen anything like this"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\falla_sagewind\\6981_quest_complete.wav", dialog_type="quest_complete", quest_id=6981, seconds=3.04 },
       ["this shard holds great secrets it is the pure esse"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\falla_sagewind\\3369_quest_accept.wav", dialog_type="quest_accept", quest_id=3369, seconds=30.8 },
     },
@@ -9742,6 +9896,7 @@ NPC_DATABASE = {
       ["look at what has happened to this place these land"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\farmer_saldean\\9_quest_accept.wav", dialog_type="quest_accept", quest_id=9, seconds=25.16 },
       ["looks to me youve seen quite a bit of combat in yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\farmer_saldean\\109_quest_accept.wav", dialog_type="quest_accept", quest_id=109, seconds=22.76 },
       ["now how am i supposed to get those mechanical wret"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\farmer_saldean\\now_how_am_i_supposed_to_get_those_mechanical_wret.wav", dialog_type="gossip", quest_id=nil, seconds=4.16 },
+      ["rough times huh adventurer no matter where you tur"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\farmer_saldean\\rough_times_huh_adventurer_no_matter_where_you_tur.wav", dialog_type="gossip", quest_id=nil, seconds=7.4 },
     },
   },
   ["Faruza"] = {
@@ -9767,6 +9922,7 @@ NPC_DATABASE = {
       ["aelthalyste show our people great respect by sendi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_cobb\\5646_quest_accept.wav", dialog_type="quest_accept", quest_id=5646, seconds=16.84 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_cobb\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
       ["it is the way of the divine to help those in need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_cobb\\8254_quest_accept.wav", dialog_type="quest_accept", quest_id=8254, seconds=23.64 },
+      ["what can this insignificant servant do for you adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_cobb\\what_can_this_insignificant_servant_do_for_you_adv.wav", dialog_type="gossip", quest_id=nil, seconds=4.4 },
     },
   },
   ["Father Inigo Montoy"] = {
@@ -9798,6 +9954,7 @@ NPC_DATABASE = {
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_lankester\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
       ["it always warms my undying heart to see priests fr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_lankester\\5656_quest_accept.wav", dialog_type="quest_accept", quest_id=5656, seconds=22.72 },
       ["like many of our own priests your own tribe puts y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_lankester\\5643_quest_accept.wav", dialog_type="quest_accept", quest_id=5643, seconds=19.84 },
+      ["what can this insignificant servant do for you adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_lankester\\what_can_this_insignificant_servant_do_for_you_adv.wav", dialog_type="gossip", quest_id=nil, seconds=6.08 },
       ["you be far from home adventurer you be needed ther"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_lankester\\5658_quest_accept.wav", dialog_type="quest_accept", quest_id=5658, seconds=23.52 },
     },
   },
@@ -9811,6 +9968,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_lazarus\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
       ["it is the way of the divine to help those in need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_lazarus\\8254_quest_accept.wav", dialog_type="quest_accept", quest_id=8254, seconds=20.4 },
+      ["what can this insignificant servant do for you adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\father_lazarus\\what_can_this_insignificant_servant_do_for_you_adv.wav", dialog_type="gossip", quest_id=nil, seconds=4.8 },
     },
   },
   ["Faustron"] = {
@@ -9853,6 +10011,7 @@ NPC_DATABASE = {
       ["hold i sense an evil presence undead"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\feero_ironhand\\hold_i_sense_an_evil_presence_undead.wav", dialog_type="gossip", quest_id=nil, seconds=3.48 },
       ["ill finish you off for good this time"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\feero_ironhand\\ill_finish_you_off_for_good_this_time.wav", dialog_type="gossip", quest_id=nil, seconds=2.0 },
       ["it looks like were in trouble look lively here the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\feero_ironhand\\it_looks_like_were_in_trouble_look_lively_here_the.wav", dialog_type="gossip", quest_id=nil, seconds=3.52 },
+      ["lets go adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\feero_ironhand\\lets_go_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.52 },
       ["the sentinels have a great need for supplies to re"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\feero_ironhand\\976_quest_progress.wav", dialog_type="quest_progress", quest_id=976, seconds=5.24 },
       ["these three again"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\feero_ironhand\\these_three_again.wav", dialog_type="gossip", quest_id=nil, seconds=1.24 },
       ["theyre coming out of the woodwork today lets keep "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\feero_ironhand\\theyre_coming_out_of_the_woodwork_today_lets_keep_.wav", dialog_type="gossip", quest_id=nil, seconds=5.76 },
@@ -10046,6 +10205,7 @@ NPC_DATABASE = {
       ["ahhh so they do still burn i am glad it would not "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\festival_flamekeeper\\9388_quest_complete.wav", dialog_type="quest_complete", quest_id=9388, seconds=13.12 },
       ["an eager one arent you if youre willing to enter t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\festival_flamekeeper\\9386_quest_accept.wav", dialog_type="quest_accept", quest_id=9386, seconds=19.64 },
       ["are the flames of kalimdor burning brightly"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\festival_flamekeeper\\9322_quest_progress.wav", dialog_type="quest_progress", quest_id=9322, seconds=2.8 },
+      ["greetings adventurer i am the flamekeeper during t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\festival_flamekeeper\\greetings_adventurer_i_am_the_flamekeeper_during_t.wav", dialog_type="gossip", quest_id=nil, seconds=17.72 },
       ["have you found your way through the dark"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\festival_flamekeeper\\9319_quest_progress.wav", dialog_type="quest_progress", quest_id=9319, seconds=2.2 },
       ["it will take time to prevail against this threat h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\festival_flamekeeper\\9323_quest_progress.wav", dialog_type="quest_progress", quest_id=9323, seconds=4.04 },
       ["our celebration of the flame is spread throughout "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\festival_flamekeeper\\9323_quest_accept.wav", dialog_type="quest_accept", quest_id=9323, seconds=32.48 },
@@ -10065,6 +10225,7 @@ NPC_DATABASE = {
     narrator = "dwarf",
     dialogs = {
       ["are the fires burning"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\festival_loremaster\\9367_quest_progress.wav", dialog_type="quest_progress", quest_id=9367, seconds=1.36 },
+      ["enjoying the festival adventurer while the flameke"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\festival_loremaster\\enjoying_the_festival_adventurer_while_the_flameke.wav", dialog_type="gossip", quest_id=nil, seconds=27.28 },
       ["excellent it seems weve appointed dutiful flamekee"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\festival_loremaster\\9367_quest_complete.wav", dialog_type="quest_complete", quest_id=9367, seconds=14.2 },
       ["have you seen to your task"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\festival_loremaster\\9389_quest_progress.wav", dialog_type="quest_progress", quest_id=9389, seconds=2.28 },
       ["hm what a strange fire it is subdued nearly smolde"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\festival_loremaster\\9326_quest_complete.wav", dialog_type="quest_complete", quest_id=9326, seconds=15.28 },
@@ -10135,6 +10296,7 @@ NPC_DATABASE = {
     narrator = "dwarf",
     dialogs = {
       ["ah here for additional supplies for yourself are y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\field_marshal_snowfall\\8846_quest_accept.wav", dialog_type="quest_accept", quest_id=8846, seconds=28.2 },
+      ["have you heard the good news adventurer the allian"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\field_marshal_snowfall\\have_you_heard_the_good_news_adventurer_the_allian.wav", dialog_type="gossip", quest_id=nil, seconds=16.72 },
     },
   },
   ["Field Marshal Teravaine"] = {
@@ -10459,6 +10621,7 @@ NPC_DATABASE = {
       ["excellent recovery adventurer i never thought id s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\foreman_oslow\\125_quest_complete.wav", dialog_type="quest_complete", quest_id=125, seconds=4.28 },
       ["great work adventurer these supplies will help the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\foreman_oslow\\89_quest_complete.wav", dialog_type="quest_complete", quest_id=89, seconds=6.76 },
       ["i could really use a hand here adventurer with the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\foreman_oslow\\125_quest_accept.wav", dialog_type="quest_accept", quest_id=125, seconds=22.88 },
+      ["i dont have much time for idle talk adventurer ive"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\foreman_oslow\\i_dont_have_much_time_for_idle_talk_adventurer_ive.wav", dialog_type="gossip", quest_id=nil, seconds=11.04 },
       ["rethban ore is named after the man who first found"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\foreman_oslow\\347_quest_accept.wav", dialog_type="quest_accept", quest_id=347, seconds=34.0 },
       ["this bridge isnt going to build itself now where a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\foreman_oslow\\89_quest_progress.wav", dialog_type="quest_progress", quest_id=89, seconds=5.04 },
       ["were you able to find my tools"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\foreman_oslow\\125_quest_progress.wav", dialog_type="quest_progress", quest_id=125, seconds=2.28 },
@@ -10577,6 +10740,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf",
     dialogs = {
+      ["greetings adventurer i am franclorn forgewright ar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\franclorn_forgewright\\greetings_adventurer_i_am_franclorn_forgewright_ar.wav", dialog_type="gossip", quest_id=nil, seconds=8.44 },
       ["greetings adventurer i am franclorn forgewright ye"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\franclorn_forgewright\\3801_quest_accept.wav", dialog_type="quest_accept", quest_id=3801, seconds=28.32 },
       ["the statue looms ominously above you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\franclorn_forgewright\\3802_quest_progress.wav", dialog_type="quest_progress", quest_id=3802, seconds=2.48 },
       ["whether it is greed which brought you here or an a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\franclorn_forgewright\\3801_quest_complete.wav", dialog_type="quest_complete", quest_id=3801, seconds=8.0 },
@@ -10593,6 +10757,7 @@ NPC_DATABASE = {
     dialogs = {
       ["ah thats my parchment i heard youd be coming to th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\frang\\2383_quest_complete.wav", dialog_type="quest_complete", quest_id=2383, seconds=21.36 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\frang\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
+      ["i dont train your kind adventurer find your own tr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\frang\\i_dont_train_your_kind_adventurer_find_your_own_tr.wav", dialog_type="gossip", quest_id=nil, seconds=4.92 },
       ["youll find this place fitting as you continue to t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\frang\\3065_quest_complete.wav", dialog_type="quest_complete", quest_id=3065, seconds=17.04 },
     },
   },
@@ -10606,6 +10771,7 @@ NPC_DATABASE = {
     dialogs = {
       ["go play with the monkey kid i dont have time for t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\frankal_stonebridge\\8310_quest_progress.wav", dialog_type="quest_progress", quest_id=8310, seconds=3.0 },
       ["i think i can formulate an elixir that will allow "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\frankal_stonebridge\\8310_quest_accept.wav", dialog_type="quest_accept", quest_id=8310, seconds=20.48 },
+      ["look up to the heavens adventurer the dragonflight"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\frankal_stonebridge\\look_up_to_the_heavens_adventurer_the_dragonflight.wav", dialog_type="gossip", quest_id=nil, seconds=9.92 },
       ["outstanding dont wander off too far kid we might n"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\frankal_stonebridge\\8310_quest_complete.wav", dialog_type="quest_complete", quest_id=8310, seconds=5.24 },
     },
   },
@@ -10674,6 +10840,17 @@ NPC_DATABASE = {
     narrator = "orc_female",
     dialogs = {
       ["the drums of war sound off in a distant land adven"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\frostwolf_ambassador_rokhstrom\\7241_quest_accept.wav", dialog_type="quest_accept", quest_id=7241, seconds=42.2 },
+    },
+  },
+  ["Frostwolf Emissary"] = {
+    race = "orc",
+    sex = "male",
+    portrait = "orc",
+    zone = "",
+    model_id = nil,
+    narrator = "orc",
+    dialogs = {
+      ["hail adventurer there is a great need and even gre"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\frostwolf_emissary\\hail_adventurer_there_is_a_great_need_and_even_gre.wav", dialog_type="gossip", quest_id=nil, seconds=10.44 },
     },
   },
   ["Frostwolf Quartermaster"] = {
@@ -10821,6 +10998,7 @@ NPC_DATABASE = {
       ["surena was talented but not enough so to gain mast"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\gakin_the_darkbinder\\1688_quest_complete.wav", dialog_type="quest_complete", quest_id=1688, seconds=12.52 },
       ["using the heartswood core you will be able to cast"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\gakin_the_darkbinder\\1739_quest_accept.wav", dialog_type="quest_accept", quest_id=1739, seconds=23.76 },
       ["well done well done adventurer i see weve done rig"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\gakin_the_darkbinder\\1739_quest_complete.wav", dialog_type="quest_complete", quest_id=1739, seconds=14.12 },
+      ["yes adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\gakin_the_darkbinder\\yes_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.48 },
       ["yes i can tell this will do nicely let me just wor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\gakin_the_darkbinder\\1738_quest_complete.wav", dialog_type="quest_complete", quest_id=1738, seconds=12.48 },
       ["you did better than i expected adventurer but as w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\gakin_the_darkbinder\\1689_quest_complete.wav", dialog_type="quest_complete", quest_id=1689, seconds=19.68 },
     },
@@ -10973,10 +11151,22 @@ NPC_DATABASE = {
       ["one of my most observant scouts brings back word t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\garthok\\825_quest_accept.wav", dialog_type="quest_accept", quest_id=825, seconds=30.64 },
       ["this does not bode well at all you were wise to br"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\garthok\\830_quest_complete.wav", dialog_type="quest_complete", quest_id=830, seconds=4.88 },
       ["though they do possess some intelligence and some "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\garthok\\837_quest_progress.wav", dialog_type="quest_progress", quest_id=837, seconds=12.96 },
+      ["thromka adventurer there is little time for talk a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\garthok\\thromka_adventurer_there_is_little_time_for_talk_a.wav", dialog_type="gossip", quest_id=nil, seconds=4.8 },
       ["when we arrived the razormane quilboars possessed "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\garthok\\837_quest_accept.wav", dialog_type="quest_accept", quest_id=837, seconds=34.64 },
       ["word of your bravery travels fast adventurer tales"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\garthok\\784_quest_complete.wav", dialog_type="quest_complete", quest_id=784, seconds=7.16 },
       ["you have your orders adventurer the safety of duro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\garthok\\784_quest_progress.wav", dialog_type="quest_progress", quest_id=784, seconds=13.12 },
       ["your recovery mission was a success adventurer i w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\garthok\\825_quest_complete.wav", dialog_type="quest_complete", quest_id=825, seconds=8.76 },
+    },
+  },
+  ["Garon Hutchins"] = {
+    race = "human",
+    sex = "male",
+    portrait = "human",
+    zone = "",
+    model_id = nil,
+    narrator = "human",
+    dialogs = {
+      ["be careful out in the desert adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\garon_hutchins\\be_careful_out_in_the_desert_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
     },
   },
   ["Gart Mistrunner"] = {
@@ -11203,6 +11393,7 @@ NPC_DATABASE = {
     dialogs = {
       ["excuse me friend it has come to my attention that "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\gennia_runetotem\\5928_quest_accept.wav", dialog_type="quest_accept", quest_id=5928, seconds=30.4 },
       ["hello druid ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\gennia_runetotem\\hello_druid_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
+      ["welcome my adventurer if you are here to train the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\gennia_runetotem\\welcome_my_adventurer_if_you_are_here_to_train_the.wav", dialog_type="gossip", quest_id=nil, seconds=13.2 },
     },
   },
   ["Geoffrey Hartwell"] = {
@@ -11334,6 +11525,7 @@ NPC_DATABASE = {
       ["the journey to ashenvale is long and your task is "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\gerrig_bonegrip\\971_quest_progress.wav", dialog_type="quest_progress", quest_id=971, seconds=9.24 },
       ["the lady told me of your coming adventurer you are"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\gerrig_bonegrip\\653_quest_complete.wav", dialog_type="quest_complete", quest_id=653, seconds=6.84 },
       ["theldurin the lost was once a member of our order "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\gerrig_bonegrip\\687_quest_accept.wav", dialog_type="quest_accept", quest_id=687, seconds=25.16 },
+      ["welcome to bonegrips runes and dooms adventurer yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\gerrig_bonegrip\\welcome_to_bonegrips_runes_and_dooms_adventurer_yo.wav", dialog_type="gossip", quest_id=nil, seconds=8.72 },
       ["yagyins digest eh are you starting a new chapter o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\gerrig_bonegrip\\735_quest_accept.wav", dialog_type="quest_accept", quest_id=735, seconds=25.56 },
       ["you are resourceful adventurer if it truly is your"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\gerrig_bonegrip\\735_quest_complete.wav", dialog_type="quest_complete", quest_id=735, seconds=8.56 },
       ["you found the manuscript what a joyous day this is"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\gerrig_bonegrip\\971_quest_complete.wav", dialog_type="quest_complete", quest_id=971, seconds=20.6 },
@@ -11359,6 +11551,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\gest\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["i dont train your kind adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\gest\\i_dont_train_your_kind_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
     },
   },
   ["Ghak Healtouch"] = {
@@ -11378,6 +11571,7 @@ NPC_DATABASE = {
       ["ive heard about a newly discovered plant called th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ghak_healtouch\\17_quest_accept.wav", dialog_type="quest_accept", quest_id=17, seconds=31.6 },
       ["well done adventurer youve proven your worth once "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ghak_healtouch\\17_quest_complete.wav", dialog_type="quest_complete", quest_id=17, seconds=24.08 },
       ["with alchemy you can turn found herbs into healing"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ghak_healtouch\\with_alchemy_you_can_turn_found_herbs_into_healing.wav", dialog_type="gossip", quest_id=nil, seconds=4.04 },
+      ["yere beyond my skill to teach adventurer go pester"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ghak_healtouch\\yere_beyond_my_skill_to_teach_adventurer_go_pester.wav", dialog_type="gossip", quest_id=nil, seconds=12.16 },
       ["you have been most helpful to me adventurer i woul"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ghak_healtouch\\2501_quest_accept.wav", dialog_type="quest_accept", quest_id=2501, seconds=27.96 },
     },
   },
@@ -11389,6 +11583,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "tauren",
     dialogs = {
+      ["be advised adventurer i am in no mood for any comm"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\ghede\\be_advised_adventurer_-_i_am_in_no_mood_for_any_co.wav", dialog_type="gossip", quest_id=nil, seconds=17.88 },
       ["oh thats right private adventurer dont make any ef"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\ghede\\3761_quest_complete.wav", dialog_type="quest_complete", quest_id=3761, seconds=27.36 },
     },
   },
@@ -11435,6 +11630,7 @@ NPC_DATABASE = {
     narrator = "gnome",
     dialogs = {
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\gimrizz_shadowcog\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["the darkness does not embrace you adventurer cease"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\gimrizz_shadowcog\\the_darkness_does_not_embrace_you_adventurer_cease.wav", dialog_type="gossip", quest_id=nil, seconds=7.16 },
     },
   },
   ["Ginny Longberry"] = {
@@ -11446,6 +11642,17 @@ NPC_DATABASE = {
     narrator = "gnome_female",
     dialogs = {
       ["it looks like youve already found love you can giv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\ginny_longberry\\it_looks_like_youve_already_found_love_you_can_giv.wav", dialog_type="gossip", quest_id=nil, seconds=9.68 },
+    },
+  },
+  ["Glordrum Steelbeard"] = {
+    race = "dwarf",
+    sex = "male",
+    portrait = "dwarf",
+    zone = "",
+    model_id = nil,
+    narrator = "dwarf",
+    dialogs = {
+      ["adventurer have ye any idea o what were up against"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\glordrum_steelbeard\\adventurer_have_ye_any_idea_o_what_were_up_against.wav", dialog_type="gossip", quest_id=nil, seconds=7.36 },
     },
   },
   ["Glorin Steelbrow"] = {
@@ -11564,6 +11771,7 @@ NPC_DATABASE = {
     narrator = "gnome",
     dialogs = {
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\gnomeregan_commendation_officer\\8812_quest_progress.wav", dialog_type="quest_progress", quest_id=8812, seconds=28.56 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\gnomeregan_commendation_officer\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=30.8 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\gnomeregan_commendation_officer\\8820_quest_progress.wav", dialog_type="quest_progress", quest_id=8820, seconds=28.28 },
     },
   },
@@ -11855,6 +12063,7 @@ NPC_DATABASE = {
       ["cant you see im fishing here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\gorkas\\cant_you_see_im_fishing_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
       ["guards"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\gorkas\\guards.wav", dialog_type="gossip", quest_id=nil, seconds=1.28 },
       ["im going to stay here until i catch a 68 pound gro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\gorkas\\im_going_to_stay_here_until_i_catch_a_68_pound_gro.wav", dialog_type="gossip", quest_id=nil, seconds=7.8 },
+      ["what can i do for you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\gorkas\\what_can_i_do_for_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.36 },
       ["you scared the fish away what do you want"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\gorkas\\you_scared_the_fish_away_what_do_you_want.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
     },
   },
@@ -11902,6 +12111,7 @@ NPC_DATABASE = {
       ["adventurer thanks to you we have devised a way to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\gorn_one_eye\\8481_quest_accept.wav", dialog_type="quest_accept", quest_id=8481, seconds=35.56 },
       ["adventurer you are welcomed in my domain ironforge"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\gorn_one_eye\\8484_quest_progress.wav", dialog_type="quest_progress", quest_id=8484, seconds=11.0 },
       ["the warchiefs greetings are bestowed upon you adve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\gorn_one_eye\\8485_quest_progress.wav", dialog_type="quest_progress", quest_id=8485, seconds=11.88 },
+      ["yes yes i see you e on your way you may have earne"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\gorn_one_eye\\yes_yes_i_see_you_e_on_your_way_you_may_have_earne.wav", dialog_type="gossip", quest_id=nil, seconds=11.72 },
       ["you have returned to us adventurer does this mean "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\gorn_one_eye\\8481_quest_progress.wav", dialog_type="quest_progress", quest_id=8481, seconds=5.04 },
       ["your deeds go beyond the tale of a simple hero adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\gorn_one_eye\\8485_quest_accept.wav", dialog_type="quest_accept", quest_id=8485, seconds=34.6 },
       ["youve youve saved us your defeat of the demon xand"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\gorn_one_eye\\8481_quest_complete.wav", dialog_type="quest_complete", quest_id=8481, seconds=28.92 },
@@ -11962,6 +12172,7 @@ NPC_DATABASE = {
     dialogs = {
       ["ah good jeevee created the parchment how was the s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\gorzeeki_wildeyes\\7629_quest_complete.wav", dialog_type="quest_complete", quest_id=7629, seconds=19.36 },
       ["ah very good ill need these to contain the fires o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\gorzeeki_wildeyes\\7628_quest_complete.wav", dialog_type="quest_complete", quest_id=7628, seconds=11.76 },
+      ["do you have any spiders or beetles adventurer they"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\gorzeeki_wildeyes\\do_you_have_any_spiders_or_beetles_adventurer_they.wav", dialog_type="gossip", quest_id=nil, seconds=7.52 },
       ["do you have the arcanite adventurer once i have it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\gorzeeki_wildeyes\\7630_quest_progress.wav", dialog_type="quest_progress", quest_id=7630, seconds=6.32 },
       ["have you been to the scholomance adventurer has th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\gorzeeki_wildeyes\\7629_quest_progress.wav", dialog_type="quest_progress", quest_id=7629, seconds=7.64 },
       ["morzul says that you want to open a portal to xoro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\gorzeeki_wildeyes\\7623_quest_accept.wav", dialog_type="quest_accept", quest_id=7623, seconds=33.56 },
@@ -12150,6 +12361,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "orc",
     dialogs = {
+      ["a wondrous winters veil to you uh little adventure"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\great-father_winter\\a_wondrous_winters_veil_to_you_uh_little_adventure.wav", dialog_type="gossip", quest_id=nil, seconds=11.0 },
       ["all this talk of treats has given me a hankering f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\great-father_winter\\6962_quest_progress.wav", dialog_type="quest_progress", quest_id=6962, seconds=6.6 },
       ["hey can you do greatfather winter a favor um littl"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\great-father_winter\\6962_quest_accept.wav", dialog_type="quest_accept", quest_id=6962, seconds=24.64 },
       ["ho ho hello adventurer the goblins told me that yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\great-father_winter\\6984_quest_complete.wav", dialog_type="quest_complete", quest_id=6984, seconds=15.32 },
@@ -12169,6 +12381,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf",
     dialogs = {
+      ["a wondrous winters veil to you uh little adventure"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\greatfather_winter\\a_wondrous_winters_veil_to_you_uh_little_adventure.wav", dialog_type="gossip", quest_id=nil, seconds=12.12 },
       ["all this talk of treats has given me a hankering f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\greatfather_winter\\7025_quest_progress.wav", dialog_type="quest_progress", quest_id=7025, seconds=5.84 },
       ["hey can you do greatfather winter a favor um littl"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\greatfather_winter\\7025_quest_accept.wav", dialog_type="quest_accept", quest_id=7025, seconds=20.36 },
       ["ho ho hello adventurer the goblins told me that yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\greatfather_winter\\7045_quest_complete.wav", dialog_type="quest_complete", quest_id=7045, seconds=14.84 },
@@ -12348,6 +12561,7 @@ NPC_DATABASE = {
       ["ahh excellent its been a while since i received wo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grelin_whitebeard\\234_quest_complete.wav", dialog_type="quest_complete", quest_id=234, seconds=3.96 },
       ["argh those lightblasted trolls a group of them cam"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grelin_whitebeard\\182_quest_complete.wav", dialog_type="quest_complete", quest_id=182, seconds=7.92 },
       ["from what ive learned these trolls hail from the f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grelin_whitebeard\\182_quest_progress.wav", dialog_type="quest_progress", quest_id=182, seconds=9.02 },
+      ["greetings adventurer im grelin whitebeard im here "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grelin_whitebeard\\greetings_adventurer_im_grelin_whitebeard_im_here_.wav", dialog_type="gossip", quest_id=nil, seconds=12.16 },
       ["hail have a care adventurer the tunnel to dun moro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grelin_whitebeard\\282_quest_progress.wav", dialog_type="quest_progress", quest_id=282, seconds=17.38 },
       ["i was planning on sending my apprentice to my brot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grelin_whitebeard\\282_quest_accept.wav", dialog_type="quest_accept", quest_id=282, seconds=29.48 },
       ["my brother senir and i were sent to different part"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grelin_whitebeard\\182_quest_accept.wav", dialog_type="quest_accept", quest_id=182, seconds=33.0 },
@@ -12389,6 +12603,17 @@ NPC_DATABASE = {
       ["i can teach you how to cook"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\gremlock_pilsnor\\i_can_teach_you_how_to_cook.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
     },
   },
+  ["Gremnik Rizzlesprang"] = {
+    race = "goblin",
+    sex = "male",
+    portrait = "goblin",
+    zone = "",
+    model_id = nil,
+    narrator = "goblin",
+    dialogs = {
+      ["talk about making the wrong investment lord valtha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\gremnik_rizzlesprang\\talk_about_making_the_wrong_investment_lord_valtha.wav", dialog_type="gossip", quest_id=nil, seconds=16.56 },
+    },
+  },
   ["Grenil Steelfury"] = {
     race = "dwarf",
     sex = "male",
@@ -12425,6 +12650,7 @@ NPC_DATABASE = {
       ["how goes your fight adventurer i know the shedding"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\greta_mosshoof\\5155_quest_progress.wav", dialog_type="quest_progress", quest_id=5155, seconds=0.0 },
       ["i sense you are not just a simple traveler looking"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\greta_mosshoof\\5158_quest_progress.wav", dialog_type="quest_progress", quest_id=5158, seconds=9.72 },
       ["i was able to see you with my spells as soon as th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\greta_mosshoof\\5165_quest_complete.wav", dialog_type="quest_complete", quest_id=5165, seconds=21.08 },
+      ["i welcome you adventurer and the emerald circle we"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\greta_mosshoof\\i_welcome_you_adventurer_and_the_emerald_circle_we.wav", dialog_type="gossip", quest_id=nil, seconds=21.24 },
       ["if i am to trust you in this matter you will first"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\greta_mosshoof\\5155_quest_accept.wav", dialog_type="quest_accept", quest_id=5155, seconds=33.72 },
       ["now you must return to jaedenar the braziers are m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\greta_mosshoof\\5165_quest_accept.wav", dialog_type="quest_accept", quest_id=5165, seconds=27.88 },
       ["once we have the waters from the moon well we will"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\greta_mosshoof\\5157_quest_progress.wav", dialog_type="quest_progress", quest_id=5157, seconds=19.96 },
@@ -12470,6 +12696,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\grezz_ragefist\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["i dont train your kind adventurer find your own tr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\grezz_ragefist\\i_dont_train_your_kind_adventurer_find_your_own_tr.wav", dialog_type="gossip", quest_id=nil, seconds=5.12 },
     },
   },
   ["Grif Wildheart"] = {
@@ -12503,6 +12730,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf",
     dialogs = {
+      ["have a drink adventurer it might be your last"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grim_patron\\have_a_drink_adventurer_it_might_be_your_last.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
       ["hey nagmara how about a mug of dark iron ale"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grim_patron\\hey_nagmara_how_about_a_mug_of_dark_iron_ale.wav", dialog_type="gossip", quest_id=nil, seconds=3.0 },
       ["i heard that a noble among the water elementals hy"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grim_patron\\i_heard_that_a_noble_among_the_water_elementals_hy.wav", dialog_type="gossip", quest_id=nil, seconds=7.44 },
       ["if hydraxis recruits more in his war then it might"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grim_patron\\if_hydraxis_recruits_more_in_his_war_then_it_might.wav", dialog_type="gossip", quest_id=nil, seconds=4.48 },
@@ -12565,6 +12793,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf",
     dialogs = {
+      ["adventure from lands far and near meeting with fol"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grimbooze_thunderbrew\\adventure_from_lands_far_and_near_meeting_with_fol.wav", dialog_type="gossip", quest_id=nil, seconds=8.92 },
       ["aged in the barrel filtered through coal it passes"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grimbooze_thunderbrew\\53_quest_complete.wav", dialog_type="quest_complete", quest_id=53, seconds=12.32 },
       ["amber is the hue of my lifes longest love like the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grimbooze_thunderbrew\\49_quest_accept.wav", dialog_type="quest_accept", quest_id=49, seconds=14.14 },
       ["an encore for you well sure friend ill mix and mix"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\grimbooze_thunderbrew\\50_quest_progress.wav", dialog_type="quest_progress", quest_id=50, seconds=14.66 },
@@ -12713,6 +12942,7 @@ NPC_DATABASE = {
       ["a tauren skilled in the ways of the hunt knows tha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\grull_hawkwind\\750_quest_accept.wav", dialog_type="quest_accept", quest_id=750, seconds=22.92 },
       ["ah at last youve arrived warrior i did not lie in "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\grull_hawkwind\\3091_quest_progress.wav", dialog_type="quest_progress", quest_id=3091, seconds=19.44 },
       ["as quickly as water falls from the sky here you ar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\grull_hawkwind\\3093_quest_progress.wav", dialog_type="quest_progress", quest_id=3093, seconds=20.56 },
+      ["greetings adventurer and welcome to camp narache n"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\grull_hawkwind\\greetings_adventurer_and_welcome_to_camp_narache_n.wav", dialog_type="gossip", quest_id=nil, seconds=7.24 },
       ["if you can provide pelts for the tribe i will pass"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\grull_hawkwind\\750_quest_progress.wav", dialog_type="quest_progress", quest_id=750, seconds=7.36 },
       ["just a moment ago a messenger was looking for you "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\grull_hawkwind\\3093_quest_accept.wav", dialog_type="quest_accept", quest_id=3093, seconds=12.88 },
       ["most excellent these ingredients will make a fine "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\grull_hawkwind\\780_quest_complete.wav", dialog_type="quest_complete", quest_id=780, seconds=8.84 },
@@ -12775,6 +13005,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["loktar adventurer im sure you already know that we"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\grunt_maug\\8542_quest_accept.wav", dialog_type="quest_accept", quest_id=8542, seconds=31.04 },
+      ["ours is the path of glory adventurer the puny alli"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\grunt_maug\\ours_is_the_path_of_glory_adventurer_the_puny_alli.wav", dialog_type="gossip", quest_id=nil, seconds=13.08 },
       ["the dredge strikers are a serious threat and must "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\grunt_maug\\8542_quest_progress.wav", dialog_type="quest_progress", quest_id=8542, seconds=4.12 },
       ["thromka adventurer you honor me and the horde with"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\grunt_maug\\8543_quest_complete.wav", dialog_type="quest_complete", quest_id=8543, seconds=18.8 },
       ["very good i see that you are serious about the war"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\grunt_maug\\8543_quest_progress.wav", dialog_type="quest_progress", quest_id=8543, seconds=30.44 },
@@ -12973,6 +13204,7 @@ NPC_DATABASE = {
     dialogs = {
       ["before you go back to darcy can you bring her some"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_parker\\130_quest_accept.wav", dialog_type="quest_accept", quest_id=130, seconds=14.36 },
       ["hail adventurer i am charged to patrol this stretc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_parker\\244_quest_accept.wav", dialog_type="quest_accept", quest_id=244, seconds=27.92 },
+      ["hail adventurer ill times these are my friend for "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_parker\\hail_adventurer_ill_times_these_are_my_friend_for_.wav", dialog_type="gossip", quest_id=nil, seconds=16.6 },
       ["thanks i could really use the meal guarding lakesh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_parker\\129_quest_complete.wav", dialog_type="quest_complete", quest_id=129, seconds=6.16 },
     },
   },
@@ -12998,6 +13230,7 @@ NPC_DATABASE = {
       ["a few days ago we sent two guards rolf and malakai"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_thomas\\37_quest_accept.wav", dialog_type="quest_accept", quest_id=37, seconds=17.28 },
       ["hail adventurer wild animals are growing more and "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_thomas\\52_quest_accept.wav", dialog_type="quest_accept", quest_id=52, seconds=13.52 },
       ["have you killed those wolves and bears"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_thomas\\52_quest_progress.wav", dialog_type="quest_progress", quest_id=52, seconds=2.32 },
+      ["hello citizen you look like a adventurer with a pu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_thomas\\hello_citizen_you_look_like_a_adventurer_with_a_pu.wav", dialog_type="gossip", quest_id=nil, seconds=6.6 },
       ["how goes the hunting adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_thomas\\46_quest_progress.wav", dialog_type="quest_progress", quest_id=46, seconds=2.36 },
       ["looks to me youve seen quite a bit of combat in yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_thomas\\109_quest_accept.wav", dialog_type="quest_accept", quest_id=109, seconds=21.16 },
       ["tell marshal dughan of malakai and rolfs deaths an"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_thomas\\39_quest_accept.wav", dialog_type="quest_accept", quest_id=39, seconds=13.88 },
@@ -13313,6 +13546,7 @@ NPC_DATABASE = {
       ["dont bother me while im partying"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hammered_patron\\dont_bother_me_while_im_partying.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
       ["i think plugger filled one of his kegs too much it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hammered_patron\\i_think_plugger_filled_one_of_his_kegs_too_much_it.wav", dialog_type="gossip", quest_id=nil, seconds=4.44 },
       ["ill take a pint of dark iron ale oh youre not the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hammered_patron\\ill_take_a_pint_of_dark_iron_ale_oh_youre_not_the_.wav", dialog_type="gossip", quest_id=nil, seconds=5.36 },
+      ["you looking at me adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hammered_patron\\you_looking_at_me_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.72 },
     },
   },
   ["Hammertoe Grez"] = {
@@ -13587,6 +13821,7 @@ NPC_DATABASE = {
     dialogs = {
       ["each of us plays a role in our tribe each of us mu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\harutt_thunderhorn\\3091_quest_complete.wav", dialog_type="quest_complete", quest_id=3091, seconds=26.0 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\harutt_thunderhorn\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
+      ["i can not train you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\harutt_thunderhorn\\i_can_not_train_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.04 },
     },
   },
   ["Hastat the Ancient"] = {
@@ -13752,6 +13987,17 @@ NPC_DATABASE = {
       ["urrgh injured and dying and confronted with the en"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\henchman_valik\\535_quest_accept.wav", dialog_type="quest_accept", quest_id=535, seconds=14.72 },
     },
   },
+  ["Henry Stern"] = {
+    race = "human",
+    sex = "male",
+    portrait = "human",
+    zone = "",
+    model_id = nil,
+    narrator = "human",
+    dialogs = {
+      ["thank you for saving me im a cook and an alchemist"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\henry_stern\\thank_you_for_saving_me_im_a_cook_and_an_alchemist.wav", dialog_type="gossip", quest_id=nil, seconds=13.04 },
+    },
+  },
   ["Henze Faulk"] = {
     race = "dwarf",
     sex = "male",
@@ -13799,6 +14045,7 @@ NPC_DATABASE = {
       ["hello again abyssmal i am glad that you wish to sp"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\herbalist_proudfeather\\8550_quest_accept.wav", dialog_type="quest_accept", quest_id=8550, seconds=32.04 },
       ["it is said that every generation must face a defin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\herbalist_proudfeather\\8549_quest_accept.wav", dialog_type="quest_accept", quest_id=8549, seconds=34.2 },
       ["thank you for your continued efforts adventurer yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\herbalist_proudfeather\\8550_quest_complete.wav", dialog_type="quest_complete", quest_id=8550, seconds=25.52 },
+      ["the hordes gathering efforts are completed adventu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\herbalist_proudfeather\\the_hordes_gathering_efforts_are_completed_adventu.wav", dialog_type="gossip", quest_id=nil, seconds=9.4 },
       ["this was no easy task yet you have excelled but do"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\herbalist_proudfeather\\8549_quest_complete.wav", dialog_type="quest_complete", quest_id=8549, seconds=7.88 },
     },
   },
@@ -13928,6 +14175,7 @@ NPC_DATABASE = {
       ["on the island of caer darrow lies scholomance a sc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_derrington\\838_quest_accept.wav", dialog_type="quest_accept", quest_id=838, seconds=34.52 },
       ["once the towers are marked theyll become top prior"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_derrington\\5098_quest_progress.wav", dialog_type="quest_progress", quest_id=5098, seconds=22.2 },
       ["through the use of a magical device known as a bea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_derrington\\5098_quest_accept.wav", dialog_type="quest_accept", quest_id=5098, seconds=32.12 },
+      ["welcome to the front lines adventurer while politi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_derrington\\welcome_to_the_front_lines_adventurer_while_politi.wav", dialog_type="gossip", quest_id=nil, seconds=25.12 },
       ["welcome to the plaguelands hero this is one of mos"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_derrington\\5094_quest_complete.wav", dialog_type="quest_complete", quest_id=5094, seconds=27.12 },
       ["welcome to the plaguelands hero this is one of the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_derrington\\5093_quest_complete.wav", dialog_type="quest_complete", quest_id=5093, seconds=27.4 },
       ["well here you are adventurer the completed skeleto"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_derrington\\5511_quest_complete.wav", dialog_type="quest_complete", quest_id=5511, seconds=23.4 },
@@ -13948,6 +14196,7 @@ NPC_DATABASE = {
       ["adventurer weve discovered a new hive for the scou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_hadrec\\438_quest_accept.wav", dialog_type="quest_accept", quest_id=438, seconds=16.08 },
       ["do you have the rot hide ichor adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_hadrec\\443_quest_progress.wav", dialog_type="quest_progress", quest_id=443, seconds=2.6 },
       ["have you defeated nightlash adventurer our success"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_hadrec\\437_quest_progress.wav", dialog_type="quest_progress", quest_id=437, seconds=6.88 },
+      ["hello adventurer if youre here then you must know "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_hadrec\\hello_adventurer_if_youre_here_then_you_must_know_.wav", dialog_type="gossip", quest_id=nil, seconds=8.92 },
       ["hello adventurer what brings you back to brill"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_hadrec\\440_quest_progress.wav", dialog_type="quest_progress", quest_id=440, seconds=3.6 },
       ["i hadnt accounted for the level of scourge presenc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_hadrec\\449_quest_complete.wav", dialog_type="quest_complete", quest_id=449, seconds=13.64 },
       ["i heard of your successful raid against the rot hi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\high_executor_hadrec\\437_quest_complete.wav", dialog_type="quest_complete", quest_id=437, seconds=11.28 },
@@ -14017,6 +14266,7 @@ NPC_DATABASE = {
       ["as much as id like to show you our own special tea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\high_priest_rohan\\5677_quest_accept.wav", dialog_type="quest_accept", quest_id=5677, seconds=28.24 },
       ["blessings onto you friend adventurer your donation"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\high_priest_rohan\\7637_quest_complete.wav", dialog_type="quest_complete", quest_id=7637, seconds=18.48 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\high_priest_rohan\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
+      ["i hope the light is with you adventurer is there a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\high_priest_rohan\\i_hope_the_light_is_with_you_adventurer_is_there_a.wav", dialog_type="gossip", quest_id=nil, seconds=4.64 },
       ["it is the way of the divine to help those in need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\high_priest_rohan\\8254_quest_accept.wav", dialog_type="quest_accept", quest_id=8254, seconds=19.56 },
       ["times a wastin adventurer its time for you to retu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\high_priest_rohan\\5675_quest_accept.wav", dialog_type="quest_accept", quest_id=5675, seconds=23.84 },
       ["welcome back adventurer have you acquired the exor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\high_priest_rohan\\7639_quest_progress.wav", dialog_type="quest_progress", quest_id=7639, seconds=3.52 },
@@ -14034,6 +14284,7 @@ NPC_DATABASE = {
     narrator = "human_female",
     dialogs = {
       ["adventurer your high priest rohan would have an au"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\high_priestess_laurena\\5641_quest_accept.wav", dialog_type="quest_accept", quest_id=5641, seconds=20.88 },
+      ["do not turn your back on the light adventurer it m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\high_priestess_laurena\\do_not_turn_your_back_on_the_light_adventurer_it_m.wav", dialog_type="gossip", quest_id=nil, seconds=6.32 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\high_priestess_laurena\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
       ["im glad youve arrived adventurer there are many th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\high_priestess_laurena\\5634_quest_complete.wav", dialog_type="quest_complete", quest_id=5634, seconds=17.12 },
       ["it is the way of the divine to help those in need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\high_priestess_laurena\\8254_quest_accept.wav", dialog_type="quest_accept", quest_id=8254, seconds=17.72 },
@@ -14249,6 +14500,7 @@ NPC_DATABASE = {
     narrator = "dwarf",
     dialogs = {
       ["another lost soul looking for guidance eh i suppos"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hogral_bakkan\\2218_quest_accept.wav", dialog_type="quest_accept", quest_id=2218, seconds=25.92 },
+      ["cant help ya adventurer i only train rogues"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hogral_bakkan\\cant_help_ya_adventurer_i_only_train_rogues.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hogral_bakkan\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
       ["where have you been adventurer hulfdans been looki"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hogral_bakkan\\2299_quest_accept.wav", dialog_type="quest_accept", quest_id=2299, seconds=10.48 },
     },
@@ -14368,6 +14620,7 @@ NPC_DATABASE = {
       ["serving the horde in one of the great battles agai"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\horde_warbringer\\8367_quest_accept.wav", dialog_type="quest_accept", quest_id=8367, seconds=31.2 },
       ["the battle for alterac rages on you must return to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\horde_warbringer\\8387_quest_accept.wav", dialog_type="quest_accept", quest_id=8387, seconds=10.0 },
       ["the battle in warsong gulch against the silverwing"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\horde_warbringer\\8428_quest_accept.wav", dialog_type="quest_accept", quest_id=8428, seconds=20.56 },
+      ["war is upon us adventurer its time for every membe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\horde_warbringer\\war_is_upon_us_adventurer_its_time_for_every_membe.wav", dialog_type="gossip", quest_id=nil, seconds=7.96 },
       ["what news do you bring from the lands of the frost"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\horde_warbringer\\8387_quest_progress.wav", dialog_type="quest_progress", quest_id=8387, seconds=5.32 },
       ["you continue to honor the horde adventurer im glad"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\horde_warbringer\\8388_quest_complete.wav", dialog_type="quest_complete", quest_id=8388, seconds=5.64 },
       ["your trials have not been easy but your courage di"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\horde_warbringer\\8367_quest_complete.wav", dialog_type="quest_complete", quest_id=8367, seconds=23.72 },
@@ -14421,6 +14674,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf",
     dialogs = {
+      ["cant help ya adventurer i only train rogues"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hulfdan_blackbeard\\cant_help_ya_adventurer_i_only_train_rogues.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hulfdan_blackbeard\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
       ["keep yer voice down adventurer the guards may hear"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hulfdan_blackbeard\\2299_quest_complete.wav", dialog_type="quest_complete", quest_id=2299, seconds=3.4 },
       ["long route in the name o me own beard ye done good"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\hulfdan_blackbeard\\2239_quest_complete.wav", dialog_type="quest_complete", quest_id=2239, seconds=25.68 },
@@ -14535,6 +14789,7 @@ NPC_DATABASE = {
       ["the razorbeak skylord is a much rarer breed of gry"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\huntsman_markhor\\7830_quest_progress.wav", dialog_type="quest_progress", quest_id=7830, seconds=7.84 },
       ["when i have his remains i shall take them to yayoj"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\huntsman_markhor\\7849_quest_progress.wav", dialog_type="quest_progress", quest_id=7849, seconds=5.96 },
       ["you have proven a worthy ally to the revantusk adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\huntsman_markhor\\7829_quest_complete.wav", dialog_type="quest_complete", quest_id=7829, seconds=4.76 },
+      ["zuljin shall return one day adventurer mark my wor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\huntsman_markhor\\zuljin_shall_return_one_day_adventurer_mark_my_wor.wav", dialog_type="gossip", quest_id=nil, seconds=26.08 },
     },
   },
   ["Huum Wildmane"] = {
@@ -14550,6 +14805,7 @@ NPC_DATABASE = {
       ["adventurer have you yet defeated vyral the vile do"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\huum_wildmane\\8321_quest_progress.wav", dialog_type="quest_progress", quest_id=8321, seconds=5.32 },
       ["enter the desert and find the twilight geolords ad"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\huum_wildmane\\8320_quest_progress.wav", dialog_type="quest_progress", quest_id=8320, seconds=6.6 },
       ["that was a task well performed adventurer your sla"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\huum_wildmane\\8320_quest_complete.wav", dialog_type="quest_complete", quest_id=8320, seconds=9.72 },
+      ["the spirits of silithus call out to us adventurer "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\huum_wildmane\\the_spirits_of_silithus_call_out_to_us_adventurer_.wav", dialog_type="gossip", quest_id=nil, seconds=6.8 },
       ["the twilights hammer an insane cult bent on destru"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\huum_wildmane\\8320_quest_accept.wav", dialog_type="quest_accept", quest_id=8320, seconds=30.4 },
       ["we have discovered another base of operations for "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\huum_wildmane\\8321_quest_accept.wav", dialog_type="quest_accept", quest_id=8321, seconds=29.76 },
       ["youve done it vyral is killed this can only mean d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\huum_wildmane\\8321_quest_complete.wav", dialog_type="quest_complete", quest_id=8321, seconds=17.36 },
@@ -14623,28 +14879,29 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "imp",
     dialogs = {
-      ["bring 10 rotting wood and 4 bloodvenom essence to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8421_quest_objective.wav", dialog_type="quest_objective", quest_id=8421, seconds=3.72 },
-      ["bring a piece of felcloth to impsy in felwood"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8420_quest_objective.wav", dialog_type="quest_objective", quest_id=8420, seconds=2.8 },
-      ["bring a total of 6 voodoo feathers from the trolls"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8422_quest_objective.wav", dialog_type="quest_objective", quest_id=8422, seconds=3.88 },
-      ["did you bring the feathers this doll needs stuffed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8422_quest_progress.wav", dialog_type="quest_progress", quest_id=8422, seconds=2.72 },
-      ["did you get lost"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7603_quest_progress.wav", dialog_type="quest_progress", quest_id=7603, seconds=1.4 },
-      ["do you have my felcloth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8420_quest_progress.wav", dialog_type="quest_progress", quest_id=8420, seconds=1.64 },
-      ["do you have the goods"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8421_quest_progress.wav", dialog_type="quest_progress", quest_id=8421, seconds=1.4 },
-      ["dont tell anyone this but niby is daft"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7602_quest_progress.wav", dialog_type="quest_progress", quest_id=7602, seconds=3.16 },
+      ["awe inspiring master your ineptitude is awe inspir"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\awe_inspiring_master_your_ineptitude_is_awe_inspir.wav", dialog_type="gossip", quest_id=nil, seconds=4.12 },
+      ["bring 10 rotting wood and 4 bloodvenom essence to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8421_quest_objective.wav", dialog_type="quest_objective", quest_id=8421, seconds=5.16 },
+      ["bring a piece of felcloth to impsy in felwood"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8420_quest_objective.wav", dialog_type="quest_objective", quest_id=8420, seconds=3.48 },
+      ["bring a total of 6 voodoo feathers from the trolls"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8422_quest_objective.wav", dialog_type="quest_objective", quest_id=8422, seconds=4.28 },
+      ["did you bring the feathers this doll needs stuffed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8422_quest_progress.wav", dialog_type="quest_progress", quest_id=8422, seconds=2.92 },
+      ["did you get lost"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7603_quest_progress.wav", dialog_type="quest_progress", quest_id=7603, seconds=1.36 },
+      ["do you have my felcloth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8420_quest_progress.wav", dialog_type="quest_progress", quest_id=8420, seconds=1.8 },
+      ["do you have the goods"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8421_quest_progress.wav", dialog_type="quest_progress", quest_id=8421, seconds=1.72 },
+      ["dont tell anyone this but niby is daft"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7602_quest_progress.wav", dialog_type="quest_progress", quest_id=7602, seconds=2.84 },
       ["give me a minute and ill combine the essences into"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7602_quest_complete.wav", dialog_type="quest_complete", quest_id=7602, seconds=3.88 },
-      ["if youre going to reanimate kroshius youre going t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7602_quest_accept.wav", dialog_type="quest_accept", quest_id=7602, seconds=31.88 },
-      ["impsy in felwood has asked that you bring him thre"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7602_quest_objective.wav", dialog_type="quest_objective", quest_id=7602, seconds=26.88 },
-      ["kroshius lays in a heap to the northeast in the sh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7603_quest_accept.wav", dialog_type="quest_accept", quest_id=7603, seconds=21.04 },
-      ["maybe this sounds strange coming from an imp but i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8420_quest_accept.wav", dialog_type="quest_accept", quest_id=8420, seconds=25.96 },
-      ["my pet is almost done now i just need something to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8422_quest_accept.wav", dialog_type="quest_accept", quest_id=8422, seconds=23.96 },
-      ["now that i have my felcloth i can really begin mak"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8421_quest_accept.wav", dialog_type="quest_accept", quest_id=8421, seconds=25.2 },
-      ["oh boy here we go again"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7601_quest_complete.wav", dialog_type="quest_complete", quest_id=7601, seconds=2.0 },
-      ["search shatter scar vale in felwood for the remain"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7603_quest_objective.wav", dialog_type="quest_objective", quest_id=7603, seconds=21.32 },
-      ["some call me impsy"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\some_call_me_impsy.wav", dialog_type="gossip", quest_id=nil, seconds=2.36 },
-      ["this will work so very well"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8421_quest_complete.wav", dialog_type="quest_complete", quest_id=8421, seconds=1.92 },
-      ["what a splendid warlock you are oh how i love the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8419_quest_complete.wav", dialog_type="quest_complete", quest_id=8419, seconds=9.44 },
-      ["wonderful now my pet is complete oh what an odd si"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8422_quest_complete.wav", dialog_type="quest_complete", quest_id=8422, seconds=4.8 },
-      ["wow you are too kind especially for a warlock oh h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8420_quest_complete.wav", dialog_type="quest_complete", quest_id=8420, seconds=10.68 },
+      ["if youre going to reanimate kroshius youre going t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7602_quest_accept.wav", dialog_type="quest_accept", quest_id=7602, seconds=30.68 },
+      ["impsy in felwood has asked that you bring him thre"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7602_quest_objective.wav", dialog_type="quest_objective", quest_id=7602, seconds=31.76 },
+      ["kroshius lays in a heap to the northeast in the sh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7603_quest_accept.wav", dialog_type="quest_accept", quest_id=7603, seconds=18.8 },
+      ["maybe this sounds strange coming from an imp but i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8420_quest_accept.wav", dialog_type="quest_accept", quest_id=8420, seconds=23.36 },
+      ["my pet is almost done now i just need something to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8422_quest_accept.wav", dialog_type="quest_accept", quest_id=8422, seconds=23.92 },
+      ["now that i have my felcloth i can really begin mak"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8421_quest_accept.wav", dialog_type="quest_accept", quest_id=8421, seconds=25.12 },
+      ["oh boy here we go again"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7601_quest_complete.wav", dialog_type="quest_complete", quest_id=7601, seconds=2.04 },
+      ["search shatter scar vale in felwood for the remain"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\7603_quest_objective.wav", dialog_type="quest_objective", quest_id=7603, seconds=22.12 },
+      ["some call me impsy"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\some_call_me_impsy.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
+      ["this will work so very well"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8421_quest_complete.wav", dialog_type="quest_complete", quest_id=8421, seconds=1.96 },
+      ["what a splendid warlock you are oh how i love the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8419_quest_complete.wav", dialog_type="quest_complete", quest_id=8419, seconds=9.92 },
+      ["wonderful now my pet is complete oh what an odd si"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8422_quest_complete.wav", dialog_type="quest_complete", quest_id=8422, seconds=4.76 },
+      ["wow you are too kind especially for a warlock oh h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\imp\\impsy\\8420_quest_complete.wav", dialog_type="quest_complete", quest_id=8420, seconds=10.32 },
     },
   },
   ["In Loving Memory"] = {
@@ -15088,6 +15345,7 @@ NPC_DATABASE = {
     narrator = "dwarf",
     dialogs = {
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_commendation_officer\\8813_quest_progress.wav", dialog_type="quest_progress", quest_id=8813, seconds=27.4 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_commendation_officer\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=24.24 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_commendation_officer\\8821_quest_progress.wav", dialog_type="quest_progress", quest_id=8821, seconds=27.4 },
     },
   },
@@ -15138,6 +15396,7 @@ NPC_DATABASE = {
       ["about time ive got customers waiting give those he"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironus_coldsteel\\5284_quest_complete.wav", dialog_type="quest_complete", quest_id=5284, seconds=8.72 },
       ["as a weaponsmith youll find that more often than n"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironus_coldsteel\\5284_quest_accept.wav", dialog_type="quest_accept", quest_id=5284, seconds=30.68 },
       ["care to learn how to turn the ore that you find in"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironus_coldsteel\\care_to_learn_how_to_turn_the_ore_that_you_find_in.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
+      ["greetings adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironus_coldsteel\\greetings_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.32 },
     },
   },
   ["Isabella"] = {
@@ -15149,6 +15408,7 @@ NPC_DATABASE = {
     narrator = "undead_female",
     dialogs = {
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\isabella\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\isabella\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=8.2 },
       ["you must return to me often if you are to become p"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\isabella\\3098_quest_complete.wav", dialog_type="quest_complete", quest_id=3098, seconds=29.12 },
     },
   },
@@ -15172,6 +15432,7 @@ NPC_DATABASE = {
       ["the brazier still reflects the ambient light from "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\islen_waterseer\\63_quest_progress.wav", dialog_type="quest_progress", quest_id=63, seconds=18.92 },
       ["the wind approaches you quickly from the horizon t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\islen_waterseer\\1528_quest_complete.wav", dialog_type="quest_complete", quest_id=1528, seconds=21.96 },
       ["this is the proof i asked for youve done well adve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\islen_waterseer\\96_quest_complete.wav", dialog_type="quest_complete", quest_id=96, seconds=30.72 },
+      ["youve come further than many adventurer respect th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\islen_waterseer\\youve_come_further_than_many_adventurer_respect_th.wav", dialog_type="gossip", quest_id=nil, seconds=7.48 },
     },
   },
   ["J.D. Collie"] = {
@@ -15259,6 +15520,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["adventurer right do you have my skins"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\james_halloran\\484_quest_progress.wav", dialog_type="quest_progress", quest_id=484, seconds=2.56 },
+      ["greetings adventurer im in a bit of a pinch right "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\james_halloran\\greetings_adventurer_im_in_a_bit_of_a_pinch_right_.wav", dialog_type="gossip", quest_id=nil, seconds=5.04 },
       ["hmm dont suppose youd be interested in becoming my"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\james_halloran\\471_quest_complete.wav", dialog_type="quest_complete", quest_id=471, seconds=19.28 },
       ["hmm this is from einar right hasnt delivered his s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\james_halloran\\469_quest_complete.wav", dialog_type="quest_complete", quest_id=469, seconds=11.8 },
       ["i sent my apprentice out into the marshes to skin "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\james_halloran\\471_quest_accept.wav", dialog_type="quest_accept", quest_id=471, seconds=27.92 },
@@ -15298,6 +15560,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf_female",
     dialogs = {
+      ["hail adventurer the ironforge brigade is stationed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\janela_stouthammer\\hail_adventurer_the_ironforge_brigade_is_stationed.wav", dialog_type="gossip", quest_id=nil, seconds=12.34 },
       ["oh excellent i wont have to hear complaints about "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\janela_stouthammer\\8781_quest_complete.wav", dialog_type="quest_complete", quest_id=8781, seconds=5.74 },
     },
   },
@@ -15445,6 +15708,7 @@ NPC_DATABASE = {
       ["very well done adventurer now the fruits of our re"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jarkal_mossmeld\\2339_quest_complete.wav", dialog_type="quest_complete", quest_id=2339, seconds=22.76 },
       ["well done adventurer youve proven your worth once "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jarkal_mossmeld\\2202_quest_complete.wav", dialog_type="quest_complete", quest_id=2202, seconds=23.32 },
       ["well look who it is took your sweet time getting h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jarkal_mossmeld\\2340_quest_progress.wav", dialog_type="quest_progress", quest_id=2340, seconds=16.16 },
+      ["whatcha need adventurer i trust that youve come ou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jarkal_mossmeld\\whatcha_need_adventurer_i_trust_that_youve_come_ou.wav", dialog_type="gossip", quest_id=nil, seconds=6.84 },
       ["you have been most helpful to me adventurer i woul"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jarkal_mossmeld\\2203_quest_accept.wav", dialog_type="quest_accept", quest_id=2203, seconds=32.08 },
       ["you know a good deal when you see one i knew i cou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jarkal_mossmeld\\2338_quest_complete.wav", dialog_type="quest_complete", quest_id=2338, seconds=19.6 },
       ["youve got another trip into the depths of uldaman "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jarkal_mossmeld\\2339_quest_progress.wav", dialog_type="quest_progress", quest_id=2339, seconds=21.12 },
@@ -15503,6 +15767,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["during the harvest festival of azeroth we give tha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\javnir_nashak\\8150_quest_accept.wav", dialog_type="quest_accept", quest_id=8150, seconds=38.08 },
+      ["greetings adventurer it is the time of the harvest"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\javnir_nashak\\greetings_adventurer_it_is_the_time_of_the_harvest.wav", dialog_type="gossip", quest_id=nil, seconds=28.72 },
       ["groms full name grommash means the giants heart it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\javnir_nashak\\8150_quest_complete.wav", dialog_type="quest_complete", quest_id=8150, seconds=28.52 },
       ["have you made the journey to groms monument and pl"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\javnir_nashak\\8150_quest_progress.wav", dialog_type="quest_progress", quest_id=8150, seconds=17.8 },
     },
@@ -15585,6 +15850,7 @@ NPC_DATABASE = {
       ["have you been successful in locating the fathom co"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jeneu_sancrea\\6921_quest_progress.wav", dialog_type="quest_progress", quest_id=6921, seconds=8.12 },
       ["have you found him yet adventurer lorgus must be s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jeneu_sancrea\\6565_quest_progress.wav", dialog_type="quest_progress", quest_id=6565, seconds=3.84 },
       ["how goes your search for the crystals adventurer h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jeneu_sancrea\\6563_quest_progress.wav", dialog_type="quest_progress", quest_id=6563, seconds=9.84 },
+      ["the elements speak to us adventurer they share kno"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jeneu_sancrea\\the_elements_speak_to_us_adventurer_they_share_kno.wav", dialog_type="gossip", quest_id=nil, seconds=8.92 },
       ["the twilights hammer has moved into the moonshrine"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jeneu_sancrea\\6921_quest_accept.wav", dialog_type="quest_accept", quest_id=6921, seconds=35.8 },
       ["this globe it is most disturbing many of the more "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jeneu_sancrea\\824_quest_complete.wav", dialog_type="quest_complete", quest_id=824, seconds=28.52 },
       ["this is exactly what i need a fathom core is an in"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jeneu_sancrea\\6921_quest_complete.wav", dialog_type="quest_complete", quest_id=6921, seconds=24.12 },
@@ -15641,6 +15907,7 @@ NPC_DATABASE = {
       ["thank you adventurer i will test this water for ma"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\jennea_cannon\\1861_quest_complete.wav", dialog_type="quest_complete", quest_id=1861, seconds=20.32 },
       ["this world has been victim to massive mystic strug"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\jennea_cannon\\1861_quest_accept.wav", dialog_type="quest_accept", quest_id=1861, seconds=35.44 },
       ["very well done i will study these creatures and wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\jennea_cannon\\1920_quest_complete.wav", dialog_type="quest_complete", quest_id=1920, seconds=11.8 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\jennea_cannon\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=9.2 },
       ["you have been sent to aid me in my task adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\jennea_cannon\\1860_quest_complete.wav", dialog_type="quest_complete", quest_id=1860, seconds=17.56 },
       ["you have served your fellow mages well and now it "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\jennea_cannon\\1921_quest_accept.wav", dialog_type="quest_accept", quest_id=1921, seconds=33.32 },
     },
@@ -15655,6 +15922,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello hunter ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\jenshan\\hello_hunter_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
       ["hello young hunter you look to me like you are ski"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\jenshan\\6068_quest_accept.wav", dialog_type="quest_accept", quest_id=6068, seconds=13.52 },
+      ["hey mon you be needin to head on over to da advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\jenshan\\hey_mon_you_be_needin_to_head_on_over_to_da_advent.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
       ["now we teach them those things and they teach us o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\jenshan\\3082_quest_complete.wav", dialog_type="quest_complete", quest_id=3082, seconds=38.24 },
       ["when we finish speakin you should talk to da rest "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\jenshan\\3087_quest_complete.wav", dialog_type="quest_complete", quest_id=3087, seconds=24.88 },
     },
@@ -15702,6 +15970,7 @@ NPC_DATABASE = {
       ["ahhh jediga be sendin her package all the way from"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jesrimon\\3541_quest_complete.wav", dialog_type="quest_complete", quest_id=3541, seconds=19.28 },
       ["have you spoken to jesrimon yet hes a boar among t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jesrimon\\3563_quest_progress.wav", dialog_type="quest_progress", quest_id=3563, seconds=14.04 },
       ["hmm maybe there be somethin you can do for the han"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jesrimon\\4300_quest_accept.wav", dialog_type="quest_accept", quest_id=4300, seconds=34.44 },
+      ["i give you warm greetins adventurer as does the sh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jesrimon\\i_give_you_warm_greetins_adventurer_as_does_the_sh.wav", dialog_type="gossip", quest_id=nil, seconds=32.52 },
       ["me clients are not so patient adventurer have you "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jesrimon\\4300_quest_progress.wav", dialog_type="quest_progress", quest_id=4300, seconds=6.68 },
       ["take this letter to jediga let her know that our d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\jesrimon\\3563_quest_accept.wav", dialog_type="quest_accept", quest_id=3563, seconds=19.44 },
     },
@@ -15903,6 +16172,17 @@ NPC_DATABASE = {
       ["the orphanage of stor oh sorry didnt mean to shout"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\john_turner\\1647_quest_complete.wav", dialog_type="quest_complete", quest_id=1647, seconds=20.6 },
       ["this is so wonderful of you adventurer thank you a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\john_turner\\1648_quest_complete.wav", dialog_type="quest_complete", quest_id=1648, seconds=25.0 },
       ["what with the influx of tradesmen here and through"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\john_turner\\1648_quest_progress.wav", dialog_type="quest_progress", quest_id=1648, seconds=20.64 },
+    },
+  },
+  ["Johnny McWeaksauce"] = {
+    race = "night_elf",
+    sex = "unknown",
+    portrait = "night_elf",
+    zone = "",
+    model_id = nil,
+    narrator = "night_elf",
+    dialogs = {
+      ["greetings adventurer i see that you are already fl"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\johnny_mcweaksauce\\greetings_adventurer_i_see_that_you_are_already_fl.wav", dialog_type="gossip", quest_id=nil, seconds=27.16 },
     },
   },
   ["Jonathan Carevin"] = {
@@ -16152,6 +16432,7 @@ NPC_DATABASE = {
     dialogs = {
       ["archmage xylem has been asking around lately for s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\juli_stormkettle\\8250_quest_accept.wav", dialog_type="quest_accept", quest_id=8250, seconds=34.44 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\juli_stormkettle\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
+      ["well met adventurer you want some advice befriend "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\juli_stormkettle\\well_met_adventurer_you_want_some_advice_befriend_.wav", dialog_type="gossip", quest_id=nil, seconds=9.32 },
     },
   },
   ["Julia Gallina"] = {
@@ -16372,6 +16653,7 @@ NPC_DATABASE = {
     dialogs = {
       ["a master of stealth and deception you are not howe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\kaplak\\2380_quest_accept.wav", dialog_type="quest_accept", quest_id=2380, seconds=18.76 },
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\kaplak\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
+      ["i dont train your kind adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\kaplak\\i_dont_train_your_kind_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
       ["lower your voice adventurer yeah i know your name "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\kaplak\\1859_quest_accept.wav", dialog_type="quest_accept", quest_id=1859, seconds=22.84 },
     },
   },
@@ -16398,6 +16680,7 @@ NPC_DATABASE = {
       ["adventurer another tribe of furbolgs the foulweald"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\karang_amakkar\\6621_quest_accept.wav", dialog_type="quest_accept", quest_id=6621, seconds=36.8 },
       ["did you defeat chief murgut adventurer did you ret"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\karang_amakkar\\6621_quest_progress.wav", dialog_type="quest_progress", quest_id=6621, seconds=4.88 },
       ["good work adventurer issuing that challenge to the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\karang_amakkar\\6621_quest_complete.wav", dialog_type="quest_complete", quest_id=6621, seconds=14.56 },
+      ["greeting adventurer welcome to the front lines in "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\karang_amakkar\\greeting_adventurer_-_welcome_to_the_front_lines_i.wav", dialog_type="gossip", quest_id=nil, seconds=14.6 },
       ["have you taken the fight to the thistlefur with a "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\karang_amakkar\\216_quest_progress.wav", dialog_type="quest_progress", quest_id=216, seconds=8.52 },
       ["the thistlefur furbolgs are threatening our expans"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\karang_amakkar\\216_quest_accept.wav", dialog_type="quest_accept", quest_id=216, seconds=30.72 },
       ["well done adventurer well done i will continue to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\karang_amakkar\\216_quest_complete.wav", dialog_type="quest_complete", quest_id=216, seconds=17.92 },
@@ -16546,6 +16829,17 @@ NPC_DATABASE = {
       ["do you have my felcloth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\kartosh\\8419_quest_progress.wav", dialog_type="quest_progress", quest_id=8419, seconds=1.72 },
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\kartosh\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
       ["your will is not strong enough to manipulate the f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\kartosh\\your_will_is_not_strong_enough_to_manipulate_the_f.wav", dialog_type="gossip", quest_id=nil, seconds=4.52 },
+    },
+  },
+  ["Kartra Bloodsnarl"] = {
+    race = "orc",
+    sex = "female",
+    portrait = "orc",
+    zone = "",
+    model_id = nil,
+    narrator = "orc_female",
+    dialogs = {
+      ["loktar adventurer we have need of your services in"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\kartra_bloodsnarl\\loktar_adventurer_we_have_need_of_your_services_in.wav", dialog_type="gossip", quest_id=nil, seconds=7.08 },
     },
   },
   ["Karus"] = {
@@ -16987,6 +17281,7 @@ NPC_DATABASE = {
     narrator = "tauren_female",
     dialogs = {
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\ker_ragetotem\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
+      ["i can not train you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\ker_ragetotem\\i_can_not_train_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.28 },
     },
   },
   ["Keras Wolfheart"] = {
@@ -17000,6 +17295,17 @@ NPC_DATABASE = {
       ["i hope that youre here to help us take back arathi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\keras_wolfheart\\i_hope_that_youre_here_to_help_us_take_back_arathi.wav", dialog_type="gossip", quest_id=nil, seconds=6.2 },
     },
   },
+  ["Kergul Bloodaxe"] = {
+    race = "orc",
+    sex = "male",
+    portrait = "orc",
+    zone = "",
+    model_id = nil,
+    narrator = "orc",
+    dialogs = {
+      ["adventurer the silverwing sentinels must be crushe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\kergul_bloodaxe\\adventurer_the_silverwing_sentinels_must_be_crushe.wav", dialog_type="gossip", quest_id=nil, seconds=5.56 },
+    },
+  },
   ["Kernda"] = {
     race = "furbolg",
     sex = "unknown",
@@ -17010,6 +17316,7 @@ NPC_DATABASE = {
     dialogs = {
       ["this thing it is in the shape of a winterfall ritu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\kernda\\8471_quest_complete.wav", dialog_type="quest_complete", quest_id=8471, seconds=32.64 },
       ["this totem i recognize it as one of the deadwoods "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\kernda\\8470_quest_complete.wav", dialog_type="quest_complete", quest_id=8470, seconds=29.28 },
+      ["what do you seek adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\furbolg\\kernda\\what_do_you_seek_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.32 },
     },
   },
   ["Kernobee"] = {
@@ -17107,6 +17414,7 @@ NPC_DATABASE = {
     dialogs = {
       ["haha i knew my note would not dissuade you from yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\khelden_bremen\\3104_quest_complete.wav", dialog_type="quest_complete", quest_id=3104, seconds=28.44 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\khelden_bremen\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\khelden_bremen\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=7.96 },
     },
   },
   ["Khole Jinglepocket"] = {
@@ -17350,6 +17658,7 @@ NPC_DATABASE = {
     narrator = "human_female",
     dialogs = {
       ["have you found them yet adventurer with the two of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\kirsta_deepshadow\\6023_quest_progress.wav", dialog_type="quest_progress", quest_id=6023, seconds=13.72 },
+      ["he hello adventurer sorry im recovering from my wo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\kirsta_deepshadow\\he_hello_adventurer_sorry_im_recovering_from_my_wo.wav", dialog_type="gossip", quest_id=nil, seconds=16.32 },
       ["how is it going adventurer are they stronger than "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\kirsta_deepshadow\\6004_quest_progress.wav", dialog_type="quest_progress", quest_id=6004, seconds=11.44 },
       ["i was sent as a scout to do some damage and gauge "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\kirsta_deepshadow\\6004_quest_accept.wav", dialog_type="quest_accept", quest_id=6004, seconds=29.32 },
       ["its a dangerous task adventurer i envy your courag"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\kirsta_deepshadow\\6025_quest_progress.wav", dialog_type="quest_progress", quest_id=6025, seconds=3.76 },
@@ -17606,6 +17915,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "goblin",
     dialogs = {
+      ["113 degrees kraklenheit cant you do any better"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krakle\\113_degrees_kraklenheit_cant_you_do_any_better.wav", dialog_type="gossip", quest_id=nil, seconds=4.84 },
       ["8536 degrees kraklenheit is the reading tired of m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krakle\\8536_degrees_kraklenheit_is_the_reading_tired_of_m.wav", dialog_type="gossip", quest_id=nil, seconds=5.16 },
       ["ding 428000 degrees kraklenheit exactly well appro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krakle\\ding_428000_degrees_kraklenheit_exactly_well_appro.wav", dialog_type="gossip", quest_id=nil, seconds=8.04 },
       ["holy krakle the temperature is 428000 degrees krak"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krakle\\holy_krakle_the_temperature_is_428000_degrees_krak.wav", dialog_type="gossip", quest_id=nil, seconds=5.12 },
@@ -17650,6 +17960,7 @@ NPC_DATABASE = {
     narrator = "tauren",
     dialogs = {
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\krang_stonehoof\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.28 },
+      ["i can not train you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\krang_stonehoof\\i_can_not_train_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
       ["the horde honors its warriors because their streng"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\krang_stonehoof\\1505_quest_accept.wav", dialog_type="quest_accept", quest_id=1505, seconds=21.96 },
     },
   },
@@ -17743,6 +18054,7 @@ NPC_DATABASE = {
     narrator = "goblin",
     dialogs = {
       ["achoo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krazek\\1116_quest_complete.wav", dialog_type="quest_complete", quest_id=1116, seconds=8.48 },
+      ["adventurer eh i am krazek baron revilgazs secretar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krazek\\adventurer_eh_i_am_krazek_baron_revilgazs_secretar.wav", dialog_type="gossip", quest_id=nil, seconds=19.28 },
       ["ah splendid that was a big favor you did for me he"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krazek\\627_quest_complete.wav", dialog_type="quest_complete", quest_id=627, seconds=4.24 },
       ["back so soon do you have my dream dust"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krazek\\1116_quest_progress.wav", dialog_type="quest_progress", quest_id=1116, seconds=3.44 },
       ["baron revilgaz has had me keep an ear out for rumo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krazek\\616_quest_accept.wav", dialog_type="quest_accept", quest_id=616, seconds=23.32 },
@@ -17780,6 +18092,7 @@ NPC_DATABASE = {
       ["honestly i wouldnt have thought it youre amazing a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\kreldig_ungor\\1466_quest_complete.wav", dialog_type="quest_complete", quest_id=1466, seconds=14.28 },
       ["i didnt even realize these demon things were in de"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\kreldig_ungor\\1466_quest_progress.wav", dialog_type="quest_progress", quest_id=1466, seconds=13.68 },
       ["intriguing well we might not be without hope quite"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\kreldig_ungor\\1456_quest_accept.wav", dialog_type="quest_accept", quest_id=1456, seconds=31.24 },
+      ["ive got a lot going on out here in desolace advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\kreldig_ungor\\ive_got_a_lot_going_on_out_here_in_desolace_advent.wav", dialog_type="gossip", quest_id=nil, seconds=12.24 },
       ["my first order of business is for the mage karnito"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\kreldig_ungor\\1454_quest_accept.wav", dialog_type="quest_accept", quest_id=1454, seconds=26.12 },
       ["next on leftwitchs list is lets see hmm oh here it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\kreldig_ungor\\1459_quest_accept.wav", dialog_type="quest_accept", quest_id=1459, seconds=28.64 },
       ["no offense to whoever nijel is but this camp aint "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\kreldig_ungor\\1456_quest_progress.wav", dialog_type="quest_progress", quest_id=1456, seconds=8.92 },
@@ -17806,6 +18119,7 @@ NPC_DATABASE = {
       ["dithers said youd deliver the goods and deliver yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krinkle_goodsteel\\5514_quest_complete.wav", dialog_type="quest_complete", quest_id=5514, seconds=18.04 },
       ["do you have the stem of the skeletal key finished "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krinkle_goodsteel\\5801_quest_progress.wav", dialog_type="quest_progress", quest_id=5801, seconds=24.28 },
       ["oh youve seen fit to do some of the work i request"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krinkle_goodsteel\\4450_quest_complete.wav", dialog_type="quest_complete", quest_id=4450, seconds=20.04 },
+      ["welcome to tanaris adventurer how can i be of serv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krinkle_goodsteel\\welcome_to_tanaris_adventurer_how_can_i_be_of_serv.wav", dialog_type="gossip", quest_id=nil, seconds=9.32 },
       ["you need two bars of thorium and a powerfully hot "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\krinkle_goodsteel\\5802_quest_accept.wav", dialog_type="quest_accept", quest_id=5802, seconds=33.6 },
     },
   },
@@ -17904,12 +18218,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "orc",
     dialogs = {
+      ["ah so i did mention a bounty didnt i well thatll t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2976_quest_accept.wav", dialog_type="quest_accept", quest_id=2976, seconds=27.6 },
       ["be quick adventurer i have much to complete today"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2976_quest_progress.wav", dialog_type="quest_progress", quest_id=2976, seconds=3.52 },
       ["take my words seriously adventurer the grimtotem c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2974_quest_progress.wav", dialog_type="quest_progress", quest_id=2974, seconds=17.88 },
       ["the sprite darters can be dangerous critters when "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2973_quest_progress.wav", dialog_type="quest_progress", quest_id=2973, seconds=24.36 },
       ["these are good horns adventurer well done ill take"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2974_quest_complete.wav", dialog_type="quest_complete", quest_id=2974, seconds=18.16 },
       ["well met adventurer ive traveled with my companion"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2973_quest_accept.wav", dialog_type="quest_accept", quest_id=2973, seconds=24.28 },
-      ["what ah so i did mention a bounty didnt i well tha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2976_quest_accept.wav", dialog_type="quest_accept", quest_id=2976, seconds=27.6 },
       ["what you came across tauren in the area youre joki"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2974_quest_accept.wav", dialog_type="quest_accept", quest_id=2974, seconds=31.92 },
       ["wonderful adventurer these will do nicely there ar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\krueg_skullsplitter\\2973_quest_complete.wav", dialog_type="quest_complete", quest_id=2973, seconds=19.36 },
     },
@@ -18115,7 +18429,19 @@ NPC_DATABASE = {
       ["do not fail and make me look bad adventurer return"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lady_callow\\8607_quest_progress.wav", dialog_type="quest_progress", quest_id=8607, seconds=6.92 },
       ["i trust that you are speaking to me because you ar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lady_callow\\8607_quest_accept.wav", dialog_type="quest_accept", quest_id=8607, seconds=20.6 },
       ["surprising yet acceptable perhaps i underestimated"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lady_callow\\8607_quest_complete.wav", dialog_type="quest_complete", quest_id=8607, seconds=20.84 },
+      ["what is it now adventurer i havent got all day the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lady_callow\\what_is_it_now_adventurer_i_havent_got_all_day_the.wav", dialog_type="gossip", quest_id=nil, seconds=19.12 },
       ["you returned interesting as you can see i am still"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lady_callow\\8608_quest_accept.wav", dialog_type="quest_accept", quest_id=8608, seconds=14.52 },
+    },
+  },
+  ["Lady Hoteshem"] = {
+    race = "human",
+    sex = "female",
+    portrait = "human",
+    zone = "",
+    model_id = nil,
+    narrator = "human_female",
+    dialogs = {
+      ["ive been expecting you adventurer are you ready to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\lady_hoteshem\\ive_been_expecting_you_adventurer_are_you_ready_to.wav", dialog_type="gossip", quest_id=nil, seconds=5.28 },
     },
   },
   ["Lady Jaina Proudmoore"] = {
@@ -18126,6 +18452,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "human_female",
     dialogs = {
+      ["hendel is in our custody now adventurer thanks to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\lady_jaina_proudmoore\\hendel_is_in_our_custody_now_adventurer_thanks_to_.wav", dialog_type="gossip", quest_id=nil, seconds=24.88 },
       ["thank you for your help adventurer please accept t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\lady_jaina_proudmoore\\1267_quest_complete.wav", dialog_type="quest_complete", quest_id=1267, seconds=5.96 },
     },
   },
@@ -18610,6 +18937,7 @@ NPC_DATABASE = {
     dialogs = {
       ["adventurer sergeant yohwa trusted your abilities a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\lieutenant_doren\\574_quest_complete.wav", dialog_type="quest_complete", quest_id=574, seconds=19.0 },
       ["dare i hope that kurzen and his defenders are dead"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\lieutenant_doren\\202_quest_progress.wav", dialog_type="quest_progress", quest_id=202, seconds=3.6 },
+      ["greetings adventurer if youre a friend of colonel "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\lieutenant_doren\\greetings_adventurer_if_youre_a_friend_of_colonel_.wav", dialog_type="gossip", quest_id=nil, seconds=8.32 },
       ["i dared not believe the reports but you bring us p"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\lieutenant_doren\\202_quest_complete.wav", dialog_type="quest_complete", quest_id=202, seconds=18.12 },
       ["if kurzen knows thorsens secret then we have a spy"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\lieutenant_doren\\200_quest_accept.wav", dialog_type="quest_accept", quest_id=200, seconds=31.52 },
       ["it pains me to find out it was merle who betrayed "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\lieutenant_doren\\331_quest_complete.wav", dialog_type="quest_complete", quest_id=331, seconds=15.64 },
@@ -18643,6 +18971,17 @@ NPC_DATABASE = {
       ["you know adventurer id really rather not take thes"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\lieutenant_farren_orinelle\\560_quest_accept.wav", dialog_type="quest_accept", quest_id=560, seconds=8.52 },
     },
   },
+  ["Lieutenant General Andorov"] = {
+    race = "human",
+    sex = "male",
+    portrait = "human",
+    zone = "",
+    model_id = nil,
+    narrator = "human",
+    dialogs = {
+      ["if it bleeds we can kill it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\lieutenant_general_andorov\\if_it_bleeds_we_can_kill_it.wav", dialog_type="gossip", quest_id=nil, seconds=2.32 },
+    },
+  },
   ["Lieutenant Haggerdin"] = {
     race = "dwarf",
     sex = "male",
@@ -18653,6 +18992,7 @@ NPC_DATABASE = {
     dialogs = {
       ["before me stands an exalted hero of the alliance f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\lieutenant_haggerdin\\7171_quest_progress.wav", dialog_type="quest_progress", quest_id=7171, seconds=17.04 },
       ["beware the harpies of the region adventurer theyll"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\lieutenant_haggerdin\\7162_quest_progress.wav", dialog_type="quest_progress", quest_id=7162, seconds=4.52 },
+      ["hail adventurer i am lieutenant haggerdin officer "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\lieutenant_haggerdin\\hail_adventurer_i_am_lieutenant_haggerdin_officer_.wav", dialog_type="gossip", quest_id=nil, seconds=20.64 },
       ["i must know adventurer when you look directly into"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\lieutenant_haggerdin\\7170_quest_progress.wav", dialog_type="quest_progress", quest_id=7170, seconds=15.08 },
       ["it is good to see you again adventurer i had not e"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\lieutenant_haggerdin\\7172_quest_accept.wav", dialog_type="quest_accept", quest_id=7172, seconds=24.24 },
       ["it is you who must lead our troops to victory comm"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\lieutenant_haggerdin\\7172_quest_complete.wav", dialog_type="quest_complete", quest_id=7172, seconds=13.28 },
@@ -18756,6 +19096,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead_female",
     dialogs = {
+      ["dont get too close adventurer im liable to fumble "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lilith_the_lithe\\dont_get_too_close_adventurer_im_liable_to_fumble_.wav", dialog_type="gossip", quest_id=nil, seconds=5.72 },
       ["his apron where is it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lilith_the_lithe\\5305_quest_progress.wav", dialog_type="quest_progress", quest_id=5305, seconds=2.32 },
       ["may you bash in many a brain adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lilith_the_lithe\\5305_quest_complete.wav", dialog_type="quest_complete", quest_id=5305, seconds=2.72 },
       ["within the confines of the scarlet bastion lies sw"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\lilith_the_lithe\\5305_quest_accept.wav", dialog_type="quest_accept", quest_id=5305, seconds=17.44 },
@@ -18801,9 +19142,12 @@ NPC_DATABASE = {
       ["blazerunner is almost invincible behind the aura h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\3962_quest_progress.wav", dialog_type="quest_progress", quest_id=3962, seconds=10.36 },
       ["did jd help you at all"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\3961_quest_complete.wav", dialog_type="quest_complete", quest_id=3961, seconds=2.04 },
       ["does my name sound familiar to you maybe we knew e"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\does_my_name_sound_familiar_to_you_maybe_we_knew_e.wav", dialog_type="gossip", quest_id=nil, seconds=7.4 },
+      ["hi there im glad you came back adventurer tell me "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\hi_there_im_glad_you_came_back_adventurer_tell_me_.wav", dialog_type="gossip", quest_id=nil, seconds=10.36 },
+      ["its a secret to everybody including me im glad you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\its_a_secret_to_everybody_including_me_im_glad_you.wav", dialog_type="gossip", quest_id=nil, seconds=9.2 },
       ["my my so linken did finally get around to sending "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\3908_quest_progress.wav", dialog_type="quest_progress", quest_id=3908, seconds=5.0 },
       ["my sword its finished now if only i could remember"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\3914_quest_complete.wav", dialog_type="quest_complete", quest_id=3914, seconds=9.12 },
       ["oh yes these things do look familiar well kind of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\3845_quest_complete.wav", dialog_type="quest_complete", quest_id=3845, seconds=4.76 },
+      ["pay me and ill talk oh hey its you adventurer neve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\pay_me_and_ill_talk_oh_hey_its_you_adventurer_neve.wav", dialog_type="gossip", quest_id=nil, seconds=5.36 },
       ["thank you adventurer the golden flame will now be "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\3962_quest_complete.wav", dialog_type="quest_complete", quest_id=3962, seconds=15.92 },
       ["thinking thinking i know i came here for something"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\3941_quest_accept.wav", dialog_type="quest_accept", quest_id=3941, seconds=29.08 },
       ["when i was wandering the crater after i crashed he"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\linken\\when_i_was_wandering_the_crater_after_i_crashed_he.wav", dialog_type="gossip", quest_id=nil, seconds=15.12 },
@@ -19220,14 +19564,15 @@ NPC_DATABASE = {
       ["adventurer youve already proven more able than all"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\711_quest_accept.wav", dialog_type="quest_accept", quest_id=711, seconds=28.12 },
       ["adventurer youve done your job well beyond all sta"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\714_quest_accept.wav", dialog_type="quest_accept", quest_id=714, seconds=23.44 },
       ["ah perfect stand back while i prepare to make more"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\777_quest_complete.wav", dialog_type="quest_complete", quest_id=777, seconds=3.4 },
-      ["ha perfect just about done no really i am almost d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\714_quest_complete.wav", dialog_type="quest_complete", quest_id=714, seconds=18.6 },
       ["haha done the shackles are done its time lucien it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\778_quest_accept.wav", dialog_type="quest_accept", quest_id=778, seconds=18.24 },
       ["have you found the oil i need it would be so helpf"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\713_quest_progress.wav", dialog_type="quest_progress", quest_id=713, seconds=4.8 },
       ["here in the badlands ive stopped to work on my lat"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\710_quest_accept.wav", dialog_type="quest_accept", quest_id=710, seconds=26.52 },
+      ["how perfect of you to come by adventurer my name i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\how_perfect_of_you_to_come_by_adventurer_my_name_i.wav", dialog_type="gossip", quest_id=nil, seconds=15.32 },
       ["i i know these markings"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\4062_quest_complete.wav", dialog_type="quest_complete", quest_id=4062, seconds=2.76 },
       ["im most pleased adventurer my spells affected the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\711_quest_progress.wav", dialog_type="quest_progress", quest_id=711, seconds=14.76 },
       ["let me tell you something about frost oil nothing "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\713_quest_accept.wav", dialog_type="quest_accept", quest_id=713, seconds=31.24 },
       ["not quite the outcome i was expecting could you ge"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\778_quest_progress.wav", dialog_type="quest_progress", quest_id=778, seconds=4.88 },
+      ["perfect just about done no really i am almost done"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\714_quest_complete.wav", dialog_type="quest_complete", quest_id=714, seconds=18.6 },
       ["stupendous this should be the perfect coolant for "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\713_quest_complete.wav", dialog_type="quest_complete", quest_id=713, seconds=15.64 },
       ["thank you adventurer that was quite an ordeal wasn"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\778_quest_complete.wav", dialog_type="quest_complete", quest_id=778, seconds=18.16 },
       ["the stone slabs you found were ideal adventurer lu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lotwil_veriatus\\712_quest_progress.wav", dialog_type="quest_progress", quest_id=712, seconds=22.12 },
@@ -19285,12 +19630,13 @@ NPC_DATABASE = {
       ["cog 5 huh yeah this isnt going to be good"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\734_quest_complete.wav", dialog_type="quest_complete", quest_id=734, seconds=3.2 },
       ["here you go adventurer try these on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\716_quest_complete.wav", dialog_type="quest_complete", quest_id=716, seconds=2.8 },
       ["hes getting closer to finishing how are things goi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\715_quest_progress.wav", dialog_type="quest_progress", quest_id=715, seconds=3.32 },
+      ["hey there adventurer lotwils not the most percepti"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\hey_there_adventurer_lotwils_not_the_most_percepti.wav", dialog_type="gossip", quest_id=nil, seconds=13.96 },
       ["i know how cheap lotwil can be adventurer so let m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\716_quest_accept.wav", dialog_type="quest_accept", quest_id=716, seconds=23.36 },
+      ["i mean thank you adventurer these will be helpful "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\715_quest_complete.wav", dialog_type="quest_complete", quest_id=715, seconds=4.8 },
       ["i wouldnt wait too long to get that bracer adventu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\716_quest_progress.wav", dialog_type="quest_progress", quest_id=716, seconds=6.44 },
       ["im thinking those items you acquired for lotwil ar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\715_quest_accept.wav", dialog_type="quest_accept", quest_id=715, seconds=27.04 },
       ["okay here you go im going to be over here behind c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\777_quest_accept.wav", dialog_type="quest_accept", quest_id=777, seconds=6.52 },
       ["the cog adventurer the cog"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\777_quest_progress.wav", dialog_type="quest_progress", quest_id=777, seconds=2.48 },
-      ["yes i mean thank you adventurer these will be help"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\lucien_tosselwrench\\715_quest_complete.wav", dialog_type="quest_complete", quest_id=715, seconds=4.8 },
     },
   },
   ["Lucille Castleton"] = {
@@ -19365,6 +19711,7 @@ NPC_DATABASE = {
     dialogs = {
       ["did you find the launchers adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\lunar_festival_harbinger\\8867_quest_progress.wav", dialog_type="quest_progress", quest_id=8867, seconds=2.32 },
       ["every year the druids of moonglade hold a celebrat"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\lunar_festival_harbinger\\8867_quest_accept.wav", dialog_type="quest_accept", quest_id=8867, seconds=22.0 },
+      ["greetings adventurer weve travelled from moonglade"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\lunar_festival_harbinger\\greetings_adventurer_weve_travelled_from_moonglade.wav", dialog_type="gossip", quest_id=nil, seconds=9.92 },
       ["now that you have your lunar festival invitation y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\lunar_festival_harbinger\\8883_quest_accept.wav", dialog_type="quest_accept", quest_id=8883, seconds=24.88 },
       ["welcome adventurer are you here to join in the fes"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\lunar_festival_harbinger\\8871_quest_complete.wav", dialog_type="quest_complete", quest_id=8871, seconds=4.2 },
       ["well done adventurer now that youre in the spirit "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\lunar_festival_harbinger\\8867_quest_complete.wav", dialog_type="quest_complete", quest_id=8867, seconds=24.44 },
@@ -19392,6 +19739,7 @@ NPC_DATABASE = {
       ["adventurer an imp in felwood by the name of impsy "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\luther_pickman\\8419_quest_accept.wav", dialog_type="quest_accept", quest_id=8419, seconds=24.2 },
       ["do you have my felcloth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\luther_pickman\\8419_quest_progress.wav", dialog_type="quest_progress", quest_id=8419, seconds=2.84 },
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\luther_pickman\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
+      ["it is wise that you humble yourself before me adve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\luther_pickman\\it_is_wise_that_you_humble_yourself_before_me_adve.wav", dialog_type="gossip", quest_id=nil, seconds=5.24 },
     },
   },
   ["Lyesa Steelbrow"] = {
@@ -19475,6 +19823,7 @@ NPC_DATABASE = {
       ["here is your thread adventurer it has a thousand u"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\madame_eva\\157_quest_accept.wav", dialog_type="quest_accept", quest_id=157, seconds=9.32 },
       ["hmm someone handled this book recently someone who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\madame_eva\\262_quest_complete.wav", dialog_type="quest_complete", quest_id=262, seconds=16.28 },
       ["i can make a spool of ghost hair thread with this "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\madame_eva\\154_quest_complete.wav", dialog_type="quest_complete", quest_id=154, seconds=8.8 },
+      ["i have sensed your coming for quite some time adve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\madame_eva\\i_have_sensed_your_coming_for_quite_some_time_adve.wav", dialog_type="gossip", quest_id=nil, seconds=6.56 },
       ["i know adventurer stalvan is dead i sensed a wave "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\madame_eva\\98_quest_complete.wav", dialog_type="quest_complete", quest_id=98, seconds=21.2 },
       ["i need to string the ghost hair thread along my do"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\madame_eva\\157_quest_progress.wav", dialog_type="quest_progress", quest_id=157, seconds=7.12 },
       ["last night a horrible disturbance rippled through "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\madame_eva\\66_quest_accept.wav", dialog_type="quest_accept", quest_id=66, seconds=27.56 },
@@ -19524,6 +19873,7 @@ NPC_DATABASE = {
       ["take this refined and purified incendia powder to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\magatha_grimtotem\\5088_quest_accept.wav", dialog_type="quest_accept", quest_id=5088, seconds=31.88 },
       ["the tauren have a bond with the land and it pains "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\magatha_grimtotem\\1064_quest_accept.wav", dialog_type="quest_accept", quest_id=1064, seconds=34.76 },
       ["well what did magatha say the old crone i bet she "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\magatha_grimtotem\\3562_quest_progress.wav", dialog_type="quest_progress", quest_id=3562, seconds=5.48 },
+      ["you must listen young adventurer listen to the whi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\magatha_grimtotem\\you_must_listen_young_adventurer_listen_to_the_whi.wav", dialog_type="gossip", quest_id=nil, seconds=7.64 },
       ["you were right to come my wisdom will be yours"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\magatha_grimtotem\\1063_quest_complete.wav", dialog_type="quest_complete", quest_id=1063, seconds=3.2 },
     },
   },
@@ -19588,6 +19938,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\maginor_dumas\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\maginor_dumas\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=8.6 },
     },
   },
   ["Magis Sparkmantle"] = {
@@ -19600,6 +19951,7 @@ NPC_DATABASE = {
     dialogs = {
       ["adventurer bink my gnome colleague in ironforge se"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\magis_sparkmantle\\1879_quest_accept.wav", dialog_type="quest_accept", quest_id=1879, seconds=19.52 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\magis_sparkmantle\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
+      ["well met adventurer you want some advice befriend "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\magis_sparkmantle\\well_met_adventurer_you_want_some_advice_befriend_.wav", dialog_type="gossip", quest_id=nil, seconds=8.4 },
       ["your knowledge of the craft grows young adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\magis_sparkmantle\\1919_quest_accept.wav", dialog_type="quest_accept", quest_id=1919, seconds=22.8 },
     },
   },
@@ -19711,6 +20063,7 @@ NPC_DATABASE = {
       ["this is grim news adventurer to discover that our "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\magistrate_solomon\\4184_quest_accept.wav", dialog_type="quest_accept", quest_id=4184, seconds=34.0 },
       ["what brings you to stormwind keep"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\magistrate_solomon\\4184_quest_progress.wav", dialog_type="quest_progress", quest_id=4184, seconds=2.32 },
       ["what have you there"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\magistrate_solomon\\120_quest_progress.wav", dialog_type="quest_progress", quest_id=120, seconds=1.44 },
+      ["who is this adventurer who goes before the court o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\magistrate_solomon\\who_is_this_adventurer_who_goes_before_the_court_o.wav", dialog_type="gossip", quest_id=nil, seconds=14.08 },
       ["you appear to have traveled from afar adventurer w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\magistrate_solomon\\145_quest_progress.wav", dialog_type="quest_progress", quest_id=145, seconds=5.56 },
       ["you must return to the burning steppes adventurer "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\magistrate_solomon\\4223_quest_accept.wav", dialog_type="quest_accept", quest_id=4223, seconds=9.64 },
     },
@@ -19822,6 +20175,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "troll_female",
     dialogs = {
+      ["greetings adventurer i pity your kind for the secr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\maiah\\greetings_adventurer_i_pity_your_kind_for_the_secr.wav", dialog_type="gossip", quest_id=nil, seconds=7.12 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\maiah\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
       ["you be among da most powerful beings on da planet "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\maiah\\3086_quest_complete.wav", dialog_type="quest_complete", quest_id=3086, seconds=40.36 },
     },
@@ -19903,6 +20257,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\malakai_cross\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
       ["it is the way of the divine to help those in need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\malakai_cross\\8254_quest_accept.wav", dialog_type="quest_accept", quest_id=8254, seconds=19.48 },
+      ["what can this insignificant servant do for you adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\malakai_cross\\what_can_this_insignificant_servant_do_for_you_adv.wav", dialog_type="gossip", quest_id=nil, seconds=4.4 },
     },
   },
   ["Malcomb Wynn"] = {
@@ -19925,6 +20280,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\malosh\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["i dont train your kind adventurer find your own tr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\malosh\\i_dont_train_your_kind_adventurer_find_your_own_tr.wav", dialog_type="gossip", quest_id=nil, seconds=5.0 },
     },
   },
   ["Malton Droffers"] = {
@@ -19991,6 +20347,7 @@ NPC_DATABASE = {
     dialogs = {
       ["adventurer you take my task seriously and for that"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mankrik\\899_quest_complete.wav", dialog_type="quest_complete", quest_id=899, seconds=14.44 },
       ["have you found any sign of her at all the pain in "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mankrik\\4921_quest_progress.wav", dialog_type="quest_progress", quest_id=4921, seconds=9.8 },
+      ["i thank you adventurer your dedication to my plea "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mankrik\\i_thank_you_adventurer_your_dedication_to_my_plea_.wav", dialog_type="gossip", quest_id=nil, seconds=17.28 },
       ["i understand thank you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mankrik\\4921_quest_complete.wav", dialog_type="quest_complete", quest_id=4921, seconds=2.36 },
       ["perhaps you know the pain of uncertainty perhaps n"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mankrik\\899_quest_accept.wav", dialog_type="quest_accept", quest_id=899, seconds=38.92 },
       ["the quilboar will pay for this adventurer i swear "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mankrik\\899_quest_progress.wav", dialog_type="quest_progress", quest_id=899, seconds=3.32 },
@@ -20069,7 +20426,6 @@ NPC_DATABASE = {
     dialogs = {
       ["adventurer the burning blade has infested the cave"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\margoz\\827_quest_accept.wav", dialog_type="quest_accept", quest_id=827, seconds=30.72 },
       ["adventurer unlocking the secret of these collars i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\margoz\\827_quest_complete.wav", dialog_type="quest_complete", quest_id=827, seconds=6.68 },
-      ["argh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\margoz\\827_quest_complete.wav", dialog_type="quest_complete", quest_id=827, seconds=6.68 },
       ["good hiding within these collars is the secret beh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\margoz\\827_quest_complete.wav", dialog_type="quest_complete", quest_id=827, seconds=6.68 },
       ["have you yet entered skull rock adventurer do you "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\margoz\\827_quest_progress.wav", dialog_type="quest_progress", quest_id=827, seconds=5.04 },
       ["my most humble greetings adventurer how might i he"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\margoz\\829_quest_progress.wav", dialog_type="quest_progress", quest_id=829, seconds=5.56 },
@@ -20181,6 +20537,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\marryk_nurribit\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
       ["oh yeah arcane arts of course heres what you need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\marryk_nurribit\\3114_quest_complete.wav", dialog_type="quest_complete", quest_id=3114, seconds=20.64 },
+      ["well met adventurer you want some advice befriend "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\marryk_nurribit\\well_met_adventurer_you_want_some_advice_befriend_.wav", dialog_type="gossip", quest_id=nil, seconds=8.44 },
     },
   },
   ["Marshal Bluewall"] = {
@@ -20349,6 +20706,7 @@ NPC_DATABASE = {
       ["adventurer are you still hunting ogres do you have"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\marshal_redpath\\500_quest_progress.wav", dialog_type="quest_progress", quest_id=500, seconds=5.44 },
       ["crushridge ogres have dug an ogre mound up in the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\marshal_redpath\\500_quest_accept.wav", dialog_type="quest_accept", quest_id=500, seconds=32.08 },
       ["farrens errand boy are you if you assisted farren "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\marshal_redpath\\560_quest_complete.wav", dialog_type="quest_complete", quest_id=560, seconds=10.32 },
+      ["i hope youre here to work adventurer we have a lot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\marshal_redpath\\i_hope_youre_here_to_work_adventurer_we_have_a_lot.wav", dialog_type="gossip", quest_id=nil, seconds=6.84 },
       ["now that youve had a taste of the crushridge ogres"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\marshal_redpath\\504_quest_accept.wav", dialog_type="quest_accept", quest_id=504, seconds=17.24 },
       ["please inform lieutenant orinelle that i would lik"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\marshal_redpath\\561_quest_accept.wav", dialog_type="quest_accept", quest_id=561, seconds=11.84 },
       ["very good adventurer you must have hacked through "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\marshal_redpath\\500_quest_complete.wav", dialog_type="quest_complete", quest_id=500, seconds=11.04 },
@@ -20381,6 +20739,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "gnome_female",
     dialogs = {
+      ["hello adventurer ive went around and asked and it "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\marta_finespindle\\hello_adventurer_ive_went_around_and_asked_and_it_.wav", dialog_type="gossip", quest_id=nil, seconds=17.52 },
       ["is that the thick leather you have there in your p"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\marta_finespindle\\8515_quest_progress.wav", dialog_type="quest_progress", quest_id=8515, seconds=10.52 },
       ["oh boy this is going to be great adventurer the ah"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\marta_finespindle\\8515_quest_accept.wav", dialog_type="quest_accept", quest_id=8515, seconds=25.96 },
       ["oh i knew you could do it adventurer i just knew i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\marta_finespindle\\8515_quest_complete.wav", dialog_type="quest_complete", quest_id=8515, seconds=21.96 },
@@ -20427,6 +20786,7 @@ NPC_DATABASE = {
     narrator = "human_female",
     dialogs = {
       ["finally the menace is laid to rest thank you adven"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\martie_jainrose\\34_quest_complete.wav", dialog_type="quest_complete", quest_id=34, seconds=9.04 },
+      ["hail adventurer welcome to my humble garden the we"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\martie_jainrose\\hail_adventurer_welcome_to_my_humble_garden_the_we.wav", dialog_type="gossip", quest_id=nil, seconds=9.6 },
       ["hello again adventurer did parker like the lunch i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\martie_jainrose\\131_quest_progress.wav", dialog_type="quest_progress", quest_id=131, seconds=3.24 },
       ["here is your bouquet i chose daffodils for you the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\martie_jainrose\\131_quest_accept.wav", dialog_type="quest_accept", quest_id=131, seconds=5.08 },
       ["is bellygrub still at it or were you able to rid l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\martie_jainrose\\34_quest_progress.wav", dialog_type="quest_progress", quest_id=34, seconds=5.2 },
@@ -20548,6 +20908,7 @@ NPC_DATABASE = {
       ["thank you adventurer you have saved minshina you h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\master_gadrin\\808_quest_complete.wav", dialog_type="quest_complete", quest_id=808, seconds=7.6 },
       ["the witchdoctor zalazane dwells on the echo isles "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\master_gadrin\\826_quest_accept.wav", dialog_type="quest_accept", quest_id=826, seconds=28.56 },
       ["the witherbarks worship a spider god and from her "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\master_gadrin\\2936_quest_accept.wav", dialog_type="quest_accept", quest_id=2936, seconds=31.72 },
+      ["there is something you wish to discuss adventurer "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\master_gadrin\\there_is_something_you_wish_to_discuss_adventurer_.wav", dialog_type="gossip", quest_id=nil, seconds=5.44 },
       ["we at senjin village are not without our own troub"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\master_gadrin\\823_quest_accept.wav", dialog_type="quest_accept", quest_id=823, seconds=29.84 },
       ["with zalazane gone our tribe can again sleep in pe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\master_gadrin\\826_quest_complete.wav", dialog_type="quest_complete", quest_id=826, seconds=16.6 },
     },
@@ -20575,6 +20936,7 @@ NPC_DATABASE = {
       ["the stonemasons guild was run by a man named edwin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\master_mathias_shaw\\141_quest_accept.wav", dialog_type="quest_accept", quest_id=141, seconds=26.88 },
       ["this matter might be more complex than stoutmantle"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\master_mathias_shaw\\135_quest_complete.wav", dialog_type="quest_complete", quest_id=135, seconds=3.64 },
       ["this would explain the defias drones you and kearn"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\master_mathias_shaw\\2359_quest_complete.wav", dialog_type="quest_complete", quest_id=2359, seconds=30.4 },
+      ["welcome to si7 headquarters adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\master_mathias_shaw\\welcome_to_si7_headquarters_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
       ["what whats this yes i think i do know who this man"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\master_mathias_shaw\\393_quest_complete.wav", dialog_type="quest_complete", quest_id=393, seconds=30.44 },
       ["you found me and by looking at you id say the run "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\master_mathias_shaw\\2205_quest_complete.wav", dialog_type="quest_complete", quest_id=2205, seconds=13.64 },
       ["your mortality wanes with every moment you waste l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\master_mathias_shaw\\2206_quest_progress.wav", dialog_type="quest_progress", quest_id=2206, seconds=5.32 },
@@ -20604,6 +20966,7 @@ NPC_DATABASE = {
     narrator = "gnome",
     dialogs = {
       ["hello im glad that youve decided to hear me out th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\master_sergeant_fizzlebolt\\8795_quest_accept.wav", dialog_type="quest_accept", quest_id=8795, seconds=29.56 },
+      ["well met adventurer i hope you are here to inquire"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\master_sergeant_fizzlebolt\\well_met_adventurer_i_hope_you_are_here_to_inquire.wav", dialog_type="gossip", quest_id=nil, seconds=32.24 },
     },
   },
   ["Master Sergeant Maclure"] = {
@@ -20615,6 +20978,7 @@ NPC_DATABASE = {
     narrator = "human_female",
     dialogs = {
       ["hello im glad that youve decided to hear me out th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\master_sergeant_maclure\\8796_quest_accept.wav", dialog_type="quest_accept", quest_id=8796, seconds=36.2 },
+      ["well met adventurer i hope you are here to inquire"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\master_sergeant_maclure\\well_met_adventurer_i_hope_you_are_here_to_inquire.wav", dialog_type="gossip", quest_id=nil, seconds=35.8 },
     },
   },
   ["Master Smith Burninate"] = {
@@ -20631,6 +20995,7 @@ NPC_DATABASE = {
       ["lets not waste more of my precious time with jibbe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\master_smith_burninate\\8242_quest_progress.wav", dialog_type="quest_progress", quest_id=8242, seconds=20.28 },
       ["theres always room for more fiery flux junior keep"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\master_smith_burninate\\7736_quest_complete.wav", dialog_type="quest_complete", quest_id=7736, seconds=5.96 },
       ["when that bastard maltorius left our clan he left "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\master_smith_burninate\\7722_quest_accept.wav", dialog_type="quest_accept", quest_id=7722, seconds=22.04 },
+      ["youve done all that ive asked you to do adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\master_smith_burninate\\youve_done_all_that_ive_asked_you_to_do_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=16.2 },
       ["youve worked your way up through the brotherhoods "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\master_smith_burninate\\7737_quest_progress.wav", dialog_type="quest_progress", quest_id=7737, seconds=25.36 },
     },
   },
@@ -20760,6 +21125,7 @@ NPC_DATABASE = {
       ["come come to your deathsif you dare"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maurin_bonesplitter\\1482_quest_complete.wav", dialog_type="quest_complete", quest_id=1482, seconds=20.72 },
       ["death is most desirable for those despicable creat"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maurin_bonesplitter\\1435_quest_accept.wav", dialog_type="quest_accept", quest_id=1435, seconds=31.48 },
       ["do not bring me an incorrect scalp adventurer usin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maurin_bonesplitter\\1481_quest_progress.wav", dialog_type="quest_progress", quest_id=1481, seconds=15.08 },
+      ["greetings adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maurin_bonesplitter\\greetings_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
       ["hmm these runes are indeed a language adventurer a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maurin_bonesplitter\\1480_quest_complete.wav", dialog_type="quest_complete", quest_id=1480, seconds=18.92 },
       ["i am ready for the oracle crystal adventurer findi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maurin_bonesplitter\\1482_quest_progress.wav", dialog_type="quest_progress", quest_id=1482, seconds=16.2 },
       ["i believe i can find this demon lord given the pro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maurin_bonesplitter\\1481_quest_accept.wav", dialog_type="quest_accept", quest_id=1481, seconds=32.0 },
@@ -20786,6 +21152,7 @@ NPC_DATABASE = {
       ["have you found dolf yet adventurer youve probably "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\maxan_anvol\\5625_quest_progress.wav", dialog_type="quest_progress", quest_id=5625, seconds=31.34 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\maxan_anvol\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
       ["hello there adventurer good to see you travelin fa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\maxan_anvol\\5630_quest_accept.wav", dialog_type="quest_accept", quest_id=5630, seconds=26.36 },
+      ["i hope the light is with you adventurer is there a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\maxan_anvol\\i_hope_the_light_is_with_you_adventurer_is_there_a.wav", dialog_type="gossip", quest_id=nil, seconds=4.76 },
       ["its usually about this time that one of your power"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\maxan_anvol\\5625_quest_accept.wav", dialog_type="quest_accept", quest_id=5625, seconds=26.08 },
       ["oh so branstock sent ya did he good good hes right"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\maxan_anvol\\5626_quest_complete.wav", dialog_type="quest_complete", quest_id=5626, seconds=17.16 },
       ["youve caught the attention of our superiors advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\maxan_anvol\\5635_quest_accept.wav", dialog_type="quest_accept", quest_id=5635, seconds=25.02 },
@@ -20800,6 +21167,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\maximillian_crowe\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
+      ["the darkness does not embrace you adventurer cease"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\maximillian_crowe\\the_darkness_does_not_embrace_you_adventurer_cease.wav", dialog_type="gossip", quest_id=nil, seconds=7.28 },
     },
   },
   ["Maximillion"] = {
@@ -20811,6 +21179,7 @@ NPC_DATABASE = {
     narrator = "undead",
     dialogs = {
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maximillion\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
+      ["i have no time to waste on the likes of you advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maximillion\\i_have_no_time_to_waste_on_the_likes_of_you_advent.wav", dialog_type="gossip", quest_id=nil, seconds=3.48 },
       ["i mentioned a slave still being a slave no matter "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\maximillion\\3099_quest_complete.wav", dialog_type="quest_complete", quest_id=3099, seconds=36.48 },
     },
   },
@@ -20946,6 +21315,7 @@ NPC_DATABASE = {
       ["the paragons of power are what i need mon well tap"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\maywiki_of_zuldazar\\8074_quest_progress.wav", dialog_type="quest_progress", quest_id=8074, seconds=10.88 },
       ["the ultimate symbol of a haruspexs power is what t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\maywiki_of_zuldazar\\8065_quest_accept.wav", dialog_type="quest_accept", quest_id=8065, seconds=33.68 },
       ["we zandalar know not of druidic ways nature is to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\maywiki_of_zuldazar\\8064_quest_accept.wav", dialog_type="quest_accept", quest_id=8064, seconds=41.36 },
+      ["what you be expectin mon maywiki only be dealin wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\maywiki_of_zuldazar\\what_you_be_expectin_mon_maywiki_only_be_dealin_wi.wav", dialog_type="gossip", quest_id=nil, seconds=5.72 },
       ["you and maywiki have something in common mon we bo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\maywiki_of_zuldazar\\8116_quest_complete.wav", dialog_type="quest_complete", quest_id=8116, seconds=25.48 },
     },
   },
@@ -21001,6 +21371,7 @@ NPC_DATABASE = {
       ["ugh thats terrible"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mebok_mizzyrix\\865_quest_complete.wav", dialog_type="quest_complete", quest_id=865, seconds=5.08 },
       ["where is my wailing essence"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mebok_mizzyrix\\1491_quest_progress.wav", dialog_type="quest_progress", quest_id=1491, seconds=2.12 },
       ["yes yes these are very nice i will grow specimens "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mebok_mizzyrix\\866_quest_complete.wav", dialog_type="quest_complete", quest_id=866, seconds=15.08 },
+      ["yes yes yes youre just the adventurer im looking f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mebok_mizzyrix\\yes_yes_yes_youre_just_the_adventurer_im_looking_f.wav", dialog_type="gossip", quest_id=nil, seconds=6.6 },
       ["you got them thank you ill have these sent to dizz"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mebok_mizzyrix\\1069_quest_complete.wav", dialog_type="quest_complete", quest_id=1069, seconds=13.28 },
     },
   },
@@ -21320,6 +21691,7 @@ NPC_DATABASE = {
     dialogs = {
       ["caught him huh good for you im surprised that was "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\mikhail\\1249_quest_complete.wav", dialog_type="quest_complete", quest_id=1249, seconds=24.88 },
       ["did he slip away he looked a little shady the way "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\mikhail\\1249_quest_progress.wav", dialog_type="quest_progress", quest_id=1249, seconds=4.72 },
+      ["give me a couple minutes adventurer there was some"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\mikhail\\give_me_a_couple_minutes_adventurer_there_was_some.wav", dialog_type="gossip", quest_id=nil, seconds=9.04 },
       ["the beginning of every month the kul tiras marines"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\mikhail\\1264_quest_accept.wav", dialog_type="quest_accept", quest_id=1264, seconds=30.32 },
       ["the king i mean the king the real king are you jok"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\mikhail\\1250_quest_complete.wav", dialog_type="quest_complete", quest_id=1250, seconds=28.88 },
       ["welcome welcome welcome adventurer good of you to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\mikhail\\1248_quest_complete.wav", dialog_type="quest_complete", quest_id=1248, seconds=22.6 },
@@ -21349,6 +21721,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\miles_welsh\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
       ["something important is up in orgrimmar adventurer "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\miles_welsh\\5642_quest_accept.wav", dialog_type="quest_accept", quest_id=5642, seconds=18.48 },
+      ["what can this insignificant servant do for you adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\miles_welsh\\what_can_this_insignificant_servant_do_for_you_adv.wav", dialog_type="gossip", quest_id=nil, seconds=4.92 },
       ["you be far from home out here in the bloodhoof vil"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\miles_welsh\\5661_quest_accept.wav", dialog_type="quest_accept", quest_id=5661, seconds=24.4 },
     },
   },
@@ -21663,7 +22036,7 @@ NPC_DATABASE = {
       ["as per our deal are you ready to hand over your sh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\9010_quest_progress.wav", dialog_type="quest_progress", quest_id=9010, seconds=7.32 },
       ["as per our deal are you ready to hand over your va"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\9013_quest_progress.wav", dialog_type="quest_progress", quest_id=9013, seconds=7.56 },
       ["as per our deal are you ready to hand over your wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\9007_quest_progress.wav", dialog_type="quest_progress", quest_id=9007, seconds=7.16 },
-      ["begone foul creatures go back to the void your mas"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8918_quest_complete.wav", dialog_type="quest_complete", quest_id=8918, seconds=14.44 },
+      ["begone foul creatures go back to the void your mas"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8913_quest_complete.wav", dialog_type="quest_complete", quest_id=8913, seconds=11.8 },
       ["hail adventurer i can tell by your demeanor that y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8916_quest_accept.wav", dialog_type="quest_accept", quest_id=8916, seconds=27.32 },
       ["have you obtained the items i require adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8913_quest_progress.wav", dialog_type="quest_progress", quest_id=8913, seconds=2.64 },
       ["i am pleased to see that you have survived adventu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8998_quest_complete.wav", dialog_type="quest_complete", quest_id=8998, seconds=8.68 },
@@ -21676,7 +22049,7 @@ NPC_DATABASE = {
       ["very well adventurer all that remains is to put th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8930_quest_accept.wav", dialog_type="quest_accept", quest_id=8930, seconds=18.48 },
       ["you must be quite brave to have stuck around after"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8923_quest_accept.wav", dialog_type="quest_accept", quest_id=8923, seconds=29.36 },
       ["you wish to speak to me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8923_quest_progress.wav", dialog_type="quest_progress", quest_id=8923, seconds=1.52 },
-      ["your fate is sealed mokvar you will pay for your t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8918_quest_complete.wav", dialog_type="quest_complete", quest_id=8918, seconds=14.44 },
+      ["your fate is sealed mokvar you will pay for your t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8913_quest_complete.wav", dialog_type="quest_complete", quest_id=8913, seconds=11.8 },
       ["youre ready to perform the exchange"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8927_quest_progress.wav", dialog_type="quest_progress", quest_id=8927, seconds=2.12 },
       ["youve proven to be a very reliable individual adve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8942_quest_accept.wav", dialog_type="quest_accept", quest_id=8942, seconds=23.04 },
       ["youve returned with the device im impressed by you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\mokvar\\8978_quest_complete.wav", dialog_type="quest_complete", quest_id=8978, seconds=5.72 },
@@ -22063,10 +22436,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf_female",
     dialogs = {
+      ["i dont care to hear it adventurer nope no way are "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\mountaineer_pebblebitty\\i_dont_care_to_hear_it_adventurer_nope_no_way_are_.wav", dialog_type="gossip", quest_id=nil, seconds=35.88 },
       ["i dont know how someone as weak as you overcame ma"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\mountaineer_pebblebitty\\3201_quest_complete.wav", dialog_type="quest_complete", quest_id=3201, seconds=10.9 },
       ["what have you got there a fake obviously ive been "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\mountaineer_pebblebitty\\3181_quest_complete.wav", dialog_type="quest_complete", quest_id=3181, seconds=18.18 },
       ["why hello there young lady would you like a tour o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\mountaineer_pebblebitty\\3182_quest_progress.wav", dialog_type="quest_progress", quest_id=3182, seconds=3.94 },
       ["you expect me to believe a story like that the rea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\mountaineer_pebblebitty\\3182_quest_accept.wav", dialog_type="quest_accept", quest_id=3182, seconds=24.5 },
+      ["youre pushing it adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\mountaineer_pebblebitty\\youre_pushing_it_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.66 },
     },
   },
   ["Mountaineer Rockgar"] = {
@@ -22097,6 +22472,7 @@ NPC_DATABASE = {
       ["thats right i have a task that i cant do while im "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\mountaineer_stormpike\\1339_quest_complete.wav", dialog_type="quest_complete", quest_id=1339, seconds=9.0 },
       ["the silver stream mine to the east ran dry long ag"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\mountaineer_stormpike\\307_quest_accept.wav", dialog_type="quest_accept", quest_id=307, seconds=29.96 },
       ["there is a dwarven armorsmith whose work i admire "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\mountaineer_stormpike\\1338_quest_accept.wav", dialog_type="quest_accept", quest_id=1338, seconds=34.48 },
+      ["well if it isnt a young bristling adventurer no do"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\mountaineer_stormpike\\well_if_it_isnt_a_young_bristling_adventurer_no_do.wav", dialog_type="gossip", quest_id=nil, seconds=17.2 },
     },
   },
   ["Mountaineer Thalos"] = {
@@ -22252,6 +22628,7 @@ NPC_DATABASE = {
       ["i i sense that the souls of those wolves you have "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\mulgris_deepriver\\4984_quest_complete.wav", dialog_type="quest_complete", quest_id=4984, seconds=17.72 },
       ["i know that the grizzles have been put down their "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\mulgris_deepriver\\4985_quest_complete.wav", dialog_type="quest_complete", quest_id=4985, seconds=32.04 },
       ["on behalf of the cenarion circle i bid you welcome"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\mulgris_deepriver\\4987_quest_progress.wav", dialog_type="quest_progress", quest_id=4987, seconds=7.48 },
+      ["the body of the tauren druid lies still and unmovi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\mulgris_deepriver\\_the_body_of_the_tauren_druid_lies_still_and_unmov.wav", dialog_type="gossip", quest_id=nil, seconds=10.64 },
       ["the lifeless hand of the tauren druid clutches a s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\mulgris_deepriver\\4987_quest_accept.wav", dialog_type="quest_accept", quest_id=4987, seconds=32.6 },
       ["the wolves that are infected with the plague must "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\mulgris_deepriver\\4984_quest_progress.wav", dialog_type="quest_progress", quest_id=4984, seconds=12.2 },
       ["to the east of where we are near where the eastern"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\mulgris_deepriver\\4985_quest_accept.wav", dialog_type="quest_accept", quest_id=4985, seconds=30.48 },
@@ -22298,6 +22675,7 @@ NPC_DATABASE = {
     narrator = "goblin_female",
     dialogs = {
       ["im happy youre seeing the error of your ways adven"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\mupsi_shacklefridd\\9267_quest_complete.wav", dialog_type="quest_complete", quest_id=9267, seconds=8.6 },
+      ["youd better not be causing trouble adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\mupsi_shacklefridd\\youd_better_not_be_causing_trouble_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
       ["youd better think twice before setting foot in rat"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\mupsi_shacklefridd\\9267_quest_progress.wav", dialog_type="quest_progress", quest_id=9267, seconds=22.8 },
     },
   },
@@ -22383,7 +22761,7 @@ NPC_DATABASE = {
       ["have you gathered the ectoplasm yet adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mux_manascrambler\\8924_quest_progress.wav", dialog_type="quest_progress", quest_id=8924, seconds=2.84 },
       ["have you had any luck finding the imp in darkwhisp"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mux_manascrambler\\8928_quest_progress.wav", dialog_type="quest_progress", quest_id=8928, seconds=3.72 },
       ["i understand the materials are a bit pricey but i "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mux_manascrambler\\8921_quest_progress.wav", dialog_type="quest_progress", quest_id=8921, seconds=6.56 },
-      ["its been great working with you adventurer here is"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mux_manascrambler\\8977_quest_accept.wav", dialog_type="quest_accept", quest_id=8977, seconds=15.4 },
+      ["its been great working with you adventurer here is"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mux_manascrambler\\8978_quest_accept.wav", dialog_type="quest_accept", quest_id=8978, seconds=12.48 },
       ["next we shall need to find a stable and portable s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mux_manascrambler\\8925_quest_accept.wav", dialog_type="quest_accept", quest_id=8925, seconds=25.24 },
       ["the core will provide us with enough juice to powe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mux_manascrambler\\8928_quest_accept.wav", dialog_type="quest_accept", quest_id=8928, seconds=30.12 },
       ["these are precisely the materials i needed quite t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\mux_manascrambler\\8921_quest_complete.wav", dialog_type="quest_complete", quest_id=8921, seconds=11.56 },
@@ -22427,6 +22805,7 @@ NPC_DATABASE = {
     narrator = "gnome_female",
     dialogs = {
       ["are you the reinforcements from tyrs hand"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\myranda_the_hag\\5862_quest_progress.wav", dialog_type="quest_progress", quest_id=5862, seconds=2.8 },
+      ["do you require an illusion should your illusion fa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\myranda_the_hag\\do_you_require_an_illusion_should_your_illusion_fa.wav", dialog_type="gossip", quest_id=nil, seconds=16.08 },
       ["how is he rexxar i mean oh come now do not look so"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\myranda_the_hag\\6568_quest_complete.wav", dialog_type="quest_complete", quest_id=6568, seconds=26.12 },
       ["i am what you would call an illusionist though i m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\myranda_the_hag\\5862_quest_accept.wav", dialog_type="quest_accept", quest_id=5862, seconds=25.12 },
       ["i have attuned this medallion with the magic neces"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\myranda_the_hag\\6570_quest_accept.wav", dialog_type="quest_accept", quest_id=6570, seconds=29.92 },
@@ -22543,7 +22922,8 @@ NPC_DATABASE = {
       ["outstanding now where did i put that 500 pound chi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\narain_soothfancy\\8578_quest_complete.wav", dialog_type="quest_complete", quest_id=8578, seconds=10.08 },
       ["time is running out champion"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\narain_soothfancy\\8729_quest_progress.wav", dialog_type="quest_progress", quest_id=8729, seconds=1.96 },
       ["well that took a little longer than expected now l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\narain_soothfancy\\8728_quest_accept.wav", dialog_type="quest_accept", quest_id=8728, seconds=30.12 },
-      ["what well um what do you want me to do shes a fish"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\narain_soothfancy\\8599_quest_complete.wav", dialog_type="quest_complete", quest_id=8599, seconds=8.68 },
+      ["well um what do you want me to do shes a fish a fi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\narain_soothfancy\\8599_quest_complete.wav", dialog_type="quest_complete", quest_id=8599, seconds=8.68 },
+      ["what is mmmm velvet am i right"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\narain_soothfancy\\what_is_mmmm_velvet_am_i_right.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
     },
   },
   ["Nardstrum Copperpinch"] = {
@@ -22838,7 +23218,6 @@ NPC_DATABASE = {
       ["a deal is a deal quickly take this and write this "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\niby_the_almighty\\7603_quest_complete.wav", dialog_type="quest_complete", quest_id=7603, seconds=8.28 },
       ["bow down to the almighty bow down before my infern"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\niby_the_almighty\\7603_quest_complete.wav", dialog_type="quest_complete", quest_id=7603, seconds=8.28 },
       ["bow in my presence insect surely you can feel the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\niby_the_almighty\\bow_in_my_presence_insect_surely_you_can_feel_the_.wav", dialog_type="gossip", quest_id=nil, seconds=4.24 },
-      ["if i am to teach you the secrets of summoning an i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\niby_the_almighty\\7601_quest_accept.wav", dialog_type="quest_accept", quest_id=7601, seconds=24.6 },
       ["niby youre an idiot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\niby_the_almighty\\7603_quest_complete.wav", dialog_type="quest_complete", quest_id=7603, seconds=8.28 },
       ["silence servant vengeance will be mine death to st"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\niby_the_almighty\\7603_quest_complete.wav", dialog_type="quest_complete", quest_id=7603, seconds=8.28 },
       ["stand back stand clear the infernal will need to b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\niby_the_almighty\\7603_quest_complete.wav", dialog_type="quest_complete", quest_id=7603, seconds=8.28 },
@@ -22960,6 +23339,7 @@ NPC_DATABASE = {
     narrator = "gnome",
     dialogs = {
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\nittlebur_sparkfizzle\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
+      ["well met adventurer you want some advice befriend "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\nittlebur_sparkfizzle\\well_met_adventurer_you_want_some_advice_befriend_.wav", dialog_type="gossip", quest_id=nil, seconds=8.56 },
     },
   },
   ["Nixx Sprocketspring"] = {
@@ -23108,6 +23488,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "human",
     dialogs = {
+      ["greetings adventurer i am master xylems apprentice"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\nyrill\\greetings_adventurer_i_am_master_xylems_apprentice.wav", dialog_type="gossip", quest_id=nil, seconds=12.64 },
       ["i will return you to sanaths camp now do not mind "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\nyrill\\3421_quest_complete.wav", dialog_type="quest_complete", quest_id=3421, seconds=10.36 },
     },
   },
@@ -23169,6 +23550,7 @@ NPC_DATABASE = {
     dialogs = {
       ["excellent it is no small sacrifice that youve made"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\officer_ironbeard\\8820_quest_complete.wav", dialog_type="quest_complete", quest_id=8820, seconds=19.12 },
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\officer_ironbeard\\8812_quest_progress.wav", dialog_type="quest_progress", quest_id=8812, seconds=27.64 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\officer_ironbeard\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=25.16 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\officer_ironbeard\\8820_quest_progress.wav", dialog_type="quest_progress", quest_id=8820, seconds=27.24 },
       ["very well your deeds have been entered into the re"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\officer_ironbeard\\8812_quest_complete.wav", dialog_type="quest_complete", quest_id=8812, seconds=14.2 },
     },
@@ -23194,6 +23576,7 @@ NPC_DATABASE = {
     dialogs = {
       ["excellent it is no small sacrifice that youve made"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\officer_maloof\\8819_quest_complete.wav", dialog_type="quest_complete", quest_id=8819, seconds=19.32 },
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\officer_maloof\\8811_quest_progress.wav", dialog_type="quest_progress", quest_id=8811, seconds=26.92 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\officer_maloof\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=26.16 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\officer_maloof\\8819_quest_progress.wav", dialog_type="quest_progress", quest_id=8819, seconds=27.68 },
       ["very well your deeds have been entered into the re"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\officer_maloof\\8811_quest_complete.wav", dialog_type="quest_complete", quest_id=8811, seconds=13.96 },
     },
@@ -23219,6 +23602,7 @@ NPC_DATABASE = {
     dialogs = {
       ["excellent it is no small sacrifice that youve made"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\officer_porterhouse\\8822_quest_complete.wav", dialog_type="quest_complete", quest_id=8822, seconds=19.36 },
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\officer_porterhouse\\8814_quest_progress.wav", dialog_type="quest_progress", quest_id=8814, seconds=30.6 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\officer_porterhouse\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=28.84 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\officer_porterhouse\\8822_quest_progress.wav", dialog_type="quest_progress", quest_id=8822, seconds=29.4 },
       ["very well your deeds have been entered into the re"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\officer_porterhouse\\8814_quest_complete.wav", dialog_type="quest_complete", quest_id=8814, seconds=14.44 },
     },
@@ -23286,6 +23670,7 @@ NPC_DATABASE = {
       ["once i receive your crafted engineering items for "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\oglethorpe_obnoticus\\3643_quest_progress.wav", dialog_type="quest_progress", quest_id=3643, seconds=14.0 },
       ["since youre a practitioner of gnomish engineering "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\oglethorpe_obnoticus\\3647_quest_complete.wav", dialog_type="quest_complete", quest_id=3647, seconds=29.4 },
       ["welcome aboard adventurer you soon will have acces"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\oglethorpe_obnoticus\\3642_quest_complete.wav", dialog_type="quest_complete", quest_id=3642, seconds=20.84 },
+      ["well if it isnt adventurer its good to see you aga"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\oglethorpe_obnoticus\\well_if_it_isnt_adventurer_its_good_to_see_you_aga.wav", dialog_type="gossip", quest_id=nil, seconds=13.2 },
       ["youve come to learn about gnome engineering eh wel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\oglethorpe_obnoticus\\3635_quest_complete.wav", dialog_type="quest_complete", quest_id=3635, seconds=26.56 },
       ["youve recovered three of my oox homing robots youv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\oglethorpe_obnoticus\\3721_quest_complete.wav", dialog_type="quest_complete", quest_id=3721, seconds=27.4 },
     },
@@ -23476,6 +23861,7 @@ NPC_DATABASE = {
       ["many are the paths of the earth mother wherever yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\omusa_thunderhorn\\many_are_the_paths_of_the_earth_mother_wherever_yo.wav", dialog_type="gossip", quest_id=nil, seconds=6.76 },
       ["though the crossroads seems to be the center of ac"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\omusa_thunderhorn\\though_the_crossroads_seems_to_be_the_center_of_ac.wav", dialog_type="gossip", quest_id=nil, seconds=8.16 },
       ["treat the wind rider well as it takes you to your "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\omusa_thunderhorn\\treat_the_wind_rider_well_as_it_takes_you_to_your_.wav", dialog_type="gossip", quest_id=nil, seconds=6.84 },
+      ["where can i send you today adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\omusa_thunderhorn\\where_can_i_send_you_today_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
     },
   },
   ["Onin MacHammar"] = {
@@ -23534,6 +23920,7 @@ NPC_DATABASE = {
       ["outstanding soldier the orcs and ogres will be ree"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\oralius\\3823_quest_complete.wav", dialog_type="quest_complete", quest_id=3823, seconds=6.16 },
       ["outstanding work soldier simply amazing oh ill get"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\oralius\\3825_quest_complete.wav", dialog_type="quest_complete", quest_id=3825, seconds=9.44 },
       ["so did you paint any pictures of the event"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\oralius\\3825_quest_progress.wav", dialog_type="quest_progress", quest_id=3825, seconds=2.84 },
+      ["stand at attention soldier winky sound off"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\oralius\\stand_at_attention_soldier_winky_sound_off.wav", dialog_type="gossip", quest_id=nil, seconds=3.52 },
       ["there is not nearly enough blood on your uniform s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\oralius\\3823_quest_progress.wav", dialog_type="quest_progress", quest_id=3823, seconds=3.0 },
       ["theyre reeling i tell you our next strike must be "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\oralius\\3824_quest_accept.wav", dialog_type="quest_accept", quest_id=3824, seconds=36.6 },
       ["urning steppes to control come in control"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\oralius\\4283_quest_progress.wav", dialog_type="quest_progress", quest_id=4283, seconds=2.92 },
@@ -23618,6 +24005,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\orgrimmar_commendation_officer\\8815_quest_progress.wav", dialog_type="quest_progress", quest_id=8815, seconds=29.6 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\orgrimmar_commendation_officer\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=30.48 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\orgrimmar_commendation_officer\\8823_quest_progress.wav", dialog_type="quest_progress", quest_id=8823, seconds=31.04 },
     },
   },
@@ -23714,6 +24102,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\ormok\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
+      ["i dont train your kind adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\ormok\\i_dont_train_your_kind_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
       ["lord jorach ravenholdt has requested your presence"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\ormok\\8233_quest_accept.wav", dialog_type="quest_accept", quest_id=8233, seconds=15.6 },
     },
   },
@@ -23727,6 +24116,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ormyr_flinteye\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
       ["lord jorach ravenholdt has requested your presence"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ormyr_flinteye\\8233_quest_accept.wav", dialog_type="quest_accept", quest_id=8233, seconds=14.52 },
+      ["what kin i do for ye adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ormyr_flinteye\\what_kin_i_do_for_ye_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
     },
   },
   ["Orok Deathbane"] = {
@@ -23775,6 +24165,7 @@ NPC_DATABASE = {
     narrator = "orc_female",
     dialogs = {
       ["may the spirits bless you adventurer youve done mo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\orphan_matron_battlewail\\5502_quest_complete.wav", dialog_type="quest_complete", quest_id=5502, seconds=25.2 },
+      ["there are costs with war adventurer ones often ove"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\orphan_matron_battlewail\\there_are_costs_with_war_adventurer_ones_often_ove.wav", dialog_type="gossip", quest_id=nil, seconds=32.04 },
       ["youre willing to help us here at the orphanage ble"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\orphan_matron_battlewail\\172_quest_accept.wav", dialog_type="quest_accept", quest_id=172, seconds=32.12 },
     },
   },
@@ -23787,6 +24178,7 @@ NPC_DATABASE = {
     narrator = "human_female",
     dialogs = {
       ["may the heavens bless you adventurer youve done mo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\orphan_matron_nightingale\\171_quest_complete.wav", dialog_type="quest_complete", quest_id=171, seconds=18.72 },
+      ["there are costs with war adventurer ones often ove"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\orphan_matron_nightingale\\there_are_costs_with_war_adventurer_ones_often_ove.wav", dialog_type="gossip", quest_id=nil, seconds=32.52 },
       ["youre willing to help us here at the orphanage ble"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\orphan_matron_nightingale\\1468_quest_accept.wav", dialog_type="quest_accept", quest_id=1468, seconds=32.48 },
     },
   },
@@ -23873,7 +24265,7 @@ NPC_DATABASE = {
       ["me thirsty for grog me miss snuff too where is str"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\overlord_mokmorokk\\1166_quest_progress.wav", dialog_type="quest_progress", quest_id=1166, seconds=12.44 },
       ["overlord mokmorokk boss you do what i say"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\overlord_mokmorokk\\overlord_mokmorokk_boss_you_do_what_i_say.wav", dialog_type="gossip", quest_id=nil, seconds=3.36 },
       ["why you tell me bout dragons me no like dragons me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\overlord_mokmorokk\\1170_quest_complete.wav", dialog_type="quest_complete", quest_id=1170, seconds=6.56 },
-      ["you dare challenge overlord mokmorokk haw me crush"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\overlord_mokmorokk\\1173_quest_accept.wav", dialog_type="quest_accept", quest_id=1173, seconds=7.24 },
+      ["you dare challenge overlord mokmorokk me crush tin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\overlord_mokmorokk\\1173_quest_accept.wav", dialog_type="quest_accept", quest_id=1173, seconds=7.24 },
       ["you good adventurer me miss things very much me li"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\overlord_mokmorokk\\1166_quest_complete.wav", dialog_type="quest_complete", quest_id=1166, seconds=5.44 },
       ["you leave me alone now go tell drazzilb we stay he"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\overlord_mokmorokk\\1171_quest_accept.wav", dialog_type="quest_accept", quest_id=1171, seconds=6.36 },
     },
@@ -24084,6 +24476,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "troll_female",
     dialogs = {
+      ["greetings adventurer i pity your kind for the secr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\pephredo\\greetings_adventurer_i_pity_your_kind_for_the_secr.wav", dialog_type="gossip", quest_id=nil, seconds=6.56 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\pephredo\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
     },
   },
@@ -24146,6 +24539,7 @@ NPC_DATABASE = {
     dialogs = {
       ["archmage xylem has been asking around lately for s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\pierce_shackleton\\8250_quest_accept.wav", dialog_type="quest_accept", quest_id=8250, seconds=34.72 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\pierce_shackleton\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\pierce_shackleton\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=7.68 },
     },
   },
   ["Pikkle"] = {
@@ -24350,6 +24744,7 @@ NPC_DATABASE = {
       ["do you have the two turtle scale breastplates and "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\pratt_mcgrubben\\2849_quest_progress.wav", dialog_type="quest_progress", quest_id=2849, seconds=28.48 },
       ["excellent excellent these are going to work out in"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\pratt_mcgrubben\\7733_quest_complete.wav", dialog_type="quest_complete", quest_id=7733, seconds=13.28 },
       ["greetings adventurer from your countenance i can t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\pratt_mcgrubben\\2853_quest_progress.wav", dialog_type="quest_progress", quest_id=2853, seconds=11.96 },
+      ["greetings adventurer if youre looking for leather "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\pratt_mcgrubben\\greetings_adventurer_--_if_youre_looking_for_leath.wav", dialog_type="gossip", quest_id=nil, seconds=7.28 },
       ["i have a lead on an even better source of hides if"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\pratt_mcgrubben\\7733_quest_accept.wav", dialog_type="quest_accept", quest_id=7733, seconds=28.2 },
       ["i need those tunics and headbands made and i also "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\pratt_mcgrubben\\2850_quest_progress.wav", dialog_type="quest_progress", quest_id=2850, seconds=25.72 },
       ["i swear if quint tries to plant one more fishing g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\pratt_mcgrubben\\i_swear_if_quint_tries_to_plant_one_more_fishing_g.wav", dialog_type="gossip", quest_id=nil, seconds=7.76 },
@@ -24379,6 +24774,7 @@ NPC_DATABASE = {
     narrator = "human_female",
     dialogs = {
       ["as you grow in experience return to me and i will "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_anetta\\3103_quest_complete.wav", dialog_type="quest_complete", quest_id=3103, seconds=16.36 },
+      ["do not turn your back on the light adventurer it m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_anetta\\do_not_turn_your_back_on_the_light_adventurer_it_m.wav", dialog_type="gossip", quest_id=nil, seconds=6.24 },
       ["hello again young adventurer the time has come for"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_anetta\\5623_quest_accept.wav", dialog_type="quest_accept", quest_id=5623, seconds=21.2 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_anetta\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
     },
@@ -24393,6 +24789,7 @@ NPC_DATABASE = {
     dialogs = {
       ["ah yes hello adventurer im glad you stopped to tal"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_josetta\\5628_quest_accept.wav", dialog_type="quest_accept", quest_id=5628, seconds=30.72 },
       ["as you may have already learned our healing magics"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_josetta\\5624_quest_progress.wav", dialog_type="quest_progress", quest_id=5624, seconds=31.0 },
+      ["do not turn your back on the light adventurer it m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_josetta\\do_not_turn_your_back_on_the_light_adventurer_it_m.wav", dialog_type="gossip", quest_id=nil, seconds=7.28 },
       ["excellent adventurer with one more healthy guard o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_josetta\\5624_quest_complete.wav", dialog_type="quest_complete", quest_id=5624, seconds=29.72 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_josetta\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
       ["im glad youve arrived adventurer we have much to d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\priestess_josetta\\5623_quest_complete.wav", dialog_type="quest_complete", quest_id=5623, seconds=7.24 },
@@ -24510,6 +24907,7 @@ NPC_DATABASE = {
       ["golly that sure is a lot of medium leather that yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_porter\\8514_quest_complete.wav", dialog_type="quest_complete", quest_id=8514, seconds=15.04 },
       ["wow seems like you were just here volunteering to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_porter\\8513_quest_complete.wav", dialog_type="quest_complete", quest_id=8513, seconds=11.52 },
       ["yes adventurer i have been charged with collecting"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_porter\\8513_quest_accept.wav", dialog_type="quest_accept", quest_id=8513, seconds=18.36 },
+      ["yes adventurer ive been ordered to report that the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_porter\\yes_adventurer_ive_been_ordered_to_report_that_the.wav", dialog_type="gossip", quest_id=nil, seconds=15.72 },
       ["yes adventurer looks like weve collected pieces of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_porter\\8514_quest_accept.wav", dialog_type="quest_accept", quest_id=8514, seconds=12.12 },
       ["yes sir i remember you is that the medium leather "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_porter\\8513_quest_progress.wav", dialog_type="quest_progress", quest_id=8513, seconds=4.36 },
       ["yes sir looks like weve collected many pieces of m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_porter\\8514_quest_progress.wav", dialog_type="quest_progress", quest_id=8514, seconds=18.52 },
@@ -24541,6 +24939,7 @@ NPC_DATABASE = {
       ["thank you for saving me adventurer i know how this"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_thorsen\\215_quest_accept.wav", dialog_type="quest_accept", quest_id=215, seconds=32.36 },
       ["thanks for saving me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_thorsen\\thanks_for_saving_me.wav", dialog_type="gossip", quest_id=nil, seconds=1.36 },
       ["these land mines will help us defend ourselves fro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_thorsen\\198_quest_complete.wav", dialog_type="quest_complete", quest_id=198, seconds=12.72 },
+      ["this is a dangerous place adventurer be careful ar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_thorsen\\this_is_a_dangerous_place_adventurer_be_careful_ar.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
       ["time for my patrol ill be back shortly"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_thorsen\\time_for_my_patrol_ill_be_back_shortly.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
       ["well im here and im ready to rejoin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\private_thorsen\\well_im_here_and_im_ready_to_rejoin.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
     },
@@ -24826,6 +25225,7 @@ NPC_DATABASE = {
       ["ah noble adventurer have you brought the valor tok"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\quartermaster_miranda_breechlock\\5513_quest_progress.wav", dialog_type="quest_progress", quest_id=5513, seconds=10.18 },
       ["choose carefully there are no refunds"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\quartermaster_miranda_breechlock\\9221_quest_progress.wav", dialog_type="quest_progress", quest_id=9221, seconds=2.7 },
       ["good day adventurer it was a pleasure doing busine"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\quartermaster_miranda_breechlock\\9221_quest_complete.wav", dialog_type="quest_complete", quest_id=9221, seconds=3.82 },
+      ["greetings adventurer i am miranda breechlock one o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\quartermaster_miranda_breechlock\\greetings_adventurer_i_am_miranda_breechlock_-_one.wav", dialog_type="gossip", quest_id=nil, seconds=31.72 },
       ["greetings friend have you insignias of the dawn or"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\quartermaster_miranda_breechlock\\9228_quest_accept.wav", dialog_type="quest_accept", quest_id=9228, seconds=13.1 },
       ["most impressive adventurer the chromatic mantle of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\quartermaster_miranda_breechlock\\5517_quest_complete.wav", dialog_type="quest_complete", quest_id=5517, seconds=17.06 },
       ["outstanding your tribute to the dawn is duly noted"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\quartermaster_miranda_breechlock\\5513_quest_complete.wav", dialog_type="quest_complete", quest_id=5513, seconds=22.7 },
@@ -24887,6 +25287,7 @@ NPC_DATABASE = {
     dialogs = {
       ["its probably one of the most potent poisons in the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ragged_john\\4866_quest_accept.wav", dialog_type="quest_accept", quest_id=4866, seconds=31.08 },
       ["this is gonna make the best ale yet eh what did yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ragged_john\\4866_quest_complete.wav", dialog_type="quest_complete", quest_id=4866, seconds=7.8 },
+      ["what you be wanting"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ragged_john\\what_you_be_wanting.wav", dialog_type="gossip", quest_id=nil, seconds=1.2 },
     },
   },
   ["Ragnar Thunderbrew"] = {
@@ -24920,6 +25321,7 @@ NPC_DATABASE = {
       ["how goes your search for the chasm and the troggs "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rahauro\\5723_quest_progress.wav", dialog_type="quest_progress", quest_id=5723, seconds=9.16 },
       ["i am glad to see you took magathas task seriously "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rahauro\\5723_quest_complete.wav", dialog_type="quest_complete", quest_id=5723, seconds=17.68 },
       ["the troggs are not the only thing that interested "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rahauro\\5722_quest_accept.wav", dialog_type="quest_accept", quest_id=5722, seconds=35.44 },
+      ["well met adventurer you may speak to me unless you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rahauro\\well_met_adventurer_you_may_speak_to_me_unless_you.wav", dialog_type="gossip", quest_id=nil, seconds=15.56 },
     },
   },
   ["Raleigh Andrean"] = {
@@ -25229,13 +25631,16 @@ NPC_DATABASE = {
       ["be brave friends the reptile will thrash wildly it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\be_brave_friends_the_reptile_will_thrash_wildly_it.wav", dialog_type="gossip", quest_id=nil, seconds=8.96 },
       ["before we begin i ask that you first gather an arm"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\6402_quest_complete.wav", dialog_type="quest_complete", quest_id=6402, seconds=5.6 },
       ["bol bolvar the medallion use"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\bol_bolvar_the_medallion_use.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["can you feel the power adventurer its time to rock"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\can_you_feel_the_power_adventurer_its_time_to_rock.wav", dialog_type="gossip", quest_id=nil, seconds=4.6 },
       ["dear friend you honor them with your vigilant watc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\dear_friend_you_honor_them_with_your_vigilant_watc.wav", dialog_type="gossip", quest_id=nil, seconds=13.2 },
       ["do not let her escape"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\do_not_let_her_escape.wav", dialog_type="gossip", quest_id=nil, seconds=1.84 },
+      ["excellent work adventurer lets find the exit i thi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\excellent_work_adventurer_lets_find_the_exit_i_thi.wav", dialog_type="gossip", quest_id=nil, seconds=4.68 },
       ["follow me friends to stormwind keep"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\follow_me_friends_to_stormwind_keep.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
       ["get him out of there"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\get_him_out_of_there.wav", dialog_type="gossip", quest_id=nil, seconds=1.2 },
       ["he has to be in the last cell unless they killed h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\he_has_to_be_in_the_last_cell_unless_they_killed_h.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
       ["holding me here is not the right decision marcus"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\holding_me_here_is_not_the_right_decision_marcus.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
       ["i i i was powerless"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\6403_quest_progress.wav", dialog_type="quest_progress", quest_id=6403, seconds=2.24 },
+      ["i knew you would come adventurer it is good to see"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\i_knew_you_would_come_adventurer_it_is_good_to_see.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
       ["i never did like those two lets get moving"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\i_never_did_like_those_two_lets_get_moving.wav", dialog_type="gossip", quest_id=nil, seconds=3.12 },
       ["it has been quite the adventure friend i owe you a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\6403_quest_accept.wav", dialog_type="quest_accept", quest_id=6403, seconds=37.36 },
       ["listen dragon let the truth resonate throughout th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\reginald_windsor\\listen_dragon_let_the_truth_resonate_throughout_th.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
@@ -25293,6 +25698,7 @@ NPC_DATABASE = {
       ["the kolkar are a threat to the hordes claims in th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\regthar_deathgate\\855_quest_accept.wav", dialog_type="quest_accept", quest_id=855, seconds=20.16 },
       ["the kolkar centaur live in desolace and their forc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\regthar_deathgate\\1362_quest_accept.wav", dialog_type="quest_accept", quest_id=1362, seconds=32.84 },
       ["very good you must have really stirred up those ce"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\regthar_deathgate\\851_quest_complete.wav", dialog_type="quest_complete", quest_id=851, seconds=12.96 },
+      ["we have our duties adventurer duties to the horde"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\regthar_deathgate\\we_have_our_duties_adventurer_duties_to_the_horde.wav", dialog_type="gossip", quest_id=nil, seconds=3.96 },
       ["well done adventurer the centaur are low brutish c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\regthar_deathgate\\850_quest_complete.wav", dialog_type="quest_complete", quest_id=850, seconds=14.6 },
       ["yes i am recruiting this mission leads into desola"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\regthar_deathgate\\1361_quest_complete.wav", dialog_type="quest_complete", quest_id=1361, seconds=8.76 },
       ["you have done it you have defeated the kolkar i wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\regthar_deathgate\\4021_quest_complete.wav", dialog_type="quest_complete", quest_id=4021, seconds=13.04 },
@@ -25408,6 +25814,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["greetings and welcome adventurer have you yet trie"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\renato_gallina\\332_quest_progress.wav", dialog_type="quest_progress", quest_id=332, seconds=5.0 },
+      ["hey adventurer you look like a adventurer with dis"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\renato_gallina\\hey_adventurer_you_look_like_a_adventurer_with_dis.wav", dialog_type="gossip", quest_id=nil, seconds=9.72 },
       ["if you talk to anyone about wine then you know we "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\renato_gallina\\332_quest_accept.wav", dialog_type="quest_accept", quest_id=332, seconds=23.16 },
     },
   },
@@ -25582,6 +25989,7 @@ NPC_DATABASE = {
       ["dont bother me while im partying"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\ribblys_crony\\dont_bother_me_while_im_partying.wav", dialog_type="gossip", quest_id=nil, seconds=1.96 },
       ["i think plugger filled one of his kegs too much it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\ribblys_crony\\i_think_plugger_filled_one_of_his_kegs_too_much_it.wav", dialog_type="gossip", quest_id=nil, seconds=5.48 },
       ["ill take a pint of dark iron ale oh youre not the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\ribblys_crony\\ill_take_a_pint_of_dark_iron_ale_oh_youre_not_the_.wav", dialog_type="gossip", quest_id=nil, seconds=4.08 },
+      ["you looking at me adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\ribblys_crony\\you_looking_at_me_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.72 },
     },
   },
   ["Richard Kerwin"] = {
@@ -25595,6 +26003,7 @@ NPC_DATABASE = {
       ["adventurer an imp in felwood by the name of impsy "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\richard_kerwin\\8419_quest_accept.wav", dialog_type="quest_accept", quest_id=8419, seconds=26.12 },
       ["do you have my felcloth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\richard_kerwin\\8419_quest_progress.wav", dialog_type="quest_progress", quest_id=8419, seconds=2.6 },
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\richard_kerwin\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["i have no time to waste on the likes of you advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\richard_kerwin\\i_have_no_time_to_waste_on_the_likes_of_you_advent.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
     },
   },
   ["Richard Van Brunt"] = {
@@ -25664,6 +26073,7 @@ NPC_DATABASE = {
       ["did you get my pearls im almost out of flash bombs"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\rigglefuzz\\705_quest_progress.wav", dialog_type="quest_progress", quest_id=705, seconds=3.56 },
       ["do you have the power stones adventurer i have a r"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\rigglefuzz\\2418_quest_progress.wav", dialog_type="quest_progress", quest_id=2418, seconds=5.36 },
       ["hello adventurer did you bring me my wings"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\rigglefuzz\\703_quest_progress.wav", dialog_type="quest_progress", quest_id=703, seconds=2.88 },
+      ["look out were under attack by a adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\rigglefuzz\\look_out_were_under_attack_by_a_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=3.12 },
       ["oh yes my barbecued buzzard wings are a favorite t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\rigglefuzz\\703_quest_accept.wav", dialog_type="quest_accept", quest_id=703, seconds=25.88 },
       ["take that beast"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\rigglefuzz\\take_that_beast.wav", dialog_type="gossip", quest_id=nil, seconds=1.36 },
       ["thats great you found some thanks a lot adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\rigglefuzz\\2418_quest_complete.wav", dialog_type="quest_complete", quest_id=2418, seconds=18.48 },
@@ -25708,6 +26118,7 @@ NPC_DATABASE = {
     dialogs = {
       ["exellent adventurer you got everything just as i a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rimblat_earthshatter\\9074_quest_complete.wav", dialog_type="quest_complete", quest_id=9074, seconds=9.08 },
       ["have you brought me that which i require"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rimblat_earthshatter\\9073_quest_progress.wav", dialog_type="quest_progress", quest_id=9073, seconds=2.48 },
+      ["ive been expec excuse me old habit i am rimblat of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rimblat_earthshatter\\ive_been_expec_excuse_me_old_habit_i_am_rimblat_of.wav", dialog_type="gossip", quest_id=nil, seconds=5.28 },
       ["the wristguards are ready adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rimblat_earthshatter\\9075_quest_complete.wav", dialog_type="quest_complete", quest_id=9075, seconds=2.08 },
       ["these handguards channel the power of the elements"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rimblat_earthshatter\\9073_quest_complete.wav", dialog_type="quest_complete", quest_id=9073, seconds=3.08 },
       ["would you honor me by returning the armor of those"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rimblat_earthshatter\\9068_quest_accept.wav", dialog_type="quest_accept", quest_id=9068, seconds=25.68 },
@@ -25881,6 +26292,7 @@ NPC_DATABASE = {
       ["ah the karnitol business in desolace excellent so "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\roetten_stonehammer\\1457_quest_complete.wav", dialog_type="quest_complete", quest_id=1457, seconds=26.16 },
       ["ah the package for leftwitch from desolace excelle"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\roetten_stonehammer\\1467_quest_complete.wav", dialog_type="quest_complete", quest_id=1467, seconds=19.68 },
       ["it looks like youve already found love you can giv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\roetten_stonehammer\\it_looks_like_youve_already_found_love_you_can_giv.wav", dialog_type="gossip", quest_id=nil, seconds=7.8 },
+      ["pleased to meetcha adventurer me names roetten i l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\roetten_stonehammer\\pleased_to_meetcha_adventurer_me_names_roetten_i_l.wav", dialog_type="gossip", quest_id=nil, seconds=16.24 },
       ["theres work to be done in desolace adventurer its "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\roetten_stonehammer\\1453_quest_accept.wav", dialog_type="quest_accept", quest_id=1453, seconds=31.24 },
     },
   },
@@ -25946,6 +26358,17 @@ NPC_DATABASE = {
       ["we must discover more about why the gordunni are h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\rok_orhan\\2979_quest_progress.wav", dialog_type="quest_progress", quest_id=2979, seconds=4.32 },
       ["what have you brought me adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\rok_orhan\\3002_quest_progress.wav", dialog_type="quest_progress", quest_id=3002, seconds=2.32 },
       ["you have proven yourself to be a trustworthy and d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\rok_orhan\\2980_quest_complete.wav", dialog_type="quest_complete", quest_id=2980, seconds=5.32 },
+    },
+  },
+  ["Rokar Bladeshadow"] = {
+    race = "orc",
+    sex = "male",
+    portrait = "orc",
+    zone = "",
+    model_id = nil,
+    narrator = "orc",
+    dialogs = {
+      ["whats a young adventurer like you out visiting an "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\rokar_bladeshadow\\whats_a_young_adventurer_like_you_out_visiting_an_.wav", dialog_type="gossip", quest_id=nil, seconds=3.96 },
     },
   },
   ["Ronald Burch"] = {
@@ -26093,6 +26516,7 @@ NPC_DATABASE = {
       ["as with most other fabrics our stocks of silk are "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rumstag_proudstrider\\7821_quest_progress.wav", dialog_type="quest_progress", quest_id=7821, seconds=28.52 },
       ["fantastic these will go right to use i assure you "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rumstag_proudstrider\\7823_quest_complete.wav", dialog_type="quest_complete", quest_id=7823, seconds=19.36 },
       ["greetings once again adventurer our need for runec"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rumstag_proudstrider\\7825_quest_progress.wav", dialog_type="quest_progress", quest_id=7825, seconds=20.4 },
+      ["hail adventurer id like a moment of your time if i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rumstag_proudstrider\\hail_adventurer_id_like_a_moment_of_your_time_if_i.wav", dialog_type="gossip", quest_id=nil, seconds=22.52 },
       ["mageweave is running low and we could use your hel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rumstag_proudstrider\\7822_quest_progress.wav", dialog_type="quest_progress", quest_id=7822, seconds=25.04 },
       ["we are currently accepting donations for wool clot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rumstag_proudstrider\\7820_quest_progress.wav", dialog_type="quest_progress", quest_id=7820, seconds=24.04 },
       ["wonderful we thank you for your generous donation "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\rumstag_proudstrider\\7820_quest_complete.wav", dialog_type="quest_complete", quest_id=7820, seconds=3.28 },
@@ -26152,6 +26576,7 @@ NPC_DATABASE = {
     narrator = "undead",
     dialogs = {
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\rupert_boch\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["i have no time to waste on the likes of you advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\rupert_boch\\i_have_no_time_to_waste_on_the_likes_of_you_advent.wav", dialog_type="gossip", quest_id=nil, seconds=3.0 },
     },
   },
   ["Rutgar Glyphshaper"] = {
@@ -26242,6 +26667,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\rwag\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
+      ["i dont train your kind adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\rwag\\i_dont_train_your_kind_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
       ["now that you know where im holding up i should let"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\rwag\\3088_quest_complete.wav", dialog_type="quest_complete", quest_id=3088, seconds=26.84 },
       ["until such time comes youll be under my tutelage i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\rwag\\3083_quest_complete.wav", dialog_type="quest_complete", quest_id=3083, seconds=23.48 },
     },
@@ -26298,6 +26724,17 @@ NPC_DATABASE = {
       ["time is critical adventurer have you succeeded in "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\sagorne_creststrider\\8258_quest_progress.wav", dialog_type="quest_progress", quest_id=8258, seconds=5.84 },
       ["what you got for me adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\sagorne_creststrider\\8410_quest_progress.wav", dialog_type="quest_progress", quest_id=8410, seconds=2.28 },
       ["your generosity is unrivaled adventurer i thank yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\sagorne_creststrider\\7667_quest_complete.wav", dialog_type="quest_complete", quest_id=7667, seconds=24.68 },
+    },
+  },
+  ["Sahrhee"] = {
+    race = "ogre",
+    sex = "unknown",
+    portrait = "ogre",
+    zone = "",
+    model_id = nil,
+    narrator = "ogre",
+    dialogs = {
+      ["thank you little adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\sahrhee\\thank_you_little_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.84 },
     },
   },
   ["Salazar Bloch"] = {
@@ -26390,6 +26827,7 @@ NPC_DATABASE = {
       ["adventurer an imp in felwood by the name of impsy "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\sandahl\\8419_quest_accept.wav", dialog_type="quest_accept", quest_id=8419, seconds=27.0 },
       ["do you have my felcloth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\sandahl\\8419_quest_progress.wav", dialog_type="quest_progress", quest_id=8419, seconds=1.96 },
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\sandahl\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["the darkness does not embrace you adventurer cease"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\sandahl\\the_darkness_does_not_embrace_you_adventurer_cease.wav", dialog_type="gossip", quest_id=nil, seconds=6.64 },
     },
   },
   ["Sara Balloo"] = {
@@ -26428,6 +26866,7 @@ NPC_DATABASE = {
     dialogs = {
       ["ah thank you for the marker please feel free to pi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sara_timberlain\\59_quest_complete.wav", dialog_type="quest_complete", quest_id=59, seconds=9.08 },
       ["ah these are nice bandanas if a little rough here "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sara_timberlain\\83_quest_complete.wav", dialog_type="quest_complete", quest_id=83, seconds=4.96 },
+      ["hello good adventurer have a seat and a meal if yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sara_timberlain\\hello_good_adventurer_have_a_seat_and_a_meal_if_yo.wav", dialog_type="gossip", quest_id=nil, seconds=8.56 },
       ["im running low on linen adventurer do you have any"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sara_timberlain\\83_quest_progress.wav", dialog_type="quest_progress", quest_id=83, seconds=5.2 },
       ["the defias gang in northshire wears burlap masks b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sara_timberlain\\83_quest_accept.wav", dialog_type="quest_accept", quest_id=83, seconds=19.12 },
     },
@@ -26452,6 +26891,7 @@ NPC_DATABASE = {
     narrator = "gnome_female",
     dialogs = {
       ["gee thats swell thanks for bringing me all of this"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\sarah_sadwhistle\\8526_quest_complete.wav", dialog_type="quest_complete", quest_id=8526, seconds=16.48 },
+      ["hey there adventurer ive talked with everyone arou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\sarah_sadwhistle\\hey_there_adventurer_ive_talked_with_everyone_arou.wav", dialog_type="gossip", quest_id=nil, seconds=16.64 },
       ["hi again adventurer i can tell youre very excited "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\sarah_sadwhistle\\8527_quest_accept.wav", dialog_type="quest_accept", quest_id=8527, seconds=11.48 },
       ["oh hows it going adventurer i see that youre inter"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\sarah_sadwhistle\\8526_quest_accept.wav", dialog_type="quest_accept", quest_id=8526, seconds=23.56 },
       ["so do you have all of that roast raptor yet"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome_female\\sarah_sadwhistle\\8526_quest_progress.wav", dialog_type="quest_progress", quest_id=8526, seconds=2.88 },
@@ -26491,6 +26931,7 @@ NPC_DATABASE = {
     narrator = "tauren",
     dialogs = {
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\sark_ragetotem\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["i can not train you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\sark_ragetotem\\i_can_not_train_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
     },
   },
   ["Sarlek"] = {
@@ -26587,6 +27028,7 @@ NPC_DATABASE = {
       ["did you finish yesterdays assignment if so then si"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\scholomance_student\\did_you_finish_yesterdays_assignment_if_so_then_si.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
       ["did you forget your students attire do you think f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\scholomance_student\\did_you_forget_your_students_attire_do_you_think_f.wav", dialog_type="gossip", quest_id=nil, seconds=5.72 },
       ["spend less time rattling and more time listening"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\scholomance_student\\spend_less_time_rattling_and_more_time_listening.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
+      ["watch your step in here adventurer the master sees"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\scholomance_student\\watch_your_step_in_here_adventurer_the_master_sees.wav", dialog_type="gossip", quest_id=nil, seconds=3.48 },
       ["we must focus if we are to spawn our dragonflight"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\scholomance_student\\we_must_focus_if_we_are_to_spawn_our_dragonflight.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
     },
   },
@@ -26602,6 +27044,7 @@ NPC_DATABASE = {
       ["alright adventurer your transponder is ready"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\scooty\\2843_quest_accept.wav", dialog_type="quest_accept", quest_id=2843, seconds=24.24 },
       ["as long as you have the transponder in your posses"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\scooty\\2843_quest_accept.wav", dialog_type="quest_accept", quest_id=2843, seconds=24.24 },
       ["give me a moment while i calibrate the transponder"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\scooty\\2843_quest_accept.wav", dialog_type="quest_accept", quest_id=2843, seconds=24.24 },
+      ["hello adventurer i am master engineer scooty"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\scooty\\hello_adventurer_i_am_master_engineer_scooty.wav", dialog_type="gossip", quest_id=nil, seconds=3.48 },
       ["i suppose you should be rewarded for bringing kern"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\scooty\\2904_quest_complete.wav", dialog_type="quest_complete", quest_id=2904, seconds=14.96 },
       ["its ready"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\scooty\\2843_quest_progress.wav", dialog_type="quest_progress", quest_id=2843, seconds=1.24 },
       ["shes a beauty isnt she pinnacle of goblin transpor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\scooty\\2842_quest_complete.wav", dialog_type="quest_complete", quest_id=2842, seconds=16.32 },
@@ -26846,6 +27289,7 @@ NPC_DATABASE = {
     narrator = "tauren",
     dialogs = {
       ["be not afraid adventurer you have successfully pas"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\seer_wiserunner\\772_quest_complete.wav", dialog_type="quest_complete", quest_id=772, seconds=4.0 },
+      ["ive been expecting you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\seer_wiserunner\\ive_been_expecting_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.28 },
       ["to gain acceptance amongst the elders of thunder b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\seer_wiserunner\\773_quest_accept.wav", dialog_type="quest_accept", quest_id=773, seconds=26.84 },
     },
   },
@@ -26910,6 +27354,7 @@ NPC_DATABASE = {
       ["a victory for adventurer in the ashenvale hunt wel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senani_thunderheart\\24_quest_complete.wav", dialog_type="quest_complete", quest_id=24, seconds=27.12 },
       ["adventurer you have slain all three beasts that co"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senani_thunderheart\\247_quest_complete.wav", dialog_type="quest_complete", quest_id=247, seconds=27.72 },
       ["ah the paw of ursangous your skill is impressive a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senani_thunderheart\\23_quest_complete.wav", dialog_type="quest_complete", quest_id=23, seconds=27.32 },
+      ["do you hear the call of the hunt adventurer you mu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senani_thunderheart\\do_you_hear_the_call_of_the_hunt_adventurer_you_mu.wav", dialog_type="gossip", quest_id=nil, seconds=10.68 },
       ["most impressive adventurer the claw of sharptalon "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senani_thunderheart\\2_quest_complete.wav", dialog_type="quest_complete", quest_id=2, seconds=31.52 },
       ["there are three legendary creatures that make up t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senani_thunderheart\\6383_quest_complete.wav", dialog_type="quest_complete", quest_id=6383, seconds=32.36 },
       ["welcome to the new frontier adventurer ashenvale i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senani_thunderheart\\6382_quest_complete.wav", dialog_type="quest_complete", quest_id=6382, seconds=30.68 },
@@ -26948,6 +27393,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead",
     dialogs = {
+      ["hail adventurer i trust you are here to inquire on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\senior_sergeant_grimsford\\hail_adventurer_i_trust_you_are_here_to_inquire_on.wav", dialog_type="gossip", quest_id=nil, seconds=29.44 },
       ["hello im glad that youve decided to hear me out th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\senior_sergeant_grimsford\\8793_quest_accept.wav", dialog_type="quest_accept", quest_id=8793, seconds=31.08 },
     },
   },
@@ -26959,6 +27405,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "troll_female",
     dialogs = {
+      ["hail adventurer i trust you are here to inquire on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\senior_sergeant_kaijin\\hail_adventurer_i_trust_you_are_here_to_inquire_on.wav", dialog_type="gossip", quest_id=nil, seconds=34.16 },
       ["hello im glad that youve decided to hear me out th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\senior_sergeant_kaijin\\8794_quest_accept.wav", dialog_type="quest_accept", quest_id=8794, seconds=34.04 },
     },
   },
@@ -26970,6 +27417,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "tauren_female",
     dialogs = {
+      ["hail adventurer i trust you are here to inquire on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senior_sergeant_taiga\\hail_adventurer_i_trust_you_are_here_to_inquire_on.wav", dialog_type="gossip", quest_id=nil, seconds=33.0 },
       ["hello im glad that youve decided to hear me out th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\senior_sergeant_taiga\\8792_quest_accept.wav", dialog_type="quest_accept", quest_id=8792, seconds=33.44 },
     },
   },
@@ -27077,6 +27525,17 @@ NPC_DATABASE = {
       ["it looks like youve already found love you can giv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc_female\\sergeant_basha\\it_looks_like_youve_already_found_love_you_can_giv.wav", dialog_type="gossip", quest_id=nil, seconds=8.76 },
     },
   },
+  ["Sergeant Bly"] = {
+    race = "human",
+    sex = "male",
+    portrait = "human",
+    zone = "",
+    model_id = nil,
+    narrator = "human",
+    dialogs = {
+      ["thanks a lot adventurer we couldnt have made it wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\sergeant_bly\\thanks_a_lot_adventurer_we_couldnt_have_made_it_wi.wav", dialog_type="gossip", quest_id=nil, seconds=9.56 },
+    },
+  },
   ["Sergeant Carnes"] = {
     race = "human",
     sex = "male",
@@ -27098,6 +27557,7 @@ NPC_DATABASE = {
     dialogs = {
       ["adventurer you have not yet assaulted a graveyard "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_durgen_stormpike\\7081_quest_progress.wav", dialog_type="quest_progress", quest_id=7081, seconds=5.52 },
       ["i received a field report stating you helped secur"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_durgen_stormpike\\7102_quest_complete.wav", dialog_type="quest_complete", quest_id=7102, seconds=8.8 },
+      ["name rank and serial number soldier thats the only"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_durgen_stormpike\\name_rank_and_serial_number_soldier_thats_the_only.wav", dialog_type="gossip", quest_id=nil, seconds=6.6 },
       ["the graveyards in alterac valley are prized territ"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_durgen_stormpike\\7081_quest_accept.wav", dialog_type="quest_accept", quest_id=7081, seconds=25.4 },
       ["the mines in alterac valley hold more than just mi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_durgen_stormpike\\7122_quest_accept.wav", dialog_type="quest_accept", quest_id=7122, seconds=26.04 },
       ["towers and bunkers are key defensive positions and"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_durgen_stormpike\\7102_quest_accept.wav", dialog_type="quest_accept", quest_id=7102, seconds=29.64 },
@@ -27131,6 +27591,7 @@ NPC_DATABASE = {
     narrator = "human_female",
     dialogs = {
       ["good work adventurer i must say that im pleasantly"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_major_germaine\\8509_quest_complete.wav", dialog_type="quest_complete", quest_id=8509, seconds=19.04 },
+      ["hail adventurer as you may know weve completed all"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_major_germaine\\hail_adventurer_as_you_may_know_weve_completed_all.wav", dialog_type="gossip", quest_id=nil, seconds=13.76 },
       ["ill keep it simple and to the point adventurer the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_major_germaine\\8509_quest_accept.wav", dialog_type="quest_accept", quest_id=8509, seconds=22.44 },
       ["ok so it looks like i still need more arthas tears"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_major_germaine\\8510_quest_accept.wav", dialog_type="quest_accept", quest_id=8510, seconds=17.64 },
       ["whats that speak up adventurer have you got that s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_major_germaine\\8509_quest_progress.wav", dialog_type="quest_progress", quest_id=8509, seconds=6.12 },
@@ -27147,6 +27608,7 @@ NPC_DATABASE = {
       ["back again adventurer outstanding the bars youve p"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_stonebrow\\8493_quest_progress.wav", dialog_type="quest_progress", quest_id=8493, seconds=29.68 },
       ["back again adventurer outstanding we still need mo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_stonebrow\\8493_quest_accept.wav", dialog_type="quest_accept", quest_id=8493, seconds=8.72 },
       ["excellent work digging around for that copper and "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_stonebrow\\8493_quest_complete.wav", dialog_type="quest_complete", quest_id=8493, seconds=18.6 },
+      ["haha adventurer the alliance has gathered everythi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_stonebrow\\haha_adventurer_the_alliance_has_gathered_everythi.wav", dialog_type="gossip", quest_id=nil, seconds=8.6 },
       ["have you collected those twenty bars of copper yet"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_stonebrow\\8492_quest_progress.wav", dialog_type="quest_progress", quest_id=8492, seconds=2.76 },
       ["hey there adventurer you look fit enough to contri"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_stonebrow\\8492_quest_accept.wav", dialog_type="quest_accept", quest_id=8492, seconds=21.32 },
       ["you did it lad well get those copper bars onto the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sergeant_stonebrow\\8492_quest_complete.wav", dialog_type="quest_complete", quest_id=8492, seconds=20.8 },
@@ -27184,6 +27646,7 @@ NPC_DATABASE = {
       ["very good you are relieved private rest but dont g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_yohwa\\very_good_you_are_relieved_private_rest_but_dont_g.wav", dialog_type="gossip", quest_id=nil, seconds=8.2 },
       ["well done the loss of those jungle fighters will r"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_yohwa\\203_quest_complete.wav", dialog_type="quest_complete", quest_id=203, seconds=13.08 },
       ["were fighting a losing battle with colonel kurzen "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_yohwa\\203_quest_accept.wav", dialog_type="quest_accept", quest_id=203, seconds=22.92 },
+      ["you watch where you step around here adventurer yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\sergeant_yohwa\\you_watch_where_you_step_around_here_adventurer_yo.wav", dialog_type="gossip", quest_id=nil, seconds=10.8 },
     },
   },
   ["Sergra Darkthorn"] = {
@@ -27340,6 +27803,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "undead_female",
     dialogs = {
+      ["dear adventurer you have arrived just in time to a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\shadowmage_vivian_lagrave\\dear_adventurer_you_have_arrived_just_in_time_to_a.wav", dialog_type="gossip", quest_id=nil, seconds=6.12 },
       ["do you have the recipe for the thunderbrew lager a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\shadowmage_vivian_lagrave\\4134_quest_progress.wav", dialog_type="quest_progress", quest_id=4134, seconds=2.96 },
       ["excellent the formulae etched into this tablet wil"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\shadowmage_vivian_lagrave\\4768_quest_complete.wav", dialog_type="quest_complete", quest_id=4768, seconds=12.32 },
       ["have you found the tablet adventurer i yearn to de"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\shadowmage_vivian_lagrave\\4768_quest_progress.wav", dialog_type="quest_progress", quest_id=4768, seconds=3.92 },
@@ -27459,6 +27923,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "gnome",
     dialogs = {
+      ["hello there adventurer do you have a little time t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\shawn\\hello_there_adventurer_do_you_have_a_little_time_t.wav", dialog_type="gossip", quest_id=nil, seconds=4.84 },
       ["hi i miss my necklace my daddy got it for me daddy"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\shawn\\3741_quest_progress.wav", dialog_type="quest_progress", quest_id=3741, seconds=9.08 },
       ["my friend hilary lost her necklace and we cant fin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\shawn\\3741_quest_accept.wav", dialog_type="quest_accept", quest_id=3741, seconds=20.04 },
     },
@@ -27558,6 +28023,7 @@ NPC_DATABASE = {
       ["as a rogue of the shattered hand it is imperative "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\shenthul\\2460_quest_accept.wav", dialog_type="quest_accept", quest_id=2460, seconds=11.64 },
       ["did you see what i did if you are unsure of the te"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\shenthul\\2460_quest_accept.wav", dialog_type="quest_accept", quest_id=2460, seconds=11.64 },
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\shenthul\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["i dont train your kind adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\shenthul\\i_dont_train_your_kind_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
       ["it is important that the shattered hand remains vi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\shenthul\\2380_quest_complete.wav", dialog_type="quest_complete", quest_id=2380, seconds=13.28 },
       ["poor fizzule he was a good agent one of our best a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\shenthul\\2478_quest_complete.wav", dialog_type="quest_complete", quest_id=2478, seconds=17.96 },
       ["so you are what our mighty allies have sent shenth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\shenthul\\2378_quest_complete.wav", dialog_type="quest_complete", quest_id=2378, seconds=6.08 },
@@ -27687,6 +28153,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello hunter ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\siandur\\hello_hunter_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
       ["hello young hunter you look to me like you are ski"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\siandur\\6069_quest_accept.wav", dialog_type="quest_accept", quest_id=6069, seconds=13.84 },
+      ["hey mon you be needin to head on over to da advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\siandur\\hey_mon_you_be_needin_to_head_on_over_to_da_advent.wav", dialog_type="gossip", quest_id=nil, seconds=3.84 },
     },
   },
   ["Siantsu"] = {
@@ -27739,6 +28206,7 @@ NPC_DATABASE = {
       ["as an apprentice to feranor steeltoe i learned his"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sigrun_ironhew\\706_quest_accept.wav", dialog_type="quest_accept", quest_id=706, seconds=29.88 },
       ["how goes the hunt adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sigrun_ironhew\\706_quest_progress.wav", dialog_type="quest_progress", quest_id=706, seconds=2.12 },
       ["in our hurry to leave the uldaman excavation site "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sigrun_ironhew\\718_quest_accept.wav", dialog_type="quest_accept", quest_id=718, seconds=32.6 },
+      ["it was quite a departure let me tell you adventure"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sigrun_ironhew\\it_was_quite_a_departure_let_me_tell_you_adventure.wav", dialog_type="gossip", quest_id=nil, seconds=8.76 },
       ["its a start adventurer and itll have to do until w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sigrun_ironhew\\733_quest_complete.wav", dialog_type="quest_complete", quest_id=733, seconds=11.04 },
       ["its going to be tough going here if i cant manage "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sigrun_ironhew\\733_quest_accept.wav", dialog_type="quest_accept", quest_id=733, seconds=27.68 },
       ["thanks so much adventurer while you were gone i er"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\sigrun_ironhew\\718_quest_complete.wav", dialog_type="quest_complete", quest_id=718, seconds=12.76 },
@@ -27883,6 +28351,17 @@ NPC_DATABASE = {
       ["aye mon take dis letter to frang in da valley of t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\narrator\\simple_tablet.wav", dialog_type="item_text", quest_id=nil, seconds=33.56 },
     },
   },
+  ["Sir Malory Wheeler"] = {
+    race = "undead",
+    sex = "male",
+    portrait = "undead",
+    zone = "",
+    model_id = nil,
+    narrator = "undead",
+    dialogs = {
+      ["look around you adventurer you are in rare company"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\sir_malory_wheeler\\look_around_you_adventurer_you_are_in_rare_company.wav", dialog_type="gossip", quest_id=nil, seconds=13.48 },
+    },
+  },
   ["Sir S. J. Erlgadin"] = {
     race = "human",
     sex = "male",
@@ -27929,6 +28408,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "troll_female",
     dialogs = {
+      ["heya adventurer dont you know the horde is done wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\skinner_jamani\\heya_adventurer_dont_you_know_the_horde_is_done_wi.wav", dialog_type="gossip", quest_id=nil, seconds=16.24 },
       ["its true adventurer i still need more heavy leathe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\skinner_jamani\\8589_quest_accept.wav", dialog_type="quest_accept", quest_id=8589, seconds=18.8 },
       ["ive got no time for games if youre just here to ji"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\skinner_jamani\\8588_quest_progress.wav", dialog_type="quest_progress", quest_id=8588, seconds=12.56 },
       ["simply amazing look at the purity of these samples"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\skinner_jamani\\8588_quest_complete.wav", dialog_type="quest_complete", quest_id=8588, seconds=24.88 },
@@ -28038,6 +28518,17 @@ NPC_DATABASE = {
       ["you know it doesnt seem prosperous to be paying th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\smeed_scrabblescrew\\5821_quest_complete.wav", dialog_type="quest_complete", quest_id=5821, seconds=18.92 },
     },
   },
+  ["Smiling Jim"] = {
+    race = "human",
+    sex = "male",
+    portrait = "human",
+    zone = "",
+    model_id = nil,
+    narrator = "human",
+    dialogs = {
+      ["hell bring you mead hell bring you beer a grinning"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\smiling_jim\\hell_bring_you_mead_hell_bring_you_beer_a_grinning.wav", dialog_type="gossip", quest_id=nil, seconds=10.92 },
+    },
+  },
   ["Smith Argus"] = {
     race = "human",
     sex = "male",
@@ -28096,6 +28587,7 @@ NPC_DATABASE = {
       ["i can pay you half up front and half when the job "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\smokey_larue\\6026_quest_complete.wav", dialog_type="quest_complete", quest_id=6026, seconds=3.16 },
       ["i cant take it adventurer you gotta help me im dyi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\smokey_larue\\5214_quest_progress.wav", dialog_type="quest_progress", quest_id=5214, seconds=4.2 },
       ["i got supplies left over to make a few more sticks"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\smokey_larue\\6041_quest_progress.wav", dialog_type="quest_progress", quest_id=6041, seconds=6.84 },
+      ["im what you call a capitalist adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\smokey_larue\\im_what_you_call_a_capitalist_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=3.0 },
       ["oh sweet sweet stogie how i have missed you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\smokey_larue\\5214_quest_complete.wav", dialog_type="quest_complete", quest_id=5214, seconds=3.0 },
       ["terrible thing what happened to fras you see the t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\smokey_larue\\5214_quest_accept.wav", dialog_type="quest_accept", quest_id=5214, seconds=30.52 },
       ["these here argent dawn people commissioned ol smok"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\smokey_larue\\6026_quest_accept.wav", dialog_type="quest_accept", quest_id=6026, seconds=31.68 },
@@ -28136,6 +28628,17 @@ NPC_DATABASE = {
     narrator = "narrator",
     dialogs = {
       ["congratulations you are the proud new owner of the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\narrator\\snufflenose_owners_manual.wav", dialog_type="item_text", quest_id=nil, seconds=195.48 },
+    },
+  },
+  ["Snurk Bucksquick"] = {
+    race = "goblin",
+    sex = "female",
+    portrait = "goblin",
+    zone = "",
+    model_id = nil,
+    narrator = "goblin_female",
+    dialogs = {
+      ["adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\snurk_bucksquick\\adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.04 },
     },
   },
   ["Sognar Cliffbeard"] = {
@@ -28209,6 +28712,17 @@ NPC_DATABASE = {
       ["would you rather trust your goods with a goblin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\soran\\would_you_rather_trust_your_goods_with_a_goblin.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
     },
   },
+  ["Sorcerer Ashcrombe"] = {
+    race = "human",
+    sex = "male",
+    portrait = "human",
+    zone = "",
+    model_id = nil,
+    narrator = "human",
+    dialogs = {
+      ["at last i am finally free from this cell the kirin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\sorcerer_ashcrombe\\at_last_i_am_finally_free_from_this_cell_the_kirin.wav", dialog_type="gossip", quest_id=nil, seconds=26.48 },
+    },
+  },
   ["Sorek"] = {
     race = "orc",
     sex = "male",
@@ -28219,6 +28733,7 @@ NPC_DATABASE = {
     dialogs = {
       ["did stoley cough up my booze"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\sorek\\8417_quest_progress.wav", dialog_type="quest_progress", quest_id=8417, seconds=1.72 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\sorek\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
+      ["i dont train your kind adventurer find your own tr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\sorek\\i_dont_train_your_kind_adventurer_find_your_own_tr.wav", dialog_type="gossip", quest_id=nil, seconds=6.12 },
       ["in the blasted lands there is a troubled spirit wh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\sorek\\8417_quest_accept.wav", dialog_type="quest_accept", quest_id=8417, seconds=12.84 },
       ["the horde honors its warriors because their streng"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\sorek\\1505_quest_accept.wav", dialog_type="quest_accept", quest_id=1505, seconds=24.2 },
       ["you are a warrior of skill and growing renown perh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\sorek\\1823_quest_accept.wav", dialog_type="quest_accept", quest_id=1823, seconds=16.16 },
@@ -28245,6 +28760,7 @@ NPC_DATABASE = {
     narrator = "goblin",
     dialogs = {
       ["as soon as we got word from kernobee about the new"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\sovik\\2842_quest_accept.wav", dialog_type="quest_accept", quest_id=2842, seconds=32.56 },
+      ["hello adventurer if you dont see it in my shop cha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\sovik\\hello_adventurer_if_you_dont_see_it_in_my_shop_cha.wav", dialog_type="gossip", quest_id=nil, seconds=4.4 },
     },
   },
   ["Spackle Thornberry"] = {
@@ -28332,6 +28848,7 @@ NPC_DATABASE = {
     dialogs = {
       ["i am absolutely terrified of the pterrordax here t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\spraggle_frock\\4501_quest_complete.wav", dialog_type="quest_complete", quest_id=4501, seconds=10.24 },
       ["ringos not in the best shape adventurer but i am g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\spraggle_frock\\4491_quest_complete.wav", dialog_type="quest_complete", quest_id=4491, seconds=7.76 },
+      ["welcome to the refuge adventurer some come here wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\spraggle_frock\\welcome_to_the_refuge_adventurer_some_come_here_wi.wav", dialog_type="gossip", quest_id=nil, seconds=9.48 },
       ["wha what"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\spraggle_frock\\4492_quest_progress.wav", dialog_type="quest_progress", quest_id=4492, seconds=1.64 },
       ["youve got to help me adventurer my friend ringo le"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\spraggle_frock\\4492_quest_accept.wav", dialog_type="quest_accept", quest_id=4492, seconds=19.0 },
     },
@@ -28613,6 +29130,7 @@ NPC_DATABASE = {
     dialogs = {
       ["ill crush you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\stomper_kreeg\\ill_crush_you.wav", dialog_type="gossip", quest_id=nil, seconds=1.32 },
       ["you da big boss now so you get free sample of my b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\stomper_kreeg\\5528_quest_complete.wav", dialog_type="quest_complete", quest_id=5528, seconds=12.48 },
+      ["you da boss now yeah long live da new king kreeg l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\stomper_kreeg\\you_da_boss_now_yeah_long_live_da_new_king_kreeg_l.wav", dialog_type="gossip", quest_id=nil, seconds=14.84 },
     },
   },
   ["Stoneguard Clayhoof"] = {
@@ -28650,6 +29168,17 @@ NPC_DATABASE = {
       ["we learn from our life experiences adventurer from"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\storm_shadowhoof\\5057_quest_complete.wav", dialog_type="quest_complete", quest_id=5057, seconds=22.12 },
       ["yes you have returned i believe now that you are a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\storm_shadowhoof\\5055_quest_complete.wav", dialog_type="quest_complete", quest_id=5055, seconds=16.0 },
       ["you have proven both your strength and your determ"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\storm_shadowhoof\\5056_quest_complete.wav", dialog_type="quest_complete", quest_id=5056, seconds=9.68 },
+    },
+  },
+  ["Stormpike Emissary"] = {
+    race = "dwarf",
+    sex = "male",
+    portrait = "dwarf",
+    zone = "",
+    model_id = nil,
+    narrator = "dwarf",
+    dialogs = {
+      ["adventurer the stormpike guard is in need of your "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\stormpike_emissary\\adventurer_the_stormpike_guard_is_in_need_of_your_.wav", dialog_type="gossip", quest_id=nil, seconds=18.64 },
     },
   },
   ["Stormpike Quartermaster"] = {
@@ -28751,6 +29280,7 @@ NPC_DATABASE = {
     narrator = "human",
     dialogs = {
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\stormwind_commendation_officer\\8814_quest_progress.wav", dialog_type="quest_progress", quest_id=8814, seconds=26.52 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\stormwind_commendation_officer\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=25.88 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\stormwind_commendation_officer\\8822_quest_progress.wav", dialog_type="quest_progress", quest_id=8822, seconds=29.8 },
     },
   },
@@ -29014,7 +29544,7 @@ NPC_DATABASE = {
       ["aha you got the jade and made the bramble well don"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\1948_quest_complete.wav", dialog_type="quest_complete", quest_id=1948, seconds=15.56 },
       ["do you have an infernal orb adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\1954_quest_progress.wav", dialog_type="quest_progress", quest_id=1954, seconds=2.92 },
       ["do you have the tiara adventurer has velratha lear"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\2846_quest_progress.wav", dialog_type="quest_progress", quest_id=2846, seconds=4.68 },
-      ["gird yourself adventurer for the demon in this orb"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\4961_quest_accept.wav", dialog_type="quest_accept", quest_id=4961, seconds=29.72 },
+      ["gird yourself adventurer for the demon in this orb"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\1955_quest_accept.wav", dialog_type="quest_accept", quest_id=1955, seconds=30.6 },
       ["have you been to uldaman adventurer did you defeat"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\1956_quest_progress.wav", dialog_type="quest_progress", quest_id=1956, seconds=5.6 },
       ["hello adventurer do you have the items i require"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\1948_quest_progress.wav", dialog_type="quest_progress", quest_id=1948, seconds=3.32 },
       ["here are the wands i made take your pick"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\1952_quest_complete.wav", dialog_type="quest_complete", quest_id=1952, seconds=2.56 },
@@ -29047,6 +29577,7 @@ NPC_DATABASE = {
       ["you should be proud of yourself adventurer many ma"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\1958_quest_complete.wav", dialog_type="quest_complete", quest_id=1958, seconds=17.12 },
       ["youll have to kill that demon to remove its presen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\4961_quest_progress.wav", dialog_type="quest_progress", quest_id=4961, seconds=5.44 },
       ["youll have to kill that demon to remove its taint "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\1955_quest_progress.wav", dialog_type="quest_progress", quest_id=1955, seconds=3.84 },
+      ["your errand must mean much adventurer to draw you "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\tabetha\\your_errand_must_mean_much_adventurer_to_draw_you_.wav", dialog_type="gossip", quest_id=nil, seconds=6.36 },
     },
   },
   ["Tabethas Instructions"] = {
@@ -29227,6 +29758,7 @@ NPC_DATABASE = {
     narrator = "dwarf",
     dialogs = {
       ["excellent i can go back to my leisurely hunting no"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\talin_keeneye\\183_quest_complete.wav", dialog_type="quest_complete", quest_id=183, seconds=5.2 },
+      ["greetings adventurer fine day for hunting wouldnt "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\talin_keeneye\\greetings_adventurer_fine_day_for_hunting_wouldnt_.wav", dialog_type="gossip", quest_id=nil, seconds=9.84 },
       ["how goes the hunt"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\talin_keeneye\\183_quest_progress.wav", dialog_type="quest_progress", quest_id=183, seconds=1.04 },
       ["if i remember correctly grelins camp is down the r"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\talin_keeneye\\234_quest_accept.wav", dialog_type="quest_accept", quest_id=234, seconds=6.32 },
       ["is there something i can help you with"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\talin_keeneye\\234_quest_progress.wav", dialog_type="quest_progress", quest_id=234, seconds=1.92 },
@@ -29273,6 +29805,7 @@ NPC_DATABASE = {
       ["everything touched by the fel emanates a strange g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\talo_thornhoof\\4120_quest_progress.wav", dialog_type="quest_progress", quest_id=4120, seconds=8.48 },
       ["in my day i was a seasoned hunter there wasnt any "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\talo_thornhoof\\3063_quest_accept.wav", dialog_type="quest_accept", quest_id=3063, seconds=33.2 },
       ["it sounds from your descriptions as if the creatur"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\talo_thornhoof\\4120_quest_complete.wav", dialog_type="quest_complete", quest_id=4120, seconds=11.84 },
+      ["listen to the stories of an elder adventurer i hav"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\talo_thornhoof\\listen_to_the_stories_of_an_elder_adventurer_i_hav.wav", dialog_type="gossip", quest_id=nil, seconds=5.48 },
       ["now i know that edana is truly dead this heart i w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\talo_thornhoof\\3062_quest_complete.wav", dialog_type="quest_complete", quest_id=3062, seconds=8.48 },
       ["thank you adventurer you have put an old taurens m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\talo_thornhoof\\3063_quest_complete.wav", dialog_type="quest_complete", quest_id=3063, seconds=4.92 },
       ["the blood elf lethtendris has overstepped her boun"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\talo_thornhoof\\7489_quest_accept.wav", dialog_type="quest_accept", quest_id=7489, seconds=34.28 },
@@ -29446,6 +29979,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\tarshaw_jaggedscar\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
+      ["i dont train your kind adventurer find your own tr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\tarshaw_jaggedscar\\i_dont_train_your_kind_adventurer_find_your_own_tr.wav", dialog_type="gossip", quest_id=nil, seconds=5.44 },
       ["the horde honors its warriors because their streng"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\tarshaw_jaggedscar\\1505_quest_accept.wav", dialog_type="quest_accept", quest_id=1505, seconds=23.68 },
     },
   },
@@ -29508,6 +30042,7 @@ NPC_DATABASE = {
       ["i followed the legend of that stalvan character fo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tavernkeep_smitts\\79_quest_accept.wav", dialog_type="quest_accept", quest_id=79, seconds=26.76 },
       ["i need that zombie juice to keep me warm on these "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tavernkeep_smitts\\159_quest_progress.wav", dialog_type="quest_progress", quest_id=159, seconds=5.68 },
       ["if you bring me some rot blossoms then i can brew "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tavernkeep_smitts\\156_quest_accept.wav", dialog_type="quest_accept", quest_id=156, seconds=27.8 },
+      ["keep the door closed adventurer never know when th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tavernkeep_smitts\\keep_the_door_closed_adventurer_never_know_when_th.wav", dialog_type="gossip", quest_id=nil, seconds=5.8 },
       ["oh yeah i remember this book its owner rented a ro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tavernkeep_smitts\\266_quest_complete.wav", dialog_type="quest_complete", quest_id=266, seconds=21.72 },
       ["this better be good adventurer let me see what you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tavernkeep_smitts\\79_quest_progress.wav", dialog_type="quest_progress", quest_id=79, seconds=16.76 },
       ["this dark taint is downright bad for business"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tavernkeep_smitts\\this_dark_taint_is_downright_bad_for_business.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
@@ -30200,6 +30735,17 @@ NPC_DATABASE = {
       ["you must defeat myzrael before she grows in streng"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\theldurin_the_lost\\656_quest_accept.wav", dialog_type="quest_accept", quest_id=656, seconds=33.72 },
     },
   },
+  ["Thelman Slatefist"] = {
+    race = "dwarf",
+    sex = "male",
+    portrait = "dwarf",
+    zone = "",
+    model_id = nil,
+    narrator = "dwarf",
+    dialogs = {
+      ["i hope that you are here to go to alterac valley a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\thelman_slatefist\\i_hope_that_you_are_here_to_go_to_alterac_valley_a.wav", dialog_type="gossip", quest_id=nil, seconds=6.12 },
+    },
+  },
   ["Theocritus"] = {
     race = "human",
     sex = "male",
@@ -30212,8 +30758,20 @@ NPC_DATABASE = {
       ["hurry adventurer before my fears of morganth sprea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\theocritus\\249_quest_progress.wav", dialog_type="quest_progress", quest_id=249, seconds=4.88 },
       ["my rival morganth is a vicious mage of great power"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\theocritus\\94_quest_accept.wav", dialog_type="quest_accept", quest_id=94, seconds=31.0 },
       ["this lion statue has sat here for decades and keep"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\theocritus\\94_quest_progress.wav", dialog_type="quest_progress", quest_id=94, seconds=13.32 },
+      ["welcome to the tower of azora young adventurer i a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\theocritus\\welcome_to_the_tower_of_azora_young_adventurer_i_a.wav", dialog_type="gossip", quest_id=nil, seconds=8.44 },
       ["you have done well adventurer in defeating the war"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\theocritus\\249_quest_complete.wav", dialog_type="quest_complete", quest_id=249, seconds=18.24 },
       ["you have my gratitude adventurer i sent that messa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\theocritus\\178_quest_complete.wav", dialog_type="quest_complete", quest_id=178, seconds=25.8 },
+    },
+  },
+  ["Theodore Griffs"] = {
+    race = "undead",
+    sex = "male",
+    portrait = "undead",
+    zone = "",
+    model_id = nil,
+    narrator = "undead",
+    dialogs = {
+      ["hello adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\theodore_griffs\\hello_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.0 },
     },
   },
   ["Theodrus Frostbeard"] = {
@@ -30225,6 +30783,7 @@ NPC_DATABASE = {
     narrator = "dwarf",
     dialogs = {
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\theodrus_frostbeard\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["i hope the light is with you adventurer is there a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\theodrus_frostbeard\\i_hope_the_light_is_with_you_adventurer_is_there_a.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
       ["it is the way of the divine to help those in need "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\theodrus_frostbeard\\8254_quest_accept.wav", dialog_type="quest_accept", quest_id=8254, seconds=19.36 },
     },
   },
@@ -30284,7 +30843,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "night_elf",
     dialogs = {
-      ["help i was wandering around the masters glaive and"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\therylune\\945_quest_accept.wav", dialog_type="quest_accept", quest_id=945, seconds=15.04 },
+      ["i was wandering around the masters glaive and thes"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\therylune\\945_quest_accept.wav", dialog_type="quest_accept", quest_id=945, seconds=15.04 },
     },
   },
   ["Therzok"] = {
@@ -30470,6 +31029,7 @@ NPC_DATABASE = {
       ["one of my scouts witnessed an attack on a caravan "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thork\\872_quest_accept.wav", dialog_type="quest_accept", quest_id=872, seconds=33.36 },
       ["that attack on the caravan contained supplies we d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thork\\5041_quest_accept.wav", dialog_type="quest_accept", quest_id=5041, seconds=24.88 },
       ["the longer it takes to stop these attacks the hard"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thork\\871_quest_progress.wav", dialog_type="quest_progress", quest_id=871, seconds=6.32 },
+      ["welcome to the crossroads adventurer my name is th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thork\\welcome_to_the_crossroads_adventurer_my_name_is_th.wav", dialog_type="gossip", quest_id=nil, seconds=25.6 },
       ["well done adventurer with kreenigs death there wil"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thork\\872_quest_complete.wav", dialog_type="quest_complete", quest_id=872, seconds=9.12 },
       ["you found the razormane leader and killed him your"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thork\\906_quest_complete.wav", dialog_type="quest_complete", quest_id=906, seconds=24.64 },
       ["you have done well adventurer those insolent quilb"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thork\\871_quest_complete.wav", dialog_type="quest_complete", quest_id=871, seconds=8.12 },
@@ -30545,6 +31105,7 @@ NPC_DATABASE = {
     narrator = "orc",
     dialogs = {
       ["a new threat now looms on the horizon as magnis ye"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\4004_quest_complete.wav", dialog_type="quest_complete", quest_id=4004, seconds=22.36 },
+      ["all members of the horde are equal in my eyes adve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\all_members_of_the_horde_are_equal_in_my_eyes_adve.wav", dialog_type="gossip", quest_id=nil, seconds=35.56 },
       ["all members of the horde are equal in my eyes grog"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\all_members_of_the_horde_are_equal_in_my_eyes_grog.wav", dialog_type="unknown", quest_id=nil, seconds=33.24 },
       ["are you prepared to take on this task"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\6566_quest_complete.wav", dialog_type="quest_complete", quest_id=6566, seconds=2.28 },
       ["ashenvale hmm i had not heard of any presence of t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\5730_quest_complete.wav", dialog_type="quest_complete", quest_id=5730, seconds=19.8 },
@@ -30566,6 +31127,8 @@ NPC_DATABASE = {
       ["kill bazzalan and jergosh the invoker before retur"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\5728_quest_objective.wav", dialog_type="quest_objective", quest_id=5728, seconds=5.36 },
       ["let it be known that adventurer horde adventurer h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\8485_quest_complete.wav", dialog_type="quest_complete", quest_id=8485, seconds=25.08 },
       ["listen to thrall"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\6566_quest_objective.wav", dialog_type="quest_objective", quest_id=6566, seconds=1.32 },
+      ["no adventurer you did not i do not fault you howev"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\no_adventurer_you_did_not_i_do_not_fault_you_howev.wav", dialog_type="gossip", quest_id=nil, seconds=22.2 },
+      ["noted now pay attention adventurer the black drago"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\noted_now_pay_attention_adventurer_the_black_drago.wav", dialog_type="gossip", quest_id=nil, seconds=23.08 },
       ["now let us see if this insignia you found is worth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\5727_quest_accept.wav", dialog_type="quest_accept", quest_id=5727, seconds=35.36 },
       ["one thing i will not tolerate are traitors in our "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\5726_quest_accept.wav", dialog_type="quest_accept", quest_id=5726, seconds=41.72 },
       ["overlord runthak awaits your arrival in the valley"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\7491_quest_accept.wav", dialog_type="quest_accept", quest_id=7491, seconds=7.0 },
@@ -30575,6 +31138,7 @@ NPC_DATABASE = {
       ["seek out overlord runthak in the valley of strengt"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\7491_quest_objective.wav", dialog_type="quest_objective", quest_id=7491, seconds=3.4 },
       ["seek out rexxar the warchief has instructed you as"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\6567_quest_objective.wav", dialog_type="quest_objective", quest_id=6567, seconds=10.72 },
       ["slay emperor dagran thaurissan and free princess m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\4003_quest_objective.wav", dialog_type="quest_objective", quest_id=4003, seconds=6.72 },
+      ["so much to learn still adventurer you are too youn"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\so_much_to_learn_still_adventurer_you_are_too_youn.wav", dialog_type="gossip", quest_id=nil, seconds=33.0 },
       ["speak to neeru fireblade in orgrimmar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\5729_quest_objective.wav", dialog_type="quest_objective", quest_id=5729, seconds=3.16 },
       ["speak with high overlord saurfang in orgrimmar he "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\7784_quest_objective.wav", dialog_type="quest_objective", quest_id=7784, seconds=6.56 },
       ["speak with thrall if you are prepared to take on t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\4002_quest_objective.wav", dialog_type="quest_objective", quest_id=4002, seconds=4.12 },
@@ -30637,6 +31201,7 @@ NPC_DATABASE = {
     narrator = "tauren",
     dialogs = {
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\thunder_bluff_commendation_officer\\8818_quest_progress.wav", dialog_type="quest_progress", quest_id=8818, seconds=27.8 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\thunder_bluff_commendation_officer\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=28.92 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\thunder_bluff_commendation_officer\\8825_quest_progress.wav", dialog_type="quest_progress", quest_id=8825, seconds=27.44 },
     },
   },
@@ -30761,6 +31326,7 @@ NPC_DATABASE = {
     dialogs = {
       ["archmage xylem has been asking around lately for s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\thurston_xane\\8250_quest_accept.wav", dialog_type="quest_accept", quest_id=8250, seconds=32.16 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\thurston_xane\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\thurston_xane\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=7.92 },
     },
   },
   ["Thuul"] = {
@@ -30810,6 +31376,8 @@ NPC_DATABASE = {
       ["come down to da shrine with tiev well put da sapta"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\tiev_mordune\\1103_quest_complete.wav", dialog_type="quest_complete", quest_id=1103, seconds=21.6 },
       ["dat should do it good"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\tiev_mordune\\dat_should_do_it_good.wav", dialog_type="gossip", quest_id=nil, seconds=1.52 },
       ["greetins adventurer have you too come to purify th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\tiev_mordune\\1103_quest_accept.wav", dialog_type="quest_accept", quest_id=1103, seconds=34.64 },
+      ["im done adventurer finish up yerself ill be restin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\tiev_mordune\\im_done_adventurer_finish_up_yerself_ill_be_restin.wav", dialog_type="gossip", quest_id=nil, seconds=6.32 },
+      ["okay adventurer now fer da sapta stay close ta me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\tiev_mordune\\okay_adventurer_now_fer_da_sapta_stay_close_ta_me.wav", dialog_type="gossip", quest_id=nil, seconds=3.96 },
       ["ya have the sapta brotha i know another that had t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\tiev_mordune\\1103_quest_progress.wav", dialog_type="quest_progress", quest_id=1103, seconds=16.4 },
     },
   },
@@ -30972,6 +31540,7 @@ NPC_DATABASE = {
       ["my faith will guide you adventurer the light knows"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tirion_fordring\\5845_quest_progress.wav", dialog_type="quest_progress", quest_id=5845, seconds=4.52 },
       ["my food supplies are running low adventurer i am a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tirion_fordring\\5544_quest_accept.wav", dialog_type="quest_accept", quest_id=5544, seconds=26.16 },
       ["please friend sit and hear my tale"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tirion_fordring\\5742_quest_progress.wav", dialog_type="quest_progress", quest_id=5742, seconds=3.08 },
+      ["sit and listen to my story adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tirion_fordring\\sit_and_listen_to_my_story_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.32 },
       ["the death of my son at the hands of these monsters"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tirion_fordring\\5944_quest_complete.wav", dialog_type="quest_complete", quest_id=5944, seconds=33.72 },
       ["the fordring redemption will be a difficult task a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tirion_fordring\\5742_quest_complete.wav", dialog_type="quest_complete", quest_id=5742, seconds=4.36 },
       ["the order of the silver hand was utterly decimated"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\tirion_fordring\\5845_quest_accept.wav", dialog_type="quest_accept", quest_id=5845, seconds=33.28 },
@@ -31001,6 +31570,7 @@ NPC_DATABASE = {
       ["i want you to take this adventurer it is called th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\tiza_battleforge\\1779_quest_accept.wav", dialog_type="quest_accept", quest_id=1779, seconds=34.64 },
       ["it looks like youve already found love you can giv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\tiza_battleforge\\it_looks_like_youve_already_found_love_you_can_giv.wav", dialog_type="gossip", quest_id=nil, seconds=8.42 },
       ["make haste adventurer more than one life hangs in "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\tiza_battleforge\\1789_quest_complete.wav", dialog_type="quest_complete", quest_id=1789, seconds=23.14 },
+      ["many tests await a paladin of the light adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\tiza_battleforge\\many_tests_await_a_paladin_of_the_light_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=12.66 },
       ["so youve returned so quickly huh and what pray tel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\tiza_battleforge\\1778_quest_complete.wav", dialog_type="quest_complete", quest_id=1778, seconds=28.98 },
       ["welcome back adventurer youve spent time reading t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\tiza_battleforge\\1646_quest_complete.wav", dialog_type="quest_complete", quest_id=1646, seconds=27.24 },
       ["well met adventurer i hope the light shows you the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf_female\\tiza_battleforge\\2997_quest_complete.wav", dialog_type="quest_complete", quest_id=2997, seconds=6.06 },
@@ -31056,6 +31626,7 @@ NPC_DATABASE = {
     dialogs = {
       ["adventurer your high priest rohan would have an au"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\toldren_deepiron\\5645_quest_accept.wav", dialog_type="quest_accept", quest_id=5645, seconds=21.8 },
       ["hello priest ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\toldren_deepiron\\hello_priest_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
+      ["i hope the light is with you adventurer is there a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\toldren_deepiron\\i_hope_the_light_is_with_you_adventurer_is_there_a.wav", dialog_type="gossip", quest_id=nil, seconds=4.04 },
     },
   },
   ["Tomas"] = {
@@ -31215,6 +31786,7 @@ NPC_DATABASE = {
     dialogs = {
       ["did stoley cough up my booze"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torm_ragetotem\\8417_quest_progress.wav", dialog_type="quest_progress", quest_id=8417, seconds=2.12 },
       ["hello warrior ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torm_ragetotem\\hello_warrior_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.2 },
+      ["i can not train you adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torm_ragetotem\\i_can_not_train_you_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.12 },
       ["in the blasted lands there is a troubled spirit wh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torm_ragetotem\\8417_quest_accept.wav", dialog_type="quest_accept", quest_id=8417, seconds=11.52 },
       ["your renown as a warrior grows adventurer now it i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torm_ragetotem\\1718_quest_accept.wav", dialog_type="quest_accept", quest_id=1718, seconds=36.08 },
     },
@@ -31308,6 +31880,7 @@ NPC_DATABASE = {
       ["were you able to pacify the great beast"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torwa_pathfinder\\9051_quest_progress.wav", dialog_type="quest_progress", quest_id=9051, seconds=2.68 },
       ["while you have been exploring ungoro i have seen o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torwa_pathfinder\\4301_quest_accept.wav", dialog_type="quest_accept", quest_id=4301, seconds=34.2 },
       ["you have traveled far to meet with me adventurer a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torwa_pathfinder\\9063_quest_complete.wav", dialog_type="quest_complete", quest_id=9063, seconds=4.44 },
+      ["youve started down an honorable path adventurer my"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\torwa_pathfinder\\youve_started_down_an_honorable_path_adventurer_my.wav", dialog_type="gossip", quest_id=nil, seconds=18.88 },
     },
   },
   ["Trackmaster Zherin"] = {
@@ -31467,6 +32040,7 @@ NPC_DATABASE = {
       ["very impressive adventurer your ancestors would be"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\turak_runetotem\\31_quest_complete.wav", dialog_type="quest_complete", quest_id=31, seconds=23.76 },
       ["welcome back adventurer i sense that your first me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\turak_runetotem\\5932_quest_complete.wav", dialog_type="quest_complete", quest_id=5932, seconds=31.8 },
       ["welcome back ive been following your progress on t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\turak_runetotem\\6130_quest_complete.wav", dialog_type="quest_complete", quest_id=6130, seconds=26.2 },
+      ["welcome my adventurer if you are here to train the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\turak_runetotem\\welcome_my_adventurer_if_you_are_here_to_train_the.wav", dialog_type="gossip", quest_id=nil, seconds=22.48 },
       ["you have finally taken your large step into a much"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\turak_runetotem\\6002_quest_complete.wav", dialog_type="quest_complete", quest_id=6002, seconds=20.76 },
       ["youre now ready to learn about poison and the powe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\turak_runetotem\\6126_quest_accept.wav", dialog_type="quest_accept", quest_id=6126, seconds=29.64 },
     },
@@ -31528,6 +32102,7 @@ NPC_DATABASE = {
       ["what the dont sneak up on me like that and keep yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\tyrion\\2745_quest_complete.wav", dialog_type="quest_complete", quest_id=2745, seconds=29.68 },
       ["yes adventurer are things going well with tyrion h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\tyrion\\434_quest_progress.wav", dialog_type="quest_progress", quest_id=434, seconds=30.4 },
       ["you did a great job spybot glad to have you back h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\tyrion\\you_did_a_great_job_spybot_glad_to_have_you_back_h.wav", dialog_type="gossip", quest_id=nil, seconds=4.08 },
+      ["youll have to be patient with me adventurer ive go"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\tyrion\\youll_have_to_be_patient_with_me_adventurer_ive_go.wav", dialog_type="gossip", quest_id=nil, seconds=13.4 },
     },
   },
   ["Ugthok"] = {
@@ -31675,6 +32250,8 @@ NPC_DATABASE = {
       ["hah theyll think twice before making fun of my ide"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\umi_rumplesnicker\\5163_quest_complete.wav", dialog_type="quest_complete", quest_id=5163, seconds=8.12 },
       ["i cant wait to hear how my friends react theyll ne"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\umi_rumplesnicker\\5163_quest_progress.wav", dialog_type="quest_progress", quest_id=5163, seconds=4.24 },
       ["i cant wait to show my friends now just wait a mom"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\umi_rumplesnicker\\977_quest_complete.wav", dialog_type="quest_complete", quest_id=977, seconds=5.28 },
+      ["ill get the last laugh theyll see oh hi adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\umi_rumplesnicker\\ill_get_the_last_laugh_theyll_see_oh_hi_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=6.72 },
+      ["invention my dear adventurer is two percent bottle"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\umi_rumplesnicker\\invention_my_dear_adventurer_is_two_percent_bottle.wav", dialog_type="gossip", quest_id=nil, seconds=16.12 },
       ["its all ready adventurer now i sent some mail to m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\umi_rumplesnicker\\5163_quest_accept.wav", dialog_type="quest_accept", quest_id=5163, seconds=28.96 },
       ["ive got lots to get started on here please get me "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\umi_rumplesnicker\\3783_quest_progress.wav", dialog_type="quest_progress", quest_id=3783, seconds=5.36 },
       ["ive just about finished attaching the fur adventur"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin_female\\umi_rumplesnicker\\977_quest_progress.wav", dialog_type="quest_progress", quest_id=977, seconds=6.72 },
@@ -31705,6 +32282,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "troll",
     dialogs = {
+      ["greetings adventurer i pity your kind for the secr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\unthuwa\\greetings_adventurer_i_pity_your_kind_for_the_secr.wav", dialog_type="gossip", quest_id=nil, seconds=5.68 },
       ["hail adventurer praise to you for my call for aid "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\unthuwa\\1883_quest_complete.wav", dialog_type="quest_complete", quest_id=1883, seconds=6.52 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\unthuwa\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
       ["i sense that zalazanes juju heaps were destroyed a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\unthuwa\\1884_quest_complete.wav", dialog_type="quest_complete", quest_id=1884, seconds=18.48 },
@@ -31734,6 +32312,7 @@ NPC_DATABASE = {
     narrator = "undead",
     dialogs = {
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\undercity_commendation_officer\\8817_quest_progress.wav", dialog_type="quest_progress", quest_id=8817, seconds=30.52 },
+      ["greetings adventurer im a commendation officer act"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\undercity_commendation_officer\\greetings_adventurer_-_im_a_commendation_officer_a.wav", dialog_type="gossip", quest_id=nil, seconds=27.92 },
       ["i accept commendation signets from adventurers who"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\undercity_commendation_officer\\8826_quest_progress.wav", dialog_type="quest_progress", quest_id=8826, seconds=27.12 },
     },
   },
@@ -31846,6 +32425,7 @@ NPC_DATABASE = {
       ["adventurer an imp in felwood by the name of impsy "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\ursula_deline\\8419_quest_accept.wav", dialog_type="quest_accept", quest_id=8419, seconds=26.88 },
       ["do you have my felcloth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\ursula_deline\\8419_quest_progress.wav", dialog_type="quest_progress", quest_id=8419, seconds=2.48 },
       ["hello warlock ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\ursula_deline\\hello_warlock_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=3.0 },
+      ["the darkness does not embrace you adventurer cease"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human_female\\ursula_deline\\the_darkness_does_not_embrace_you_adventurer_cease.wav", dialog_type="gossip", quest_id=nil, seconds=7.32 },
     },
   },
   ["Ursyn Ghull"] = {
@@ -31858,6 +32438,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\ursyn_ghull\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
       ["rumor is that tabetha a mage colleague who lives d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\ursyn_ghull\\2861_quest_accept.wav", dialog_type="quest_accept", quest_id=2861, seconds=23.04 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\ursyn_ghull\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=9.12 },
     },
   },
   ["Urtharo"] = {
@@ -31924,6 +32505,7 @@ NPC_DATABASE = {
     dialogs = {
       ["ah these be perfect for me magics here you take on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\uthelnay\\7068_quest_complete.wav", dialog_type="quest_complete", quest_id=7068, seconds=9.4 },
       ["fascinating adventurer this orb is very powerful b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\uthelnay\\3002_quest_complete.wav", dialog_type="quest_complete", quest_id=3002, seconds=5.72 },
+      ["greetings adventurer i pity your kind for the secr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\uthelnay\\greetings_adventurer_i_pity_your_kind_for_the_secr.wav", dialog_type="gossip", quest_id=nil, seconds=5.8 },
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\uthelnay\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
       ["it is time adventurer for you to speak with tabeth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\uthelnay\\1953_quest_accept.wav", dialog_type="quest_accept", quest_id=1953, seconds=15.4 },
       ["strong magics be found in the centaur holy place t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\uthelnay\\7068_quest_accept.wav", dialog_type="quest_accept", quest_id=7068, seconds=29.4 },
@@ -31997,6 +32579,7 @@ NPC_DATABASE = {
     dialogs = {
       ["another of our heroes lost to the spawn of deathwi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\vaelastrasz_the_corrupt\\8730_quest_progress.wav", dialog_type="quest_progress", quest_id=8730, seconds=7.76 },
       ["champion is it you a thousand years it has been si"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\vaelastrasz_the_corrupt\\8730_quest_accept.wav", dialog_type="quest_accept", quest_id=8730, seconds=24.32 },
+      ["i i have failed adventurer the lord of bla the lor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\vaelastrasz_the_corrupt\\i_i_have_failed_adventurer_the_lord_of_bla_the_lor.wav", dialog_type="gossip", quest_id=nil, seconds=16.8 },
     },
   },
   ["Vahgruk"] = {
@@ -32066,6 +32649,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "tauren",
     dialogs = {
+      ["a great evil stirs adventurer can you feel it ah o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\vargus\\a_great_evil_stirs_adventurer_can_you_feel_it_ah_o.wav", dialog_type="gossip", quest_id=nil, seconds=9.32 },
       ["great work adventurer please accept this on behalf"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\vargus\\8572_quest_complete.wav", dialog_type="quest_complete", quest_id=8572, seconds=7.64 },
       ["its in our best interest to keep our most loyal al"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\vargus\\8572_quest_progress.wav", dialog_type="quest_progress", quest_id=8572, seconds=4.8 },
       ["kaldon sent you very well lets see what we can do "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\vargus\\8800_quest_complete.wav", dialog_type="quest_complete", quest_id=8800, seconds=4.04 },
@@ -32106,6 +32690,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "troll",
     dialogs = {
+      ["i be seeking someone adventurer please leave me be"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\varjun\\i_be_seeking_someone_adventurer_please_leave_me_be.wav", dialog_type="gossip", quest_id=nil, seconds=5.44 },
       ["it be time for you to meet with urkyo adventurer h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\varjun\\5654_quest_accept.wav", dialog_type="quest_accept", quest_id=5654, seconds=17.12 },
     },
   },
@@ -32336,6 +32921,7 @@ NPC_DATABASE = {
       ["adventurer the gnolls are still out there i can he"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\verner_osgood\\126_quest_accept.wav", dialog_type="quest_accept", quest_id=126, seconds=24.28 },
       ["again thank you for your help the stormwind army i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\verner_osgood\\126_quest_complete.wav", dialog_type="quest_complete", quest_id=126, seconds=9.04 },
       ["as if the attacking orcs werent enough now i have "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\verner_osgood\\124_quest_accept.wav", dialog_type="quest_accept", quest_id=124, seconds=15.76 },
+      ["hey adventurer do you think you could give me a ha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\verner_osgood\\hey_adventurer_do_you_think_you_could_give_me_a_ha.wav", dialog_type="gossip", quest_id=nil, seconds=5.4 },
       ["i know that greedy argus will send someone to coll"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\verner_osgood\\122_quest_progress.wav", dialog_type="quest_progress", quest_id=122, seconds=8.24 },
       ["i need some underbelly scales from black dragon wh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\verner_osgood\\122_quest_accept.wav", dialog_type="quest_accept", quest_id=122, seconds=24.84 },
       ["ive been using so much iron keeping the stormwind "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\verner_osgood\\118_quest_accept.wav", dialog_type="quest_accept", quest_id=118, seconds=15.92 },
@@ -32367,6 +32953,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf",
     dialogs = {
+      ["not so fast adventurer ill not be handing out the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\veron_amberstill\\not_so_fast_adventurer_ill_not_be_handing_out_the_.wav", dialog_type="gossip", quest_id=nil, seconds=15.64 },
       ["ye bring me yer old ram i will trade it in for one"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\veron_amberstill\\7673_quest_progress.wav", dialog_type="quest_progress", quest_id=7673, seconds=13.4 },
     },
   },
@@ -32516,6 +33103,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "goblin",
     dialogs = {
+      ["grab your things adventurer ive just gotten word f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\vizzklick\\grab_your_things_adventurer_ive_just_gotten_word_f.wav", dialog_type="gossip", quest_id=nil, seconds=13.0 },
       ["kovic slain this is a glorious day adventurer for "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\vizzklick\\3402_quest_complete.wav", dialog_type="quest_complete", quest_id=3402, seconds=18.92 },
     },
   },
@@ -32562,6 +33150,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "dwarf",
     dialogs = {
+      ["och theres nothing i can teach ye adventurer have "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\vosur_brakthel\\och_theres_nothing_i_can_teach_ye_adventurer_have_.wav", dialog_type="gossip", quest_id=nil, seconds=11.52 },
       ["with alchemy you can turn found herbs into healing"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\vosur_brakthel\\with_alchemy_you_can_turn_found_herbs_into_healing.wav", dialog_type="gossip", quest_id=nil, seconds=4.16 },
     },
   },
@@ -32574,6 +33163,7 @@ NPC_DATABASE = {
     narrator = "dwarf",
     dialogs = {
       ["during the harvest festival of azeroth we give tha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wagner_hammerstrike\\8149_quest_accept.wav", dialog_type="quest_accept", quest_id=8149, seconds=27.28 },
+      ["greetings adventurer it is the time of the harvest"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wagner_hammerstrike\\greetings_adventurer_it_is_the_time_of_the_harvest.wav", dialog_type="gossip", quest_id=nil, seconds=26.16 },
       ["have you made the journey to uthers tomb and place"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wagner_hammerstrike\\8149_quest_progress.wav", dialog_type="quest_progress", quest_id=8149, seconds=24.28 },
       ["he was a hero among heroes uther was i cant even b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wagner_hammerstrike\\8149_quest_complete.wav", dialog_type="quest_complete", quest_id=8149, seconds=34.72 },
     },
@@ -32703,6 +33293,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "orc",
     dialogs = {
+      ["adventurer the horde has gathered all that it need"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_gorchuk\\adventurer_the_horde_has_gathered_all_that_it_need.wav", dialog_type="gossip", quest_id=nil, seconds=17.68 },
       ["thromka adventurer good to see so many of the hord"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_gorchuk\\8792_quest_complete.wav", dialog_type="quest_complete", quest_id=8792, seconds=29.76 },
     },
   },
@@ -32720,6 +33311,7 @@ NPC_DATABASE = {
       ["fall in maggots"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_goretooth\\fall_in_maggots.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
       ["finally the villain been brought to justice you ar"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_goretooth\\4132_quest_complete.wav", dialog_type="quest_complete", quest_id=4132, seconds=12.44 },
       ["has the butcher of blackrock been disposed of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_goretooth\\4132_quest_progress.wav", dialog_type="quest_progress", quest_id=4132, seconds=2.64 },
+      ["i am a warrior of the horde adventurer it fills me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_goretooth\\i_am_a_warrior_of_the_horde_adventurer_it_fills_me.wav", dialog_type="gossip", quest_id=nil, seconds=23.48 },
       ["rend lives impossible it had been thought that ren"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_goretooth\\4941_quest_accept.wav", dialog_type="quest_accept", quest_id=4941, seconds=29.16 },
       ["this first strike should put a crease in angerforg"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_goretooth\\4081_quest_complete.wav", dialog_type="quest_complete", quest_id=4081, seconds=14.32 },
       ["very well proudtusk you may begin your march carry"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warlord_goretooth\\very_well_proudtusk_you_may_begin_your_march_carry.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
@@ -32788,6 +33380,17 @@ NPC_DATABASE = {
       ["oh i am cursed once a great ogre mage of the spire"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\narrator\\waroshs_scroll.wav", dialog_type="item_text", quest_id=nil, seconds=144.44 },
     },
   },
+  ["Warsong Emissary"] = {
+    race = "orc",
+    sex = "male",
+    portrait = "orc",
+    zone = "",
+    model_id = nil,
+    narrator = "orc",
+    dialogs = {
+      ["adventurer we have a great need for your help in w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warsong_emissary\\adventurer_we_have_a_great_need_for_your_help_in_w.wav", dialog_type="gossip", quest_id=nil, seconds=15.76 },
+    },
+  },
   ["Warsong Outrider"] = {
     race = "orc",
     sex = "female",
@@ -32811,6 +33414,7 @@ NPC_DATABASE = {
       ["i have witnessed many naga attacks since i arrived"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warsong_runner\\6641_quest_complete.wav", dialog_type="quest_complete", quest_id=6641, seconds=11.2 },
       ["so youre here with my orders always good to see a "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warsong_runner\\6545_quest_progress.wav", dialog_type="quest_progress", quest_id=6545, seconds=25.6 },
       ["well my update will explain all of this to kadrak "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warsong_runner\\6545_quest_complete.wav", dialog_type="quest_complete", quest_id=6545, seconds=6.8 },
+      ["yes adventurer are you reporting in"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\warsong_runner\\yes_adventurer_are_you_reporting_in.wav", dialog_type="gossip", quest_id=nil, seconds=3.08 },
     },
   },
   ["Warsong Scout"] = {
@@ -32949,6 +33553,7 @@ NPC_DATABASE = {
     narrator = "goblin",
     dialogs = {
       ["oh no here they come"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\weegli_blastfuse\\oh_no_here_they_come.wav", dialog_type="gossip", quest_id=nil, seconds=2.04 },
+      ["thanks adventurer if you hadnt shown up im sure we"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\weegli_blastfuse\\thanks_adventurer_if_you_hadnt_shown_up_im_sure_we.wav", dialog_type="gossip", quest_id=nil, seconds=9.56 },
     },
   },
   ["Weldon Barov"] = {
@@ -33004,6 +33609,7 @@ NPC_DATABASE = {
       ["look at the size of that thing adventurer were goi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\wharfmaster_dizzywig\\896_quest_complete.wav", dialog_type="quest_complete", quest_id=896, seconds=18.56 },
       ["oh yes parts for kravel im glad youre here these t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\wharfmaster_dizzywig\\1111_quest_complete.wav", dialog_type="quest_complete", quest_id=1111, seconds=7.64 },
       ["so what did dizzywig have to say"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\wharfmaster_dizzywig\\892_quest_progress.wav", dialog_type="quest_progress", quest_id=892, seconds=2.6 },
+      ["something i can help you with adventurer theres a "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\wharfmaster_dizzywig\\something_i_can_help_you_with_adventurer_theres_a_.wav", dialog_type="gossip", quest_id=nil, seconds=5.12 },
     },
   },
   ["Wharfmaster Lozgil"] = {
@@ -33079,6 +33685,7 @@ NPC_DATABASE = {
       ["many of my friends perished that horrible day when"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wilder_thistlenettle\\168_quest_accept.wav", dialog_type="quest_accept", quest_id=168, seconds=21.36 },
       ["my suspicions were correct my poor brother well th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wilder_thistlenettle\\167_quest_complete.wav", dialog_type="quest_complete", quest_id=167, seconds=9.88 },
       ["thank you for collecting these adventurer your eff"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wilder_thistlenettle\\168_quest_complete.wav", dialog_type="quest_complete", quest_id=168, seconds=8.24 },
+      ["there were thieves everywhere it was horrible the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wilder_thistlenettle\\there_were_thieves_everywhere_it_was_horrible_the_.wav", dialog_type="gossip", quest_id=nil, seconds=8.92 },
       ["we were deep in a vast mine in westfall hidden ben"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wilder_thistlenettle\\167_quest_accept.wav", dialog_type="quest_accept", quest_id=167, seconds=30.12 },
       ["were you able to retrieve any of my old coworkers "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\wilder_thistlenettle\\168_quest_progress.wav", dialog_type="quest_progress", quest_id=168, seconds=5.06 },
     },
@@ -33138,6 +33745,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "human",
     dialogs = {
+      ["aha good day good day master adventurer come sit d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\william_pestle\\aha_good_day_good_day_master_adventurer_come_sit_d.wav", dialog_type="gossip", quest_id=nil, seconds=11.08 },
       ["did you deliver my letter to tommy joe what did he"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\william_pestle\\114_quest_progress.wav", dialog_type="quest_progress", quest_id=114, seconds=4.0 },
       ["did you gather those candles yet"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\william_pestle\\60_quest_progress.wav", dialog_type="quest_progress", quest_id=60, seconds=2.08 },
       ["do you have that crystal kelp im sure maybell is a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\william_pestle\\112_quest_progress.wav", dialog_type="quest_progress", quest_id=112, seconds=5.68 },
@@ -33226,6 +33834,7 @@ NPC_DATABASE = {
       ["cenarion hold is a location of utmost strategic im"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\windcaller_proudhorn\\8280_quest_accept.wav", dialog_type="quest_accept", quest_id=8280, seconds=32.92 },
       ["excellent a new recruit answering the call to arms"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\windcaller_proudhorn\\8275_quest_complete.wav", dialog_type="quest_complete", quest_id=8275, seconds=21.44 },
       ["excellent youve proven to be a valuable ally in pr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\windcaller_proudhorn\\8281_quest_complete.wav", dialog_type="quest_complete", quest_id=8281, seconds=5.8 },
+      ["greetings adventurer welcome to cenarion hold from"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\windcaller_proudhorn\\greetings_adventurer_welcome_to_cenarion_hold_from.wav", dialog_type="gossip", quest_id=nil, seconds=12.12 },
       ["the dredge crushers are a serious threat and must "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\windcaller_proudhorn\\8281_quest_progress.wav", dialog_type="quest_progress", quest_id=8281, seconds=4.48 },
       ["the dredge strikers are a serious threat and must "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\windcaller_proudhorn\\8280_quest_progress.wav", dialog_type="quest_progress", quest_id=8280, seconds=3.76 },
       ["well done adventurer the twilight marauders were i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren_female\\windcaller_proudhorn\\8740_quest_complete.wav", dialog_type="quest_complete", quest_id=8740, seconds=9.36 },
@@ -33378,6 +33987,7 @@ NPC_DATABASE = {
       ["in winterspring you will fight misguided creatures"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\witch_doctor_mauari\\4802_quest_progress.wav", dialog_type="quest_progress", quest_id=4802, seconds=21.28 },
       ["in winterspring you will find large bears wit extr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\witch_doctor_mauari\\4803_quest_progress.wav", dialog_type="quest_progress", quest_id=4803, seconds=21.16 },
       ["mauari can derive da juju for adventurer use da ca"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\witch_doctor_mauari\\4801_quest_complete.wav", dialog_type="quest_complete", quest_id=4801, seconds=9.12 },
+      ["mauari know why you seek her out ring me da eko yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\witch_doctor_mauari\\mauari_know_why_you_seek_her_out_ring_me_da_eko_yo.wav", dialog_type="gossip", quest_id=nil, seconds=8.88 },
       ["now before i give ya dis charm i better explain ho"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll_female\\witch_doctor_mauari\\975_quest_accept.wav", dialog_type="quest_accept", quest_id=975, seconds=29.8 },
     },
   },
@@ -33471,6 +34081,7 @@ NPC_DATABASE = {
     dialogs = {
       ["ah longbeard sent you with a load of helmets hoora"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\wizzle_brassbolts\\1179_quest_complete.wav", dialog_type="quest_complete", quest_id=1179, seconds=6.64 },
       ["ah you want to help me great theres a part i want "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\wizzle_brassbolts\\2769_quest_complete.wav", dialog_type="quest_complete", quest_id=2769, seconds=8.92 },
+      ["be careful where you put that foot of yours advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\wizzle_brassbolts\\be_careful_where_you_put_that_foot_of_yours_advent.wav", dialog_type="gossip", quest_id=nil, seconds=6.08 },
       ["deep in zulfarrak the sand troll city in tanaris t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\wizzle_brassbolts\\2770_quest_accept.wav", dialog_type="quest_accept", quest_id=2770, seconds=26.96 },
       ["do you have the scale i cant wait to try different"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\wizzle_brassbolts\\2770_quest_progress.wav", dialog_type="quest_progress", quest_id=2770, seconds=4.92 },
       ["do you have the tail fins if i cant protect our ca"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\gnome\\wizzle_brassbolts\\1107_quest_progress.wav", dialog_type="quest_progress", quest_id=1107, seconds=6.4 },
@@ -33640,6 +34251,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "tauren",
     dialogs = {
+      ["hello shaman it is good to see one of my adventure"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\xanis_flameweaver\\hello_shaman_it_is_good_to_see_one_of_my_adventure.wav", dialog_type="gossip", quest_id=nil, seconds=5.4 },
       ["long has it been since you were last tested advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\xanis_flameweaver\\1529_quest_accept.wav", dialog_type="quest_accept", quest_id=1529, seconds=28.88 },
       ["the winds of kalimdor rush to meet you and you sha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\xanis_flameweaver\\1532_quest_accept.wav", dialog_type="quest_accept", quest_id=1532, seconds=30.56 },
     },
@@ -33716,6 +34328,7 @@ NPC_DATABASE = {
     narrator = "troll",
     dialogs = {
       ["hello hunter ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\xorjuul\\hello_hunter_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
+      ["hey mon you be needin to head on over to da advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\xorjuul\\hey_mon_you_be_needin_to_head_on_over_to_da_advent.wav", dialog_type="gossip", quest_id=nil, seconds=4.08 },
       ["ogtinc of azshara has sent out a call for seasoned"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\xorjuul\\8151_quest_accept.wav", dialog_type="quest_accept", quest_id=8151, seconds=25.32 },
     },
   },
@@ -33826,6 +34439,7 @@ NPC_DATABASE = {
       ["ah you have the egg i bow to you adventurer your s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\yehkinya\\4787_quest_complete.wav", dialog_type="quest_complete", quest_id=4787, seconds=7.0 },
       ["do you have the ancient egg i sense great forces s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\yehkinya\\4787_quest_progress.wav", dialog_type="quest_progress", quest_id=4787, seconds=6.44 },
       ["do you have the tablets of the prophecy of mosharu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\yehkinya\\3527_quest_progress.wav", dialog_type="quest_progress", quest_id=3527, seconds=10.32 },
+      ["greetings adventurer though time and drink have du"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\yehkinya\\greetings_adventurer_though_time_and_drink_have_du.wav", dialog_type="gossip", quest_id=nil, seconds=7.4 },
       ["have you collected the essence of the screecher sp"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\yehkinya\\3520_quest_progress.wav", dialog_type="quest_progress", quest_id=3520, seconds=3.36 },
       ["have you defeated the avatar of hakkar adventurer "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\yehkinya\\3528_quest_progress.wav", dialog_type="quest_progress", quest_id=3528, seconds=7.2 },
       ["now it is time to capture the essence of the avata"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\yehkinya\\3528_quest_accept.wav", dialog_type="quest_accept", quest_id=3528, seconds=35.36 },
@@ -34007,6 +34621,7 @@ NPC_DATABASE = {
     dialogs = {
       ["hello mage ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\zaldimar_wefhellt\\hello_mage_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
       ["we mages have a task that needs doing one that is "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\zaldimar_wefhellt\\1860_quest_accept.wav", dialog_type="quest_accept", quest_id=1860, seconds=17.92 },
+      ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\zaldimar_wefhellt\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=8.52 },
       ["your knowledge of the craft grows young adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\zaldimar_wefhellt\\1919_quest_accept.wav", dialog_type="quest_accept", quest_id=1919, seconds=21.2 },
     },
   },
@@ -34291,6 +34906,7 @@ NPC_DATABASE = {
       ["hmph i say youre not prepared but that is not my d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\zevrost\\3631_quest_accept.wav", dialog_type="quest_accept", quest_id=3631, seconds=19.44 },
       ["hmph still you strive to become more powerful i sa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\zevrost\\4737_quest_accept.wav", dialog_type="quest_accept", quest_id=4737, seconds=37.28 },
       ["still a fool and still seeking the trappings of mo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\zevrost\\4967_quest_accept.wav", dialog_type="quest_accept", quest_id=4967, seconds=35.92 },
+      ["the darkness does not embrace you adventurer cease"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\orc\\zevrost\\the_darkness_does_not_embrace_you_adventurer_cease.wav", dialog_type="gossip", quest_id=nil, seconds=7.28 },
     },
   },
   ["Zggi"] = {
@@ -34315,6 +34931,7 @@ NPC_DATABASE = {
       ["adventurer we could not have gotten this far witho"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\zilzibin_drumlore\\4511_quest_accept.wav", dialog_type="quest_accept", quest_id=4511, seconds=35.4 },
       ["ah ive been expecting this these creatures you fac"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\zilzibin_drumlore\\7732_quest_complete.wav", dialog_type="quest_complete", quest_id=7732, seconds=30.64 },
       ["it would seem that the silithids intent nay reason"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\zilzibin_drumlore\\4494_quest_accept.wav", dialog_type="quest_accept", quest_id=4494, seconds=36.0 },
+      ["these are dangerous times adventurer an ancient ev"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\zilzibin_drumlore\\these_are_dangerous_times_adventurer_an_ancient_ev.wav", dialog_type="gossip", quest_id=nil, seconds=7.44 },
       ["this report ive dealt with these beasts before fiz"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\zilzibin_drumlore\\32_quest_complete.wav", dialog_type="quest_complete", quest_id=32, seconds=33.08 },
       ["while i genuinely appreciate this i am not sure wh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\zilzibin_drumlore\\4509_quest_complete.wav", dialog_type="quest_complete", quest_id=4509, seconds=29.6 },
       ["zug zug what may i help you with today adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\troll\\zilzibin_drumlore\\4511_quest_progress.wav", dialog_type="quest_progress", quest_id=4511, seconds=3.76 },
@@ -34385,6 +35002,7 @@ NPC_DATABASE = {
       ["scrumdillyriffic these cores will keep me working "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\zorbin_fandazzle\\7721_quest_complete.wav", dialog_type="quest_complete", quest_id=7721, seconds=26.88 },
       ["splendifimous not only am i glad to see that youve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\zorbin_fandazzle\\7003_quest_complete.wav", dialog_type="quest_complete", quest_id=7003, seconds=24.92 },
       ["top notch adventurer top notch while the coin i gi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\zorbin_fandazzle\\7726_quest_complete.wav", dialog_type="quest_complete", quest_id=7726, seconds=20.52 },
+      ["well hello again adventurer i dont know how much l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\zorbin_fandazzle\\well_hello_again_adventurer_i_dont_know_how_much_l.wav", dialog_type="gossip", quest_id=nil, seconds=12.56 },
       ["while i could bore you with the technical details "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\zorbin_fandazzle\\7721_quest_progress.wav", dialog_type="quest_progress", quest_id=7721, seconds=15.4 },
     },
   },
