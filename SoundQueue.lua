@@ -24,6 +24,8 @@ SoundQueue = {
     },
 }
 
+local playerName = UnitName("player")
+local _, playerClass = UnitClass("player")
 -------------------------------------------------
 -- DEBUG & UTILS
 -------------------------------------------------
@@ -40,9 +42,6 @@ end
 -- Database hookup code
 function NormalizeDialogText(text)
     if not text then return "" end
-
-    local playerName = UnitName("player") or ""
-    local _, playerClass = UnitClass("player") or ""
 
     -- Replace Blizzard placeholders
     text = string.gsub(text, "%$[nNcCrR]", "adventurer")
@@ -228,11 +227,14 @@ end
 local function bit_not(a, bits)
     return math.pow(2, bits) - 1 - a
 end
-
 -- Myers bit-parallel edit distance (Levenshtein)
 -- Fast O(n) algorithm using bitwise operations
 -- Pattern length limited to 63 characters (perfect for our 50-char normalized keys)
 local function EditDistance(pattern, text)
+    -- local aliases (work with Classic/WoW globals if available)
+    local strlen = strlen or string.len
+    local strsub = strsub or string.sub
+
     local m = strlen(pattern)
     local n = strlen(text)
     
@@ -259,7 +261,7 @@ local function EditDistance(pattern, text)
         local c = strsub(text, i, i)
         local Eq = Peq[c] or 0
         
-        -- Simulate bitwise operations
+        -- Simulate bitwise operations (using helper bit_* funcs defined above)
         local Xv = bit_or(Eq, Mv)
         local temp = bit_and(Eq, Pv) + Pv
         local Xh = bit_or(bit_xor(temp, Pv), Eq)
@@ -282,6 +284,7 @@ local function EditDistance(pattern, text)
     return score
 end
 
+-- Fuzzy find (uses EditDistance consistently and enforces a 0.1s loop timeout)
 function FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
 
@@ -293,41 +296,72 @@ function FuzzyFindDialogSound(npcName, dialogText)
     local normalizedInput = NormalizeDialogText(dialogText)
     if normalizedInput == "" then return nil end
 
-    -- Edit distance threshold (out of 50 chars, allow ~5 char differences)
-    local MAX_DISTANCE = 10
+    -- dynamic distance threshold: allow ~20% of pattern length, capped at 10
+    local strlen = strlen or string.len
+    local m = strlen(normalizedInput)
+    local MAX_DISTANCE = math.min(10, math.max(1, math.ceil(m * 0.20)))
+
     local bestMatch = nil
     local bestDistance = 999
 
-    -- Early check: same NPC first
+    local startTime = GetTime()
+    local TIMEOUT = 0.1
+
+    -- Early check: same NPC first (fast path)
     if targetNpc and targetNpc.dialogs then
         for dialogKey, entry in pairs(targetNpc.dialogs) do
+            if GetTime() - startTime > TIMEOUT then
+                Debug("Fuzzy search timeout (same NPC) - aborting fuzzy lookup")
+                return nil
+            end
+
             local distance = EditDistance(normalizedInput, dialogKey)
             if distance <= MAX_DISTANCE and distance < bestDistance then
                 bestDistance = distance
                 bestMatch = entry
             end
         end
-        
-        -- If we found a good match, return it
+
         if bestMatch then
             return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
         end
     end
-    -- Fallback: search other NPCs with same sex + race
-    for _, data in pairs(NPC_DATABASE) do
+
+    -- Fallback: search other NPCs filtered by race + sex (to avoid unrelated matches)
+    for otherName, data in pairs(NPC_DATABASE) do
+        if GetTime() - startTime > TIMEOUT then
+            Debug("Fuzzy search timeout (other NPCs) - aborting fuzzy lookup")
+            return nil
+        end
+
         if data ~= targetNpc
-           and ( targetRace and data.race == targetRace)
-           and ( targetSex  and data.sex  == targetSex) 
+           and targetRace and data.race == targetRace
+           and targetSex  and data.sex  == targetSex
            and data.dialogs then
 
             for dialogKey, entry in pairs(data.dialogs) do
-                local score = JaroWinkler(normalizedInput, dialogKey)
-                if score >= JW_THRESHOLD then
-                    return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+                if GetTime() - startTime > TIMEOUT then
+                    Debug("Fuzzy search timeout (inside NPC dialogs) - aborting fuzzy lookup")
+                    return nil
+                end
+
+                local distance = EditDistance(normalizedInput, dialogKey)
+                if distance <= MAX_DISTANCE then
+                    -- prefer the smallest distance (best fuzzy match)
+                    if distance < bestDistance then
+                        bestDistance = distance
+                        bestMatch = entry
+                    end
+
+                    -- If we get a perfect or very close match, return immediately
+                    if distance == 0 or distance <= math.max(1, math.floor(m * 0.05)) then
+                        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+                    end
                 end
             end
         end
     end
+
     if bestMatch then
         return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
     end
@@ -335,7 +369,7 @@ function FuzzyFindDialogSound(npcName, dialogText)
     return nil
 end
 
-
+-- FindDialogSound with timeout on the full hash fallback loop
 function FindDialogSound(npcName, dialogText)
   if not npcName or not dialogText then return nil end
 
@@ -350,8 +384,15 @@ function FindDialogSound(npcName, dialogText)
     return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
   end
 
-  -- 2) Fallback: search all NPCs by text hash
+  -- 2) Fallback: search all NPCs by text hash (with timeout guard)
+  local startTime = GetTime()
+  local TIMEOUT = 0.1
   for otherNpcName, data in pairs(NPC_DATABASE) do
+    if GetTime() - startTime > TIMEOUT then
+        Debug("FindDialogSound fallback timeout - aborting full-hash scan")
+        break
+    end
+
     if data.dialogs then
       local entry = data.dialogs[key]
       if entry then
@@ -360,7 +401,7 @@ function FindDialogSound(npcName, dialogText)
     end
   end
 
-  -- 3) Fuzzy text search (now using Myers' algorithm - much faster!)
+  -- 3) Fuzzy text search (Myers' algorithm + timeout)
   local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds = FuzzyFindDialogSound(npcName, dialogText)
   if fuzzyPath then
     return fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds
