@@ -304,36 +304,17 @@ function SoundQueue:UpdatePauseButton()
 end
 
 function SoundQueue:UpdateStatusText()
-    if not self.frame or not self.frame.status then return end
-
-    local current = self.currentSound
-    if current then
-        local elapsed
-        if self.isPaused then
-            elapsed = current.pauseOffset
-        else
-            elapsed = GetTime() - current.startTime
-        end
-        self.frame.status:SetText(string.format("%.1fs / %.1fs", elapsed, current.duration))
+    if not self.frame or not self.frame.statusText then return end
+    local current, total = self:GetProgress()
+    if total > 0 then
+        self.frame.statusText:SetText(string.format("%d / %d", current, total))
     else
-        self.frame.status:SetText("")
+        self.frame.statusText:SetText("")
     end
 end
 
 function SoundQueue:UpdateQueueList()
-    if not self.frame or not self.frame.queueButtons then return end
-
-    for i = 1, self.maxQueueDisplay do
-        local button   = self.frame.queueButtons[i]
-        local soundData = self.sounds[i + 1]   -- [1] is currently playing
-
-        if soundData then
-            button.text:SetText(string.format("%d. %s", i, soundData.npcName or "Unknown"))
-            button:Show()
-        else
-            button:Hide()
-        end
-    end
+    -- (Placeholder for list view updates if needed)
 end
 
 function SoundQueue:ShowFrame()
@@ -345,160 +326,57 @@ function SoundQueue:HideFrame()
 end
 
 -------------------------------------------------------------------------
--- Queue-item button factory
+-- UI Construction
 -------------------------------------------------------------------------
-function SoundQueue:CreateQueueButton(parent, index)
-    local button = CreateFrame("Button", nil, parent)
-    button:SetHeight(18)
-    button.index = index
-
-    button.bg = button:CreateTexture(nil, "BACKGROUND")
-    button.bg:SetAllPoints()
-    button.bg:SetTexture(1, 0.2, 0.2, 0.3)
-    button.bg:Hide()
-
-    button.text = button:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    button.text:SetPoint("LEFT", 5, 0)
-    button.text:SetPoint("RIGHT", -5, 0)
-    button.text:SetJustifyH("LEFT")
-    button.text:SetTextColor(0.7, 0.7, 0.7)
-
-    button:SetScript("OnEnter", function()
-        this.bg:Show()
-        this.text:SetTextColor(1, 0.3, 0.3)
-        GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
-        GameTooltip:SetText("Click to remove")
-        GameTooltip:Show()
-    end)
-    button:SetScript("OnLeave", function()
-        this.bg:Hide()
-        this.text:SetTextColor(0.7, 0.7, 0.7)
-        GameTooltip:Hide()
-    end)
-    button:SetScript("OnClick", function()
-        local soundData = SoundQueue.sounds[this.index]
-        if soundData then SoundQueue:RemoveSound(soundData) end
-    end)
-
-    return button
-end
-
--------------------------------------------------------------------------
--- Sub-frame initializers  (modular, called once from InitializeUI)
--------------------------------------------------------------------------
-
 function SoundQueue:InitMainFrame()
-    self.frame = CreateFrame("Frame", "BetterQuestVoiceOverFrame", UIParent)
-    self.frame:SetWidth(370)
-    self.frame:SetHeight(120)
-    self.frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 150)
-    self.frame:SetMovable(true)
+    self.frame = CreateFrame("Frame", "BetterQuestSoundFrame", UIParent)
+    self.frame:SetWidth(300)
+    self.frame:SetHeight(80)
+    self.frame:SetPoint("BOTTOMRIGHT", -20, 100)
     self.frame:EnableMouse(true)
-    self.frame:SetClampedToScreen(true)
+    self.frame:SetMovable(true)
     self.frame:RegisterForDrag("LeftButton")
-
     self.frame:SetScript("OnDragStart", function() this:StartMoving() end)
-    self.frame:SetScript("OnDragStop",  function() this:StopMovingOrSizing() end)
+    self.frame:SetScript("OnDragStop", function() this:StopMovingOrSizing() end)
 
     self.frame.bg = self.frame:CreateTexture(nil, "BACKGROUND")
     self.frame.bg:SetAllPoints()
-    self.frame.bg:SetTexture(0, 0, 0, 0.8)
+    self.frame.bg:SetTexture(0, 0, 0, 0.7)
 end
 
 function SoundQueue:InitPortrait()
     self.frame.portrait = CreateFrame("Frame", nil, self.frame)
-    self.frame.portrait:SetWidth(self.portraitConfig.WIDTH)
-    self.frame.portrait:SetHeight(self.portraitConfig.HEIGHT)
-    self.frame.portrait:SetPoint("TOPLEFT", 10, -10)
-
-    self.frame.portrait.bg = self.frame.portrait:CreateTexture(nil, "BACKGROUND")
-    self.frame.portrait.bg:SetAllPoints()
-    self.frame.portrait.bg:SetTexture(0, 0, 0, 1)
+    self.frame.portrait:SetWidth(60)
+    self.frame.portrait:SetHeight(60)
+    self.frame.portrait:SetPoint("LEFT", 10, 0)
 
     self.frame.portrait.texture = self.frame.portrait:CreateTexture(nil, "ARTWORK")
     self.frame.portrait.texture:SetAllPoints()
-    self.frame.portrait.texture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+    self.frame.portrait.texture:SetTexture(self.portraitConfig.DEFAULT_NPC)
 end
 
 function SoundQueue:InitNPCInfo()
-    self.frame.header = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.header:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, 0)
-    self.frame.header:SetText("Now Playing:")
-    self.frame.header:SetTextColor(0.5, 0.5, 0.5)
+    self.frame.npcName = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+    self.frame.npcName:SetPoint("TOPLEFT", 80, -15)
+    self.frame.npcName:SetText("Unknown NPC")
 
-    -- Clickable "current track" area → click to skip
-    self.frame.currentBtn = CreateFrame("Button", nil, self.frame)
-    self.frame.currentBtn:SetPoint("TOPLEFT",     self.frame.portrait, "TOPRIGHT", 10, -14)
-    self.frame.currentBtn:SetPoint("BOTTOMRIGHT", self.frame, "TOPRIGHT", -30, -52)
-
-    self.frame.currentBtn.bg = self.frame.currentBtn:CreateTexture(nil, "BACKGROUND")
-    self.frame.currentBtn.bg:SetAllPoints()
-    self.frame.currentBtn.bg:SetTexture(1, 0.2, 0.2, 0.3)
-    self.frame.currentBtn.bg:Hide()
-
-    self.frame.npcName = self.frame.currentBtn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    self.frame.npcName:SetPoint("TOPLEFT", 0, 0)
-    self.frame.npcName:SetTextColor(1, 1, 1)
-
-    self.frame.title = self.frame.currentBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.title:SetPoint("TOPLEFT", 0, -16)
-    self.frame.title:SetTextColor(0.9, 0.9, 0.5)
-
-    self.frame.currentBtn:SetScript("OnEnter", function()
-        this.bg:Show()
-        SoundQueue.frame.npcName:SetTextColor(1, 0.3, 0.3)
-        SoundQueue.frame.title:SetTextColor(1, 0.5, 0.5)
-        GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
-        GameTooltip:SetText("Click to skip")
-        GameTooltip:Show()
-    end)
-    self.frame.currentBtn:SetScript("OnLeave", function()
-        this.bg:Hide()
-        SoundQueue.frame.npcName:SetTextColor(1, 1, 1)
-        SoundQueue.frame.title:SetTextColor(0.9, 0.9, 0.5)
-        GameTooltip:Hide()
-    end)
-    self.frame.currentBtn:SetScript("OnClick", function()
-        local current = SoundQueue:GetCurrentSound()
-        if current then
-            SoundQueue:StopSound(current)
-            SoundQueue:RemoveSound(current)
-        end
-    end)
+    self.frame.title = self.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    self.frame.title:SetPoint("TOPLEFT", 80, -35)
+    self.frame.title:SetWidth(180)
+    self.frame.title:SetJustifyH("LEFT")
+    self.frame.title:SetText("Waiting...")
 end
 
 function SoundQueue:InitQueueContainer()
-    self.frame.queueContainer = CreateFrame("Frame", nil, self.frame)
-    self.frame.queueContainer:SetPoint("TOPLEFT",     self.frame.portrait, "TOPRIGHT", 10, -55)
-    self.frame.queueContainer:SetPoint("BOTTOMRIGHT", -10, 35)
-
-    self.frame.queueHeader = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.queueHeader:SetPoint("BOTTOMLEFT", self.frame.queueContainer, "TOPLEFT", 0, 2)
-    self.frame.queueHeader:SetText("Queue:")
-    self.frame.queueHeader:SetTextColor(0.5, 0.5, 0.5)
-
-    self.frame.queueButtons = {}
-    for i = 1, self.maxQueueDisplay do
-        local btn = self:CreateQueueButton(self.frame.queueContainer, i + 1)
-        if i == 1 then
-            btn:SetPoint("TOPLEFT",  0, 0)
-            btn:SetPoint("TOPRIGHT", 0, 0)
-        else
-            btn:SetPoint("TOPLEFT",  self.frame.queueButtons[i-1], "BOTTOMLEFT",  0, -2)
-            btn:SetPoint("TOPRIGHT", self.frame.queueButtons[i-1], "BOTTOMRIGHT", 0, -2)
-        end
-        self.frame.queueButtons[i] = btn
-    end
+    self.frame.statusText = self.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    self.frame.statusText:SetPoint("BOTTOMLEFT", 80, 15)
+    self.frame.statusText:SetText("")
 end
 
 function SoundQueue:InitControls()
-    -- Elapsed / duration readout
-    self.frame.status = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.status:SetPoint("BOTTOMLEFT", 10, 10)
-
-    -- Close button (hides UI but keeps audio going)
+    -- Close button
     self.frame.closeBtn = CreateFrame("Button", nil, self.frame, "UIPanelCloseButton")
-    self.frame.closeBtn:SetPoint("TOPRIGHT", -2, -2)
+    self.frame.closeBtn:SetPoint("TOPRIGHT", 0, 0)
     self.frame.closeBtn:SetWidth(20)
     self.frame.closeBtn:SetHeight(20)
     self.frame.closeBtn:SetScript("OnClick", function() SoundQueue.frame:Hide() end)
@@ -591,6 +469,7 @@ local QUEST_CONFIG = {
     SCROLL_HEIGHT_DETAIL   = 220,
     SCROLL_HEIGHT_PROGRESS = 220,
     SCROLL_HEIGHT_REWARD   = 200,
+    SCROLL_HEIGHT_GREETING = 220, -- FIX: Support greeting page height
 
     BUTTON_OFFSET_X = 20,
     BUTTON_OFFSET_Y = 20,
@@ -643,6 +522,7 @@ local function ApplyQuestLayout()
     LayoutScroll(QuestDetailScrollFrame,   QuestDetailScrollChildFrame,   QUEST_CONFIG.SCROLL_HEIGHT_DETAIL)
     LayoutScroll(QuestProgressScrollFrame, QuestProgressScrollChildFrame, QUEST_CONFIG.SCROLL_HEIGHT_PROGRESS)
     LayoutScroll(QuestRewardScrollFrame,   QuestRewardScrollChildFrame,   QUEST_CONFIG.SCROLL_HEIGHT_REWARD)
+    LayoutScroll(QuestGreetingScrollFrame, QuestGreetingScrollChildFrame, QUEST_CONFIG.SCROLL_HEIGHT_GREETING) -- FIX: Apply layout to Greeting
 
     -- Re-anchor all Blizzard buttons to the backdrop
     if QuestFrameAcceptButton then
@@ -665,6 +545,12 @@ local function ApplyQuestLayout()
         QuestFrameCloseButton:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT",
             -QUEST_CONFIG.CLOSE_OFFSET_X, -QUEST_CONFIG.CLOSE_OFFSET_Y)
     end
+    
+    -- FIX: Ensure Greeting buttons are also aligned
+    if QuestGreetingFrameCancelButton then
+        QuestGreetingFrameCancelButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT",
+            -QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+    end
 end
 
 local function FixTextWidths()
@@ -672,11 +558,25 @@ local function FixTextWidths()
     local fields = {
         QuestTitleText, QuestDescription, QuestObjectiveText,
         QuestProgressText, QuestRewardText,
+        GreetingText, -- FIX: Support Greeting text
     }
     for _, f in ipairs(fields) do
         if f then
             f:SetWidth(width)
             f:SetJustifyH("LEFT")
+        end
+    end
+    
+    -- FIX: Fix Greeting title buttons alignment
+    for i=1, 32 do -- MAX_NUM_QUESTS is usually 32 in vanilla/classic
+        local button = getglobal("QuestTitleButton"..i)
+        if button and button:IsShown() then
+            button:SetWidth(width)
+            local text = getglobal("QuestTitleButton"..i.."QuestTitle")
+            if text then
+                text:SetWidth(width - 20)
+                text:SetJustifyH("LEFT")
+            end
         end
     end
 end
