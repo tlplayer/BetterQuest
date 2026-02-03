@@ -186,7 +186,7 @@ function SoundQueue:PlaySound(soundData)
     if not soundData then return end
 
 
-    soundData.handle = PlaySound(soundData.filePath)
+    soundData.handle = Utils:PlaySound(soundData)
     if not soundData.handle then
         Debug("Failed to play sound, skipping: " .. tostring(soundData.filePath))
         return

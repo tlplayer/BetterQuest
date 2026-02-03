@@ -15,7 +15,7 @@
 --   FuzzyFindDialogSound()  — Myers bit-parallel fuzzy matcher
 --   GetNPCMetadata()        — metadata accessor for NPC_DATABASE
 
-
+Utils = {}
 local playerName = UnitName("player")
 local _, playerClass = UnitClass("player")
 
@@ -104,21 +104,19 @@ end
 -------------------------------------------------
 
 -- Safely play a sound file; returns the handle or nil if failed.
-function PlaySound(soundData)
+function Utils:PlaySound(soundData)
     if not soundData then return nil end
-        soundData.filePath = NormalizePath(soundData.filePath)
-    if not soundData.filePath then
-        Debug("ERROR: No valid file path")
-        return
-    end
 
-    Debug("Loading" .. tostring(soundData.filePath))
+    filePath = NormalizePath(soundData.filePath)
+
+    Debug("Loading" .. tostring(filePath))
     if not filePath or filePath == "" then
         Debug("PlaySoundSafe called with empty path")
         return nil
     end
     if soundData.duration == 0.0 then 
         Debug("File is empty, if you play this file it will crash wow" .. filePath)
+        return nil
     end
 
     local handle
