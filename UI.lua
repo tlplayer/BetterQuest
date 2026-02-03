@@ -303,13 +303,23 @@ function SoundQueue:UpdatePauseButton()
     end
 end
 
-function SoundQueue:UpdateStatusText()
-    if not self.frame or not self.frame.statusText then return end
-    local current, total = self:GetProgress()
-    if total > 0 then
-        self.frame.statusText:SetText(string.format("%d / %d", current, total))
+local function UpdateStatusText()
+    if not SoundQueue.frame or not SoundQueue.frame.status then return end
+    
+    local current = SoundQueue.currentSound
+    if current then
+        local elapsed = GetTime() - current.startTime
+        local remaining = current.duration - elapsed
+        
+        if SoundQueue.isPaused then
+            elapsed = current.pauseOffset
+            remaining = current.duration - elapsed
+        end
+        
+        local statusText = string.format("%.1fs / %.1fs", elapsed, current.duration)
+        SoundQueue.frame.status:SetText(statusText)
     else
-        self.frame.statusText:SetText("")
+        SoundQueue.frame.status:SetText("")
     end
 end
 
