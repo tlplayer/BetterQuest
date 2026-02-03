@@ -1,22 +1,12 @@
 <Ui xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
     
-    <!-- Config first -->
-    <Script file="Config.lua"/>
 
     <!-- Databases -->
     <Include file="db\npc_database.lua"/>
-    <Script file="BetterQuestDB.lua"/>
 
     <!-- Core systems -->
+    <Script file="Utils.lua"/>
     <Script file="SoundQueue.lua"/>
-    <Script file="PortraitManager.lua"/>
-
-    <!-- UI frames -->
-    <Script file="GossipFrame.lua"/>
-    <Script file="QuestFrame.lua"/>
-    <Script file="Broadcast.lua"/>
-
-    <!-- Features -->
-    <Script file="Book.lua"/>
-    <Include file="Compatibility.lua"/>
+    <Script file="UI.lua"/>
+    <Script file="Core.lua"/>
 </Ui>

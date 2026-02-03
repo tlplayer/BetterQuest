@@ -1,147 +1,100 @@
--- SoundQueue.lua (REFACTORED - OPTIMIZED)
--- Modular voice-over system for WoW 1.12.1
--- UI components separated into individual initialization functions
--- Fuzzy matching upgraded to Myers' bit-parallel edit distance (O(n) vs O(n²))
+-- soundqueue.lua
+-- Sound queue state, playback, history, missing-NPC logging, slash commands.
+-- Load order: 2 of 4  (utils → soundqueue → ui → core)
+--
+-- Globals exported:
+--   SoundQueue   — the central queue table
+--
+-- Dependencies (must already be loaded):
+--   Debug, NormalizeNPCName, NormalizeDialogText, NormalizePath, FindDialogSound   ← utils.lua
+--
+-- UI stubs (attached by ui.lua after it loads):
+--   SoundQueue:InitializeUI()
+--   SoundQueue:UpdatePortrait(soundData)
+--   SoundQueue:UpdateCurrentInfo(soundData)
+--   SoundQueue:UpdatePauseButton()
+--   SoundQueue:UpdateStatusText()
+--   SoundQueue:UpdateQueueList()
+--   SoundQueue:ShowFrame()
+--   SoundQueue:HideFrame()
+
+-------------------------------------------------
+-- TABLE DEFINITION
+-------------------------------------------------
 
 SoundQueue = {
-    sounds = {},
-    currentSound = nil,
-    isPlaying = false,
-    isPaused = false,
-    updateFrame = nil,
-    delayFrame = nil,
-    history = {},
+    -- Queue & playback state
+    sounds        = {},
+    currentSound  = nil,
+    isPlaying     = false,
+    isPaused      = false,
+    updateFrame   = nil,       -- Frame that drives CheckSoundFinished
+
+    -- History
+    history        = {},
     maxHistorySize = 50,
+
+    -- UI caps
     maxQueueDisplay = 5,
-    
+
+    -- Portrait data referenced by ui.lua when building textures
     portraitConfig = {
-        WIDTH = 80,
-        HEIGHT = 80,
-        PATH = "Interface\\AddOns\\BetterQuest\\Textures\\",
-        DEFAULT_NPC = "Interface\\Icons\\INV_Misc_QuestionMark",
-        DEFAULT_BOOK = "Interface\\AddOns\\BetterQuest\\Textures\\Book",
-        PORTRAIT_PATH = "Interface\\AddOns\\BetterQuest\\portraits\\"
+        WIDTH          = 80,
+        HEIGHT         = 80,
+        PATH           = "Interface\\AddOns\\BetterQuest\\Textures\\",
+        DEFAULT_NPC    = "Interface\\Icons\\INV_Misc_QuestionMark",
+        DEFAULT_BOOK   = "Interface\\AddOns\\BetterQuest\\Textures\\Book",
+        PORTRAIT_PATH  = "Interface\\AddOns\\BetterQuest\\portraits\\",
     },
 }
 
-local playerName = UnitName("player")
-local _, playerClass = UnitClass("player")
 -------------------------------------------------
--- DEBUG & UTILS
+-- SAFE UI STUBS
+-- ui.lua will overwrite these once it loads.
+-- Having no-op defaults means soundqueue never errors if ui hasn't attached yet.
 -------------------------------------------------
-
-local function Debug(msg)
-    DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[SoundQueue]|r " .. tostring(msg))
-end
-
-local function NormalizePath(path)
-    if not path then return nil end
-    return string.gsub(path, "/+", "\\")
-end
-
--- Database hookup code
-function NormalizeDialogText(text)
-    if not text then return "" end
-
-    -- Replace Blizzard placeholders
-    text = string.gsub(text, "%$[nNcCrR]", "adventurer")
-    text = string.gsub(text, "%$g[^;]*;", "adventurer")
-
-    -- Replace actual player name and class
-    if playerName ~= "" then
-        text = string.gsub(text, playerName, "adventurer")
-    end
-    if playerClass ~= "" then
-        text = string.gsub(text, playerClass, "adventurer")
-    end
-
-    -- Remove other $ tokens
-    text = string.gsub(text, "%$%w+", "")
-
-    -- Remove text in brackets/parentheses/<> (emotes, tags)
-    text = string.gsub(text, "%b[]", "")
-    text = string.gsub(text, "%b()", "")
-    text = string.gsub(text, "%b<>", "")
-
-    -- Remove punctuation
-    text = string.gsub(text, "[^%w%s]", "")
-
-    -- Trim and collapse spaces
-    text = string.gsub(text, "%s+", " ")
-    text = string.gsub(text, "^%s+", "")
-    text = string.gsub(text, "%s+$", "")
-
-    -- Lowercase
-    text = string.lower(text)
-
-    return string.sub(text, 1, 50)
-end
-
-
-local function NormalizeNPCName(name)
-  if not name then return nil end
-  name = string.gsub(name, "['']", "")
-  return name
-end
-
-function GetNPCMetadata(npcName)
-  if not npcName then return nil end
-  local lookupName = NormalizeNPCName(npcName)
-  local npc = NPC_DATABASE[lookupName]
-
-  
-  if npc then
-    return {
-      race = npc.race,
-      sex = npc.sex,
-      portrait = npc.portrait,
-      zone = npc.zone,
-      model_id = npc.model_id,
-      narrator = npc.narrator
-    }
-  end
-  
-  return nil
-end
+function SoundQueue:InitializeUI()        end
+function SoundQueue:UpdatePortrait()      end
+function SoundQueue:UpdateCurrentInfo()   end
+function SoundQueue:UpdatePauseButton()   end
+function SoundQueue:UpdateStatusText()    end
+function SoundQueue:UpdateQueueList()     end
+function SoundQueue:ShowFrame()           end
+function SoundQueue:HideFrame()           end
 
 -------------------------------------------------
--- MISSING NPC TRACKING
+-- MISSING-NPC TRACKING
 -------------------------------------------------
 
 function SoundQueue:InitializeBetterQuestDB()
     if not BetterQuestDB then
-        BetterQuestDB = {
-            missingNPCs = {}
-        }
+        BetterQuestDB = { missingNPCs = {} }
         Debug("BetterQuestDB initialized")
     end
 end
 
 function SoundQueue:LogMissingNPC(npcName, dialogText, dialogType)
     if not BetterQuestDB or not npcName or not dialogText then return end
-    
+
     local normalizedName = NormalizeNPCName(npcName)
     local normalizedText = NormalizeDialogText(dialogText)
-    
     if normalizedText == "" then return end
-    
+
     if not BetterQuestDB.missingNPCs[normalizedName] then
         BetterQuestDB.missingNPCs[normalizedName] = {
             originalName = npcName,
-            dialogs = {}
+            dialogs      = {},
         }
     end
-    
+
     local npcEntry = BetterQuestDB.missingNPCs[normalizedName]
-    
     if not npcEntry.dialogs[normalizedText] then
         npcEntry.dialogs[normalizedText] = {
             dialog_text = dialogText,
-            dialogType = dialogType or "gossip",
-            count = 0
+            dialogType  = dialogType or "gossip",
+            count       = 0,
         }
     end
-    
     npcEntry.dialogs[normalizedText].count = npcEntry.dialogs[normalizedText].count + 1
 end
 
@@ -150,23 +103,20 @@ function SoundQueue:ExportMissingNPCs()
         Debug("No missing NPC data to export")
         return
     end
-    
-    local npcCount = 0
-    local totalDialogs = 0
-    
+
+    local npcCount, totalDialogs = 0, 0
     Debug("=== MISSING NPCs ===")
-    for normalizedName, data in pairs(BetterQuestDB.missingNPCs) do
+
+    for _, data in pairs(BetterQuestDB.missingNPCs) do
         npcCount = npcCount + 1
         local dialogCount = 0
-        
-        for _, dialogData in pairs(data.dialogs) do
-            dialogCount = dialogCount + 1
-            totalDialogs = totalDialogs + 1
+        for _ in pairs(data.dialogs) do
+            dialogCount   = dialogCount + 1
+            totalDialogs  = totalDialogs + 1
         end
-        
         Debug(string.format("%d. %s (%d dialog(s))", npcCount, data.originalName, dialogCount))
     end
-    
+
     Debug(string.format("Total: %d missing NPCs, %d missing dialogs", npcCount, totalDialogs))
 end
 
@@ -178,345 +128,22 @@ function SoundQueue:ClearMissingNPCs()
 end
 
 -------------------------------------------------
--- FUZZY TEXT MATCHING (Myers' Bit-Parallel)
--------------------------------------------------
-
-
--- Standard Levenshtein Distance (Global)
--- Optimized for Lua 5.1 / WoW to minimize string and table churn
-local function EditDistance(s, t)
-    if s == t then return 0 end
-    local slen = string.len(s)
-    local tlen = string.len(t)
-    if slen == 0 then return tlen end
-    if tlen == 0 then return slen end
-
-    -- Optimization: ensure temporary arrays are sized for the shorter string.
-    -- This minimizes memory usage and the number of operations in the inner loop.
-    local s_long, t_short
-    local slen_long, tlen_short
-
-    if slen < tlen then
-        s_long, t_short = t, s
-        slen_long, tlen_short = tlen, slen
-    else
-        s_long, t_short = s, t
-        slen_long, tlen_short = slen, tlen
-    end
-
-    -- Pre-allocate v0 and v1 tables once.
-    -- This avoids repeated table creation and reduces garbage collection pressure.
-    local v0 = {}
-    local v1 = {}
-    for i = 0, tlen_short do
-        v0[i] = i
-    end
-
-    -- Pre-process t_short into a table of characters.
-    -- This avoids calling string.sub(t_short, j, j) inside the inner loop,
-    -- significantly reducing the creation of temporary string objects.
-    local t_short_chars = {}
-    for k = 1, tlen_short do
-        t_short_chars[k] = string.sub(t_short, k, k)
-    end
-
-    for i = 1, slen_long do
-        v1[0] = i
-        local s_i_char = string.sub(s_long, i, i) -- One string.sub per outer loop iteration
-        for j = 1, tlen_short do
-            local cost = (s_i_char == t_short_chars[j]) and 0 or 1
-            local del = v0[j] + 1
-            local ins = v1[j-1] + 1
-            local sub = v0[j-1] + cost
-            
-            local min_val = del
-            if ins < min_val then min_val = ins end
-            if sub < min_val then min_val = sub end
-            v1[j] = min_val
-        end
-        -- Efficiently update v0 for the next iteration by copying values.
-        -- This reuses the existing table structure instead of allocating new ones.
-        for j = 0, tlen_short do
-            v0[j] = v1[j]
-        end
-    end
-
-    return v0[tlen_short]
-end
-
--- Fuzzy find (uses EditDistance consistently and enforces a 0.1s loop timeout)
-function FuzzyFindDialogSound(npcName, dialogText)
-    if not npcName or not dialogText then return nil end
-    print(dialogText)
-
-    local lookupName = NormalizeNPCName(npcName)
-    local targetNpc  = NPC_DATABASE[lookupName]
-    local targetSex  = targetNpc and targetNpc.sex
-    local targetRace = targetNpc and targetNpc.race
-
-    local normalizedInput = NormalizeDialogText(dialogText)
-    print(normalizedInput)
-    if normalizedInput == "" then return nil end
-
-    -- dynamic distance threshold: allow ~20% of pattern length, capped at 10
-    local strlen = strlen or string.len
-    local m = strlen(normalizedInput)
-    local MAX_DISTANCE = math.min(8, math.max(1, math.ceil(m * 0.10)))
-
-    local bestMatch = nil
-    local bestDistance = 999
-
-    local startTime = GetTime()
-    local TIMEOUT = 0.1
-
-    -- Early check: same NPC first (fast path)
-    if targetNpc and targetNpc.dialogs then
-        for dialogKey, entry in pairs(targetNpc.dialogs) do
-            if GetTime() - startTime > TIMEOUT then
-                Debug("Fuzzy search timeout (same NPC) - aborting fuzzy lookup")
-                return nil
-            end
-
-            local distance =  EditDistance(normalizedInput, dialogKey)
-            if distance <= MAX_DISTANCE and distance < bestDistance then
-                bestDistance = distance
-                bestMatch = entry
-            end
-        end
-
-        if bestMatch then
-            return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
-        end
-    end
-    -- Fallback: search other NPCs filtered by race + sex (to avoid unrelated matches)
-    for otherName, data in pairs(NPC_DATABASE) do
-        if GetTime() - startTime > TIMEOUT  then
-            Debug("Fuzzy search timeout (other NPCs) - aborting fuzzy lookup")
-            return nil
-        end
-
-        if data ~= targetNpc
-           and targetRace and data.race == targetRace
-           and targetSex  and data.sex  == targetSex
-           and data.dialogs then
-
-            for dialogKey, entry in pairs(data.dialogs) do
-                if GetTime() - startTime > TIMEOUT then
-                    Debug("Fuzzy search timeout (inside NPC dialogs) - aborting fuzzy lookup")
-                    return nil
-                end
-
-                local distance =  EditDistance(normalizedInput, dialogKey)
-                if distance <= MAX_DISTANCE then
-                    -- prefer the smallest distance (best fuzzy match)
-                    if distance < bestDistance then
-                        bestDistance = distance
-                        bestMatch = entry
-                    end
-
-                    -- If we get a perfect or very close match, return immediately
-                    if distance == 0 or distance <= math.max(3, math.floor(m * 0.05)) then
-                        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
-                    end
-                end
-            end
-        end
-    end
-
-    if bestMatch then
-        return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
-    end
-
-    return nil
-end
-
--- FindDialogSound with timeout on the full hash fallback loop
-function FindDialogSound(npcName, dialogText)
-  if not npcName or not dialogText then return nil end
-
-  local lookupName = NormalizeNPCName(npcName)
-  local key = NormalizeDialogText(dialogText)
-  if key == "" then return nil end
-
-  -- 1) Normal lookup
-  local npc = NPC_DATABASE[lookupName]
-  if npc and npc.dialogs and npc.dialogs[key] then
-    local entry = npc.dialogs[key]
-    return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
-  end
-
-  -- 2) Fallback: search all NPCs by text hash (with timeout guard)
-  local startTime = GetTime()
-  local TIMEOUT = 0.1
-  for otherNpcName, data in pairs(NPC_DATABASE) do
-    if GetTime() - startTime > TIMEOUT then
-        Debug("FindDialogSound fallback timeout - aborting full-hash scan")
-        break
-    end
-
-    if not data then
-        pass
-    end
-
-    if data.dialogs then
-      local entry = data.dialogs[key]
-      if entry then
-        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
-      end
-    end
-  end
-
-  -- 3) Fuzzy text search (Myers' algorithm + timeout)
-  local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds = FuzzyFindDialogSound(npcName, dialogText)
-  if fuzzyPath then
-    return fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds
-  end
-
-  return nil
-    ::continue::
-end
-
--------------------------------------------------
--- PORTRAIT HELPERS
--------------------------------------------------
-
-local function IsBookInteraction()
-    return ItemTextFrame and ItemTextFrame:IsShown()
-end
-
-local function GetPortraitTexture(soundData)
-    if not soundData or not soundData.npcName then
-        return SoundQueue.portraitConfig.DEFAULT_NPC
-    end
-    
-    if IsBookInteraction() then
-        return SoundQueue.portraitConfig.DEFAULT_BOOK
-    end
-    
-    local metadata = GetNPCMetadata(soundData.npcName)
-    
-    -- If this NPC has a narrator, we prefer the narrator's metadata
-    if metadata and metadata.narrator then
-        local narratorMetadata = GetNPCMetadata(metadata.narrator)
-        if narratorMetadata then
-            metadata = narratorMetadata
-        end
-    end
-    
-    -- Final check for race to build the portrait path
-    if metadata and metadata.race then
-        local filename = metadata.race
-        if metadata.sex == "female" then
-            filename = filename .. "_female"
-        end
-        return SoundQueue.portraitConfig.PORTRAIT_PATH .. filename
-    end
-    
-    return SoundQueue.portraitConfig.DEFAULT_NPC
-end
-
--------------------------------------------------
--- UI UPDATE FUNCTIONS (Modular)
--------------------------------------------------
-
-local function UpdatePortrait(soundData)
-    if not SoundQueue.frame or not SoundQueue.frame.portrait then return end
-    
-    local texture = GetPortraitTexture(soundData)
-    SoundQueue.frame.portrait.texture:SetTexture(texture)
-end
-
-local function UpdateCurrentInfo(soundData)
-    if not SoundQueue.frame then return end
-    
-    if soundData then
-        SoundQueue.frame.npcName:SetText(soundData.npcName or "Unknown")
-        SoundQueue.frame.title:SetText(soundData.title or "")
-    else
-        SoundQueue.frame.npcName:SetText("")
-        SoundQueue.frame.title:SetText("")
-    end
-end
-
-local function UpdatePauseButton()
-    if not SoundQueue.frame or not SoundQueue.frame.pauseBtn then return end
-    
-    if SoundQueue.isPaused then
-        SoundQueue.frame.pauseBtn.pauseIcon:Hide()
-        SoundQueue.frame.pauseBtn.playIcon:Show()
-    else
-        SoundQueue.frame.pauseBtn.pauseIcon:Show()
-        SoundQueue.frame.pauseBtn.playIcon:Hide()
-    end
-end
-
-local function UpdateStatusText()
-    if not SoundQueue.frame or not SoundQueue.frame.status then return end
-    
-    local current = SoundQueue.currentSound
-    if current then
-        local elapsed = GetTime() - current.startTime
-        local remaining = current.duration - elapsed
-        
-        if SoundQueue.isPaused then
-            elapsed = current.pauseOffset
-            remaining = current.duration - elapsed
-        end
-        
-        local statusText = string.format("%.1fs / %.1fs", elapsed, current.duration)
-        SoundQueue.frame.status:SetText(statusText)
-    else
-        SoundQueue.frame.status:SetText("")
-    end
-end
-
-local function UpdateQueueList()
-    if not SoundQueue.frame or not SoundQueue.frame.queueButtons then return end
-    
-    for i = 1, SoundQueue.maxQueueDisplay do
-        local button = SoundQueue.frame.queueButtons[i]
-        local soundData = SoundQueue.sounds[i + 1]
-        
-        if soundData then
-            button.text:SetText(string.format("%d. %s", i, soundData.npcName or "Unknown"))
-            button:Show()
-        else
-            button:Hide()
-        end
-    end
-end
-
-local function ShowFrame()
-    if SoundQueue.frame then
-        SoundQueue.frame:Show()
-    end
-end
-
-local function HideFrame()
-    if SoundQueue.frame then
-        SoundQueue.frame:Hide()
-    end
-end
-
--------------------------------------------------
 -- HISTORY
 -------------------------------------------------
 
 function SoundQueue:AddToHistory(soundData)
     if not soundData then return end
-    
+
     table.insert(self.history, 1, {
-        npcName = soundData.npcName,
-        text = soundData.text,
-        title = soundData.title,
-        filePath = soundData.filePath,
+        npcName    = soundData.npcName,
+        text       = soundData.text,
+        title      = soundData.title,
+        filePath   = soundData.filePath,
         dialogType = soundData.dialogType,
-        questID = soundData.questID,
-        duration = soundData.duration,
-        startTime = 0,
-        pauseOffset = 0,
+        questID    = soundData.questID,
+        duration   = soundData.duration,
     })
-    
+
     while table.getn(self.history) > self.maxHistorySize do
         table.remove(self.history)
     end
@@ -525,21 +152,21 @@ end
 function SoundQueue:PlayFromHistory(index)
     local entry = self.history[index]
     if not entry then return end
-    
+
     local soundData = {
-        npcName = entry.npcName,
-        text = entry.text,
-        title = entry.title,
-        filePath = entry.filePath,
-        dialogType = entry.dialogType,
-        questID = entry.questID,
-        duration = entry.duration,
-        startTime = 0,
-        pauseOffset = 0,
+        npcName      = entry.npcName,
+        text         = entry.text,
+        title        = entry.title,
+        filePath     = entry.filePath,
+        dialogType   = entry.dialogType,
+        questID      = entry.questID,
+        duration     = entry.duration,
+        startTime    = 0,
+        pauseOffset  = 0,
     }
-    
+
     table.insert(self.sounds, 1, soundData)
-    
+
     if not self.isPlaying then
         self:PlaySound(soundData)
     end
@@ -556,11 +183,9 @@ end
 
 function SoundQueue:PlaySound(soundData)
     Debug("PlaySound called for: " .. tostring(soundData and soundData.npcName))
-    
     if not soundData then return end
 
     soundData.filePath = NormalizePath(soundData.filePath)
-    
     if not soundData.filePath then
         Debug("ERROR: No valid file path")
         return
@@ -570,18 +195,19 @@ function SoundQueue:PlaySound(soundData)
     soundData.handle = 1
 
     if soundData.isResuming then
-        soundData.startTime = GetTime() - soundData.pauseOffset
+        soundData.startTime  = GetTime() - soundData.pauseOffset
         soundData.isResuming = nil
         Debug("Resuming from: " .. soundData.pauseOffset)
     else
-        soundData.startTime = GetTime()
+        soundData.startTime  = GetTime()
         soundData.pauseOffset = 0
     end
 
     self.currentSound = soundData
-    self.isPlaying = true
-    self.isPaused = false
+    self.isPlaying    = true
+    self.isPaused     = false
 
+    -- Ensure the per-frame finished-check is running
     if not self.updateFrame then
         self.updateFrame = CreateFrame("Frame")
         self.updateFrame:SetScript("OnUpdate", function()
@@ -589,20 +215,21 @@ function SoundQueue:PlaySound(soundData)
         end)
     end
     self.updateFrame:Show()
-    
-    -- Update UI components
-    UpdatePortrait(soundData)
-    UpdateCurrentInfo(soundData)
-    UpdatePauseButton()
-    UpdateStatusText()
-    UpdateQueueList()
-    ShowFrame()
-    
+
+    -- Refresh every piece of the UI
+    self:UpdatePortrait(soundData)
+    self:UpdateCurrentInfo(soundData)
+    self:UpdatePauseButton()
+    self:UpdateStatusText()
+    self:UpdateQueueList()
+    self:ShowFrame()
+
     Debug("PlaySound complete")
 end
 
 function SoundQueue:StopSound(soundData)
     if not soundData then return end
+    -- Classic-era trick: toggling MasterSoundEffects kills all active sounds
     SetCVar("MasterSoundEffects", 0)
     SetCVar("MasterSoundEffects", 1)
     soundData.handle = nil
@@ -613,18 +240,17 @@ function SoundQueue:TogglePause()
     if not current then return end
 
     if not self.isPaused then
-        -- PAUSE
+        -- PAUSE — snapshot how far we are, then kill audio
         Debug("Pausing")
-        local elapsed = GetTime() - current.startTime
-        current.pauseOffset = elapsed
+        current.pauseOffset = GetTime() - current.startTime
         self:StopSound(current)
-        self.isPaused = true
+        self.isPaused  = true
         self.isPlaying = false
-        
-        UpdatePauseButton()
-        UpdateStatusText()
+
+        self:UpdatePauseButton()
+        self:UpdateStatusText()
     else
-        -- RESUME
+        -- RESUME — re-enter PlaySound with the offset baked in
         Debug("Resuming")
         current.isResuming = true
         self:PlaySound(current)
@@ -633,9 +259,9 @@ end
 
 function SoundQueue:CheckSoundFinished()
     if not self.currentSound or self.isPaused then return end
-    
-    UpdateStatusText()
-    
+
+    self:UpdateStatusText()
+
     local elapsed = GetTime() - self.currentSound.startTime
     if elapsed >= self.currentSound.duration then
         Debug("Sound finished naturally")
@@ -655,57 +281,52 @@ function SoundQueue:GetCurrentSound()
     return self.sounds[1]
 end
 
-function SoundQueue:FindSound(npcName, dialogText)
-    if not npcName or not dialogText or not FindDialogSound then return nil end
-    return FindDialogSound(npcName, dialogText)
-end
-
 function SoundQueue:AddSound(npcName, dialogText, title)
     Debug("AddSound: " .. tostring(npcName))
-    
-    local soundPath, dialogType, questID, seconds = self:FindSound(npcName, dialogText)
-    
-    if not soundPath then 
-        Debug("No sound found - logging to BetterQuestDB")
+
+    local soundPath, dialogType, questID, seconds = FindDialogSound(npcName, dialogText)
+
+    if not soundPath then
+        Debug("No sound found — logging to BetterQuestDB")
         self:LogMissingNPC(npcName, dialogText, dialogType or "unknown")
-        return 
+        return
     end
-    
+
     local soundData = {
-        npcName = npcName,
-        text = dialogText,
-        title = title or (questID and ("Quest " .. questID) or npcName),
-        filePath = soundPath,
-        dialogType = dialogType,
-        questID = questID,
-        duration = seconds or 15,
-        startTime = 0,
-        pauseOffset = 0,
+        npcName      = npcName,
+        text         = dialogText,
+        title        = title or (questID and ("Quest " .. questID) or npcName),
+        filePath     = soundPath,
+        dialogType   = dialogType,
+        questID      = questID,
+        duration     = seconds or 15,
+        startTime    = 0,
+        pauseOffset  = 0,
     }
-    
-    -- Check for duplicates
-    for _, queuedSound in ipairs(self.sounds) do
-        if queuedSound.filePath == soundData.filePath then 
+
+    -- Deduplicate by file path
+    for _, queued in ipairs(self.sounds) do
+        if queued.filePath == soundData.filePath then
             Debug("Duplicate, skipping")
-            return 
+            return
         end
     end
-    
+
     table.insert(self.sounds, soundData)
     Debug("Added to queue (size: " .. table.getn(self.sounds) .. ")")
-    
+
     if table.getn(self.sounds) == 1 then
-        self:PlaySound(soundData)
+        self:PlaySound(soundData)     -- first in queue → play immediately
     else
-        UpdateQueueList()
+        self:UpdateQueueList()        -- already playing → just refresh the list
     end
 end
 
 function SoundQueue:RemoveSound(soundData)
     if not soundData then return end
-    
     Debug("RemoveSound: " .. tostring(soundData.npcName))
-    
+
+    -- Find the index of this exact entry
     local removedIndex = nil
     for i = 1, table.getn(self.sounds) do
         if self.sounds[i] == soundData then
@@ -713,288 +334,35 @@ function SoundQueue:RemoveSound(soundData)
             break
         end
     end
-    
     if not removedIndex then
-        Debug("Sound not found")
+        Debug("Sound not found in queue")
         return
     end
-    
+
     table.remove(self.sounds, removedIndex)
     Debug("Removed from queue")
-    
+
     if removedIndex == 1 then
-        -- Was playing
+        -- The item that was playing just left → advance
         self:AddToHistory(soundData)
-        
+
         self.currentSound = nil
-        self.isPlaying = false
-        self.isPaused = false
-        
+        self.isPlaying    = false
+        self.isPaused     = false
+
         local nextSound = self:GetCurrentSound()
         if nextSound then
             Debug("Playing next")
             self:PlaySound(nextSound)
         else
             Debug("Queue empty")
-            if self.updateFrame then 
-                self.updateFrame:Hide() 
-            end
-            HideFrame()
+            if self.updateFrame then self.updateFrame:Hide() end
+            self:HideFrame()
         end
     else
-        -- Was queued
-        UpdateQueueList()
+        -- A queued (non-playing) item was removed
+        self:UpdateQueueList()
     end
-end
-
--------------------------------------------------
--- UI COMPONENTS (Modular Initialization)
--------------------------------------------------
-
-function SoundQueue:CreateQueueButton(parent, index)
-    local button = CreateFrame("Button", nil, parent)
-    button:SetHeight(18)
-    button.index = index
-    
-    button.bg = button:CreateTexture(nil, "BACKGROUND")
-    button.bg:SetAllPoints()
-    button.bg:SetTexture(1, 0.2, 0.2, 0.3)
-    button.bg:Hide()
-    
-    button.text = button:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    button.text:SetPoint("LEFT", 5, 0)
-    button.text:SetPoint("RIGHT", -5, 0)
-    button.text:SetJustifyH("LEFT")
-    button.text:SetTextColor(0.7, 0.7, 0.7)
-    
-    button:SetScript("OnEnter", function()
-        this.bg:Show()
-        this.text:SetTextColor(1, 0.3, 0.3)
-        GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
-        GameTooltip:SetText("Click to remove")
-        GameTooltip:Show()
-    end)
-    
-    button:SetScript("OnLeave", function()
-        this.bg:Hide()
-        this.text:SetTextColor(0.7, 0.7, 0.7)
-        GameTooltip:Hide()
-    end)
-    
-    button:SetScript("OnClick", function()
-        local soundData = SoundQueue.sounds[this.index]
-        if soundData then
-            SoundQueue:RemoveSound(soundData)
-        end
-    end)
-    
-    return button
-end
-
--- Initialize main frame
-function SoundQueue:InitMainFrame()
-    self.frame = CreateFrame("Frame", "BetterQuestVoiceOverFrame", UIParent)
-    self.frame:SetWidth(370)
-    self.frame:SetHeight(120)
-    self.frame:SetPoint("BOTTOM", UIParent, "BOTTOM", 0, 150)
-    self.frame:SetMovable(true)
-    self.frame:EnableMouse(true)
-    self.frame:SetClampedToScreen(true)
-    self.frame:RegisterForDrag("LeftButton")
-    
-    self.frame:SetScript("OnDragStart", function()
-        this:StartMoving()
-    end)
-    self.frame:SetScript("OnDragStop", function()
-        this:StopMovingOrSizing()
-    end)
-    
-    self.frame.bg = self.frame:CreateTexture(nil, "BACKGROUND")
-    self.frame.bg:SetAllPoints()
-    self.frame.bg:SetTexture(0, 0, 0, 0.8)
-end
-
--- Initialize portrait (without embedded border)
-function SoundQueue:InitPortrait()
-    self.frame.portrait = CreateFrame("Frame", nil, self.frame)
-    self.frame.portrait:SetWidth(self.portraitConfig.WIDTH)
-    self.frame.portrait:SetHeight(self.portraitConfig.HEIGHT)
-    self.frame.portrait:SetPoint("TOPLEFT", 10, -10)
-    
-    self.frame.portrait.bg = self.frame.portrait:CreateTexture(nil, "BACKGROUND")
-    self.frame.portrait.bg:SetAllPoints()
-    self.frame.portrait.bg:SetTexture(0, 0, 0, 1)
-    
-    self.frame.portrait.texture = self.frame.portrait:CreateTexture(nil, "ARTWORK")
-    self.frame.portrait.texture:SetAllPoints()
-    self.frame.portrait.texture:SetTexCoord(0.1, 0.9, 0.1, 0.9)
-    
-    -- Border removed - portraits should not have embedded borders
-end
-
--- Initialize NPC info display
-function SoundQueue:InitNPCInfo()
-    self.frame.header = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.header:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, 0)
-    self.frame.header:SetText("Now Playing:")
-    self.frame.header:SetTextColor(0.5, 0.5, 0.5)
-    
-    self.frame.currentBtn = CreateFrame("Button", nil, self.frame)
-    self.frame.currentBtn:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, -14)
-    self.frame.currentBtn:SetPoint("BOTTOMRIGHT", self.frame, "TOPRIGHT", -30, -52)
-    
-    self.frame.currentBtn.bg = self.frame.currentBtn:CreateTexture(nil, "BACKGROUND")
-    self.frame.currentBtn.bg:SetAllPoints()
-    self.frame.currentBtn.bg:SetTexture(1, 0.2, 0.2, 0.3)
-    self.frame.currentBtn.bg:Hide()
-    
-    self.frame.npcName = self.frame.currentBtn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    self.frame.npcName:SetPoint("TOPLEFT", 0, 0)
-    self.frame.npcName:SetTextColor(1, 1, 1)
-    
-    self.frame.title = self.frame.currentBtn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.title:SetPoint("TOPLEFT", 0, -16)
-    self.frame.title:SetTextColor(0.9, 0.9, 0.5)
-    
-    self.frame.currentBtn:SetScript("OnEnter", function()
-        this.bg:Show()
-        SoundQueue.frame.npcName:SetTextColor(1, 0.3, 0.3)
-        SoundQueue.frame.title:SetTextColor(1, 0.5, 0.5)
-        GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
-        GameTooltip:SetText("Click to skip")
-        GameTooltip:Show()
-    end)
-    
-    self.frame.currentBtn:SetScript("OnLeave", function()
-        this.bg:Hide()
-        SoundQueue.frame.npcName:SetTextColor(1, 1, 1)
-        SoundQueue.frame.title:SetTextColor(0.9, 0.9, 0.5)
-        GameTooltip:Hide()
-    end)
-    
-    self.frame.currentBtn:SetScript("OnClick", function()
-        local current = SoundQueue:GetCurrentSound()
-        if current then
-            SoundQueue:StopSound(current)
-            SoundQueue:RemoveSound(current)
-        end
-    end)
-end
-
--- Initialize queue container
-function SoundQueue:InitQueueContainer()
-    self.frame.queueContainer = CreateFrame("Frame", nil, self.frame)
-    self.frame.queueContainer:SetPoint("TOPLEFT", self.frame.portrait, "TOPRIGHT", 10, -55)
-    self.frame.queueContainer:SetPoint("BOTTOMRIGHT", -10, 35)
-    
-    self.frame.queueHeader = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.queueHeader:SetPoint("BOTTOMLEFT", self.frame.queueContainer, "TOPLEFT", 0, 2)
-    self.frame.queueHeader:SetText("Queue:")
-    self.frame.queueHeader:SetTextColor(0.5, 0.5, 0.5)
-    
-    self.frame.queueButtons = {}
-    for i = 1, self.maxQueueDisplay do
-        local btn = self:CreateQueueButton(self.frame.queueContainer, i + 1)
-        if i == 1 then
-            btn:SetPoint("TOPLEFT", 0, 0)
-            btn:SetPoint("TOPRIGHT", 0, 0)
-        else
-            btn:SetPoint("TOPLEFT", self.frame.queueButtons[i-1], "BOTTOMLEFT", 0, -2)
-            btn:SetPoint("TOPRIGHT", self.frame.queueButtons[i-1], "BOTTOMRIGHT", 0, -2)
-        end
-        self.frame.queueButtons[i] = btn
-    end
-end
-
--- Initialize control buttons (pause/play/back)
-function SoundQueue:InitControls()
-    -- Status text
-    self.frame.status = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-    self.frame.status:SetPoint("BOTTOMLEFT", 10, 10)
-
-    -- Close button
-    self.frame.closeBtn = CreateFrame("Button", nil, self.frame, "UIPanelCloseButton")
-    self.frame.closeBtn:SetPoint("TOPRIGHT", -2, -2)
-    self.frame.closeBtn:SetWidth(20)
-    self.frame.closeBtn:SetHeight(20)
-    self.frame.closeBtn:SetScript("OnClick", function()
-        SoundQueue.frame:Hide()
-    end)
-    self.frame.closeBtn:SetScript("OnEnter", function()
-        GameTooltip:SetOwner(this, "ANCHOR_LEFT")
-        GameTooltip:SetText("Hide (keeps playing)")
-        GameTooltip:Show()
-    end)
-    self.frame.closeBtn:SetScript("OnLeave", function()
-        GameTooltip:Hide()
-    end)
-
-    -- Back button (replay last)
-    self.frame.backBtn = CreateFrame("Button", nil, self.frame)
-    self.frame.backBtn:SetWidth(20)
-    self.frame.backBtn:SetHeight(20)
-    self.frame.backBtn:SetPoint("BOTTOMRIGHT", -50, 10)
-    self.frame.backBtn:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up")
-    self.frame.backBtn:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Down")
-    self.frame.backBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
-    self.frame.backBtn:SetScript("OnClick", function()
-        if table.getn(SoundQueue.history) > 0 then
-            SoundQueue:PlayFromHistory(1)
-        end
-    end)
-    self.frame.backBtn:SetScript("OnEnter", function()
-        GameTooltip:SetOwner(this, "ANCHOR_TOP")
-        GameTooltip:SetText("Replay Last")
-        if table.getn(SoundQueue.history) > 0 then
-            GameTooltip:AddLine(SoundQueue.history[1].npcName or "Unknown", 1, 1, 1)
-        end
-        GameTooltip:Show()
-    end)
-    self.frame.backBtn:SetScript("OnLeave", function()
-        GameTooltip:Hide()
-    end)
-
-    -- Pause/Play button
-    self.frame.pauseBtn = CreateFrame("Button", nil, self.frame)
-    self.frame.pauseBtn:SetWidth(24)
-    self.frame.pauseBtn:SetHeight(24)
-    self.frame.pauseBtn:SetPoint("BOTTOMRIGHT", -25, 8)
-    self.frame.pauseBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
-    
-    self.frame.pauseBtn.pauseIcon = self.frame.pauseBtn:CreateTexture(nil, "ARTWORK")
-    self.frame.pauseBtn.pauseIcon:SetAllPoints()
-    self.frame.pauseBtn.pauseIcon:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestLogStopButton")
-    
-    self.frame.pauseBtn.playIcon = self.frame.pauseBtn:CreateTexture(nil, "ARTWORK")
-    self.frame.pauseBtn.playIcon:SetAllPoints()
-    self.frame.pauseBtn.playIcon:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestLogPlayButton")
-    self.frame.pauseBtn.playIcon:Hide()
-    
-    self.frame.pauseBtn:SetScript("OnClick", function() 
-        SoundQueue:TogglePause() 
-    end)
-    self.frame.pauseBtn:SetScript("OnEnter", function()
-        GameTooltip:SetOwner(this, "ANCHOR_TOP")
-        GameTooltip:SetText(SoundQueue.isPaused and "Resume" or "Pause")
-        GameTooltip:Show()
-    end)
-    self.frame.pauseBtn:SetScript("OnLeave", function()
-        GameTooltip:Hide()
-    end)
-end
-
--- Main UI initialization (now modular)
-function SoundQueue:InitializeUI()
-    if self.frame then return end
-    
-    self:InitMainFrame()
-    self:InitPortrait()
-    self:InitNPCInfo()
-    self:InitQueueContainer()
-    self:InitControls()
-    
-    self.frame:Hide()
-    Debug("UI Initialized (Modular)")
 end
 
 -------------------------------------------------
@@ -1006,11 +374,12 @@ SLASH_SOUNDQUEUE2 = "/soundqueue"
 
 SlashCmdList["SOUNDQUEUE"] = function(msg)
     msg = string.lower(msg or "")
-    
+
     if msg == "show" then
         if SoundQueue.frame and SoundQueue:GetCurrentSound() then
-            ShowFrame()
+            SoundQueue:ShowFrame()
         end
+
     elseif msg == "history" then
         if table.getn(SoundQueue.history) == 0 then
             Debug("No history")
@@ -1021,88 +390,24 @@ SlashCmdList["SOUNDQUEUE"] = function(msg)
                 Debug(i .. ". " .. (entry.npcName or "Unknown") .. " - " .. (entry.title or ""))
             end
         end
+
     elseif msg == "clear" then
         SoundQueue:ClearHistory()
+
     elseif string.find(msg, "play ") == 1 then
         local index = tonumber(string.sub(msg, 6))
-        if index then
-            SoundQueue:PlayFromHistory(index)
-        end
+        if index then SoundQueue:PlayFromHistory(index) end
+
     elseif msg == "pause" then
         SoundQueue:TogglePause()
+
     elseif msg == "missing" then
         SoundQueue:ExportMissingNPCs()
+
     elseif msg == "clearmissing" then
         SoundQueue:ClearMissingNPCs()
+
     else
         Debug("Commands: show, history, play <n>, clear, pause, missing, clearmissing")
     end
 end
-
--------------------------------------------------
--- DELAYED TRIGGER LOGIC
--------------------------------------------------
-
-function SoundQueue:QueueTrigger(npcName, eventType)
-    if self.delayFrameActive then return end
-    self.delayFrameActive = true
-    if not self.delayFrame then
-        self.delayFrame = CreateFrame("Frame")
-    end
-
-    local waitTime = 0.1
-    local startTime = GetTime()
-
-    self.delayFrame:SetScript("OnUpdate", function()
-        if GetTime() - startTime >= waitTime then
-            this:SetScript("OnUpdate", nil)
-            
-            local text, title
-            if eventType == "QUEST_DETAIL" then
-                text, title = GetQuestText(), GetTitleText()
-            elseif eventType == "QUEST_PROGRESS" then
-                text, title = GetProgressText(), GetTitleText()
-            elseif eventType == "QUEST_COMPLETE" then
-                text, title = GetRewardText(), GetTitleText()
-            elseif eventType == "GOSSIP_SHOW" then
-                text, title = GetGossipText(), "Gossip"
-            end
-
-            if text and text ~= "" then
-                SoundQueue:AddSound(npcName, text, title)
-            end
-            
-            SoundQueue.delayFrameActive = false
-        end
-    end)
-end
-
--------------------------------------------------
--- INITIALIZE
--------------------------------------------------
-
-function SoundQueue:Initialize()
-    local initFrame = CreateFrame("Frame")
-    initFrame:RegisterEvent("ADDON_LOADED")
-    
-    initFrame:SetScript("OnEvent", function()
-        if event == "ADDON_LOADED" and arg1 == "BetterQuest" then
-            SoundQueue:InitializeBetterQuestDB()
-            SoundQueue:InitializeUI()
-            
-            local gameEventFrame = CreateFrame("Frame")
-            gameEventFrame:RegisterEvent("QUEST_DETAIL")
-            gameEventFrame:RegisterEvent("QUEST_PROGRESS")
-            gameEventFrame:RegisterEvent("QUEST_COMPLETE")
-            gameEventFrame:RegisterEvent("GOSSIP_SHOW")
-            
-            gameEventFrame:SetScript("OnEvent", function()
-                SoundQueue:QueueTrigger(UnitName("npc"), event)
-            end)
-            
-            Debug("SoundQueue Initialized (Refactored & Optimized with Myers' Algorithm)")
-        end
-    end)
-end
-
-SoundQueue:Initialize()
