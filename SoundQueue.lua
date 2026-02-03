@@ -222,12 +222,32 @@ function SoundQueue:PlaySound(soundData)
     self.updateFrame:Show()
 
     -- Refresh every piece of the UI
-    self:UpdatePortrait(soundData)
-    self:UpdateCurrentInfo(soundData)
-    self:UpdatePauseButton()
-    self:UpdateStatusText()
-    self:UpdateQueueList()
-    self:ShowFrame()
+local success, err
+
+        Debug("UpdatePortrait")
+success, err = pcall(function() self:UpdatePortrait(soundData) end)
+if not success then Debug("UpdatePortrait error: " .. tostring(err)) end
+        Debug("UpdateCurrentInfo")
+
+success, err = pcall(function() self:UpdateCurrentInfo(soundData) end)
+if not success then Debug("UpdateCurrentInfo error: " .. tostring(err)) end
+        Debug("UpdatePauseButton")
+
+success, err = pcall(function() self:UpdatePauseButton() end)
+if not success then Debug("UpdatePauseButton error: " .. tostring(err)) end
+        Debug("UpdateStatusText")
+
+success, err = pcall(function() self:UpdateStatusText() end)
+if not success then Debug("UpdateStatusText error: " .. tostring(err)) end
+        Debug("UpdateQueueList")
+
+success, err = pcall(function() self:UpdateQueueList() end)
+if not success then Debug("UpdateQueueList error: " .. tostring(err)) end
+        Debug("ShowFrame")
+
+success, err = pcall(function() self:ShowFrame() end)
+if not success then Debug("ShowFrame error: " .. tostring(err)) end
+
 
     Debug("PlaySound complete")
 end
