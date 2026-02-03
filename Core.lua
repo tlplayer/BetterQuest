@@ -156,3 +156,51 @@ addonFrame:SetScript("OnEvent", function()
 
     Debug("BetterQuest initialized")
 end)
+
+
+-------------------------------------------------
+-- SLASH COMMANDS
+-------------------------------------------------
+
+SLASH_SOUNDQUEUE1 = "/bq"
+SLASH_SOUNDQUEUE2 = "/soundqueue"
+
+SlashCmdList["SOUNDQUEUE"] = function(msg)
+    msg = string.lower(msg or "")
+
+    if msg == "show" then
+        if SoundQueue.frame and SoundQueue:GetCurrentSound() then
+            SoundQueue:ShowFrame()
+        end
+
+    elseif msg == "history" then
+        if table.getn(SoundQueue.history) == 0 then
+            Debug("No history")
+        else
+            Debug("=== History (" .. table.getn(SoundQueue.history) .. ") ===")
+            for i = 1, math.min(10, table.getn(SoundQueue.history)) do
+                local entry = SoundQueue.history[i]
+                Debug(i .. ". " .. (entry.npcName or "Unknown") .. " - " .. (entry.title or ""))
+            end
+        end
+
+    elseif msg == "clear" then
+        SoundQueue:ClearHistory()
+
+    elseif string.find(msg, "play ") == 1 then
+        local index = tonumber(string.sub(msg, 6))
+        if index then SoundQueue:PlayFromHistory(index) end
+
+    elseif msg == "pause" then
+        SoundQueue:TogglePause()
+
+    elseif msg == "missing" then
+        SoundQueue:ExportMissingNPCs()
+
+    elseif msg == "clearmissing" then
+        SoundQueue:ClearMissingNPCs()
+
+    else
+        Debug("Commands: show, history, play <n>, clear, pause, missing, clearmissing")
+    end
+end

@@ -191,8 +191,7 @@ function SoundQueue:PlaySound(soundData)
         return
     end
 
-    PlaySoundFile(soundData.filePath)
-    soundData.handle = 1
+    soundData.handle = PlaySoundFile(soundData.filePath)
 
     if soundData.isResuming then
         soundData.startTime  = GetTime() - soundData.pauseOffset
@@ -229,9 +228,14 @@ end
 
 function SoundQueue:StopSound(soundData)
     if not soundData then return end
-    -- Classic-era trick: toggling MasterSoundEffects kills all active sounds
-    SetCVar("MasterSoundEffects", 0)
-    SetCVar("MasterSoundEffects", 1)
+    -- Classic-era trick: toggling MasterSoundEffects kills all active sounds.
+    -- Only do it if we believe a sound is actually still playing; running it
+    -- against an already-finished sound can also trigger a null-deref in the
+    -- sound engine on some 1.12.1 builds.
+    if self.isPlaying and soundData.handle then
+        SetCVar("MasterSoundEffects", 0)
+        SetCVar("MasterSoundEffects", 1)
+    end
     soundData.handle = nil
 end
 
@@ -265,7 +269,16 @@ function SoundQueue:CheckSoundFinished()
     local elapsed = GetTime() - self.currentSound.startTime
     if elapsed >= self.currentSound.duration then
         Debug("Sound finished naturally")
-        self:RemoveSound(self.currentSound)
+        -- Stop the polling loop immediately before we touch any state.
+        -- RemoveSound may start the next sound (which sets up its own
+        -- updateFrame script), so we must not let this tick run again
+        -- on the now-stale currentSound.
+        if self.updateFrame then
+            self.updateFrame:SetScript("OnUpdate", nil)
+        end
+        local finished = self.currentSound
+        self.currentSound = nil
+        self:RemoveSound(finished)
     end
 end
 
@@ -362,52 +375,5 @@ function SoundQueue:RemoveSound(soundData)
     else
         -- A queued (non-playing) item was removed
         self:UpdateQueueList()
-    end
-end
-
--------------------------------------------------
--- SLASH COMMANDS
--------------------------------------------------
-
-SLASH_SOUNDQUEUE1 = "/bq"
-SLASH_SOUNDQUEUE2 = "/soundqueue"
-
-SlashCmdList["SOUNDQUEUE"] = function(msg)
-    msg = string.lower(msg or "")
-
-    if msg == "show" then
-        if SoundQueue.frame and SoundQueue:GetCurrentSound() then
-            SoundQueue:ShowFrame()
-        end
-
-    elseif msg == "history" then
-        if table.getn(SoundQueue.history) == 0 then
-            Debug("No history")
-        else
-            Debug("=== History (" .. table.getn(SoundQueue.history) .. ") ===")
-            for i = 1, math.min(10, table.getn(SoundQueue.history)) do
-                local entry = SoundQueue.history[i]
-                Debug(i .. ". " .. (entry.npcName or "Unknown") .. " - " .. (entry.title or ""))
-            end
-        end
-
-    elseif msg == "clear" then
-        SoundQueue:ClearHistory()
-
-    elseif string.find(msg, "play ") == 1 then
-        local index = tonumber(string.sub(msg, 6))
-        if index then SoundQueue:PlayFromHistory(index) end
-
-    elseif msg == "pause" then
-        SoundQueue:TogglePause()
-
-    elseif msg == "missing" then
-        SoundQueue:ExportMissingNPCs()
-
-    elseif msg == "clearmissing" then
-        SoundQueue:ClearMissingNPCs()
-
-    else
-        Debug("Commands: show, history, play <n>, clear, pause, missing, clearmissing")
     end
 end

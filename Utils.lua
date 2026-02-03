@@ -15,6 +15,10 @@
 --   FuzzyFindDialogSound()  — Myers bit-parallel fuzzy matcher
 --   GetNPCMetadata()        — metadata accessor for NPC_DATABASE
 
+
+local playerName = UnitName("player")
+local _, playerClass = UnitClass("player")
+
 -------------------------------------------------
 -- DEBUG
 -------------------------------------------------
