@@ -191,7 +191,13 @@ function SoundQueue:PlaySound(soundData)
         return
     end
 
-    soundData.handle = PlaySoundFile(soundData.filePath)
+    Debug("Loading" .. tostring(soundData.filePath))
+    soundData.handle = PlaySound(soundData.filePath)
+    if not soundData.handle then
+        Debug("Failed to play sound, skipping: " .. tostring(soundData.filePath))
+        return
+    end
+
 
     if soundData.isResuming then
         soundData.startTime  = GetTime() - soundData.pauseOffset

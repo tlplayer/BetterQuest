@@ -323,9 +323,55 @@ local function UpdateStatusText()
     end
 end
 
-function SoundQueue:UpdateQueueList()
-    -- (Placeholder for list view updates if needed)
+function SoundQueue:InitQueueList()
+    -- Container frame for queued sounds
+    self.frame.queueContainer = CreateFrame("Frame", nil, self.frame)
+    self.frame.queueContainer:SetPoint("TOPLEFT", 80, -55)
+    self.frame.queueContainer:SetWidth(200)
+    self.frame.queueContainer:SetHeight(80)
+
+    -- Pool of buttons for queued sounds
+    self.frame.queueButtons = {}
+    for i = 1, 5 do  -- show up to 5 queued sounds
+        local btn = CreateFrame("Button", nil, self.frame.queueContainer)
+        btn:SetHeight(15)
+        btn:SetWidth(180)
+        btn:SetPoint("TOPLEFT", 0, -(i-1)*16)
+
+        btn.text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        btn.text:SetAllPoints()
+        btn.text:SetJustifyH("LEFT")
+
+        -- Make a local copy of i for the closure
+        local index = i
+        btn:SetScript("OnClick", function()
+            if not SoundQueue.sounds then return end
+            local soundData = SoundQueue.sounds[index+1]  -- skip currently playing
+            if soundData then
+                SoundQueue:RemoveSound(soundData)
+            end
+        end)
+
+        btn:Hide()
+        self.frame.queueButtons[i] = btn
+    end
 end
+
+function SoundQueue:UpdateQueueList()
+    if not self.frame or not self.frame.queueButtons then return end
+    if not self.sounds then return end
+
+    for i, btn in ipairs(self.frame.queueButtons) do
+        local soundData = self.sounds[i+1]  -- skip currently playing
+        if soundData then
+            btn.text:SetText(string.format("%d. %s", i, soundData.npcName or "Unknown"))
+            btn:Show()
+        else
+            btn:Hide()
+        end
+    end
+end
+
 
 function SoundQueue:ShowFrame()
     if self.frame then self.frame:Show() end

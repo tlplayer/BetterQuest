@@ -100,6 +100,47 @@ function IsBookInteraction()
 end
 
 -------------------------------------------------
+-- SAFE SOUND HELPERS
+-------------------------------------------------
+
+-- Safely play a sound file; returns the handle or nil if failed.
+function PlaySound(filePath)
+    if not filePath or filePath == "" then
+        Debug("PlaySoundSafe called with empty path")
+        return nil
+    end
+
+    local handle
+    local ok, err = pcall(function()
+        handle = PlaySoundFile(filePath)
+    end)
+
+    if not ok then
+        Debug("PlaySoundSafe ERROR playing sound: " .. tostring(err) .. " | Path: " .. tostring(filePath))
+        return nil
+    end
+
+    Debug("PlaySoundSafe succeeded: " .. tostring(filePath))
+    return handle
+end
+
+-- Safely stop a sound by handle
+function StopSound(handle)
+    if not handle then
+        Debug("StopSoundSafe called with nil handle")
+        return
+    end
+
+    local ok, err = pcall(function()
+        StopSoundFile(handle)
+    end)
+
+    if not ok then
+        Debug("StopSoundSafe ERROR stopping sound: " .. tostring(err) .. " | Handle: " .. tostring(handle))
+    end
+end
+
+-------------------------------------------------
 -- DIALOG SOUND LOOKUP
 -------------------------------------------------
 -- Three-stage resolution:
