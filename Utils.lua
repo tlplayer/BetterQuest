@@ -104,10 +104,21 @@ end
 -------------------------------------------------
 
 -- Safely play a sound file; returns the handle or nil if failed.
-function PlaySound(filePath)
+function PlaySound(soundData)
+    if not soundData then return nil end
+        soundData.filePath = NormalizePath(soundData.filePath)
+    if not soundData.filePath then
+        Debug("ERROR: No valid file path")
+        return
+    end
+
+    Debug("Loading" .. tostring(soundData.filePath))
     if not filePath or filePath == "" then
         Debug("PlaySoundSafe called with empty path")
         return nil
+    end
+    if soundData.duration == 0.0 then 
+        Debug("File is empty, if you play this file it will crash wow" .. filePath)
     end
 
     local handle

@@ -185,13 +185,7 @@ function SoundQueue:PlaySound(soundData)
     Debug("PlaySound called for: " .. tostring(soundData and soundData.npcName))
     if not soundData then return end
 
-    soundData.filePath = NormalizePath(soundData.filePath)
-    if not soundData.filePath then
-        Debug("ERROR: No valid file path")
-        return
-    end
 
-    Debug("Loading" .. tostring(soundData.filePath))
     soundData.handle = PlaySound(soundData.filePath)
     if not soundData.handle then
         Debug("Failed to play sound, skipping: " .. tostring(soundData.filePath))
