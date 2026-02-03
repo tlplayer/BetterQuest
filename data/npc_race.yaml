@@ -76,6 +76,7 @@ demon:
 - Zggi
 trogg:
 - Warosh
+- Rockjaw Skullthumper
 mechanical:
 - 7:XT
 - A-Me 01
@@ -256,6 +257,7 @@ dragon:
 - Itharius
 - Lord Arkkoroc
 dwarf:
+- Yarlyn Amberstill
 - Advisor Belgrum
 - Aedis Brom
 - Agnar Beastamer
@@ -3030,8 +3032,11 @@ nightelf:
 - Zarrin
 object:
 - Crude Map
+- A Dwarven Corpse
 - Strange Snowman
 - Winter Reveler
+- Hildelves Journal
+-
 - Flik's Frog
 - Metzen the Reindeer
 ogre:

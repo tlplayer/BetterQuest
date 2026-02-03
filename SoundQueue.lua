@@ -181,112 +181,73 @@ end
 -- FUZZY TEXT MATCHING (Myers' Bit-Parallel)
 -------------------------------------------------
 
--- Bitwise helper functions for Lua 5.1 (WoW 1.12.1)
-local function bit_and(a, b)
-    local result = 0
-    local bit = 1
-    while a > 0 and b > 0 do
-        if mod(a, 2) == 1 and mod(b, 2) == 1 then
-            result = result + bit
-        end
-        a = math.floor(a / 2)
-        b = math.floor(b / 2)
-        bit = bit * 2
-    end
-    return result
-end
 
-local function bit_or(a, b)
-    local result = 0
-    local bit = 1
-    while a > 0 or b > 0 do
-        if mod(a, 2) == 1 or mod(b, 2) == 1 then
-            result = result + bit
-        end
-        a = math.floor(a / 2)
-        b = math.floor(b / 2)
-        bit = bit * 2
-    end
-    return result
-end
+-- Standard Levenshtein Distance (Global)
+-- Optimized for Lua 5.1 / WoW to minimize string and table churn
+local function EditDistance(s, t)
+    if s == t then return 0 end
+    local slen = string.len(s)
+    local tlen = string.len(t)
+    if slen == 0 then return tlen end
+    if tlen == 0 then return slen end
 
-local function bit_xor(a, b)
-    local result = 0
-    local bit = 1
-    while a > 0 or b > 0 do
-        if mod(a, 2) ~= mod(b, 2) then
-            result = result + bit
-        end
-        a = math.floor(a / 2)
-        b = math.floor(b / 2)
-        bit = bit * 2
-    end
-    return result
-end
+    -- Optimization: ensure temporary arrays are sized for the shorter string.
+    -- This minimizes memory usage and the number of operations in the inner loop.
+    local s_long, t_short
+    local slen_long, tlen_short
 
-local function bit_not(a, bits)
-    return math.pow(2, bits) - 1 - a
-end
--- Myers bit-parallel edit distance (Levenshtein)
--- Fast O(n) algorithm using bitwise operations
--- Pattern length limited to 63 characters (perfect for our 50-char normalized keys)
-local function EditDistance(pattern, text)
-    -- local aliases (work with Classic/WoW globals if available)
-    local strlen = strlen or string.len
-    local strsub = strsub or string.sub
+    if slen < tlen then
+        s_long, t_short = t, s
+        slen_long, tlen_short = tlen, slen
+    else
+        s_long, t_short = s, t
+        slen_long, tlen_short = slen, tlen
+    end
 
-    local m = strlen(pattern)
-    local n = strlen(text)
-    
-    if m == 0 then return n end
-    if n == 0 then return m end
-    if m > 63 then return 999 end  -- Pattern too long, return large distance
-    
-    -- Build Peq table (character bitmasks)
-    local Peq = {}
-    for i = 1, m do
-        local c = strsub(pattern, i, i)
-        local mask = Peq[c] or 0
-        Peq[c] = mask + math.pow(2, i - 1)
+    -- Pre-allocate v0 and v1 tables once.
+    -- This avoids repeated table creation and reduces garbage collection pressure.
+    local v0 = {}
+    local v1 = {}
+    for i = 0, tlen_short do
+        v0[i] = i
     end
-    
-    -- Initialize bit vectors
-    local Pv = math.pow(2, m) - 1  -- All 1s for m bits
-    local Mv = 0
-    local score = m
-    local high_bit = math.pow(2, m - 1)
-    
-    -- Process each character in text
-    for i = 1, n do
-        local c = strsub(text, i, i)
-        local Eq = Peq[c] or 0
-        
-        -- Simulate bitwise operations (using helper bit_* funcs defined above)
-        local Xv = bit_or(Eq, Mv)
-        local temp = bit_and(Eq, Pv) + Pv
-        local Xh = bit_or(bit_xor(temp, Pv), Eq)
-        
-        local Ph = bit_or(Mv, bit_not(bit_or(Xh, Pv), m))
-        local Mh = bit_and(Pv, Xh)
-        
-        -- Update score
-        if bit_and(Ph, high_bit) ~= 0 then
-            score = score + 1
-        elseif bit_and(Mh, high_bit) ~= 0 then
-            score = score - 1
+
+    -- Pre-process t_short into a table of characters.
+    -- This avoids calling string.sub(t_short, j, j) inside the inner loop,
+    -- significantly reducing the creation of temporary string objects.
+    local t_short_chars = {}
+    for k = 1, tlen_short do
+        t_short_chars[k] = string.sub(t_short, k, k)
+    end
+
+    for i = 1, slen_long do
+        v1[0] = i
+        local s_i_char = string.sub(s_long, i, i) -- One string.sub per outer loop iteration
+        for j = 1, tlen_short do
+            local cost = (s_i_char == t_short_chars[j]) and 0 or 1
+            local del = v0[j] + 1
+            local ins = v1[j-1] + 1
+            local sub = v0[j-1] + cost
+            
+            local min_val = del
+            if ins < min_val then min_val = ins end
+            if sub < min_val then min_val = sub end
+            v1[j] = min_val
         end
-        
-        -- Update bit vectors
-        Pv = bit_or(Mh, bit_not(bit_or(Xv, Ph), m))
-        Mv = bit_and(Ph, Xv)
+        -- Efficiently update v0 for the next iteration by copying values.
+        -- This reuses the existing table structure instead of allocating new ones.
+        for j = 0, tlen_short do
+            v0[j] = v1[j]
+        end
     end
-    
-    return score
+
+    return v0[tlen_short]
 end
 
 -- Fuzzy find (uses EditDistance consistently and enforces a 0.1s loop timeout)
 function FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
+    print(dialogText)
 
     local lookupName = NormalizeNPCName(npcName)
     local targetNpc  = NPC_DATABASE[lookupName]
@@ -294,12 +255,13 @@ function FuzzyFindDialogSound(npcName, dialogText)
     local targetRace = targetNpc and targetNpc.race
 
     local normalizedInput = NormalizeDialogText(dialogText)
+    print(normalizedInput)
     if normalizedInput == "" then return nil end
 
     -- dynamic distance threshold: allow ~20% of pattern length, capped at 10
     local strlen = strlen or string.len
     local m = strlen(normalizedInput)
-    local MAX_DISTANCE = math.min(10, math.max(1, math.ceil(m * 0.20)))
+    local MAX_DISTANCE = math.min(8, math.max(1, math.ceil(m * 0.10)))
 
     local bestMatch = nil
     local bestDistance = 999
@@ -315,7 +277,7 @@ function FuzzyFindDialogSound(npcName, dialogText)
                 return nil
             end
 
-            local distance = EditDistance(normalizedInput, dialogKey)
+            local distance =  EditDistance(normalizedInput, dialogKey)
             if distance <= MAX_DISTANCE and distance < bestDistance then
                 bestDistance = distance
                 bestMatch = entry
@@ -326,10 +288,9 @@ function FuzzyFindDialogSound(npcName, dialogText)
             return bestMatch.path, bestMatch.dialog_type, bestMatch.quest_id, bestMatch.seconds
         end
     end
-
     -- Fallback: search other NPCs filtered by race + sex (to avoid unrelated matches)
     for otherName, data in pairs(NPC_DATABASE) do
-        if GetTime() - startTime > TIMEOUT then
+        if GetTime() - startTime > TIMEOUT  then
             Debug("Fuzzy search timeout (other NPCs) - aborting fuzzy lookup")
             return nil
         end
@@ -345,7 +306,7 @@ function FuzzyFindDialogSound(npcName, dialogText)
                     return nil
                 end
 
-                local distance = EditDistance(normalizedInput, dialogKey)
+                local distance =  EditDistance(normalizedInput, dialogKey)
                 if distance <= MAX_DISTANCE then
                     -- prefer the smallest distance (best fuzzy match)
                     if distance < bestDistance then
@@ -354,7 +315,7 @@ function FuzzyFindDialogSound(npcName, dialogText)
                     end
 
                     -- If we get a perfect or very close match, return immediately
-                    if distance == 0 or distance <= math.max(1, math.floor(m * 0.05)) then
+                    if distance == 0 or distance <= math.max(3, math.floor(m * 0.05)) then
                         return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
                     end
                 end
@@ -393,6 +354,10 @@ function FindDialogSound(npcName, dialogText)
         break
     end
 
+    if not data then
+        pass
+    end
+
     if data.dialogs then
       local entry = data.dialogs[key]
       if entry then
@@ -408,6 +373,7 @@ function FindDialogSound(npcName, dialogText)
   end
 
   return nil
+    ::continue::
 end
 
 -------------------------------------------------
@@ -419,7 +385,7 @@ local function IsBookInteraction()
 end
 
 local function GetPortraitTexture(soundData)
-    if not soundData then
+    if not soundData or not soundData.npcName then
         return SoundQueue.portraitConfig.DEFAULT_NPC
     end
     
@@ -427,18 +393,23 @@ local function GetPortraitTexture(soundData)
         return SoundQueue.portraitConfig.DEFAULT_BOOK
     end
     
-    local npcName = soundData.npcName
-    if npcName then
-        local metadata = GetNPCMetadata(npcName)
-        if metadata and metadata.race then
-            local filename = metadata.race
-            if metadata.sex == "female" then
-                filename = filename .. "_female"
-            end
-            
-            local path = SoundQueue.portraitConfig.PORTRAIT_PATH .. filename
-            return path
+    local metadata = GetNPCMetadata(soundData.npcName)
+    
+    -- If this NPC has a narrator, we prefer the narrator's metadata
+    if metadata and metadata.narrator then
+        local narratorMetadata = GetNPCMetadata(metadata.narrator)
+        if narratorMetadata then
+            metadata = narratorMetadata
         end
+    end
+    
+    -- Final check for race to build the portrait path
+    if metadata and metadata.race then
+        local filename = metadata.race
+        if metadata.sex == "female" then
+            filename = filename .. "_female"
+        end
+        return SoundQueue.portraitConfig.PORTRAIT_PATH .. filename
     end
     
     return SoundQueue.portraitConfig.DEFAULT_NPC
