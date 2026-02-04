@@ -2,6 +2,8 @@
 -- Every frame, layout hook, portrait, and UI-update callback lives here.
 -- Load order: 3 of 4  (utils → soundqueue → ui → core)
 --
+-- UPDATED: Integrated QuestUI.tga background with portrait positioning
+--
 -- Globals exported:
 --   PortraitManager          — unified portrait module
 --   GossipResize(titleButton)— called by Blizzard's gossip UI, MUST be global
@@ -47,10 +49,11 @@ local currentPortrait = {
 local activeNPCName = nil
 
 local PORTRAIT_CONFIG = {
-    WIDTH  = 125,
-    HEIGHT = 220,
-    OFFSET_X = 15,
-    OFFSET_Y = 50,
+    -- Updated to match QuestUI.tga dark frame position
+    WIDTH  = 140,
+    HEIGHT = 180,
+    OFFSET_X = 25,
+    OFFSET_Y = 85,
 
     DEFAULT_NPC    = "Interface\\AddOns\\BetterQuest\\portraits\\default.tga",
     DEFAULT_BOOK   = "Interface\\Icons\\INV_Misc_Book_09",
@@ -89,7 +92,7 @@ local function GetOrCreatePortraitFrame(parentFrame)
 
     portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
     portrait.bg:SetAllPoints()
-    portrait.bg:SetTexture(0, 0, 0, 1)
+    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent since QuestUI.tga has the frame
 
     portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
     portrait.texture:SetAllPoints()
@@ -507,34 +510,57 @@ end
 
 
 -- =====================================================================
---   SECTION 3 — QuestFrame Layout
+--   SECTION 3 — QuestFrame Layout with QuestUI.tga Background
 -- =====================================================================
 
 do  -- block-scope so all locals are invisible to the rest of ui.lua
 
 local QUEST_CONFIG = {
-    WIDTH  = 620,
-    HEIGHT = 400,
+    -- Frame dimensions to match your QuestUI.tga
+    WIDTH  = 800,
+    HEIGHT = 450,
     POS_X  = 0,
     POS_Y  = -60,
 
-    MARGIN_LEFT  = 140,
-    MARGIN_RIGHT = 50,
-    MARGIN_TOP   = 50,
+    -- Content area margins (to fit within the parchment area)
+    MARGIN_LEFT  = 200,  -- Space for portrait frame on left
+    MARGIN_RIGHT = 60,
+    MARGIN_TOP   = 80,
 
-    SCROLL_HEIGHT_DETAIL   = 220,
-    SCROLL_HEIGHT_PROGRESS = 220,
-    SCROLL_HEIGHT_REWARD   = 200,
-    SCROLL_HEIGHT_GREETING = 220, -- FIX: Support greeting page height
+    SCROLL_HEIGHT_DETAIL   = 250,
+    SCROLL_HEIGHT_PROGRESS = 250,
+    SCROLL_HEIGHT_REWARD   = 230,
+    SCROLL_HEIGHT_GREETING = 250,
 
-    BUTTON_OFFSET_X = 20,
-    BUTTON_OFFSET_Y = 20,
-    CLOSE_OFFSET_X  = 8,
-    CLOSE_OFFSET_Y  = 8,
+    BUTTON_OFFSET_X = 80,
+    BUTTON_OFFSET_Y = 30,
+    CLOSE_OFFSET_X  = 15,
+    CLOSE_OFFSET_Y  = 15,
 }
 
 local function GetBackdrop()
     return QuestFrame.backdrop or QuestFrame
+end
+
+-- Apply the QuestUI.tga background
+local function ApplyQuestBackground()
+    if not QuestFrame then return end
+    local backdrop = GetBackdrop()
+    
+    -- Create custom background texture if it doesn't exist
+    if not backdrop.customBG then
+        backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
+        backdrop.customBG:SetAllPoints(backdrop)
+        backdrop.customBG:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga")
+        
+        -- Hide default Blizzard background elements
+        if QuestFrameDetailPanel then QuestFrameDetailPanel:SetAlpha(0) end
+        if QuestFrameProgressPanel then QuestFrameProgressPanel:SetAlpha(0) end
+        if QuestFrameRewardPanel then QuestFrameRewardPanel:SetAlpha(0) end
+        if QuestFrameGreetingPanel then QuestFrameGreetingPanel:SetAlpha(0) end
+        
+        Debug("QuestFrame custom background applied")
+    end
 end
 
 local function UpdateNPCPortrait()
@@ -573,39 +599,43 @@ local function ApplyQuestLayout()
     QuestFrame:ClearAllPoints()
     QuestFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", QUEST_CONFIG.POS_X, QUEST_CONFIG.POS_Y)
 
+    -- Apply custom background
+    ApplyQuestBackground()
+    
+    -- Update portrait
     UpdateNPCPortrait()
 
     LayoutScroll(QuestDetailScrollFrame,   QuestDetailScrollChildFrame,   QUEST_CONFIG.SCROLL_HEIGHT_DETAIL)
     LayoutScroll(QuestProgressScrollFrame, QuestProgressScrollChildFrame, QUEST_CONFIG.SCROLL_HEIGHT_PROGRESS)
     LayoutScroll(QuestRewardScrollFrame,   QuestRewardScrollChildFrame,   QUEST_CONFIG.SCROLL_HEIGHT_REWARD)
-    LayoutScroll(QuestGreetingScrollFrame, QuestGreetingScrollChildFrame, QUEST_CONFIG.SCROLL_HEIGHT_GREETING) -- FIX: Apply layout to Greeting
+    LayoutScroll(QuestGreetingScrollFrame, QuestGreetingScrollChildFrame, QUEST_CONFIG.SCROLL_HEIGHT_GREETING)
 
-    -- Re-anchor all Blizzard buttons to the backdrop
+    -- Re-anchor all Blizzard buttons to match QuestUI.tga button positions
     if QuestFrameAcceptButton then
-        QuestFrameAcceptButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT",
-            QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+        QuestFrameAcceptButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            -QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
     end
     if QuestFrameDeclineButton then
-        QuestFrameDeclineButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT",
-            -QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
-    end
-    if QuestFrameCompleteButton then
-        QuestFrameCompleteButton:SetPoint("BOTTOMLEFT", backdrop, "BOTTOMLEFT",
+        QuestFrameDeclineButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
             QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
     end
-    if QuestFrameGoodbyeButton then
-        QuestFrameGoodbyeButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT",
+    if QuestFrameCompleteButton then
+        QuestFrameCompleteButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
             -QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+    end
+    if QuestFrameGoodbyeButton then
+        QuestFrameGoodbyeButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
     end
     if QuestFrameCloseButton then
         QuestFrameCloseButton:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT",
             -QUEST_CONFIG.CLOSE_OFFSET_X, -QUEST_CONFIG.CLOSE_OFFSET_Y)
     end
     
-    -- FIX: Ensure Greeting buttons are also aligned
+    -- Greeting buttons alignment
     if QuestGreetingFrameCancelButton then
-        QuestGreetingFrameCancelButton:SetPoint("BOTTOMRIGHT", backdrop, "BOTTOMRIGHT",
-            -QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+        QuestGreetingFrameCancelButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
     end
 end
 
@@ -614,7 +644,7 @@ local function FixTextWidths()
     local fields = {
         QuestTitleText, QuestDescription, QuestObjectiveText,
         QuestProgressText, QuestRewardText,
-        GreetingText, -- FIX: Support Greeting text
+        GreetingText,
     }
     for _, f in ipairs(fields) do
         if f then
@@ -623,8 +653,8 @@ local function FixTextWidths()
         end
     end
     
-    -- FIX: Fix Greeting title buttons alignment
-    for i=1, 32 do -- MAX_NUM_QUESTS is usually 32 in vanilla/classic
+    -- Fix Greeting title buttons alignment
+    for i=1, 32 do
         local button = getglobal("QuestTitleButton"..i)
         if button and button:IsShown() then
             button:SetWidth(width)
@@ -696,28 +726,28 @@ end  -- end QuestFrame do-block
 
 
 -- =====================================================================
---   SECTION 4 — GossipFrame Layout  (single authoritative copy)
+--   SECTION 4 — GossipFrame Layout with QuestUI.tga Background
 -- =====================================================================
 
 do  -- block-scope
 
 local GOSSIP_CONFIG = {
     FRAME = {
-        WIDTH    = 620,
-        HEIGHT   = 350,
+        WIDTH    = 800,
+        HEIGHT   = 450,
         OFFSET_X = 0,
-        OFFSET_Y = -250,
+        OFFSET_Y = -60,
     },
     PORTRAIT = {
-        WIDTH  = 125,
-        HEIGHT = 220,
-        LEFT   = 15,
-        TOP    = 50,
+        WIDTH  = 140,
+        HEIGHT = 180,
+        LEFT   = 25,
+        TOP    = 85,
     },
     CONTENT = {
-        GAP_FROM_PORTRAIT      = -10,
+        GAP_FROM_PORTRAIT      = 10,
         RIGHT                  = 60,
-        TOP                    = 40,
+        TOP                    = 80,
         BOTTOM                 = 40,
         EXTRA_BOTTOM_RESERVED  = 80,
     },
@@ -728,7 +758,7 @@ local GOSSIP_CONFIG = {
         ICON_LEFT      = 3,
     },
     SCROLLBAR = {
-        OFFSET_X      = 16,
+        OFFSET_X      = -20,
         OFFSET_TOP    = 16,
         OFFSET_BOTTOM = 16,
     },
@@ -769,7 +799,7 @@ local function EnsureGossipPortrait(parent)
 
     portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
     portrait.bg:SetAllPoints()
-    portrait.bg:SetTexture(0, 0, 0, 1)
+    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent since QuestUI.tga has the frame
 
     portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
     portrait.texture:SetAllPoints()
@@ -796,49 +826,19 @@ local function HideGossipPortrait()
         GossipFrame.widePortrait:Hide()
     end
 end
--- ========================================================
--- Standalone Image Display
--- ========================================================
--- ===== Simple one-off image display (shows on addon load) =====
-do
-  local TEXTURE_PATH = "Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga"
-  local FRAME_NAME = "BetterQuest_LoadImageFrame"
 
-  -- if frame already exists (reloads), reuse it
-  if not f then
-    f = CreateFrame("Frame", FRAME_NAME, UIParent)
-    -- size — change as needed
-    f:SetWidth(256)
-    f:SetHeight(256)
-
-    -- center it
-    f:ClearAllPoints()
-    f:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
-
-    -- allow moving
-    f:EnableMouse(true)
-    f:SetMovable(true)
-    f:RegisterForDrag("LeftButton")
-    f:SetScript("OnDragStart", function(self) self:StartMoving() end)
-    f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
-
-    -- optional semi-transparent black backdrop behind the texture
-    f.backdrop = f:CreateTexture(nil, "BACKGROUND")
-    f.backdrop:SetAllPoints(f)
-    f.backdrop:SetTexture(0, 0, 0, 0.6)
-
-    -- the actual texture (in ARTWORK so it sits above backdrop)
-    f.texture = f:CreateTexture(nil, "ARTWORK")
-    f.texture:SetAllPoints(f)
-    f.texture:SetTexCoord(0, 1, 0, 1)
-  end
-
-  -- set the texture path (safely) and show the frame
-  if f.texture and type(TEXTURE_PATH) == "string" then
-    print("Setting texture" .. TEXTURE_PATH )
-    f.texture:SetTexture(TEXTURE_PATH)
-  end
-  f:Show()
+-- Apply the QuestUI.tga background to Gossip frame
+local function ApplyGossipBackground()
+    if not GossipFrame then return end
+    local backdrop = GossipFrame.backdrop or GossipFrame
+    
+    if not backdrop.customBG then
+        backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
+        backdrop.customBG:SetAllPoints(backdrop)
+        backdrop.customBG:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga")
+        
+        Debug("GossipFrame custom background applied")
+    end
 end
 
 local function ApplyGossipLayout()
@@ -848,14 +848,13 @@ local function ApplyGossipLayout()
     GossipFrame:SetWidth(GOSSIP_CONFIG.FRAME.WIDTH)
     GossipFrame:SetHeight(GOSSIP_CONFIG.FRAME.HEIGHT)
     GossipFrame:ClearAllPoints()
-    GossipFrame:SetPoint("CENTER", UIParent, "CENTER",
+    GossipFrame:SetPoint("BOTTOM", UIParent, "BOTTOM",
         GOSSIP_CONFIG.FRAME.OFFSET_X, GOSSIP_CONFIG.FRAME.OFFSET_Y)
 
-        -- Attach your custom background
-    if not backdrop.bgTexture then
-        backdrop.bgTexture = backdrop:CreateTexture(nil, "BACKGROUND")
-        backdrop.bgTexture:SetAllPoints()
-    end
+    -- Apply custom background
+    ApplyGossipBackground()
+    
+    -- Update portrait
     UpdateGossipPortrait()
 
     if GossipGreetingScrollFrame then
