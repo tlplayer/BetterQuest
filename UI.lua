@@ -48,6 +48,8 @@ local currentPortrait = {
 }
 local activeNPCName = nil
 
+local QUEST_UI_TEXTURE = "Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga"
+
 local PORTRAIT_CONFIG = {
     -- Updated to match QuestUI.tga dark frame position
     WIDTH  = 140,
@@ -551,7 +553,7 @@ local function ApplyQuestBackground()
     if not backdrop.customBG then
         backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
         backdrop.customBG:SetAllPoints(backdrop)
-        backdrop.customBG:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga")
+        backdrop.customBG:SetTexture(QUEST_UI_TEXTURE)
         
         -- Hide default Blizzard background elements
         if QuestFrameDetailPanel then QuestFrameDetailPanel:SetAlpha(0) end
@@ -835,7 +837,7 @@ local function ApplyGossipBackground()
     if not backdrop.customBG then
         backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
         backdrop.customBG:SetAllPoints(backdrop)
-        backdrop.customBG:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga")
+        backdrop.customBG:SetTexture(QUEST_UI_TEXTURE)
         
         Debug("GossipFrame custom background applied")
     end
