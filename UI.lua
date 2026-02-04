@@ -796,6 +796,50 @@ local function HideGossipPortrait()
         GossipFrame.widePortrait:Hide()
     end
 end
+-- ========================================================
+-- Standalone Image Display
+-- ========================================================
+-- ===== Simple one-off image display (shows on addon load) =====
+do
+  local TEXTURE_PATH = "Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga"
+  local FRAME_NAME = "BetterQuest_LoadImageFrame"
+
+  -- if frame already exists (reloads), reuse it
+  if not f then
+    f = CreateFrame("Frame", FRAME_NAME, UIParent)
+    -- size — change as needed
+    f:SetWidth(256)
+    f:SetHeight(256)
+
+    -- center it
+    f:ClearAllPoints()
+    f:SetPoint("CENTER", UIParent, "CENTER", 0, 0)
+
+    -- allow moving
+    f:EnableMouse(true)
+    f:SetMovable(true)
+    f:RegisterForDrag("LeftButton")
+    f:SetScript("OnDragStart", function(self) self:StartMoving() end)
+    f:SetScript("OnDragStop", function(self) self:StopMovingOrSizing() end)
+
+    -- optional semi-transparent black backdrop behind the texture
+    f.backdrop = f:CreateTexture(nil, "BACKGROUND")
+    f.backdrop:SetAllPoints(f)
+    f.backdrop:SetTexture(0, 0, 0, 0.6)
+
+    -- the actual texture (in ARTWORK so it sits above backdrop)
+    f.texture = f:CreateTexture(nil, "ARTWORK")
+    f.texture:SetAllPoints(f)
+    f.texture:SetTexCoord(0, 1, 0, 1)
+  end
+
+  -- set the texture path (safely) and show the frame
+  if f.texture and type(TEXTURE_PATH) == "string" then
+    print("Setting texture" .. TEXTURE_PATH )
+    f.texture:SetTexture(TEXTURE_PATH)
+  end
+  f:Show()
+end
 
 local function ApplyGossipLayout()
     if not GossipFrame then return end
@@ -807,6 +851,11 @@ local function ApplyGossipLayout()
     GossipFrame:SetPoint("CENTER", UIParent, "CENTER",
         GOSSIP_CONFIG.FRAME.OFFSET_X, GOSSIP_CONFIG.FRAME.OFFSET_Y)
 
+        -- Attach your custom background
+    if not backdrop.bgTexture then
+        backdrop.bgTexture = backdrop:CreateTexture(nil, "BACKGROUND")
+        backdrop.bgTexture:SetAllPoints()
+    end
     UpdateGossipPortrait()
 
     if GossipGreetingScrollFrame then

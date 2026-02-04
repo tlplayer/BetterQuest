@@ -26,7 +26,13 @@ local _, playerClass = UnitClass("player")
 function Debug(msg)
     DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BetterQuest]|r " .. tostring(msg))
 end
+-- ===== Slash command to reload UI =====
+SLASH_BETTERQUEST_RELOAD1 = "/reload"
+SLASH_BETTERQUEST_RELOAD2 = "/rl"  -- optional shorthand
 
+SlashCmdList["BETTERQUEST_RELOAD"] = function()
+    ReloadUI()  -- built-in WoW function
+end
 -------------------------------------------------
 -- NORMALIZERS
 -------------------------------------------------
