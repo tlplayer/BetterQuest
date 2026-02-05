@@ -2,7 +2,7 @@
 -- Every frame, layout hook, portrait, and UI-update callback lives here.
 -- Load order: 3 of 4  (utils → soundqueue → ui → core)
 --
--- UPDATED: Integrated QuestUI.tga background with portrait positioning
+-- UPDATED: Configuration-first design with shared configs
 --
 -- Globals exported:
 --   PortraitManager          — unified portrait module
@@ -24,6 +24,176 @@
 --   GetNPCMetadata, NPC_DATABASE                    ← data layer (external)
 
 -- =====================================================================
+--   CONFIGURATION — All settings in one place at the top
+-- =====================================================================
+
+local CONFIG = {
+    -- ================================================================
+    -- SHARED DIALOG CONFIGURATION (Quest & Gossip)
+    -- ================================================================
+    DIALOG = {
+        -- Frame dimensions
+        FRAME_WIDTH  = 800,
+        FRAME_HEIGHT = 450,
+        
+        -- Frame positioning
+        ANCHOR_POINT    = "BOTTOM",
+        ANCHOR_RELATIVE = "BOTTOM",
+        OFFSET_X = 30,
+        OFFSET_Y = -60,
+        
+        -- Portrait configuration
+        PORTRAIT_WIDTH  = 160,
+        PORTRAIT_HEIGHT = 240,
+        PORTRAIT_OFFSET_X = 90,
+        PORTRAIT_OFFSET_Y = 95,
+        
+        -- Content area (margins from frame edges)
+        CONTENT_MARGIN_LEFT  = 270,  -- Space for portrait on left
+        CONTENT_MARGIN_RIGHT = 80,
+        CONTENT_MARGIN_TOP   = 80,
+        CONTENT_MARGIN_BOTTOM = 60,
+        
+        -- Text area (can differ from content area)
+        TEXT_WIDTH_OVERRIDE = 600,  -- Set to number to override, nil uses content width
+        TEXT_EXTRA_PADDING_RIGHT = 0,
+        TEXT_JUSTIFY = "LEFT",
+        
+        -- Scroll frame heights by dialog type
+        SCROLL_HEIGHT_DETAIL   = 250,
+        SCROLL_HEIGHT_PROGRESS = 250,
+        SCROLL_HEIGHT_REWARD   = 230,
+        SCROLL_HEIGHT_GREETING = 250,
+        SCROLL_HEIGHT_GOSSIP   = 250,
+        
+        -- Button positioning
+        BUTTON_OFFSET_X = 80,   -- Distance from center
+        BUTTON_OFFSET_Y = 30,   -- Distance from bottom
+        CLOSE_OFFSET_X  = 15,   -- Distance from right edge
+        CLOSE_OFFSET_Y  = 15,   -- Distance from top edge
+        
+        -- Gossip-specific button config
+        GOSSIP_BUTTON_HEIGHT_PADDING = 4,
+        GOSSIP_BUTTON_TEXT_LEFT      = 25,
+        GOSSIP_BUTTON_TEXT_RIGHT     = 5,
+        GOSSIP_BUTTON_ICON_LEFT      = 3,
+        
+        -- Scrollbar positioning
+        SCROLLBAR_OFFSET_X      = -20,
+        SCROLLBAR_OFFSET_TOP    = 16,
+        SCROLLBAR_OFFSET_BOTTOM = 16,
+        
+        -- Background texture
+        BACKGROUND_TEXTURE = "Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga",
+    },
+    
+    -- ================================================================
+    -- PORTRAIT MANAGER CONFIGURATION
+    -- ================================================================
+    PORTRAIT = {
+        DEBUG = false,
+        
+        -- Default textures by type
+        DEFAULT_NPC    = "Interface\\AddOns\\BetterQuest\\portraits\\default.tga",
+        DEFAULT_BOOK   = "Interface\\Icons\\INV_Misc_Book_09",
+        DEFAULT_ITEM   = "Interface\\Icons\\INV_Misc_QuestionMark",
+        DEFAULT_OBJECT = "Interface\\Icons\\INV_Misc_Gear_01",
+        
+        -- Portrait path
+        PORTRAIT_PATH = "Interface\\AddOns\\BetterQuest\\portraits\\",
+    },
+    
+    -- ================================================================
+    -- BOOK/NOTE/LETTER CONFIGURATION
+    -- ================================================================
+    BOOK = {
+        FRAME_WIDTH  = 620,
+        FRAME_HEIGHT = 400,
+        
+        ANCHOR_POINT    = "BOTTOM",
+        ANCHOR_RELATIVE = "BOTTOM",
+        OFFSET_X = 0,
+        OFFSET_Y = -60,
+        
+        MARGIN_LEFT   = 30,
+        MARGIN_RIGHT  = 50,
+        MARGIN_TOP    = 40,
+        MARGIN_BOTTOM = 120,
+        
+        TEXT_RIGHT_PADDING = 40,
+    },
+    
+    -- ================================================================
+    -- SOUND QUEUE MINI-PLAYER CONFIGURATION
+    -- ================================================================
+    SOUNDQUEUE = {
+        FRAME_WIDTH  = 300,
+        FRAME_HEIGHT = 80,
+        
+        ANCHOR_POINT = "BOTTOMRIGHT",
+        OFFSET_X = -20,
+        OFFSET_Y = 100,
+        
+        PORTRAIT_SIZE = 60,
+        PORTRAIT_LEFT = 10,
+        
+        INFO_LEFT = 80,
+        INFO_TOP_NPC = -15,
+        INFO_TOP_TITLE = -35,
+        INFO_WIDTH = 180,
+        
+        STATUS_LEFT = 80,
+        STATUS_BOTTOM = 15,
+        
+        QUEUE_LEFT = 80,
+        QUEUE_TOP = -55,
+        QUEUE_WIDTH = 200,
+        QUEUE_HEIGHT = 80,
+        QUEUE_MAX_DISPLAY = 5,
+        QUEUE_BUTTON_HEIGHT = 15,
+        QUEUE_BUTTON_SPACING = 16,
+        
+        CLOSE_BUTTON_SIZE = 20,
+        CONTROL_BUTTON_SIZE = 24,
+        BACK_BUTTON_SIZE = 20,
+        
+        BACK_BUTTON_RIGHT = -50,
+        BACK_BUTTON_BOTTOM = 10,
+        
+        PAUSE_BUTTON_RIGHT = -25,
+        PAUSE_BUTTON_BOTTOM = 8,
+        
+        BG_ALPHA = 0.7,
+    },
+}
+
+-- Computed values (derived from config)
+local COMPUTED = {
+    DIALOG_CONTENT_WIDTH = CONFIG.DIALOG.FRAME_WIDTH 
+        - CONFIG.DIALOG.CONTENT_MARGIN_LEFT 
+        - CONFIG.DIALOG.CONTENT_MARGIN_RIGHT,
+        
+    DIALOG_CONTENT_HEIGHT = CONFIG.DIALOG.FRAME_HEIGHT 
+        - CONFIG.DIALOG.CONTENT_MARGIN_TOP 
+        - CONFIG.DIALOG.CONTENT_MARGIN_BOTTOM,
+        
+    DIALOG_TEXT_WIDTH = nil,  -- Computed in GetDialogTextWidth()
+}
+
+-- Helper to get text width (allows override)
+local function GetDialogTextWidth()
+    if not COMPUTED.DIALOG_TEXT_WIDTH then
+        local base = COMPUTED.DIALOG_CONTENT_WIDTH
+        if CONFIG.DIALOG.TEXT_WIDTH_OVERRIDE then
+            base = CONFIG.DIALOG.TEXT_WIDTH_OVERRIDE
+        end
+        COMPUTED.DIALOG_TEXT_WIDTH = base + CONFIG.DIALOG.TEXT_EXTRA_PADDING_RIGHT
+    end
+    return COMPUTED.DIALOG_TEXT_WIDTH
+end
+
+
+-- =====================================================================
 --   SECTION 1 — PortraitManager
 -- =====================================================================
 
@@ -38,7 +208,7 @@ PortraitManager.Type = {
     OBJECT = "object",
     CUSTOM = "custom",
 }
-PortraitManager.DEBUG = false
+PortraitManager.DEBUG = CONFIG.PORTRAIT.DEBUG
 
 -- Module-private state
 local currentPortrait = {
@@ -47,21 +217,6 @@ local currentPortrait = {
     frame   = nil,
 }
 local activeNPCName = nil
-
-local PORTRAIT_CONFIG = {
-    -- Updated to match QuestUI.tga dark frame position
-    WIDTH  = 160,
-    HEIGHT = 240,
-    OFFSET_X = 90,
-    OFFSET_Y = 95,
-
-    DEFAULT_NPC    = "Interface\\AddOns\\BetterQuest\\portraits\\default.tga",
-    DEFAULT_BOOK   = "Interface\\Icons\\INV_Misc_Book_09",
-    DEFAULT_ITEM   = "Interface\\Icons\\INV_Misc_QuestionMark",
-    DEFAULT_OBJECT = "Interface\\Icons\\INV_Misc_Gear_01",
-
-    PORTRAIT_PATH  = "Interface\\AddOns\\BetterQuest\\portraits\\",
-}
 
 -- Debug helper scoped to PortraitManager
 local function PMDebug(msg)
@@ -72,23 +227,23 @@ end
 
 -- Build "portraits/race.tga" or "portraits/race_female.tga"
 local function BuildPortraitPath(race, sex)
-    if not race or race == "" then return PORTRAIT_CONFIG.DEFAULT_NPC end
+    if not race or race == "" then return CONFIG.PORTRAIT.DEFAULT_NPC end
     local filename = race
     if sex == "female" then filename = filename .. "_female" end
-    return PORTRAIT_CONFIG.PORTRAIT_PATH .. filename .. ".tga"
+    return CONFIG.PORTRAIT.PORTRAIT_PATH .. filename .. ".tga"
 end
 
 -- Get-or-create the wide portrait sub-frame on any parent.
--- Reuses an existing one; only creates if absent.  (Fixes the old double-definition bug.)
+-- Reuses an existing one; only creates if absent.
 local function GetOrCreatePortraitFrame(parentFrame)
     if not parentFrame then return nil end
     if parentFrame.widePortrait then return parentFrame.widePortrait end
 
     local portrait = CreateFrame("Frame", nil, parentFrame)
-    portrait:SetWidth(PORTRAIT_CONFIG.WIDTH)
-    portrait:SetHeight(PORTRAIT_CONFIG.HEIGHT)
+    portrait:SetWidth(CONFIG.DIALOG.PORTRAIT_WIDTH)
+    portrait:SetHeight(CONFIG.DIALOG.PORTRAIT_HEIGHT)
     portrait:SetPoint("TOPLEFT", parentFrame, "TOPLEFT",
-        PORTRAIT_CONFIG.OFFSET_X, -PORTRAIT_CONFIG.OFFSET_Y)
+        CONFIG.DIALOG.PORTRAIT_OFFSET_X, -CONFIG.DIALOG.PORTRAIT_OFFSET_Y)
 
     portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
     portrait.bg:SetAllPoints()
@@ -140,7 +295,7 @@ function PortraitManager:FindNPCPortrait()
     local npc = self:GetNPCInfo()
     if not npc then
         PMDebug("No NPC info available, using default")
-        return PORTRAIT_CONFIG.DEFAULT_NPC
+        return CONFIG.PORTRAIT.DEFAULT_NPC
     end
     if npc.race and npc.race ~= "" then
         local path = BuildPortraitPath(npc.race, npc.sex)
@@ -148,12 +303,12 @@ function PortraitManager:FindNPCPortrait()
         return path
     end
     PMDebug("No race found, using default")
-    return PORTRAIT_CONFIG.DEFAULT_NPC
+    return CONFIG.PORTRAIT.DEFAULT_NPC
 end
 
 function PortraitManager:FindNPCPortraitByKey(key)
-    if not key or key == "" then return PORTRAIT_CONFIG.DEFAULT_NPC end
-    return PORTRAIT_CONFIG.PORTRAIT_PATH .. key .. ".tga"
+    if not key or key == "" then return CONFIG.PORTRAIT.DEFAULT_NPC end
+    return CONFIG.PORTRAIT.PORTRAIT_PATH .. key .. ".tga"
 end
 
 -------------------------------------------------------------------------
@@ -165,7 +320,7 @@ function PortraitManager:FindBookPortrait(itemName)
             return BookDB.portraits[itemName]
         end
     end
-    return PORTRAIT_CONFIG.DEFAULT_BOOK
+    return CONFIG.PORTRAIT.DEFAULT_BOOK
 end
 
 -------------------------------------------------------------------------
@@ -181,21 +336,21 @@ function PortraitManager:SetPortrait(parentFrame, portraitType, customTexture)
     elseif portraitType == self.Type.NPC then
         texturePath = self:FindNPCPortrait()
     elseif portraitType == self.Type.BOOK then
-        texturePath = PORTRAIT_CONFIG.DEFAULT_BOOK
+        texturePath = CONFIG.PORTRAIT.DEFAULT_BOOK
     elseif portraitType == self.Type.ITEM then
-        texturePath = PORTRAIT_CONFIG.DEFAULT_ITEM
+        texturePath = CONFIG.PORTRAIT.DEFAULT_ITEM
     elseif portraitType == self.Type.OBJECT then
-        texturePath = PORTRAIT_CONFIG.DEFAULT_OBJECT
+        texturePath = CONFIG.PORTRAIT.DEFAULT_OBJECT
     else
-        texturePath = PORTRAIT_CONFIG.DEFAULT_NPC
+        texturePath = CONFIG.PORTRAIT.DEFAULT_NPC
     end
 
-    -- Validate before calling SetTexture (removes the stray print() from the old code)
+    -- Validate before calling SetTexture
     if type(texturePath) == "string" and texturePath ~= "" then
         portrait.texture:SetTexture(texturePath)
     else
         PMDebug("BLOCKED bad texture path: " .. tostring(texturePath))
-        portrait.texture:SetTexture(PORTRAIT_CONFIG.DEFAULT_NPC)
+        portrait.texture:SetTexture(CONFIG.PORTRAIT.DEFAULT_NPC)
     end
 
     local success, err = pcall(function() portrait:Show() end)
@@ -258,19 +413,19 @@ PortraitManager:Initialize()
 -------------------------------------------------------------------------
 local function GetPortraitTexture(soundData)
     if not soundData or not soundData.npcName then
-        return SoundQueue.portraitConfig.DEFAULT_NPC
+        return CONFIG.PORTRAIT.DEFAULT_NPC
     end
     if IsBookInteraction() then
-        return SoundQueue.portraitConfig.DEFAULT_BOOK
+        return CONFIG.PORTRAIT.DEFAULT_BOOK
     end
 
     local metadata = GetNPCMetadata and GetNPCMetadata(soundData.npcName)
     if metadata and metadata.race and metadata.sex then
         local filename = metadata.race
         if metadata.sex == "female" then filename = filename .. "_female" end
-        return SoundQueue.portraitConfig.PORTRAIT_PATH .. filename .. ".tga"
+        return CONFIG.PORTRAIT.PORTRAIT_PATH .. filename .. ".tga"
     end
-    return SoundQueue.portraitConfig.DEFAULT_NPC
+    return CONFIG.PORTRAIT.DEFAULT_NPC
 end
 
 -------------------------------------------------------------------------
@@ -329,17 +484,19 @@ end
 function SoundQueue:InitQueueList()
     -- Container frame for queued sounds
     self.frame.queueContainer = CreateFrame("Frame", nil, self.frame)
-    self.frame.queueContainer:SetPoint("TOPLEFT", 80, -55)
-    self.frame.queueContainer:SetWidth(200)
-    self.frame.queueContainer:SetHeight(80)
+    self.frame.queueContainer:SetPoint("TOPLEFT", 
+        CONFIG.SOUNDQUEUE.QUEUE_LEFT, 
+        -CONFIG.SOUNDQUEUE.QUEUE_TOP)
+    self.frame.queueContainer:SetWidth(CONFIG.SOUNDQUEUE.QUEUE_WIDTH)
+    self.frame.queueContainer:SetHeight(CONFIG.SOUNDQUEUE.QUEUE_HEIGHT)
 
     -- Pool of buttons for queued sounds
     self.frame.queueButtons = {}
-    for i = 1, 5 do  -- show up to 5 queued sounds
+    for i = 1, CONFIG.SOUNDQUEUE.QUEUE_MAX_DISPLAY do
         local btn = CreateFrame("Button", nil, self.frame.queueContainer)
-        btn:SetHeight(15)
-        btn:SetWidth(180)
-        btn:SetPoint("TOPLEFT", 0, -(i-1)*16)
+        btn:SetHeight(CONFIG.SOUNDQUEUE.QUEUE_BUTTON_HEIGHT)
+        btn:SetWidth(CONFIG.SOUNDQUEUE.QUEUE_WIDTH - 20)
+        btn:SetPoint("TOPLEFT", 0, -(i-1)*CONFIG.SOUNDQUEUE.QUEUE_BUTTON_SPACING)
 
         btn.text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
         btn.text:SetAllPoints()
@@ -389,9 +546,11 @@ end
 -------------------------------------------------------------------------
 function SoundQueue:InitMainFrame()
     self.frame = CreateFrame("Frame", "BetterQuestSoundFrame", UIParent)
-    self.frame:SetWidth(300)
-    self.frame:SetHeight(80)
-    self.frame:SetPoint("BOTTOMRIGHT", -20, 100)
+    self.frame:SetWidth(CONFIG.SOUNDQUEUE.FRAME_WIDTH)
+    self.frame:SetHeight(CONFIG.SOUNDQUEUE.FRAME_HEIGHT)
+    self.frame:SetPoint(CONFIG.SOUNDQUEUE.ANCHOR_POINT, 
+        CONFIG.SOUNDQUEUE.OFFSET_X, 
+        CONFIG.SOUNDQUEUE.OFFSET_Y)
     self.frame:EnableMouse(true)
     self.frame:SetMovable(true)
     self.frame:RegisterForDrag("LeftButton")
@@ -400,35 +559,41 @@ function SoundQueue:InitMainFrame()
 
     self.frame.bg = self.frame:CreateTexture(nil, "BACKGROUND")
     self.frame.bg:SetAllPoints()
-    self.frame.bg:SetTexture(0, 0, 0, 0.7)
+    self.frame.bg:SetTexture(0, 0, 0, CONFIG.SOUNDQUEUE.BG_ALPHA)
 end
 
 function SoundQueue:InitPortrait()
     self.frame.portrait = CreateFrame("Frame", nil, self.frame)
-    self.frame.portrait:SetWidth(60)
-    self.frame.portrait:SetHeight(60)
-    self.frame.portrait:SetPoint("LEFT", 10, 0)
+    self.frame.portrait:SetWidth(CONFIG.SOUNDQUEUE.PORTRAIT_SIZE)
+    self.frame.portrait:SetHeight(CONFIG.SOUNDQUEUE.PORTRAIT_SIZE)
+    self.frame.portrait:SetPoint("LEFT", CONFIG.SOUNDQUEUE.PORTRAIT_LEFT, 0)
 
     self.frame.portrait.texture = self.frame.portrait:CreateTexture(nil, "ARTWORK")
     self.frame.portrait.texture:SetAllPoints()
-    self.frame.portrait.texture:SetTexture(self.portraitConfig.DEFAULT_NPC)
+    self.frame.portrait.texture:SetTexture(CONFIG.PORTRAIT.DEFAULT_NPC)
 end
 
 function SoundQueue:InitNPCInfo()
     self.frame.npcName = self.frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-    self.frame.npcName:SetPoint("TOPLEFT", 80, -15)
+    self.frame.npcName:SetPoint("TOPLEFT", 
+        CONFIG.SOUNDQUEUE.INFO_LEFT, 
+        CONFIG.SOUNDQUEUE.INFO_TOP_NPC)
     self.frame.npcName:SetText("Unknown NPC")
 
     self.frame.title = self.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    self.frame.title:SetPoint("TOPLEFT", 80, -35)
-    self.frame.title:SetWidth(180)
+    self.frame.title:SetPoint("TOPLEFT", 
+        CONFIG.SOUNDQUEUE.INFO_LEFT, 
+        CONFIG.SOUNDQUEUE.INFO_TOP_TITLE)
+    self.frame.title:SetWidth(CONFIG.SOUNDQUEUE.INFO_WIDTH)
     self.frame.title:SetJustifyH("LEFT")
     self.frame.title:SetText("Waiting...")
 end
 
 function SoundQueue:InitQueueContainer()
     self.frame.statusText = self.frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    self.frame.statusText:SetPoint("BOTTOMLEFT", 80, 15)
+    self.frame.statusText:SetPoint("BOTTOMLEFT", 
+        CONFIG.SOUNDQUEUE.STATUS_LEFT, 
+        CONFIG.SOUNDQUEUE.STATUS_BOTTOM)
     self.frame.statusText:SetText("")
 end
 
@@ -436,8 +601,8 @@ function SoundQueue:InitControls()
     -- Close button
     self.frame.closeBtn = CreateFrame("Button", nil, self.frame, "UIPanelCloseButton")
     self.frame.closeBtn:SetPoint("TOPRIGHT", 0, 0)
-    self.frame.closeBtn:SetWidth(20)
-    self.frame.closeBtn:SetHeight(20)
+    self.frame.closeBtn:SetWidth(CONFIG.SOUNDQUEUE.CLOSE_BUTTON_SIZE)
+    self.frame.closeBtn:SetHeight(CONFIG.SOUNDQUEUE.CLOSE_BUTTON_SIZE)
     self.frame.closeBtn:SetScript("OnClick", function() SoundQueue.frame:Hide() end)
     self.frame.closeBtn:SetScript("OnEnter", function()
         GameTooltip:SetOwner(this, "ANCHOR_LEFT")
@@ -448,9 +613,11 @@ function SoundQueue:InitControls()
 
     -- Back button (replay last from history)
     self.frame.backBtn = CreateFrame("Button", nil, self.frame)
-    self.frame.backBtn:SetWidth(20)
-    self.frame.backBtn:SetHeight(20)
-    self.frame.backBtn:SetPoint("BOTTOMRIGHT", -50, 10)
+    self.frame.backBtn:SetWidth(CONFIG.SOUNDQUEUE.BACK_BUTTON_SIZE)
+    self.frame.backBtn:SetHeight(CONFIG.SOUNDQUEUE.BACK_BUTTON_SIZE)
+    self.frame.backBtn:SetPoint("BOTTOMRIGHT", 
+        CONFIG.SOUNDQUEUE.BACK_BUTTON_RIGHT, 
+        CONFIG.SOUNDQUEUE.BACK_BUTTON_BOTTOM)
     self.frame.backBtn:SetNormalTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Up")
     self.frame.backBtn:SetPushedTexture("Interface\\Buttons\\UI-SpellbookIcon-PrevPage-Down")
     self.frame.backBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
@@ -471,9 +638,11 @@ function SoundQueue:InitControls()
 
     -- Pause / Play toggle
     self.frame.pauseBtn = CreateFrame("Button", nil, self.frame)
-    self.frame.pauseBtn:SetWidth(24)
-    self.frame.pauseBtn:SetHeight(24)
-    self.frame.pauseBtn:SetPoint("BOTTOMRIGHT", -25, 8)
+    self.frame.pauseBtn:SetWidth(CONFIG.SOUNDQUEUE.CONTROL_BUTTON_SIZE)
+    self.frame.pauseBtn:SetHeight(CONFIG.SOUNDQUEUE.CONTROL_BUTTON_SIZE)
+    self.frame.pauseBtn:SetPoint("BOTTOMRIGHT", 
+        CONFIG.SOUNDQUEUE.PAUSE_BUTTON_RIGHT, 
+        CONFIG.SOUNDQUEUE.PAUSE_BUTTON_BOTTOM)
     self.frame.pauseBtn:SetHighlightTexture("Interface\\Buttons\\UI-Common-MouseHilight", "ADD")
 
     self.frame.pauseBtn.pauseIcon = self.frame.pauseBtn:CreateTexture(nil, "ARTWORK")
@@ -515,29 +684,6 @@ end
 
 do  -- block-scope so all locals are invisible to the rest of ui.lua
 
-local QUEST_CONFIG = {
-    -- Frame dimensions to match your QuestUI.tga
-    WIDTH  = 600,
-    HEIGHT = 450,
-    POS_X  = 30,
-    POS_Y  = -60,
-
-    -- Content area margins (to fit within the parchment area)
-    MARGIN_LEFT  = 200,  -- Space for portrait frame on left
-    MARGIN_RIGHT = 60,
-    MARGIN_TOP   = 80,
-
-    SCROLL_HEIGHT_DETAIL   = 250,
-    SCROLL_HEIGHT_PROGRESS = 250,
-    SCROLL_HEIGHT_REWARD   = 230,
-    SCROLL_HEIGHT_GREETING = 250,
-
-    BUTTON_OFFSET_X = 80,
-    BUTTON_OFFSET_Y = 30,
-    CLOSE_OFFSET_X  = 15,
-    CLOSE_OFFSET_Y  = 15,
-}
-
 local function GetBackdrop()
     return QuestFrame.backdrop or QuestFrame
 end
@@ -551,7 +697,7 @@ local function ApplyQuestBackground()
     if not backdrop.customBG then
         backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
         backdrop.customBG:SetAllPoints(backdrop)
-        backdrop.customBG:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga")
+        backdrop.customBG:SetTexture(CONFIG.DIALOG.BACKGROUND_TEXTURE)
         
         -- Hide default Blizzard background elements
         if QuestFrameDetailPanel then QuestFrameDetailPanel:SetAlpha(0) end
@@ -579,25 +725,27 @@ end
 
 local function LayoutScroll(scrollFrame, child, height)
     if not scrollFrame then return end
-    local contentWidth = QUEST_CONFIG.WIDTH - QUEST_CONFIG.MARGIN_LEFT - QUEST_CONFIG.MARGIN_RIGHT
 
     scrollFrame:ClearAllPoints()
     scrollFrame:SetPoint("TOPLEFT", QuestFrame, "TOPLEFT",
-        QUEST_CONFIG.MARGIN_LEFT, -QUEST_CONFIG.MARGIN_TOP)
-    scrollFrame:SetWidth(contentWidth)
+        CONFIG.DIALOG.CONTENT_MARGIN_LEFT, -CONFIG.DIALOG.CONTENT_MARGIN_TOP)
+    scrollFrame:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
     scrollFrame:SetHeight(height)
 
-    if child then child:SetWidth(contentWidth) end
+    if child then 
+        child:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH) 
+    end
 end
 
 local function ApplyQuestLayout()
     if not QuestFrame then return end
     local backdrop = GetBackdrop()
 
-    QuestFrame:SetWidth(QUEST_CONFIG.WIDTH)
-    QuestFrame:SetHeight(QUEST_CONFIG.HEIGHT)
+    QuestFrame:SetWidth(CONFIG.DIALOG.FRAME_WIDTH)
+    QuestFrame:SetHeight(CONFIG.DIALOG.FRAME_HEIGHT)
     QuestFrame:ClearAllPoints()
-    QuestFrame:SetPoint("BOTTOM", UIParent, "BOTTOM", QUEST_CONFIG.POS_X, QUEST_CONFIG.POS_Y)
+    QuestFrame:SetPoint(CONFIG.DIALOG.ANCHOR_POINT, UIParent, CONFIG.DIALOG.ANCHOR_RELATIVE, 
+        CONFIG.DIALOG.OFFSET_X, CONFIG.DIALOG.OFFSET_Y)
 
     -- Apply custom background
     ApplyQuestBackground()
@@ -605,42 +753,42 @@ local function ApplyQuestLayout()
     -- Update portrait
     UpdateNPCPortrait()
 
-    LayoutScroll(QuestDetailScrollFrame,   QuestDetailScrollChildFrame,   QUEST_CONFIG.SCROLL_HEIGHT_DETAIL)
-    LayoutScroll(QuestProgressScrollFrame, QuestProgressScrollChildFrame, QUEST_CONFIG.SCROLL_HEIGHT_PROGRESS)
-    LayoutScroll(QuestRewardScrollFrame,   QuestRewardScrollChildFrame,   QUEST_CONFIG.SCROLL_HEIGHT_REWARD)
-    LayoutScroll(QuestGreetingScrollFrame, QuestGreetingScrollChildFrame, QUEST_CONFIG.SCROLL_HEIGHT_GREETING)
+    LayoutScroll(QuestDetailScrollFrame,   QuestDetailScrollChildFrame,   CONFIG.DIALOG.SCROLL_HEIGHT_DETAIL)
+    LayoutScroll(QuestProgressScrollFrame, QuestProgressScrollChildFrame, CONFIG.DIALOG.SCROLL_HEIGHT_PROGRESS)
+    LayoutScroll(QuestRewardScrollFrame,   QuestRewardScrollChildFrame,   CONFIG.DIALOG.SCROLL_HEIGHT_REWARD)
+    LayoutScroll(QuestGreetingScrollFrame, QuestGreetingScrollChildFrame, CONFIG.DIALOG.SCROLL_HEIGHT_GREETING)
 
     -- Re-anchor all Blizzard buttons to match QuestUI.tga button positions
     if QuestFrameAcceptButton then
         QuestFrameAcceptButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
-            -QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+            -CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
     end
     if QuestFrameDeclineButton then
         QuestFrameDeclineButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
-            QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+            CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
     end
     if QuestFrameCompleteButton then
         QuestFrameCompleteButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
-            -QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+            -CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
     end
     if QuestFrameGoodbyeButton then
         QuestFrameGoodbyeButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
-            QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+            CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
     end
     if QuestFrameCloseButton then
         QuestFrameCloseButton:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT",
-            -QUEST_CONFIG.CLOSE_OFFSET_X, -QUEST_CONFIG.CLOSE_OFFSET_Y)
+            -CONFIG.DIALOG.CLOSE_OFFSET_X, -CONFIG.DIALOG.CLOSE_OFFSET_Y)
     end
     
     -- Greeting buttons alignment
     if QuestGreetingFrameCancelButton then
         QuestGreetingFrameCancelButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
-            QUEST_CONFIG.BUTTON_OFFSET_X, QUEST_CONFIG.BUTTON_OFFSET_Y)
+            CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
     end
 end
 
 local function FixTextWidths()
-    local width = QUEST_CONFIG.WIDTH - QUEST_CONFIG.MARGIN_LEFT - QUEST_CONFIG.MARGIN_RIGHT - 10
+    local width = GetDialogTextWidth()
     local fields = {
         QuestTitleText, QuestDescription, QuestObjectiveText,
         QuestProgressText, QuestRewardText,
@@ -649,7 +797,7 @@ local function FixTextWidths()
     for _, f in ipairs(fields) do
         if f then
             f:SetWidth(width)
-            f:SetJustifyH("LEFT")
+            f:SetJustifyH(CONFIG.DIALOG.TEXT_JUSTIFY)
         end
     end
     
@@ -657,10 +805,10 @@ local function FixTextWidths()
     for i=1, 32 do
         local button = getglobal("QuestTitleButton"..i)
         if button and button:IsShown() then
-            button:SetWidth(width)
+            button:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
             local text = getglobal("QuestTitleButton"..i.."QuestTitle")
             if text then
-                text:SetWidth(width - 20)
+                text:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH - 20)
                 text:SetJustifyH("LEFT")
             end
         end
@@ -731,75 +879,18 @@ end  -- end QuestFrame do-block
 
 do  -- block-scope
 
-local GOSSIP_CONFIG = {
-    FRAME = {
-        WIDTH    = 600,
-        HEIGHT   = 450,
-        OFFSET_X = 30,
-        OFFSET_Y = -60,
-    },
-    PORTRAIT = {
-        WIDTH  = 140,
-        HEIGHT = 180,
-        LEFT   = 25,
-        TOP    = 85,
-    },
-    CONTENT = {
-        GAP_FROM_PORTRAIT      = 10,
-        RIGHT                  = 60,
-        TOP                    = 80,
-        BOTTOM                 = 40,
-        EXTRA_BOTTOM_RESERVED  = 80,
-    },
-    BUTTON = {
-        HEIGHT_PADDING = 4,
-        TEXT_LEFT      = 25,
-        TEXT_RIGHT     = 5,
-        ICON_LEFT      = 3,
-    },
-    SCROLLBAR = {
-        OFFSET_X      = -20,
-        OFFSET_TOP    = 16,
-        OFFSET_BOTTOM = 16,
-    },
-}
-
--- Derived layout (computed once at load time)
-local GOSSIP_LAYOUT = {
-    PORTRAIT = {
-        LEFT  = GOSSIP_CONFIG.PORTRAIT.LEFT,
-        TOP   = GOSSIP_CONFIG.PORTRAIT.TOP,
-        RIGHT = GOSSIP_CONFIG.PORTRAIT.LEFT + GOSSIP_CONFIG.PORTRAIT.WIDTH,
-    },
-    CONTENT = {
-        LEFT =
-            GOSSIP_CONFIG.PORTRAIT.LEFT
-            + GOSSIP_CONFIG.PORTRAIT.WIDTH
-            + GOSSIP_CONFIG.CONTENT.GAP_FROM_PORTRAIT,
-        WIDTH =
-            GOSSIP_CONFIG.FRAME.WIDTH
-            - (GOSSIP_CONFIG.PORTRAIT.LEFT + GOSSIP_CONFIG.PORTRAIT.WIDTH + GOSSIP_CONFIG.CONTENT.GAP_FROM_PORTRAIT)
-            - GOSSIP_CONFIG.CONTENT.RIGHT,
-        HEIGHT =
-            GOSSIP_CONFIG.FRAME.HEIGHT
-            - GOSSIP_CONFIG.CONTENT.TOP
-            - GOSSIP_CONFIG.CONTENT.BOTTOM
-            - GOSSIP_CONFIG.CONTENT.EXTRA_BOTTOM_RESERVED,
-    },
-}
-
 local function EnsureGossipPortrait(parent)
     if parent.widePortrait then return parent.widePortrait end
 
     local portrait = CreateFrame("Frame", nil, parent)
-    portrait:SetWidth(GOSSIP_CONFIG.PORTRAIT.WIDTH)
-    portrait:SetHeight(GOSSIP_CONFIG.PORTRAIT.HEIGHT)
+    portrait:SetWidth(CONFIG.DIALOG.PORTRAIT_WIDTH)
+    portrait:SetHeight(CONFIG.DIALOG.PORTRAIT_HEIGHT)
     portrait:SetPoint("TOPLEFT", parent, "TOPLEFT",
-        GOSSIP_LAYOUT.PORTRAIT.LEFT, -GOSSIP_LAYOUT.PORTRAIT.TOP)
+        CONFIG.DIALOG.PORTRAIT_OFFSET_X, -CONFIG.DIALOG.PORTRAIT_OFFSET_Y)
 
     portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
     portrait.bg:SetAllPoints()
-    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent since QuestUI.tga has the frame
+    --portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent since QuestUI.tga has the frame
 
     portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
     portrait.texture:SetAllPoints()
@@ -835,7 +926,7 @@ local function ApplyGossipBackground()
     if not backdrop.customBG then
         backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
         backdrop.customBG:SetAllPoints(backdrop)
-        backdrop.customBG:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga")
+        backdrop.customBG:SetTexture(CONFIG.DIALOG.BACKGROUND_TEXTURE)
         
         Debug("GossipFrame custom background applied")
     end
@@ -845,11 +936,11 @@ local function ApplyGossipLayout()
     if not GossipFrame then return end
     local backdrop = GossipFrame.backdrop or GossipFrame
 
-    GossipFrame:SetWidth(GOSSIP_CONFIG.FRAME.WIDTH)
-    GossipFrame:SetHeight(GOSSIP_CONFIG.FRAME.HEIGHT)
+    GossipFrame:SetWidth(CONFIG.DIALOG.FRAME_WIDTH)
+    GossipFrame:SetHeight(CONFIG.DIALOG.FRAME_HEIGHT)
     GossipFrame:ClearAllPoints()
-    GossipFrame:SetPoint("BOTTOM", UIParent, "BOTTOM",
-        GOSSIP_CONFIG.FRAME.OFFSET_X, GOSSIP_CONFIG.FRAME.OFFSET_Y)
+    GossipFrame:SetPoint(CONFIG.DIALOG.ANCHOR_POINT, UIParent, CONFIG.DIALOG.ANCHOR_RELATIVE,
+        CONFIG.DIALOG.OFFSET_X, CONFIG.DIALOG.OFFSET_Y)
 
     -- Apply custom background
     ApplyGossipBackground()
@@ -860,23 +951,23 @@ local function ApplyGossipLayout()
     if GossipGreetingScrollFrame then
         GossipGreetingScrollFrame:ClearAllPoints()
         GossipGreetingScrollFrame:SetPoint("TOPLEFT", backdrop, "TOPLEFT",
-            GOSSIP_LAYOUT.CONTENT.LEFT, -GOSSIP_CONFIG.CONTENT.TOP)
-        GossipGreetingScrollFrame:SetWidth(GOSSIP_LAYOUT.CONTENT.WIDTH)
-        GossipGreetingScrollFrame:SetHeight(GOSSIP_LAYOUT.CONTENT.HEIGHT)
+            CONFIG.DIALOG.CONTENT_MARGIN_LEFT, -CONFIG.DIALOG.CONTENT_MARGIN_TOP)
+        GossipGreetingScrollFrame:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
+        GossipGreetingScrollFrame:SetHeight(CONFIG.DIALOG.SCROLL_HEIGHT_GOSSIP)
     end
 
     if GossipGreetingScrollChildFrame then
-        GossipGreetingScrollChildFrame:SetWidth(GOSSIP_LAYOUT.CONTENT.WIDTH)
+        GossipGreetingScrollChildFrame:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
     end
 
     if GossipGreetingScrollFrameScrollBar then
         GossipGreetingScrollFrameScrollBar:ClearAllPoints()
         GossipGreetingScrollFrameScrollBar:SetPoint("TOPRIGHT",
             GossipGreetingScrollFrame, "TOPRIGHT",
-            GOSSIP_CONFIG.SCROLLBAR.OFFSET_X, -GOSSIP_CONFIG.SCROLLBAR.OFFSET_TOP)
+            CONFIG.DIALOG.SCROLLBAR_OFFSET_X, -CONFIG.DIALOG.SCROLLBAR_OFFSET_TOP)
         GossipGreetingScrollFrameScrollBar:SetPoint("BOTTOMRIGHT",
             GossipGreetingScrollFrame, "BOTTOMRIGHT",
-            GOSSIP_CONFIG.SCROLLBAR.OFFSET_X, GOSSIP_CONFIG.SCROLLBAR.OFFSET_BOTTOM)
+            CONFIG.DIALOG.SCROLLBAR_OFFSET_X, CONFIG.DIALOG.SCROLLBAR_OFFSET_BOTTOM)
     end
 end
 
@@ -884,21 +975,23 @@ end
 function GossipResize(titleButton)
     if not titleButton then return end
 
-    titleButton:SetWidth(GOSSIP_LAYOUT.CONTENT.WIDTH)
-    titleButton:SetHeight(titleButton:GetTextHeight() + GOSSIP_CONFIG.BUTTON.HEIGHT_PADDING)
+    titleButton:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
+    titleButton:SetHeight(titleButton:GetTextHeight() + CONFIG.DIALOG.GOSSIP_BUTTON_HEIGHT_PADDING)
 
     local text = getglobal(titleButton:GetName() .. "Text")
     if text then
         text:ClearAllPoints()
-        text:SetPoint("LEFT", titleButton, "LEFT", GOSSIP_CONFIG.BUTTON.TEXT_LEFT, 0)
-        text:SetWidth(GOSSIP_LAYOUT.CONTENT.WIDTH - GOSSIP_CONFIG.BUTTON.TEXT_LEFT - GOSSIP_CONFIG.BUTTON.TEXT_RIGHT)
+        text:SetPoint("LEFT", titleButton, "LEFT", CONFIG.DIALOG.GOSSIP_BUTTON_TEXT_LEFT, 0)
+        text:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH 
+            - CONFIG.DIALOG.GOSSIP_BUTTON_TEXT_LEFT 
+            - CONFIG.DIALOG.GOSSIP_BUTTON_TEXT_RIGHT)
         text:SetJustifyH("LEFT")
     end
 
     local icon = getglobal(titleButton:GetName() .. "GossipIcon")
     if icon then
         icon:ClearAllPoints()
-        icon:SetPoint("LEFT", titleButton, "LEFT", GOSSIP_CONFIG.BUTTON.ICON_LEFT, 0)
+        icon:SetPoint("LEFT", titleButton, "LEFT", CONFIG.DIALOG.GOSSIP_BUTTON_ICON_LEFT, 0)
     end
 end
 
@@ -975,23 +1068,6 @@ end  -- end GossipFrame do-block
 
 do  -- block-scope
 
-local BOOK_CONFIG = {
-    FRAME_WIDTH  = 620,
-    FRAME_HEIGHT = 400,
-
-    ANCHOR_POINT    = "BOTTOM",
-    ANCHOR_RELATIVE = "BOTTOM",
-    OFFSET_X = 0,
-    OFFSET_Y = -60,
-
-    MARGIN_LEFT   = 30,
-    MARGIN_RIGHT  = 50,
-    MARGIN_TOP    = 40,
-    MARGIN_BOTTOM = 120,
-
-    TEXT_RIGHT_PADDING = 40,
-}
-
 local function GetVisualBackdrop(frame, inset)
     if inset and inset:IsShown() then return inset end
     return frame
@@ -1003,26 +1079,26 @@ local function ApplyItemTextLayout()
     local backdrop = GetVisualBackdrop(ItemTextFrame, ItemTextFrameInset)
     if not backdrop then return end
 
-    ItemTextFrame:SetWidth(BOOK_CONFIG.FRAME_WIDTH)
-    ItemTextFrame:SetHeight(BOOK_CONFIG.FRAME_HEIGHT)
+    ItemTextFrame:SetWidth(CONFIG.BOOK.FRAME_WIDTH)
+    ItemTextFrame:SetHeight(CONFIG.BOOK.FRAME_HEIGHT)
     ItemTextFrame:ClearAllPoints()
     ItemTextFrame:SetPoint(
-        BOOK_CONFIG.ANCHOR_POINT, UIParent, BOOK_CONFIG.ANCHOR_RELATIVE,
-        BOOK_CONFIG.OFFSET_X, BOOK_CONFIG.OFFSET_Y)
+        CONFIG.BOOK.ANCHOR_POINT, UIParent, CONFIG.BOOK.ANCHOR_RELATIVE,
+        CONFIG.BOOK.OFFSET_X, CONFIG.BOOK.OFFSET_Y)
 
-    local contentWidth  = backdrop:GetWidth()  - BOOK_CONFIG.MARGIN_LEFT - BOOK_CONFIG.MARGIN_RIGHT
-    local contentHeight = backdrop:GetHeight() - BOOK_CONFIG.MARGIN_TOP  - BOOK_CONFIG.MARGIN_BOTTOM
+    local contentWidth  = backdrop:GetWidth()  - CONFIG.BOOK.MARGIN_LEFT - CONFIG.BOOK.MARGIN_RIGHT
+    local contentHeight = backdrop:GetHeight() - CONFIG.BOOK.MARGIN_TOP  - CONFIG.BOOK.MARGIN_BOTTOM
 
     if ItemTextScrollFrame then
         ItemTextScrollFrame:ClearAllPoints()
         ItemTextScrollFrame:SetPoint("TOPLEFT", backdrop, "TOPLEFT",
-            BOOK_CONFIG.MARGIN_LEFT, -BOOK_CONFIG.MARGIN_TOP)
+            CONFIG.BOOK.MARGIN_LEFT, -CONFIG.BOOK.MARGIN_TOP)
         ItemTextScrollFrame:SetWidth(contentWidth)
         ItemTextScrollFrame:SetHeight(contentHeight)
     end
 
     if ItemTextPageText then
-        ItemTextPageText:SetWidth(contentWidth + BOOK_CONFIG.TEXT_RIGHT_PADDING)
+        ItemTextPageText:SetWidth(contentWidth + CONFIG.BOOK.TEXT_RIGHT_PADDING)
         ItemTextPageText:SetJustifyH("LEFT")
     end
 end
@@ -1076,12 +1152,11 @@ if ItemTextFrame then
 end
 
 end  -- end Book do-block
+
+
 -- =====================================================================
 --   SECTION 6 — Hide Default Blizzard UI (PFUI Style)
 -- =====================================================================
--- This section "nukes" the default Blizzard frames. 
--- In Vanilla 1.12.1, simply hiding frames isn't enough because the engine 
--- re-shows them. We must unregister events and hook the show functions.
 
 do
     -- A "dummy" function that does nothing
@@ -1115,11 +1190,6 @@ do
         end
 
         -- 2. NUKE GOSSIP & QUEST DIALOGS
-        -- If you want to replace them with your own UI, we stop the default ones from showing.
-        -- Note: If your ui.lua is trying to "skin" the existing QuestFrame, 
-        -- nuking it will break your skin. 
-        
-        -- To HIDE the default textures while keeping the frame functional for your skin:
         local framesToStrip = {
             QuestFrame,
             QuestFrameDetailPanel,
@@ -1143,7 +1213,6 @@ do
         end
 
         -- 3. REMOVE WINDOW DECORATIONS
-        -- These are often global textures not parented strictly
         local art = {
             "QuestFrameHorizontalBarLeft", "QuestFrameTopBorder", "QuestFrameTopRightCorner",
             "QuestFrameRightBorder", "QuestFrameBottomRightCorner", "QuestFrameBottomBorder",

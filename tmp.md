@@ -7,3 +7,6 @@ X needs to line up with our X
 Accept/decline should be in the middle. 
 
 Frame has a black background? Can we fix that idk 
+
+
+set background transparent
