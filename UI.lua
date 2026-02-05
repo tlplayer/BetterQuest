@@ -192,6 +192,39 @@ local function GetDialogTextWidth()
     return COMPUTED.DIALOG_TEXT_WIDTH
 end
 
+-- =====================================================================
+--   PFUI COMPATIBILITY
+-- =====================================================================
+
+-- Remove PFUI stationery background texture from dialog scroll frames
+-- PFUI sets this texture at: https://github.com/shagu/pfUI/blob/b2f6df84a93a4ce6adbe1fd8f0372454795151f1/skins/blizzard/gossipquest.lua#L109
+local function RemovePFUIStationery()
+    local scrollFrames = {
+        QuestDetailScrollFrame,
+        QuestProgressScrollFrame,
+        QuestRewardScrollFrame,
+        QuestGreetingScrollFrame,
+        GossipGreetingScrollFrame,
+    }
+    
+    for _, scrollFrame in ipairs(scrollFrames) do
+        if scrollFrame then
+            -- Find and remove any stationery texture layers
+            local regions = { scrollFrame:GetRegions() }
+            for _, region in ipairs(regions) do
+                if region and region:GetObjectType() == "Texture" then
+                    local texture = region:GetTexture()
+                    -- Check if it's a stationery texture
+                    if texture and type(texture) == "string" and string.find(texture, "Stationery") then
+                        region:SetTexture(nil)
+                        region:Hide()
+                        Debug("Removed PFUI stationery texture from: " .. scrollFrame:GetName())
+                    end
+                end
+            end
+        end
+    end
+end
 
 -- =====================================================================
 --   SECTION 1 — PortraitManager
@@ -749,6 +782,9 @@ local function ApplyQuestLayout()
 
     -- Apply custom background
     ApplyQuestBackground()
+
+    -- Remove PFUI stationery if present
+    RemovePFUIStationery()
     
     -- Update portrait
     UpdateNPCPortrait()
