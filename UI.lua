@@ -226,6 +226,33 @@ local function RemovePFUIStationery()
     end
 end
 
+-- Hide Blizzard UI elements that overlap with QuestUI.tga background
+local function HideBlizzardUIElements()
+
+    
+    -- Hide close buttons (QuestUI.tga has its own)
+    --if QuestFrameCloseButton then QuestFrameCloseButton:Hide() end
+    --if GossipFrameCloseButton then GossipFrameCloseButton:Hide() end
+    
+    -- Hide action buttons (QuestUI.tga has its own)
+    --if QuestFrameAcceptButton then QuestFrameAcceptButton:Hide() end
+    --if QuestFrameDeclineButton then QuestFrameDeclineButton:Hide() end
+    --if QuestFrameCompleteButton then QuestFrameCompleteButton:Hide() end
+    --if QuestFrameGoodbyeButton then QuestFrameGoodbyeButton:Hide() end
+    --if QuestFrameCancelButton then QuestFrameCancelButton:Hide() end
+    --if QuestGreetingFrameCancelButton then QuestGreetingFrameCancelButton:Hide() end
+    
+    -- Hide scrollbars
+    if QuestDetailScrollFrameScrollBar then QuestDetailScrollFrameScrollBar:Hide() end
+    if QuestProgressScrollFrameScrollBar then QuestProgressScrollFrameScrollBar:Hide() end
+    if QuestRewardScrollFrameScrollBar then QuestRewardScrollFrameScrollBar:Hide() end
+    if QuestGreetingScrollFrameScrollBar then QuestGreetingScrollFrameScrollBar:Hide() end
+    if GossipGreetingScrollFrameScrollBar then GossipGreetingScrollFrameScrollBar:Hide() end
+    
+    Debug("Blizzard UI elements hidden to show QuestUI.tga")
+end
+
+
 -- =====================================================================
 --   SECTION 1 — PortraitManager
 -- =====================================================================
@@ -281,7 +308,7 @@ local function GetOrCreatePortraitFrame(parentFrame)
     portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
     portrait.bg:SetAllPoints()
     portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent since QuestUI.tga has the frame
-
+    
     portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
     portrait.texture:SetAllPoints()
     portrait.texture:SetTexCoord(0, 1, 0, 1)
@@ -782,7 +809,7 @@ local function ApplyQuestLayout()
 
     -- Apply custom background
     ApplyQuestBackground()
-
+    
     -- Remove PFUI stationery if present
     RemovePFUIStationery()
     
@@ -980,6 +1007,12 @@ local function ApplyGossipLayout()
 
     -- Apply custom background
     ApplyGossipBackground()
+    
+    -- Remove PFUI stationery if present
+    RemovePFUIStationery()
+    
+    -- Hide Blizzard UI elements (buttons, scrollbars) - QuestUI.tga provides these
+    HideBlizzardUIElements()
     
     -- Update portrait
     UpdateGossipPortrait()
