@@ -48,14 +48,12 @@ local currentPortrait = {
 }
 local activeNPCName = nil
 
-local QUEST_UI_TEXTURE = "Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga"
-
 local PORTRAIT_CONFIG = {
     -- Updated to match QuestUI.tga dark frame position
-    WIDTH  = 140,
-    HEIGHT = 180,
-    OFFSET_X = 25,
-    OFFSET_Y = 85,
+    WIDTH  = 160,
+    HEIGHT = 240,
+    OFFSET_X = 90,
+    OFFSET_Y = 95,
 
     DEFAULT_NPC    = "Interface\\AddOns\\BetterQuest\\portraits\\default.tga",
     DEFAULT_BOOK   = "Interface\\Icons\\INV_Misc_Book_09",
@@ -519,9 +517,9 @@ do  -- block-scope so all locals are invisible to the rest of ui.lua
 
 local QUEST_CONFIG = {
     -- Frame dimensions to match your QuestUI.tga
-    WIDTH  = 800,
+    WIDTH  = 600,
     HEIGHT = 450,
-    POS_X  = 0,
+    POS_X  = 30,
     POS_Y  = -60,
 
     -- Content area margins (to fit within the parchment area)
@@ -553,7 +551,7 @@ local function ApplyQuestBackground()
     if not backdrop.customBG then
         backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
         backdrop.customBG:SetAllPoints(backdrop)
-        backdrop.customBG:SetTexture(QUEST_UI_TEXTURE)
+        backdrop.customBG:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga")
         
         -- Hide default Blizzard background elements
         if QuestFrameDetailPanel then QuestFrameDetailPanel:SetAlpha(0) end
@@ -735,9 +733,9 @@ do  -- block-scope
 
 local GOSSIP_CONFIG = {
     FRAME = {
-        WIDTH    = 800,
+        WIDTH    = 600,
         HEIGHT   = 450,
-        OFFSET_X = 0,
+        OFFSET_X = 30,
         OFFSET_Y = -60,
     },
     PORTRAIT = {
@@ -837,7 +835,7 @@ local function ApplyGossipBackground()
     if not backdrop.customBG then
         backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
         backdrop.customBG:SetAllPoints(backdrop)
-        backdrop.customBG:SetTexture(QUEST_UI_TEXTURE)
+        backdrop.customBG:SetTexture("Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga")
         
         Debug("GossipFrame custom background applied")
     end
@@ -1078,3 +1076,98 @@ if ItemTextFrame then
 end
 
 end  -- end Book do-block
+-- =====================================================================
+--   SECTION 6 — Hide Default Blizzard UI (PFUI Style)
+-- =====================================================================
+-- This section "nukes" the default Blizzard frames. 
+-- In Vanilla 1.12.1, simply hiding frames isn't enough because the engine 
+-- re-shows them. We must unregister events and hook the show functions.
+
+do
+    -- A "dummy" function that does nothing
+    local function Noop() end
+
+    -- Helper to strip all textures from a frame
+    local function StripTextures(frame)
+        if not frame then return end
+        local region
+        for i=1, frame:GetNumRegions() do
+            region = frame:GetRegions()[i]
+            if region and region:GetObjectType() == "Texture" then
+                region:SetTexture(nil)
+            end
+        end
+    end
+
+    local function NukeBlizzardUI()
+        -- 1. NUKE QUEST LOG
+        if QuestLogFrame then
+            QuestLogFrame:UnregisterAllEvents()
+            QuestLogFrame:Hide()
+            -- Replace the global Show function so it can't be opened
+            ShowQuestLog = Noop
+            ToggleQuestLog = Noop
+        end
+        
+        if QuestLogMicroButton then
+            QuestLogMicroButton:UnregisterAllEvents()
+            QuestLogMicroButton:Hide()
+        end
+
+        -- 2. NUKE GOSSIP & QUEST DIALOGS
+        -- If you want to replace them with your own UI, we stop the default ones from showing.
+        -- Note: If your ui.lua is trying to "skin" the existing QuestFrame, 
+        -- nuking it will break your skin. 
+        
+        -- To HIDE the default textures while keeping the frame functional for your skin:
+        local framesToStrip = {
+            QuestFrame,
+            QuestFrameDetailPanel,
+            QuestFrameProgressPanel,
+            QuestFrameRewardPanel,
+            QuestFrameGreetingPanel,
+            GossipFrame,
+            GossipFrameGreetingPanel,
+        }
+
+        for _, f in ipairs(framesToStrip) do
+            if f then
+                StripTextures(f)
+                -- Hide the specific portrait texture specifically
+                local name = f:GetName()
+                if name then
+                    local portrait = getglobal(name .. "Portrait")
+                    if portrait then portrait:SetAlpha(0) end
+                end
+            end
+        end
+
+        -- 3. REMOVE WINDOW DECORATIONS
+        -- These are often global textures not parented strictly
+        local art = {
+            "QuestFrameHorizontalBarLeft", "QuestFrameTopBorder", "QuestFrameTopRightCorner",
+            "QuestFrameRightBorder", "QuestFrameBottomRightCorner", "QuestFrameBottomBorder",
+            "QuestFrameBottomLeftCorner", "QuestFrameLeftBorder", "GossipFrameGreetingGoodbyeButton",
+            "GossipFrameHorizontalBarLeft", "QuestFramePortrait"
+        }
+        for _, name in ipairs(art) do
+            local obj = getglobal(name)
+            if obj then 
+                if obj.Hide then obj:Hide() end
+                if obj.SetAlpha then obj:SetAlpha(0) end
+            end
+        end
+
+        Debug("Blizzard UI elements nuked (PFUI Style).")
+    end
+
+    -- Run the nuke logic
+    local nukeFrame = CreateFrame("Frame")
+    nukeFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+    nukeFrame:SetScript("OnEvent", function()
+        NukeBlizzardUI()
+        -- Also hook into the Gossip/Quest show events to ensure they stay stripped
+        hooksecurefunc("QuestFrame_OnShow", NukeBlizzardUI)
+        hooksecurefunc("GossipFrame_OnShow", NukeBlizzardUI)
+    end)
+end

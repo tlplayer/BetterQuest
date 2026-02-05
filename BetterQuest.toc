@@ -4,6 +4,7 @@
 ## Author: Timothy Player 
 ## Version: 1.0
 ## SavedVariables: BetterQuestDB
+## Dependencies: pfUI
 
 embeds.xml
 BetterQuest.xml
