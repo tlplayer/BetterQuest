@@ -225,6 +225,30 @@ local function RemovePFUIStationery()
         end
     end
 end
+-- Makes any frame fully transparent and removes its background
+local function MakeFrameTransparent(frame)
+    if not frame then return end
+
+    -- Remove the background texture if it exists
+    if frame.bg and frame.bg.SetTexture then
+        frame.bg:SetTexture(nil)
+        frame.bg:Hide()
+    end
+
+    -- Remove all texture regions in the frame
+    for i = 1, frame:GetNumRegions() do
+        local region = select(i, frame:GetRegions())
+        if region and region:GetObjectType() == "Texture" then
+            region:SetTexture(nil)
+            region:Hide()
+        end
+    end
+
+    -- Make the frame itself fully transparent
+    if frame.SetAlpha then
+        frame:SetAlpha(0)
+    end
+end
 
 -- Hide Blizzard UI elements that overlap with QuestUI.tga background
 local function HideBlizzardUIElements()
@@ -479,7 +503,8 @@ local function GetPortraitTexture(soundData)
         return CONFIG.PORTRAIT.DEFAULT_BOOK
     end
 
-    local metadata = GetNPCMetadata and GetNPCMetadata(soundData.npcName)
+    local metadata = GetNPCMetadata(soundData.npcName)
+    Debug(metadata.race)
     if metadata and metadata.race and metadata.sex then
         local filename = metadata.race
         if metadata.sex == "female" then filename = filename .. "_female" end
@@ -1222,90 +1247,3 @@ end
 
 end  -- end Book do-block
 
-
--- =====================================================================
---   SECTION 6 — Hide Default Blizzard UI (PFUI Style)
--- =====================================================================
-
-do
-    -- A "dummy" function that does nothing
-    local function Noop() end
-
-    -- Helper to strip all textures from a frame
-    local function StripTextures(frame)
-        if not frame then return end
-        local region
-        for i=1, frame:GetNumRegions() do
-            region = frame:GetRegions()[i]
-            if region and region:GetObjectType() == "Texture" then
-                region:SetTexture(nil)
-            end
-        end
-    end
-
-    local function NukeBlizzardUI()
-        -- 1. NUKE QUEST LOG
-        if QuestLogFrame then
-            QuestLogFrame:UnregisterAllEvents()
-            QuestLogFrame:Hide()
-            -- Replace the global Show function so it can't be opened
-            ShowQuestLog = Noop
-            ToggleQuestLog = Noop
-        end
-        
-        if QuestLogMicroButton then
-            QuestLogMicroButton:UnregisterAllEvents()
-            QuestLogMicroButton:Hide()
-        end
-
-        -- 2. NUKE GOSSIP & QUEST DIALOGS
-        local framesToStrip = {
-            QuestFrame,
-            QuestFrameDetailPanel,
-            QuestFrameProgressPanel,
-            QuestFrameRewardPanel,
-            QuestFrameGreetingPanel,
-            GossipFrame,
-            GossipFrameGreetingPanel,
-        }
-
-        for _, f in ipairs(framesToStrip) do
-            if f then
-                StripTextures(f)
-                -- Hide the specific portrait texture specifically
-                local name = f:GetName()
-                if name then
-                    local portrait = getglobal(name .. "Portrait")
-                    if portrait then portrait:SetAlpha(0) end
-                end
-            end
-        end
-
-        -- 3. REMOVE WINDOW DECORATIONS
-        local art = {
-            "QuestFrameHorizontalBarLeft", "QuestFrameTopBorder", "QuestFrameTopRightCorner",
-            "QuestFrameRightBorder", "QuestFrameBottomRightCorner", "QuestFrameBottomBorder",
-            "QuestFrameBottomLeftCorner", "QuestFrameLeftBorder", "GossipFrameGreetingGoodbyeButton",
-            "GossipFrameHorizontalBarLeft", "QuestFramePortrait"
-        }
-        for _, name in ipairs(art) do
-            local obj = getglobal(name)
-            if obj then 
-                if obj.Hide then obj:Hide() end
-                if obj.SetAlpha then obj:SetAlpha(0) end
-            end
-        end
-
-        Debug("Blizzard UI elements nuked (PFUI Style).")
-    end
-
-    -- Run the nuke logic
-    local nukeFrame = CreateFrame("Frame")
-    nukeFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-    nukeFrame:SetScript("OnEvent", function()
-        NukeBlizzardUI()
-        -- Also hook into the Gossip/Quest show events to ensure they stay stripped
-        hooksecurefunc("QuestFrame_OnShow", NukeBlizzardUI)
-        hooksecurefunc("GossipFrame_OnShow", NukeBlizzardUI)
-    end)
-end
