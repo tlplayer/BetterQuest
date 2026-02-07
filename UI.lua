@@ -33,8 +33,8 @@ local CONFIG = {
     -- ================================================================
     DIALOG = {
         -- Frame dimensions
-        FRAME_WIDTH  = 700,
-        FRAME_HEIGHT = 400,
+        FRAME_WIDTH  = 800,
+        FRAME_HEIGHT = 450,
         
         -- Frame positioning
         ANCHOR_POINT    = "BOTTOM",
@@ -44,15 +44,15 @@ local CONFIG = {
         
         -- Portrait configuration
         PORTRAIT_WIDTH  = 160,
-        PORTRAIT_HEIGHT = 260,
-        PORTRAIT_OFFSET_X = 30,
-        PORTRAIT_OFFSET_Y = 60,
+        PORTRAIT_HEIGHT = 240,
+        PORTRAIT_OFFSET_X = 90,
+        PORTRAIT_OFFSET_Y = 95,
         
         -- Content area (margins from frame edges)
-        CONTENT_MARGIN_LEFT  = 200,  -- Space for portrait on left
-        CONTENT_MARGIN_RIGHT = 60,
-        CONTENT_MARGIN_TOP   = 60,
-        CONTENT_MARGIN_BOTTOM = 100,
+        CONTENT_MARGIN_LEFT  = 270,  -- Space for portrait on left
+        CONTENT_MARGIN_RIGHT = 80,
+        CONTENT_MARGIN_TOP   = 80,
+        CONTENT_MARGIN_BOTTOM = 60,
         
         -- Text area (can differ from content area)
         TEXT_WIDTH_OVERRIDE = 600,  -- Set to number to override, nil uses content width
@@ -67,8 +67,8 @@ local CONFIG = {
         SCROLL_HEIGHT_GOSSIP   = 250,
         
         -- Button positioning
-        BUTTON_OFFSET_X = 80,   -- Distance from center
-        BUTTON_OFFSET_Y = 30,   -- Distance from bottom
+        BUTTON_OFFSET_X = 80,   -- Distance from center (left/right buttons)
+        BUTTON_OFFSET_Y = 30,   -- Distance from bottom (all action buttons)
         CLOSE_OFFSET_X  = 15,   -- Distance from right edge
         CLOSE_OFFSET_Y  = 15,   -- Distance from top edge
         
@@ -193,31 +193,6 @@ end
 --   PFUI COMPATIBILITY
 -- =====================================================================
 
--- Makes any frame fully transparent and removes its background
-local function MakeFrameTransparent(frame)
-    if not frame then return end
-
-    -- Remove the background texture if it exists
-    if frame.bg and frame.bg.SetTexture then
-        frame.bg:SetTexture(nil)
-        frame.bg:Hide()
-    end
-
-    -- Remove all texture regions in the frame
-    for i = 1, frame:GetNumRegions() do
-        local region = select(i, frame:GetRegions())
-        if region and region:GetObjectType() == "Texture" then
-            region:SetTexture(nil)
-            region:Hide()
-        end
-    end
-
-    -- Make the frame itself fully transparent
-    if frame.SetAlpha then
-        frame:SetAlpha(0)
-    end
-end
-
 
 -- =====================================================================
 --   SECTION 1 — PortraitManager
@@ -332,10 +307,6 @@ function PortraitManager:FindNPCPortrait()
     return CONFIG.PORTRAIT.DEFAULT_NPC
 end
 
-function PortraitManager:FindNPCPortraitByKey(key)
-    if not key or key == "" then return CONFIG.PORTRAIT.DEFAULT_NPC end
-    return CONFIG.PORTRAIT.PORTRAIT_PATH .. key .. ".tga"
-end
 
 -------------------------------------------------------------------------
 -- BOOK PORTRAITS
@@ -412,9 +383,6 @@ function PortraitManager:HidePortrait(parentFrame)
     currentPortrait.frame   = nil
 end
 
-function PortraitManager:GetCurrentPortrait()
-    return currentPortrait
-end
 
 function PortraitManager:Initialize()
     PMDebug("PortraitManager initialized")
@@ -533,10 +501,21 @@ function SoundQueue:InitQueueList()
         local index = i
         btn:SetScript("OnClick", function()
             if not SoundQueue.sounds then return end
-            local soundData = SoundQueue.sounds[index+1]  -- skip currently playing
+            -- Index offset by 1 because sounds[1] is currently playing
+            local soundData = SoundQueue.sounds[index + 1]
             if soundData then
                 SoundQueue:RemoveSound(soundData)
             end
+        end)
+        
+        btn:SetScript("OnEnter", function()
+            GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
+            GameTooltip:SetText("Click to remove from queue")
+            GameTooltip:Show()
+        end)
+        
+        btn:SetScript("OnLeave", function()
+            GameTooltip:Hide()
         end)
 
         btn:Hide()
@@ -698,6 +677,7 @@ function SoundQueue:InitializeUI()
     self:InitPortrait()
     self:InitNPCInfo()
     self:InitQueueContainer()
+    self:InitQueueList()
     self:InitControls()
 
     self.frame:Hide()
@@ -882,27 +862,6 @@ end  -- end QuestFrame do-block
 
 do  -- block-scope
 
-local function EnsureGossipPortrait(parent)
-    if parent.widePortrait then return parent.widePortrait end
-
-    local portrait = CreateFrame("Frame", nil, parent)
-    portrait:SetWidth(CONFIG.DIALOG.PORTRAIT_WIDTH)
-    portrait:SetHeight(CONFIG.DIALOG.PORTRAIT_HEIGHT)
-    portrait:SetPoint("TOPLEFT", parent, "TOPLEFT",
-        CONFIG.DIALOG.PORTRAIT_OFFSET_X, -CONFIG.DIALOG.PORTRAIT_OFFSET_Y)
-
-    portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
-    portrait.bg:SetAllPoints()
-    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent - let PFUI handle backgrounds
-
-    portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
-    portrait.texture:SetAllPoints()
-    portrait.texture:SetTexCoord(0, 1, 0, 1)
-
-    parent.widePortrait = portrait
-    return portrait
-end
-
 local function UpdateGossipPortrait()
     if not GossipFrame then return end
     if PortraitManager then
@@ -910,7 +869,7 @@ local function UpdateGossipPortrait()
         return
     end
     -- Fallback if PortraitManager somehow isn't loaded
-    local portrait = EnsureGossipPortrait(GossipFrame)
+    local portrait = GetOrCreatePortraitFrame(GossipFrame)
     portrait.texture:SetTexture("Interface\\CharacterFrame\\TempPortrait")
     portrait:Show()
 end
@@ -954,6 +913,18 @@ local function ApplyGossipLayout()
         GossipGreetingScrollFrameScrollBar:SetPoint("BOTTOMRIGHT",
             GossipGreetingScrollFrame, "BOTTOMRIGHT",
             CONFIG.DIALOG.SCROLLBAR_OFFSET_X, CONFIG.DIALOG.SCROLLBAR_OFFSET_BOTTOM)
+    end
+    
+    -- Gossip frame close button
+    if GossipFrameCloseButton then
+        GossipFrameCloseButton:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT",
+            -CONFIG.DIALOG.CLOSE_OFFSET_X, -CONFIG.DIALOG.CLOSE_OFFSET_Y)
+    end
+    
+    -- Gossip frame goodbye button (should align with other action buttons)
+    if GossipFrameGreetingGoodbyeButton then
+        GossipFrameGreetingGoodbyeButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            0, CONFIG.DIALOG.BUTTON_OFFSET_Y)
     end
 end
 
