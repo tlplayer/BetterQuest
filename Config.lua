@@ -132,7 +132,6 @@ local CONFIG = {
         PAUSE_BUTTON_RIGHT = -25,
         PAUSE_BUTTON_BOTTOM = 8,
         
-        BG_ALPHA = 0.7,
     },
 }
 
