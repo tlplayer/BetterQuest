@@ -1,6 +1,120 @@
--------------------------------------------------
--- PORTRAIT HELPERS
--------------------------------------------------
+-------------------------------------------------------------------------
+-- NPC CONTROL
+-------------------------------------------------------------------------
+function PortraitManager:SetActiveNPC(name)
+    activeNPCName = name
+    PMDebug("Active NPC set: " .. tostring(name))
+end
+
+function PortraitManager:ClearActiveNPC()
+    activeNPCName = nil
+end
+
+function PortraitManager:GetNPCInfo()
+    local name = activeNPCName or UnitName("npc") or UnitName("target") 
+    local normalizedName = NormalizeNPCName(name)
+
+    local metadata = GetNPCMetadata and GetNPCMetadata(normalizedName)
+    if not metadata then
+        PMDebug("No metadata found for: " .. tostring(name))
+        return nil
+    end
+
+    return {
+        name     = normalizedName,
+        race     = metadata.race     or "unknown",
+        sex      = metadata.sex      or "male",
+        portrait = metadata.portrait or metadata.race or "default",
+        zone     = metadata.zone     or GetZoneText() or "Unknown",
+        model_id = metadata.model_id,
+        narrator = metadata.narrator or "default",
+    }
+end
+
+function PortraitManager:FindNPCPortrait()
+    local npc = self:GetNPCInfo()
+    if not npc then
+        PMDebug("No NPC info available, using default")
+        return CONFIG.PORTRAIT.DEFAULT_NPC
+    end
+    if npc.race and npc.race ~= "" then
+        local path = BuildPortraitPath(npc.race, npc.sex)
+        PMDebug("Using portrait: " .. path)
+        return path
+    end
+    PMDebug("No race found, using default")
+    return CONFIG.PORTRAIT.DEFAULT_NPC
+end
+
+function PortraitManager:FindNPCPortraitByKey(key)
+    if not key or key == "" then return CONFIG.PORTRAIT.DEFAULT_NPC end
+    return CONFIG.PORTRAIT.PORTRAIT_PATH .. key .. ".tga"
+end
+
+-- =====================================================================
+--   SECTION 1 — PortraitManager
+-- =====================================================================
+
+-------------------------------------------------------------------------
+-- PORTRAIT MANAGER  (replaces the two identical copies in the old code)
+-------------------------------------------------------------------------
+PortraitManager = {}
+PortraitManager.Type = {
+    NPC    = "npc",
+    BOOK   = "book",
+    ITEM   = "item",
+    OBJECT = "object",
+    CUSTOM = "custom",
+}
+PortraitManager.DEBUG = CONFIG.PORTRAIT.DEBUG
+
+-- Module-private state
+local currentPortrait = {
+    type    = nil,
+    texture = nil,
+    frame   = nil,
+}
+local activeNPCName = nil
+
+-- Debug helper scoped to PortraitManager
+local function PMDebug(msg)
+    if PortraitManager.DEBUG then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff99ccff[Portrait]|r " .. msg)
+    end
+end
+
+-- Build "portraits/race.tga" or "portraits/race_female.tga"
+local function BuildPortraitPath(race, sex)
+    if not race or race == "" then return CONFIG.PORTRAIT.DEFAULT_NPC end
+    local filename = race
+    if sex == "female" then filename = filename .. "_female" end
+    return CONFIG.PORTRAIT.PORTRAIT_PATH .. filename .. ".tga"
+end
+
+-- Get-or-create the wide portrait sub-frame on any parent.
+-- Reuses an existing one; only creates if absent.
+local function GetOrCreatePortraitFrame(parentFrame)
+    if not parentFrame then return nil end
+    if parentFrame.widePortrait then return parentFrame.widePortrait end
+
+    local portrait = CreateFrame("Frame", nil, parentFrame)
+    portrait:SetWidth(CONFIG.DIALOG.PORTRAIT_WIDTH)
+    portrait:SetHeight(CONFIG.DIALOG.PORTRAIT_HEIGHT)
+    portrait:SetPoint("TOPLEFT", parentFrame, "TOPLEFT",
+        CONFIG.DIALOG.PORTRAIT_OFFSET_X, -CONFIG.DIALOG.PORTRAIT_OFFSET_Y)
+
+    portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
+    portrait.bg:SetAllPoints()
+    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent - let PFUI handle backgrounds
+    
+    portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
+    portrait.texture:SetAllPoints()
+    portrait.texture:SetTexCoord(0, 1, 0, 1)
+
+    parentFrame.widePortrait = portrait
+    currentPortrait.frame = parentFrame
+    return portrait
+end
 
 
 local function PortraitManager:PortraitManagerGetPortraitTexture(soundData)
