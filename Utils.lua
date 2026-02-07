@@ -260,7 +260,6 @@ end
 -- Strip curly/straight apostrophes so "Sylvanas's" == "Sylvanass" style keys match.
 function NormalizeNPCName(name)
     if not name then return nil end
-    name = string.gsub(name, "[\xe2\x80\x98\xe2\x80\x99]", "")  -- UTF-8 curly quotes
     name = string.gsub(name, "['']", "")                          -- ASCII apostrophe
     return name
 end

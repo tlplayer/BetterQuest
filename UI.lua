@@ -33,8 +33,8 @@ local CONFIG = {
     -- ================================================================
     DIALOG = {
         -- Frame dimensions
-        FRAME_WIDTH  = 800,
-        FRAME_HEIGHT = 450,
+        FRAME_WIDTH  = 700,
+        FRAME_HEIGHT = 400,
         
         -- Frame positioning
         ANCHOR_POINT    = "BOTTOM",
@@ -44,15 +44,15 @@ local CONFIG = {
         
         -- Portrait configuration
         PORTRAIT_WIDTH  = 160,
-        PORTRAIT_HEIGHT = 240,
-        PORTRAIT_OFFSET_X = 90,
-        PORTRAIT_OFFSET_Y = 95,
+        PORTRAIT_HEIGHT = 260,
+        PORTRAIT_OFFSET_X = 30,
+        PORTRAIT_OFFSET_Y = 60,
         
         -- Content area (margins from frame edges)
-        CONTENT_MARGIN_LEFT  = 270,  -- Space for portrait on left
-        CONTENT_MARGIN_RIGHT = 80,
-        CONTENT_MARGIN_TOP   = 80,
-        CONTENT_MARGIN_BOTTOM = 60,
+        CONTENT_MARGIN_LEFT  = 200,  -- Space for portrait on left
+        CONTENT_MARGIN_RIGHT = 60,
+        CONTENT_MARGIN_TOP   = 60,
+        CONTENT_MARGIN_BOTTOM = 100,
         
         -- Text area (can differ from content area)
         TEXT_WIDTH_OVERRIDE = 600,  -- Set to number to override, nil uses content width
@@ -82,9 +82,6 @@ local CONFIG = {
         SCROLLBAR_OFFSET_X      = -20,
         SCROLLBAR_OFFSET_TOP    = 16,
         SCROLLBAR_OFFSET_BOTTOM = 16,
-        
-        -- Background texture
-        BACKGROUND_TEXTURE = "Interface\\AddOns\\BetterQuest\\Textures\\QuestUI.tga",
     },
     
     -- ================================================================
@@ -196,35 +193,6 @@ end
 --   PFUI COMPATIBILITY
 -- =====================================================================
 
--- Remove PFUI stationery background texture from dialog scroll frames
--- PFUI sets this texture at: https://github.com/shagu/pfUI/blob/b2f6df84a93a4ce6adbe1fd8f0372454795151f1/skins/blizzard/gossipquest.lua#L109
-local function RemovePFUIStationery()
-    local scrollFrames = {
-        QuestDetailScrollFrame,
-        QuestProgressScrollFrame,
-        QuestRewardScrollFrame,
-        QuestGreetingScrollFrame,
-        GossipGreetingScrollFrame,
-    }
-    
-    for _, scrollFrame in ipairs(scrollFrames) do
-        if scrollFrame then
-            -- Find and remove any stationery texture layers
-            local regions = { scrollFrame:GetRegions() }
-            for _, region in ipairs(regions) do
-                if region and region:GetObjectType() == "Texture" then
-                    local texture = region:GetTexture()
-                    -- Check if it's a stationery texture
-                    if texture and type(texture) == "string" and string.find(texture, "Stationery") then
-                        region:SetTexture(nil)
-                        region:Hide()
-                        Debug("Removed PFUI stationery texture from: " .. scrollFrame:GetName())
-                    end
-                end
-            end
-        end
-    end
-end
 -- Makes any frame fully transparent and removes its background
 local function MakeFrameTransparent(frame)
     if not frame then return end
@@ -248,32 +216,6 @@ local function MakeFrameTransparent(frame)
     if frame.SetAlpha then
         frame:SetAlpha(0)
     end
-end
-
--- Hide Blizzard UI elements that overlap with QuestUI.tga background
-local function HideBlizzardUIElements()
-
-    
-    -- Hide close buttons (QuestUI.tga has its own)
-    --if QuestFrameCloseButton then QuestFrameCloseButton:Hide() end
-    --if GossipFrameCloseButton then GossipFrameCloseButton:Hide() end
-    
-    -- Hide action buttons (QuestUI.tga has its own)
-    --if QuestFrameAcceptButton then QuestFrameAcceptButton:Hide() end
-    --if QuestFrameDeclineButton then QuestFrameDeclineButton:Hide() end
-    --if QuestFrameCompleteButton then QuestFrameCompleteButton:Hide() end
-    --if QuestFrameGoodbyeButton then QuestFrameGoodbyeButton:Hide() end
-    --if QuestFrameCancelButton then QuestFrameCancelButton:Hide() end
-    --if QuestGreetingFrameCancelButton then QuestGreetingFrameCancelButton:Hide() end
-    
-    -- Hide scrollbars
-    if QuestDetailScrollFrameScrollBar then QuestDetailScrollFrameScrollBar:Hide() end
-    if QuestProgressScrollFrameScrollBar then QuestProgressScrollFrameScrollBar:Hide() end
-    if QuestRewardScrollFrameScrollBar then QuestRewardScrollFrameScrollBar:Hide() end
-    if QuestGreetingScrollFrameScrollBar then QuestGreetingScrollFrameScrollBar:Hide() end
-    if GossipGreetingScrollFrameScrollBar then GossipGreetingScrollFrameScrollBar:Hide() end
-    
-    Debug("Blizzard UI elements hidden to show QuestUI.tga")
 end
 
 
@@ -331,7 +273,7 @@ local function GetOrCreatePortraitFrame(parentFrame)
 
     portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
     portrait.bg:SetAllPoints()
-    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent since QuestUI.tga has the frame
+    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent - let PFUI handle backgrounds
     
     portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
     portrait.texture:SetAllPoints()
@@ -764,34 +706,13 @@ end
 
 
 -- =====================================================================
---   SECTION 3 — QuestFrame Layout with QuestUI.tga Background
+--   SECTION 3 — QuestFrame Layout (PFUI-Compatible)
 -- =====================================================================
 
 do  -- block-scope so all locals are invisible to the rest of ui.lua
 
 local function GetBackdrop()
     return QuestFrame.backdrop or QuestFrame
-end
-
--- Apply the QuestUI.tga background
-local function ApplyQuestBackground()
-    if not QuestFrame then return end
-    local backdrop = GetBackdrop()
-    
-    -- Create custom background texture if it doesn't exist
-    if not backdrop.customBG then
-        backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
-        backdrop.customBG:SetAllPoints(backdrop)
-        backdrop.customBG:SetTexture(CONFIG.DIALOG.BACKGROUND_TEXTURE)
-        
-        -- Hide default Blizzard background elements
-        if QuestFrameDetailPanel then QuestFrameDetailPanel:SetAlpha(0) end
-        if QuestFrameProgressPanel then QuestFrameProgressPanel:SetAlpha(0) end
-        if QuestFrameRewardPanel then QuestFrameRewardPanel:SetAlpha(0) end
-        if QuestFrameGreetingPanel then QuestFrameGreetingPanel:SetAlpha(0) end
-        
-        Debug("QuestFrame custom background applied")
-    end
 end
 
 local function UpdateNPCPortrait()
@@ -832,13 +753,7 @@ local function ApplyQuestLayout()
     QuestFrame:SetPoint(CONFIG.DIALOG.ANCHOR_POINT, UIParent, CONFIG.DIALOG.ANCHOR_RELATIVE, 
         CONFIG.DIALOG.OFFSET_X, CONFIG.DIALOG.OFFSET_Y)
 
-    -- Apply custom background
-    ApplyQuestBackground()
-    
-    -- Remove PFUI stationery if present
-    RemovePFUIStationery()
-    
-    -- Update portrait
+    -- Update portrait (no custom background - let PFUI handle it)
     UpdateNPCPortrait()
 
     LayoutScroll(QuestDetailScrollFrame,   QuestDetailScrollChildFrame,   CONFIG.DIALOG.SCROLL_HEIGHT_DETAIL)
@@ -846,7 +761,7 @@ local function ApplyQuestLayout()
     LayoutScroll(QuestRewardScrollFrame,   QuestRewardScrollChildFrame,   CONFIG.DIALOG.SCROLL_HEIGHT_REWARD)
     LayoutScroll(QuestGreetingScrollFrame, QuestGreetingScrollChildFrame, CONFIG.DIALOG.SCROLL_HEIGHT_GREETING)
 
-    -- Re-anchor all Blizzard buttons to match QuestUI.tga button positions
+    -- Re-anchor all Blizzard buttons
     if QuestFrameAcceptButton then
         QuestFrameAcceptButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
             -CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
@@ -962,7 +877,7 @@ end  -- end QuestFrame do-block
 
 
 -- =====================================================================
---   SECTION 4 — GossipFrame Layout with QuestUI.tga Background
+--   SECTION 4 — GossipFrame Layout (PFUI-Compatible)
 -- =====================================================================
 
 do  -- block-scope
@@ -978,7 +893,7 @@ local function EnsureGossipPortrait(parent)
 
     portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
     portrait.bg:SetAllPoints()
-    --portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent since QuestUI.tga has the frame
+    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent - let PFUI handle backgrounds
 
     portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
     portrait.texture:SetAllPoints()
@@ -1006,20 +921,6 @@ local function HideGossipPortrait()
     end
 end
 
--- Apply the QuestUI.tga background to Gossip frame
-local function ApplyGossipBackground()
-    if not GossipFrame then return end
-    local backdrop = GossipFrame.backdrop or GossipFrame
-    
-    if not backdrop.customBG then
-        backdrop.customBG = backdrop:CreateTexture(nil, "BACKGROUND")
-        backdrop.customBG:SetAllPoints(backdrop)
-        backdrop.customBG:SetTexture(CONFIG.DIALOG.BACKGROUND_TEXTURE)
-        
-        Debug("GossipFrame custom background applied")
-    end
-end
-
 local function ApplyGossipLayout()
     if not GossipFrame then return end
     local backdrop = GossipFrame.backdrop or GossipFrame
@@ -1030,16 +931,7 @@ local function ApplyGossipLayout()
     GossipFrame:SetPoint(CONFIG.DIALOG.ANCHOR_POINT, UIParent, CONFIG.DIALOG.ANCHOR_RELATIVE,
         CONFIG.DIALOG.OFFSET_X, CONFIG.DIALOG.OFFSET_Y)
 
-    -- Apply custom background
-    ApplyGossipBackground()
-    
-    -- Remove PFUI stationery if present
-    RemovePFUIStationery()
-    
-    -- Hide Blizzard UI elements (buttons, scrollbars) - QuestUI.tga provides these
-    HideBlizzardUIElements()
-    
-    -- Update portrait
+    -- Update portrait (no custom background - let PFUI handle it)
     UpdateGossipPortrait()
 
     if GossipGreetingScrollFrame then
@@ -1246,4 +1138,3 @@ if ItemTextFrame then
 end
 
 end  -- end Book do-block
-
