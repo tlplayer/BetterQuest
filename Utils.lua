@@ -273,6 +273,83 @@ function NormalizePath(path)
     path = string.gsub(path, "/", "\\")
     return path
 end
+-------------------------------------------------
+-- DEBUG & UTILS
+-------------------------------------------------
+
+local function Utils:Debug(msg)
+    DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[SoundQueue]|r " .. tostring(msg))
+end
+
+local function Utils:NormalizePath(path)
+    if not path then return nil end
+    return string.gsub(path, "/+", "\\")
+end
+
+-- Database hookup code
+function Utils:NormalizeDialogText(text)
+    if not text then return "" end
+
+    -- Replace Blizzard placeholders
+    text = string.gsub(text, "%$[nNcCrR]", "adventurer")
+    text = string.gsub(text, "%$g[^;]*;", "adventurer")
+
+    -- Replace actual player name and class
+    if playerName ~= "" then
+        text = string.gsub(text, playerName, "adventurer")
+    end
+    if playerClass ~= "" then
+        text = string.gsub(text, playerClass, "adventurer")
+    end
+
+    -- Remove other $ tokens
+    text = string.gsub(text, "%$%w+", "")
+
+    -- Remove text in brackets/parentheses/<> (emotes, tags)
+    text = string.gsub(text, "%b[]", "")
+    text = string.gsub(text, "%b()", "")
+    text = string.gsub(text, "%b<>", "")
+
+    -- Remove punctuation
+    text = string.gsub(text, "[^%w%s]", "")
+
+    -- Trim and collapse spaces
+    text = string.gsub(text, "%s+", " ")
+    text = string.gsub(text, "^%s+", "")
+    text = string.gsub(text, "%s+$", "")
+
+    -- Lowercase
+    text = string.lower(text)
+
+    return string.sub(text, 1, 50)
+end
+
+
+local function Utils:NormalizeNPCName(name)
+  if not name then return nil end
+  name = string.gsub(name, "['']", "")
+  return name
+end
+
+function Utils:GetNPCMetadata(npcName)
+  if not npcName then return nil end
+  local lookupName = NormalizeNPCName(npcName)
+  local npc = NPC_DATABASE[lookupName]
+
+  
+  if npc then
+    return {
+      race = npc.race,
+      sex = npc.sex,
+      portrait = npc.portrait,
+      zone = npc.zone,
+      model_id = npc.model_id,
+      narrator = npc.narrator
+    }
+  end
+  
+  return nil
+end
 
 -------------------------------------------------
 -- CONTEXT HELPERS
@@ -318,7 +395,7 @@ function Utils:PlaySound(soundData)
 end
 
 -- Safely stop a sound by handle
-function StopSound(handle)
+function Utils:StopSound(handle)
     if not handle then
         Debug("StopSoundSafe called with nil handle")
         return
@@ -343,7 +420,7 @@ end
 -- Returns: path, dialog_type, quest_id, seconds   (or nil)
 -- Computes the Levenshtein (edit) distance between two strings
 -- Edit distance (Levenshtein) for Lua 5.0
-function EditDistance(s1, s2)
+function Utils:EditDistance(s1, s2)
     if not s1 or not s2 then return 9999 end
 
     -- lengths using string.len (Lua 5.0 safe)
@@ -391,7 +468,7 @@ end
 
 local FALLBACK_TIMEOUT = 0.1   -- seconds — abort the full-hash scan if exceeded
 
-function GetNPCMetadata(npcName)
+function Utils:GetNPCMetadata(npcName)
   if not npcName then return nil end
   
   -- Early exit if NPC is marked as missing in runtime cache
@@ -417,12 +494,12 @@ function GetNPCMetadata(npcName)
   end
   
   -- NPC not found, mark as missing in runtime cache only
-  MarkNPCMissing(npcName)
+  Utils:MarkNPCMissing(npcName)
   return nil
 end
 
 -- Fuzzy find (uses EditDistance consistently and enforces a 0.1s loop timeout)
-function FuzzyFindDialogSound(npcName, dialogText)
+function Utils:FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
     
     -- Early exit if NPC is marked as missing in runtime cache
@@ -521,7 +598,7 @@ function FuzzyFindDialogSound(npcName, dialogText)
 end
 
 -- FindDialogSound with timeout on the full hash fallback loop
-function FindDialogSound(npcName, dialogText)
+function Utils:FindDialogSound(npcName, dialogText)
   if not npcName or not dialogText then return nil end
 
   -- Early exit if NPC is marked as missing in runtime cache (THIS SESSION)
@@ -572,4 +649,78 @@ function FindDialogSound(npcName, dialogText)
   end
 
   return nil
+end
+
+
+-------------------------------------------------
+-- MISSING NPC TRACKING
+-------------------------------------------------
+
+function  Utils:InitializeBetterQuestDB()
+    if not BetterQuestDB then
+        BetterQuestDB = {
+            missingNPCs = {}
+        }
+        Debug("BetterQuestDB initialized")
+    end
+end
+
+function  Utils:LogMissingNPC(npcName, dialogText, dialogType)
+    if not BetterQuestDB or not npcName or not dialogText then return end
+    
+    local normalizedName = NormalizeNPCName(npcName)
+    local normalizedText = NormalizeDialogText(dialogText)
+    
+    if normalizedText == "" then return end
+    
+    if not BetterQuestDB.missingNPCs[normalizedName] then
+        BetterQuestDB.missingNPCs[normalizedName] = {
+            originalName = npcName,
+            dialogs = {}
+        }
+    end
+    
+    local npcEntry = BetterQuestDB.missingNPCs[normalizedName]
+    
+    if not npcEntry.dialogs[normalizedText] then
+        npcEntry.dialogs[normalizedText] = {
+            dialog_text = dialogText,
+            dialogType = dialogType or "gossip",
+            count = 0
+        }
+    end
+    
+    npcEntry.dialogs[normalizedText].count = npcEntry.dialogs[normalizedText].count + 1
+end
+
+function Utils:ExportMissingNPCs()
+    if not BetterQuestDB or not BetterQuestDB.missingNPCs then
+        Debug("No missing NPC data to export")
+        return
+    end
+    
+    local npcCount = 0
+    local totalDialogs = 0
+    
+    Debug("=== MISSING NPCs ===")
+    for normalizedName, data in pairs(BetterQuestDB.missingNPCs) do
+        npcCount = npcCount + 1
+        local dialogCount = 0
+        
+        for _, dialogData in pairs(data.dialogs) do
+            dialogCount = dialogCount + 1
+            totalDialogs = totalDialogs + 1
+        end
+        
+        Debug(string.format("%d. %s (%d dialog(s))", npcCount, data.originalName, dialogCount))
+    end
+    
+    Debug(string.format("Total: %d missing NPCs, %d missing dialogs", npcCount, totalDialogs))
+end
+
+function SoundQueue:ClearMissingNPCs()
+    if BetterQuestDB then
+        BetterQuestDB.missingNPCs = {}
+        Debug("Missing NPC database cleared")
+    end
 end

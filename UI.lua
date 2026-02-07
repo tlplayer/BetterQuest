@@ -2,7 +2,7 @@
 -- Every frame, layout hook, portrait, and UI-update callback lives here.
 -- Load order: 3 of 4  (utils → soundqueue → ui → core)
 --
--- UPDATED: Configuration-first design with shared DialogLayout engine
+-- UPDATED: Configuration-first design with shared configs
 --
 -- Globals exported:
 --   PortraitManager          — unified portrait module
@@ -33,8 +33,8 @@ local CONFIG = {
     -- ================================================================
     DIALOG = {
         -- Frame dimensions
-        FRAME_WIDTH  = 800,
-        FRAME_HEIGHT = 450,
+        FRAME_WIDTH  = 700,
+        FRAME_HEIGHT = 400,
         
         -- Frame positioning
         ANCHOR_POINT    = "BOTTOM",
@@ -44,15 +44,15 @@ local CONFIG = {
         
         -- Portrait configuration
         PORTRAIT_WIDTH  = 160,
-        PORTRAIT_HEIGHT = 240,
-        PORTRAIT_OFFSET_X = 90,
-        PORTRAIT_OFFSET_Y = 95,
+        PORTRAIT_HEIGHT = 260,
+        PORTRAIT_OFFSET_X = 30,
+        PORTRAIT_OFFSET_Y = 60,
         
         -- Content area (margins from frame edges)
-        CONTENT_MARGIN_LEFT  = 270,  -- Space for portrait on left
-        CONTENT_MARGIN_RIGHT = 80,
-        CONTENT_MARGIN_TOP   = 80,
-        CONTENT_MARGIN_BOTTOM = 60,
+        CONTENT_MARGIN_LEFT  = 200,  -- Space for portrait on left
+        CONTENT_MARGIN_RIGHT = 60,
+        CONTENT_MARGIN_TOP   = 60,
+        CONTENT_MARGIN_BOTTOM = 100,
         
         -- Text area (can differ from content area)
         TEXT_WIDTH_OVERRIDE = 600,  -- Set to number to override, nil uses content width
@@ -67,8 +67,8 @@ local CONFIG = {
         SCROLL_HEIGHT_GOSSIP   = 250,
         
         -- Button positioning
-        BUTTON_OFFSET_X = 80,   -- Distance from center (left/right buttons)
-        BUTTON_OFFSET_Y = 30,   -- Distance from bottom (all action buttons)
+        BUTTON_OFFSET_X = 80,   -- Distance from center
+        BUTTON_OFFSET_Y = 30,   -- Distance from bottom
         CLOSE_OFFSET_X  = 15,   -- Distance from right edge
         CLOSE_OFFSET_Y  = 15,   -- Distance from top edge
         
@@ -164,18 +164,7 @@ local CONFIG = {
     },
 }
 
--- Computed values (derived from config)
-local COMPUTED = {
-    DIALOG_CONTENT_WIDTH = CONFIG.DIALOG.FRAME_WIDTH 
-        - CONFIG.DIALOG.CONTENT_MARGIN_LEFT 
-        - CONFIG.DIALOG.CONTENT_MARGIN_RIGHT,
-        
-    DIALOG_CONTENT_HEIGHT = CONFIG.DIALOG.FRAME_HEIGHT 
-        - CONFIG.DIALOG.CONTENT_MARGIN_TOP 
-        - CONFIG.DIALOG.CONTENT_MARGIN_BOTTOM,
-        
-    DIALOG_TEXT_WIDTH = nil,  -- Computed in GetDialogTextWidth()
-}
+
 
 -- Helper to get text width (allows override)
 local function GetDialogTextWidth()
@@ -190,144 +179,31 @@ local function GetDialogTextWidth()
 end
 
 -- =====================================================================
---   DIALOG LAYOUT ENGINE — Shared logic for Quest/Gossip/Book
+--   PFUI COMPATIBILITY
 -- =====================================================================
 
-local DialogLayout = {}
+-- Makes any frame fully transparent and removes its background
+local function MakeFrameTransparent(frame)
+    if not frame then return end
 
--- Unified portrait update
-function DialogLayout:UpdatePortrait(frame, portraitType, customKey)
-    if not PortraitManager or not frame then return end
-    PortraitManager:SetPortrait(frame, portraitType or PortraitManager.Type.NPC, customKey)
-end
-
--- Unified portrait hide
-function DialogLayout:HidePortrait(frame)
-    if PortraitManager then
-        PortraitManager:HidePortrait(frame)
+    -- Remove the background texture if it exists
+    if frame.bg and frame.bg.SetTexture then
+        frame.bg:SetTexture(nil)
+        frame.bg:Hide()
     end
-end
 
--- Unified SoundQueue hook for dialogs (CHAINED, not overwriting)
-function DialogLayout:HookSoundQueue(dialogType, frame)
-    if not SoundQueue then return end
-
-    -- Chain OnVoiceStart
-    local prevStart = SoundQueue.OnVoiceStart
-    SoundQueue.OnVoiceStart = function(self, data)
-        if prevStart then prevStart(self, data) end
-        
-        if data and data.dialog_type == dialogType then
-            if data.npc_name then
-                PortraitManager:SetActiveNPC(data.npc_name)
-            end
-            DialogLayout:UpdatePortrait(frame)
+    -- Remove all texture regions in the frame
+    for i = 1, frame:GetNumRegions() do
+        local region = select(i, frame:GetRegions())
+        if region and region:GetObjectType() == "Texture" then
+            region:SetTexture(nil)
+            region:Hide()
         end
     end
 
-    -- Chain OnVoiceStop
-    local prevStop = SoundQueue.OnVoiceStop
-    SoundQueue.OnVoiceStop = function(self)
-        if prevStop then prevStop(self) end
-        DialogLayout:HidePortrait(frame)
-    end
-end
-
--- =====================================================================
---   UNIVERSAL FRAME LAYOUT (Quest/Gossip/Book unified)
--- =====================================================================
-
-local function ApplyFrameLayout(frameObj)
-    if not frameObj or not frameObj.frame or not frameObj.type then return end
-
-    local f = frameObj.frame
-    local frameType = frameObj.type
-    local scrollFrames = frameObj.scrollFrames or {}
-    local portrait = frameObj.portrait
-    local buttons = frameObj.buttons or {}
-    local backdrop = frameObj.backdrop or f
-    local textFields = frameObj.textFields or {}
-
-    -- Main frame sizing & anchoring
-    if frameType == "Quest" or frameType == "Gossip" then
-        f:SetWidth(CONFIG.DIALOG.FRAME_WIDTH)
-        f:SetHeight(CONFIG.DIALOG.FRAME_HEIGHT)
-        f:ClearAllPoints()
-        f:SetPoint(CONFIG.DIALOG.ANCHOR_POINT, UIParent, CONFIG.DIALOG.ANCHOR_RELATIVE, 
-            CONFIG.DIALOG.OFFSET_X, CONFIG.DIALOG.OFFSET_Y)
-    elseif frameType == "Book" or frameType == "ItemText" then
-        f:SetWidth(CONFIG.BOOK.FRAME_WIDTH)
-        f:SetHeight(CONFIG.BOOK.FRAME_HEIGHT)
-        f:ClearAllPoints()
-        f:SetPoint(CONFIG.BOOK.ANCHOR_POINT, UIParent, CONFIG.BOOK.ANCHOR_RELATIVE, 
-            CONFIG.BOOK.OFFSET_X, CONFIG.BOOK.OFFSET_Y)
-    end
-
-    -- Portrait
-    if portrait and portrait:IsVisible then
-        portrait:ClearAllPoints()
-        if frameType == "Quest" or frameType == "Gossip" then
-            portrait:SetPoint("TOPLEFT", f, "TOPLEFT", 
-                CONFIG.DIALOG.PORTRAIT_OFFSET_X, -CONFIG.DIALOG.PORTRAIT_OFFSET_Y)
-            portrait:SetWidth(CONFIG.DIALOG.PORTRAIT_WIDTH)
-            portrait:SetHeight(CONFIG.DIALOG.PORTRAIT_HEIGHT)
-        elseif frameType == "Book" or frameType == "ItemText" then
-            portrait:SetPoint("TOPLEFT", f, "TOPLEFT", 
-                CONFIG.BOOK.MARGIN_LEFT, -CONFIG.BOOK.MARGIN_TOP)
-            portrait:SetWidth(CONFIG.BOOK.FRAME_WIDTH - CONFIG.BOOK.MARGIN_LEFT - CONFIG.BOOK.MARGIN_RIGHT)
-            portrait:SetHeight(CONFIG.BOOK.FRAME_HEIGHT - CONFIG.BOOK.MARGIN_TOP - CONFIG.BOOK.MARGIN_BOTTOM)
-        end
-    end
-
-    -- ScrollFrames
-    for _, s in ipairs(scrollFrames) do
-        if s.frame then
-            s.frame:ClearAllPoints()
-            local parent = backdrop
-            if frameType == "Quest" or frameType == "Gossip" then
-                s.frame:SetPoint("TOPLEFT", parent, "TOPLEFT", 
-                    CONFIG.DIALOG.CONTENT_MARGIN_LEFT, -CONFIG.DIALOG.CONTENT_MARGIN_TOP)
-                s.frame:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
-                s.frame:SetHeight(s.height or 200)
-            elseif frameType == "Book" or frameType == "ItemText" then
-                local width  = parent:GetWidth()  - CONFIG.BOOK.MARGIN_LEFT - CONFIG.BOOK.MARGIN_RIGHT
-                local height = parent:GetHeight() - CONFIG.BOOK.MARGIN_TOP  - CONFIG.BOOK.MARGIN_BOTTOM
-                s.frame:SetPoint("TOPLEFT", parent, "TOPLEFT", 
-                    CONFIG.BOOK.MARGIN_LEFT, -CONFIG.BOOK.MARGIN_TOP)
-                s.frame:SetWidth(width)
-                s.frame:SetHeight(height)
-            end
-            if s.child then s.child:SetWidth(s.frame:GetWidth()) end
-        end
-    end
-
-    -- Buttons (bottom-anchored for Quest/Gossip)
-    local yOffset = 0
-    for _, btn in ipairs(buttons) do
-        if btn and btn:IsVisible then
-            btn:ClearAllPoints()
-            if frameType == "Quest" or frameType == "Gossip" then
-                local xOffset = ((yOffset % 2 == 0) and -CONFIG.DIALOG.BUTTON_OFFSET_X or CONFIG.DIALOG.BUTTON_OFFSET_X)
-                btn:SetPoint("BOTTOM", backdrop, "BOTTOM", xOffset, CONFIG.DIALOG.BUTTON_OFFSET_Y)
-                yOffset = yOffset + 1
-            end
-        end
-    end
-
-    -- Close button
-    if frameObj.closeButton then
-        frameObj.closeButton:ClearAllPoints()
-        frameObj.closeButton:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT", 
-            -CONFIG.DIALOG.CLOSE_OFFSET_X, -CONFIG.DIALOG.CLOSE_OFFSET_Y)
-    end
-
-    -- Text fields
-    for _, ftext in ipairs(textFields) do
-        if ftext then
-            local width = GetDialogTextWidth()
-            ftext:SetWidth(width)
-            ftext:SetJustifyH(CONFIG.DIALOG.TEXT_JUSTIFY)
-        end
+    -- Make the frame itself fully transparent
+    if frame.SetAlpha then
+        frame:SetAlpha(0)
     end
 end
 
@@ -445,6 +321,10 @@ function PortraitManager:FindNPCPortrait()
     return CONFIG.PORTRAIT.DEFAULT_NPC
 end
 
+function PortraitManager:FindNPCPortraitByKey(key)
+    if not key or key == "" then return CONFIG.PORTRAIT.DEFAULT_NPC end
+    return CONFIG.PORTRAIT.PORTRAIT_PATH .. key .. ".tga"
+end
 
 -------------------------------------------------------------------------
 -- BOOK PORTRAITS
@@ -521,6 +401,9 @@ function PortraitManager:HidePortrait(parentFrame)
     currentPortrait.frame   = nil
 end
 
+function PortraitManager:GetCurrentPortrait()
+    return currentPortrait
+end
 
 function PortraitManager:Initialize()
     PMDebug("PortraitManager initialized")
@@ -536,33 +419,12 @@ PortraitManager:Initialize()
 
 
 -- =====================================================================
---   SECTION 2 — SoundQueue Mini-Player UI (Pipeline Architecture)
+--   SECTION 2 — SoundQueue Mini-Player UI
 --         (attached onto the SoundQueue table)
 -- =====================================================================
 
--- UI INVARIANTS (LIFECYCLE-AWARE):
--- 1. RefreshUI() guarantees UI exists (calls InitializeUI if needed)
--- 2. Queue (sounds[]) is the source of truth for visibility
--- 3. Only RefreshUI() may update multiple UI regions
--- 4. Render stages must not mutate SoundQueue state
--- 5. State-mutating functions must call RefreshUI()
--- 6. No UI mutation outside pipeline stages
-
 -------------------------------------------------------------------------
--- COMPONENT BASE (Lua 5.0 compatible interface pattern)
--------------------------------------------------------------------------
-local Component = {}
-Component.__index = Component
-
-function Component:new(o)
-    return setmetatable(o or {}, self)
-end
-
-function Component:update(state) end
-function Component:render(ui, state) end
-
--------------------------------------------------------------------------
--- HELPER: Portrait texture resolver
+-- Portrait-texture resolver for the mini-player
 -------------------------------------------------------------------------
 local function GetPortraitTexture(soundData)
     if not soundData or not soundData.npcName then
@@ -573,201 +435,13 @@ local function GetPortraitTexture(soundData)
     end
 
     local metadata = GetNPCMetadata(soundData.npcName)
+    Debug(metadata.race)
     if metadata and metadata.race and metadata.sex then
         local filename = metadata.race
         if metadata.sex == "female" then filename = filename .. "_female" end
         return CONFIG.PORTRAIT.PORTRAIT_PATH .. filename .. ".tga"
     end
     return CONFIG.PORTRAIT.DEFAULT_NPC
-end
-
--------------------------------------------------------------------------
--- PIPELINE STAGES (Each is a Component)
--------------------------------------------------------------------------
-
--- Stage: Portrait
-local PortraitStage = Component:new{}
-function PortraitStage:render(ui, state)
-    if not ui.portrait or not ui.portrait.texture then return end
-    ui.portrait.texture:SetTexture(GetPortraitTexture(state.currentSound))
-end
-
--- Stage: Current Info (NPC name + title)
-local InfoStage = Component:new{}
-function InfoStage:render(ui, state)
-    -- FIX #3: Add nil guards
-    if not ui.npcName or not ui.title then return end
-    
-    local current = state.currentSound
-    ui.npcName:SetText(current and current.npcName or "")
-    ui.title:SetText(current and current.title or "")
-end
-
--- Stage: Pause/Play Button
-local PauseButtonStage = Component:new{}
-function PauseButtonStage:render(ui, state)
-    -- FIX #3: Add nil guards
-    if not ui.pauseBtn or not ui.pauseBtn.pauseIcon or not ui.pauseBtn.playIcon then return end
-    
-    if state.isPaused then
-        ui.pauseBtn.pauseIcon:Hide()
-        ui.pauseBtn.playIcon:Show()
-    else
-        ui.pauseBtn.pauseIcon:Show()
-        ui.pauseBtn.playIcon:Hide()
-    end
-end
-
--- Stage: Status Text (elapsed / duration)
-local StatusStage = Component:new{}
-function StatusStage:render(ui, state)
-    if not ui.statusText then return end
-    
-    local current = state.currentSound
-    if not current then
-        ui.statusText:SetText("")
-        return
-    end
-
-    local elapsed = GetTime() - current.startTime
-    if state.isPaused then
-        elapsed = current.pauseOffset
-    end
-
-    ui.statusText:SetFormattedText("%.1fs / %.1fs", elapsed, current.duration)
-end
-
--- Stage: Queue List
-local QueueStage = Component:new{}
-function QueueStage:render(ui, state)
-    if not ui.queueButtons then return end
-
-    for i, btn in ipairs(ui.queueButtons) do
-        local soundData = state.sounds[i + 1]  -- skip currently playing
-
-        if soundData then
-            -- BUG FIX: Bind soundData directly, not index
-            btn.soundData = soundData
-            btn.text:SetText(string.format("%d. %s", i, soundData.npcName or "Unknown"))
-            btn:Show()
-        else
-            btn.soundData = nil
-            btn:Hide()
-        end
-    end
-end
-
--- Stage: Frame Visibility
-local VisibilityStage = Component:new{}
-function VisibilityStage:render(ui, state)
-    -- FIX #2: Queue is source of truth (sounds[1] = current)
-    if table.getn(state.sounds) > 0 then
-        ui:Show()
-    else
-        ui:Hide()
-    end
-end
-
--------------------------------------------------------------------------
--- PIPELINE REGISTRATION
--------------------------------------------------------------------------
-SoundQueue.pipeline = {
-    PortraitStage,
-    InfoStage,
-    PauseButtonStage,
-    StatusStage,
-    QueueStage,
-    VisibilityStage,
-}
-
--------------------------------------------------------------------------
--- SINGLE REFRESH CHOKE POINT
--------------------------------------------------------------------------
-function SoundQueue:RefreshUI(reason)
-    -- FIX #1: Guarantee UI exists (restore temporal invariant)
-    if not self.frame then
-        self:InitializeUI()
-    end
-    if not self.frame then return end  -- InitializeUI failed
-
-    local state = {
-        currentSound = self.currentSound,
-        sounds       = self.sounds or {},
-        isPaused     = self.isPaused,
-    }
-
-    -- Run all stages in order
-    for _, stage in ipairs(self.pipeline) do
-        if stage.update then stage:update(state) end
-    end
-
-    for _, stage in ipairs(self.pipeline) do
-        if stage.render then stage:render(self.frame, state) end
-    end
-
-    if reason then
-        Debug("UI refreshed: " .. reason)
-    end
-end
-
--------------------------------------------------------------------------
--- BACKWARDS COMPATIBILITY STUBS (called from soundqueue.lua)
--- FIX #5: Make these no-ops to avoid recursive refresh loops
--------------------------------------------------------------------------
-function SoundQueue:UpdatePortrait()      end  -- Use RefreshUI() instead
-function SoundQueue:UpdateCurrentInfo()   end  -- Use RefreshUI() instead
-function SoundQueue:UpdatePauseButton()   end  -- Use RefreshUI() instead
-function SoundQueue:UpdateStatusText()    end  -- Use RefreshUI() instead
-function SoundQueue:UpdateQueueList()     end  -- Use RefreshUI() instead
-function SoundQueue:ShowFrame()           if self.frame then self.frame:Show() end end
-function SoundQueue:HideFrame()           if self.frame then self.frame:Hide() end end
-
--------------------------------------------------------------------------
--- QUEUE BUTTON SETUP (BUG FIX: Bind soundData, not index)
--------------------------------------------------------------------------
-function SoundQueue:InitQueueList()
-    -- BUG FIX: Compute correct container height
-    local containerHeight = CONFIG.SOUNDQUEUE.QUEUE_MAX_DISPLAY 
-        * CONFIG.SOUNDQUEUE.QUEUE_BUTTON_SPACING
-
-    self.frame.queueContainer = CreateFrame("Frame", nil, self.frame)
-    self.frame.queueContainer:SetPoint("TOPLEFT", 
-        CONFIG.SOUNDQUEUE.QUEUE_LEFT, 
-        -CONFIG.SOUNDQUEUE.QUEUE_TOP)
-    self.frame.queueContainer:SetWidth(CONFIG.SOUNDQUEUE.QUEUE_WIDTH)
-    self.frame.queueContainer:SetHeight(containerHeight)
-
-    self.frame.queueButtons = {}
-    for i = 1, CONFIG.SOUNDQUEUE.QUEUE_MAX_DISPLAY do
-        local btn = CreateFrame("Button", nil, self.frame.queueContainer)
-        btn:SetHeight(CONFIG.SOUNDQUEUE.QUEUE_BUTTON_HEIGHT)
-        btn:SetWidth(CONFIG.SOUNDQUEUE.QUEUE_WIDTH - 20)
-        btn:SetPoint("TOPLEFT", 0, -(i-1)*CONFIG.SOUNDQUEUE.QUEUE_BUTTON_SPACING)
-
-        btn.text = btn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-        btn.text:SetAllPoints()
-        btn.text:SetJustifyH("LEFT")
-
-        -- BUG FIX: Bind soundData directly in OnClick, not index
-        btn:SetScript("OnClick", function()
-            if this.soundData then
-                SoundQueue:RemoveSound(this.soundData)
-            end
-        end)
-        
-        btn:SetScript("OnEnter", function()
-            GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
-            GameTooltip:SetText("Click to remove from queue")
-            GameTooltip:Show()
-        end)
-        
-        btn:SetScript("OnLeave", function()
-            GameTooltip:Hide()
-        end)
-
-        btn:Hide()
-        self.frame.queueButtons[i] = btn
-    end
 end
 
 -------------------------------------------------------------------------
@@ -900,7 +574,6 @@ function SoundQueue:InitializeUI()
     self:InitPortrait()
     self:InitNPCInfo()
     self:InitQueueContainer()
-    self:InitQueueList()
     self:InitControls()
 
     self.frame:Hide()
@@ -909,7 +582,7 @@ end
 
 
 -- =====================================================================
---   SECTION 3 — QuestFrame Layout (Universal Layout Engine)
+--   SECTION 3 — QuestFrame Layout (PFUI-Compatible)
 -- =====================================================================
 
 do  -- block-scope so all locals are invisible to the rest of ui.lua
@@ -918,39 +591,94 @@ local function GetBackdrop()
     return QuestFrame.backdrop or QuestFrame
 end
 
+local function UpdateNPCPortrait()
+    if not QuestFrame then return end
+    if PortraitManager then
+        PortraitManager:UpdateNPCPortrait(QuestFrame)
+        return
+    end
+end
+
+local function HideQuestPortrait()
+    if QuestFrame and QuestFrame.widePortrait then
+        QuestFrame.widePortrait:Hide()
+    end
+end
+
+local function LayoutScroll(scrollFrame, child, height)
+    if not scrollFrame then return end
+
+    scrollFrame:ClearAllPoints()
+    scrollFrame:SetPoint("TOPLEFT", QuestFrame, "TOPLEFT",
+        CONFIG.DIALOG.CONTENT_MARGIN_LEFT, -CONFIG.DIALOG.CONTENT_MARGIN_TOP)
+    scrollFrame:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
+    scrollFrame:SetHeight(height)
+
+    if child then 
+        child:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH) 
+    end
+end
+
 local function ApplyQuestLayout()
     if not QuestFrame then return end
+    local backdrop = GetBackdrop()
+
+    QuestFrame:SetWidth(CONFIG.DIALOG.FRAME_WIDTH)
+    QuestFrame:SetHeight(CONFIG.DIALOG.FRAME_HEIGHT)
+    QuestFrame:ClearAllPoints()
+    QuestFrame:SetPoint(CONFIG.DIALOG.ANCHOR_POINT, UIParent, CONFIG.DIALOG.ANCHOR_RELATIVE, 
+        CONFIG.DIALOG.OFFSET_X, CONFIG.DIALOG.OFFSET_Y)
+
+    -- Update portrait (no custom background - let PFUI handle it)
+    UpdateNPCPortrait()
+
+    LayoutScroll(QuestDetailScrollFrame,   QuestDetailScrollChildFrame,   CONFIG.DIALOG.SCROLL_HEIGHT_DETAIL)
+    LayoutScroll(QuestProgressScrollFrame, QuestProgressScrollChildFrame, CONFIG.DIALOG.SCROLL_HEIGHT_PROGRESS)
+    LayoutScroll(QuestRewardScrollFrame,   QuestRewardScrollChildFrame,   CONFIG.DIALOG.SCROLL_HEIGHT_REWARD)
+    LayoutScroll(QuestGreetingScrollFrame, QuestGreetingScrollChildFrame, CONFIG.DIALOG.SCROLL_HEIGHT_GREETING)
+
+    -- Re-anchor all Blizzard buttons
+    if QuestFrameAcceptButton then
+        QuestFrameAcceptButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            -CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
+    end
+    if QuestFrameDeclineButton then
+        QuestFrameDeclineButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
+    end
+    if QuestFrameCompleteButton then
+        QuestFrameCompleteButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            -CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
+    end
+    if QuestFrameGoodbyeButton then
+        QuestFrameGoodbyeButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
+    end
+    if QuestFrameCloseButton then
+        QuestFrameCloseButton:SetPoint("TOPRIGHT", backdrop, "TOPRIGHT",
+            -CONFIG.DIALOG.CLOSE_OFFSET_X, -CONFIG.DIALOG.CLOSE_OFFSET_Y)
+    end
     
-    DialogLayout:UpdatePortrait(QuestFrame)
-    
-    ApplyFrameLayout({
-        frame = QuestFrame,
-        type = "Quest",
-        backdrop = GetBackdrop(),
-        scrollFrames = {
-            { frame = QuestDetailScrollFrame,   child = QuestDetailScrollChildFrame,   height = CONFIG.DIALOG.SCROLL_HEIGHT_DETAIL },
-            { frame = QuestProgressScrollFrame, child = QuestProgressScrollChildFrame, height = CONFIG.DIALOG.SCROLL_HEIGHT_PROGRESS },
-            { frame = QuestRewardScrollFrame,   child = QuestRewardScrollChildFrame,   height = CONFIG.DIALOG.SCROLL_HEIGHT_REWARD },
-            { frame = QuestGreetingScrollFrame, child = QuestGreetingScrollChildFrame, height = CONFIG.DIALOG.SCROLL_HEIGHT_GREETING },
-        },
-        portrait = QuestFrame.widePortrait,
-        buttons = { 
-            QuestFrameAcceptButton, 
-            QuestFrameDeclineButton, 
-            QuestFrameCompleteButton, 
-            QuestFrameGoodbyeButton,
-            QuestGreetingFrameCancelButton,
-        },
-        closeButton = QuestFrameCloseButton,
-        textFields = { 
-            QuestTitleText, 
-            QuestDescription, 
-            QuestObjectiveText, 
-            QuestProgressText, 
-            QuestRewardText, 
-            GreetingText,
-        }
-    })
+    -- Greeting buttons alignment
+    if QuestGreetingFrameCancelButton then
+        QuestGreetingFrameCancelButton:SetPoint("BOTTOM", backdrop, "BOTTOM",
+            CONFIG.DIALOG.BUTTON_OFFSET_X, CONFIG.DIALOG.BUTTON_OFFSET_Y)
+    end
+end
+
+local function FixTextWidths()
+    local width = GetDialogTextWidth()
+    local fields = {
+        QuestTitleText, QuestDescription, QuestObjectiveText,
+        QuestProgressText, QuestRewardText,
+        GreetingText,
+    }
+    for _, f in ipairs(fields) do
+        if f then
+            f:SetWidth(width)
+            f:SetJustifyH(CONFIG.DIALOG.TEXT_JUSTIFY)
+        end
+    end
     
     -- Fix Greeting title buttons alignment
     for i=1, 32 do
@@ -966,6 +694,25 @@ local function ApplyQuestLayout()
     end
 end
 
+-- SoundQueue hook: update portrait when voice starts on a quest dialog
+local function HookQuestSoundQueue()
+    if not SoundQueue then return end
+
+    SoundQueue.OnVoiceStart = function(_, data)
+        if not data then return end
+        if data.dialog_type == "quest" or data.dialog_type == "gossip" then
+            if PortraitManager and data.npc_name then
+                PortraitManager:SetActiveNPC(data.npc_name)
+            end
+            UpdateNPCPortrait()
+        end
+    end
+
+    SoundQueue.OnVoiceStop = function()
+        HideQuestPortrait()
+    end
+end
+
 -- Event frame for quest UI events
 local questEventFrame = CreateFrame("Frame")
 questEventFrame:RegisterEvent("QUEST_DETAIL")
@@ -976,6 +723,7 @@ questEventFrame:RegisterEvent("QUEST_GREETING")
 questEventFrame:SetScript("OnEvent", function()
     this:SetScript("OnUpdate", function()
         ApplyQuestLayout()
+        FixTextWidths()
         this:SetScript("OnUpdate", nil)
     end)
 end)
@@ -985,6 +733,7 @@ local originalQuestOnShow = QuestFrame:GetScript("OnShow")
 QuestFrame:SetScript("OnShow", function()
     if originalQuestOnShow then originalQuestOnShow() end
     ApplyQuestLayout()
+    FixTextWidths()
 end)
 
 -- Delayed init (gives Blizzard frames time to exist)
@@ -994,8 +743,8 @@ questInitFrame:SetScript("OnUpdate", function()
     questInitTimer = questInitTimer + arg1
     if questInitTimer > 0.5 then
         ApplyQuestLayout()
-        -- Hook SoundQueue using unified method
-        DialogLayout:HookSoundQueue("quest", QuestFrame)
+        FixTextWidths()
+        HookQuestSoundQueue()
         this:SetScript("OnUpdate", nil)
     end
 end)
@@ -1004,31 +753,75 @@ end  -- end QuestFrame do-block
 
 
 -- =====================================================================
---   SECTION 4 — GossipFrame Layout (Universal Layout Engine)
+--   SECTION 4 — GossipFrame Layout (PFUI-Compatible)
 -- =====================================================================
 
 do  -- block-scope
 
+local function EnsureGossipPortrait(parent)
+    if parent.widePortrait then return parent.widePortrait end
+
+    local portrait = CreateFrame("Frame", nil, parent)
+    portrait:SetWidth(CONFIG.DIALOG.PORTRAIT_WIDTH)
+    portrait:SetHeight(CONFIG.DIALOG.PORTRAIT_HEIGHT)
+    portrait:SetPoint("TOPLEFT", parent, "TOPLEFT",
+        CONFIG.DIALOG.PORTRAIT_OFFSET_X, -CONFIG.DIALOG.PORTRAIT_OFFSET_Y)
+
+    portrait.bg = portrait:CreateTexture(nil, "BACKGROUND")
+    portrait.bg:SetAllPoints()
+    portrait.bg:SetTexture(0, 0, 0, 0)  -- Transparent - let PFUI handle backgrounds
+
+    portrait.texture = portrait:CreateTexture(nil, "ARTWORK")
+    portrait.texture:SetAllPoints()
+    portrait.texture:SetTexCoord(0, 1, 0, 1)
+
+    parent.widePortrait = portrait
+    return portrait
+end
+
+local function UpdateGossipPortrait()
+    if not GossipFrame then return end
+    if PortraitManager then
+        PortraitManager:UpdateNPCPortrait(GossipFrame)
+        return
+    end
+    -- Fallback if PortraitManager somehow isn't loaded
+    local portrait = EnsureGossipPortrait(GossipFrame)
+    portrait.texture:SetTexture("Interface\\CharacterFrame\\TempPortrait")
+    portrait:Show()
+end
+
+local function HideGossipPortrait()
+    if GossipFrame and GossipFrame.widePortrait then
+        GossipFrame.widePortrait:Hide()
+    end
+end
+
 local function ApplyGossipLayout()
     if not GossipFrame then return end
-    
-    DialogLayout:UpdatePortrait(GossipFrame)
-    
-    ApplyFrameLayout({
-        frame = GossipFrame,
-        type = "Gossip",
-        backdrop = GossipFrame.backdrop or GossipFrame,
-        scrollFrames = {
-            { frame = GossipGreetingScrollFrame, child = GossipGreetingScrollChildFrame, height = CONFIG.DIALOG.SCROLL_HEIGHT_GOSSIP },
-        },
-        portrait = GossipFrame.widePortrait,
-        buttons = { 
-            GossipFrameGreetingGoodbyeButton,
-        },
-        closeButton = GossipFrameCloseButton,
-    })
-    
-    -- Scrollbar positioning (Gossip-specific)
+    local backdrop = GossipFrame.backdrop or GossipFrame
+
+    GossipFrame:SetWidth(CONFIG.DIALOG.FRAME_WIDTH)
+    GossipFrame:SetHeight(CONFIG.DIALOG.FRAME_HEIGHT)
+    GossipFrame:ClearAllPoints()
+    GossipFrame:SetPoint(CONFIG.DIALOG.ANCHOR_POINT, UIParent, CONFIG.DIALOG.ANCHOR_RELATIVE,
+        CONFIG.DIALOG.OFFSET_X, CONFIG.DIALOG.OFFSET_Y)
+
+    -- Update portrait (no custom background - let PFUI handle it)
+    UpdateGossipPortrait()
+
+    if GossipGreetingScrollFrame then
+        GossipGreetingScrollFrame:ClearAllPoints()
+        GossipGreetingScrollFrame:SetPoint("TOPLEFT", backdrop, "TOPLEFT",
+            CONFIG.DIALOG.CONTENT_MARGIN_LEFT, -CONFIG.DIALOG.CONTENT_MARGIN_TOP)
+        GossipGreetingScrollFrame:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
+        GossipGreetingScrollFrame:SetHeight(CONFIG.DIALOG.SCROLL_HEIGHT_GOSSIP)
+    end
+
+    if GossipGreetingScrollChildFrame then
+        GossipGreetingScrollChildFrame:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
+    end
+
     if GossipGreetingScrollFrameScrollBar then
         GossipGreetingScrollFrameScrollBar:ClearAllPoints()
         GossipGreetingScrollFrameScrollBar:SetPoint("TOPRIGHT",
@@ -1064,6 +857,24 @@ function GossipResize(titleButton)
     end
 end
 
+-- SoundQueue hook for gossip portraits
+local function HookGossipSoundQueue()
+    if not SoundQueue then return end
+
+    SoundQueue.OnVoiceStart = function(_, data)
+        if not data then return end
+        if data.dialog_type ~= "gossip" then return end
+        if PortraitManager and data.npc_name then
+            PortraitManager:SetActiveNPC(data.npc_name)
+        end
+        UpdateGossipPortrait()
+    end
+
+    SoundQueue.OnVoiceStop = function()
+        HideGossipPortrait()
+    end
+end
+
 -- Events
 local gossipEventFrame = CreateFrame("Frame")
 gossipEventFrame:RegisterEvent("GOSSIP_SHOW")
@@ -1071,7 +882,7 @@ gossipEventFrame:RegisterEvent("GOSSIP_CLOSED")
 
 gossipEventFrame:SetScript("OnEvent", function()
     if event == "GOSSIP_CLOSED" then
-        DialogLayout:HidePortrait(GossipFrame)
+        HideGossipPortrait()
         return
     end
     this:SetScript("OnUpdate", function()
@@ -1105,8 +916,7 @@ gossipInitFrame:SetScript("OnUpdate", function()
     gossipInitTimer = gossipInitTimer + arg1
     if gossipInitTimer > 0.5 then
         ApplyGossipLayout()
-        -- Hook SoundQueue using unified method
-        DialogLayout:HookSoundQueue("gossip", GossipFrame)
+        HookGossipSoundQueue()
         this:SetScript("OnUpdate", nil)
     end
 end)
@@ -1115,7 +925,7 @@ end  -- end GossipFrame do-block
 
 
 -- =====================================================================
---   SECTION 5 — Book / Note / Letter Layout (Universal Layout Engine)
+--   SECTION 5 — Book / Note / Letter Layout
 -- =====================================================================
 
 do  -- block-scope
@@ -1131,16 +941,28 @@ local function ApplyItemTextLayout()
     local backdrop = GetVisualBackdrop(ItemTextFrame, ItemTextFrameInset)
     if not backdrop then return end
 
-    ApplyFrameLayout({
-        frame = ItemTextFrame,
-        type = "Book",
-        backdrop = backdrop,
-        scrollFrames = {
-            { frame = ItemTextScrollFrame, child = nil },
-        },
-        portrait = ItemTextFrame.widePortrait,
-        textFields = { ItemTextPageText },
-    })
+    ItemTextFrame:SetWidth(CONFIG.BOOK.FRAME_WIDTH)
+    ItemTextFrame:SetHeight(CONFIG.BOOK.FRAME_HEIGHT)
+    ItemTextFrame:ClearAllPoints()
+    ItemTextFrame:SetPoint(
+        CONFIG.BOOK.ANCHOR_POINT, UIParent, CONFIG.BOOK.ANCHOR_RELATIVE,
+        CONFIG.BOOK.OFFSET_X, CONFIG.BOOK.OFFSET_Y)
+
+    local contentWidth  = backdrop:GetWidth()  - CONFIG.BOOK.MARGIN_LEFT - CONFIG.BOOK.MARGIN_RIGHT
+    local contentHeight = backdrop:GetHeight() - CONFIG.BOOK.MARGIN_TOP  - CONFIG.BOOK.MARGIN_BOTTOM
+
+    if ItemTextScrollFrame then
+        ItemTextScrollFrame:ClearAllPoints()
+        ItemTextScrollFrame:SetPoint("TOPLEFT", backdrop, "TOPLEFT",
+            CONFIG.BOOK.MARGIN_LEFT, -CONFIG.BOOK.MARGIN_TOP)
+        ItemTextScrollFrame:SetWidth(contentWidth)
+        ItemTextScrollFrame:SetHeight(contentHeight)
+    end
+
+    if ItemTextPageText then
+        ItemTextPageText:SetWidth(contentWidth + CONFIG.BOOK.TEXT_RIGHT_PADDING)
+        ItemTextPageText:SetJustifyH("LEFT")
+    end
 end
 
 -- Play the book's voice-over via SoundQueue
@@ -1190,17 +1012,5 @@ if ItemTextFrame then
         ApplyItemTextLayout()
     end)
 end
-
--- Hook SoundQueue for book dialogs
-local bookInitFrame = CreateFrame("Frame")
-local bookInitTimer = 0
-bookInitFrame:SetScript("OnUpdate", function()
-    bookInitTimer = bookInitTimer + arg1
-    if bookInitTimer > 0.5 then
-        -- Hook SoundQueue using unified method
-        DialogLayout:HookSoundQueue("book", ItemTextFrame)
-        this:SetScript("OnUpdate", nil)
-    end
-end)
 
 end  -- end Book do-block
