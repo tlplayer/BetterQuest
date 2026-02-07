@@ -58,14 +58,14 @@ local _, playerClass = UnitClass("player")
 local MISSING_NPC_CACHE = {}
 
 -- Check if an NPC is marked as missing
-local function IsNPCMissing(npcName)
+local function Utils:IsNPCMissing(npcName)
     if not npcName then return false end
     local lookupName = NormalizeNPCName(npcName)
     return MISSING_NPC_CACHE[lookupName] == true
 end
 
 -- Mark an NPC as missing
-local function MarkNPCMissing(npcName)
+local function Utils:MarkNPCMissing(npcName)
     if not npcName then return end
     local lookupName = NormalizeNPCName(npcName)
     MISSING_NPC_CACHE[lookupName] = true
@@ -73,7 +73,7 @@ local function MarkNPCMissing(npcName)
 end
 
 -- Remove an NPC from the missing list (found in database)
-local function UnmarkNPCMissing(npcName)
+local function Utils:UnmarkNPCMissing(npcName)
     if not npcName then return end
     local lookupName = NormalizeNPCName(npcName)
     if MISSING_NPC_CACHE[lookupName] then
@@ -216,56 +216,16 @@ if not hooksecurefunc then
     end
 end
 
--- Strip punctuation, collapse whitespace, lowercase.
--- Used as the canonical key for every dialog lookup.
-
--- Database hookup code
-function NormalizeDialogText(text)
-    if not text then return "" end
-
-    -- Replace Blizzard placeholders
-    text = string.gsub(text, "%$[nNcCrR]", "adventurer")
-    text = string.gsub(text, "%$g[^;]*;", "adventurer")
-
-    -- Replace actual player name and class
-    if playerName ~= "" then
-        text = string.gsub(text, playerName, "adventurer")
-    end
-    if playerClass ~= "" then
-        text = string.gsub(text, playerClass, "adventurer")
-    end
-
-    -- Remove other $ tokens
-    text = string.gsub(text, "%$%w+", "")
-
-    -- Remove text in brackets/parentheses/<> (emotes, tags)
-    text = string.gsub(text, "%b[]", "")
-    text = string.gsub(text, "%b()", "")
-    text = string.gsub(text, "%b<>", "")
-
-    -- Remove punctuation
-    text = string.gsub(text, "[^%w%s]", "")
-
-    -- Trim and collapse spaces
-    text = string.gsub(text, "%s+", " ")
-    text = string.gsub(text, "^%s+", "")
-    text = string.gsub(text, "%s+$", "")
-
-    -- Lowercase
-    text = string.lower(text)
-
-    return string.sub(text, 1, 50)
-end
 
 -- Strip curly/straight apostrophes so "Sylvanas's" == "Sylvanass" style keys match.
-function NormalizeNPCName(name)
+function Utils:NormalizeNPCName(name)
     if not name then return nil end
     name = string.gsub(name, "['']", "")                          -- ASCII apostrophe
     return name
 end
 
 -- Guarantee forward-slashes, strip leading/trailing whitespace.
-function NormalizePath(path)
+function Utils:NormalizePath(path)
     if not path then return nil end
     path = string.gsub(path, "^%s+", "")
     path = string.gsub(path, "%s+$", "")
@@ -356,7 +316,7 @@ end
 -------------------------------------------------
 
 -- True when the player is reading a book/note/letter.
-function IsBookInteraction()
+function Utils:IsBookInteraction()
     return ItemTextFrame and ItemTextFrame:IsShown()
 end
 

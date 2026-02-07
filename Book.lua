@@ -1,42 +1,15 @@
--- Book.lua
--- Book / Note / Letter layout ONLY
--- WoW 1.12.1 safe
 
---------------------------------------------------
--- CONFIG
---------------------------------------------------
 
-local BOOK_TEXT_CONFIG = {
-    FRAME_WIDTH  = 620,
-    FRAME_HEIGHT = 400,
+-- =====================================================================
+--   SECTION 5 — Book / Note / Letter Layout
+-- =====================================================================
 
-    ANCHOR_POINT    = "BOTTOM",
-    ANCHOR_RELATIVE = "BOTTOM",
-    OFFSET_X = 0,
-    OFFSET_Y = -60,
-
-    MARGIN_LEFT   = 30,
-    MARGIN_RIGHT  = 50,
-    MARGIN_TOP    = 40,
-    MARGIN_BOTTOM = 120,
-
-    TEXT_RIGHT_PADDING = 40,
-}
-
---------------------------------------------------
--- HELPERS
---------------------------------------------------
+do  -- block-scope
 
 local function GetVisualBackdrop(frame, inset)
-    if inset and inset:IsShown() then
-        return inset
-    end
+    if inset and inset:IsShown() then return inset end
     return frame
 end
-
---------------------------------------------------
--- APPLY LAYOUT
---------------------------------------------------
 
 local function ApplyItemTextLayout()
     if not ItemTextFrame then return end
@@ -44,113 +17,76 @@ local function ApplyItemTextLayout()
     local backdrop = GetVisualBackdrop(ItemTextFrame, ItemTextFrameInset)
     if not backdrop then return end
 
-    -- Resize main frame
-    ItemTextFrame:SetWidth(BOOK_TEXT_CONFIG.FRAME_WIDTH)
-    ItemTextFrame:SetHeight(BOOK_TEXT_CONFIG.FRAME_HEIGHT)
+    ItemTextFrame:SetWidth(CONFIG.BOOK.FRAME_WIDTH)
+    ItemTextFrame:SetHeight(CONFIG.BOOK.FRAME_HEIGHT)
     ItemTextFrame:ClearAllPoints()
     ItemTextFrame:SetPoint(
-        BOOK_TEXT_CONFIG.ANCHOR_POINT,
-        UIParent,
-        BOOK_TEXT_CONFIG.ANCHOR_RELATIVE,
-        BOOK_TEXT_CONFIG.OFFSET_X,
-        BOOK_TEXT_CONFIG.OFFSET_Y
-    )
+        CONFIG.BOOK.ANCHOR_POINT, UIParent, CONFIG.BOOK.ANCHOR_RELATIVE,
+        CONFIG.BOOK.OFFSET_X, CONFIG.BOOK.OFFSET_Y)
 
-    local contentWidth =
-        backdrop:GetWidth()
-        - BOOK_TEXT_CONFIG.MARGIN_LEFT
-        - BOOK_TEXT_CONFIG.MARGIN_RIGHT
+    local contentWidth  = backdrop:GetWidth()  - CONFIG.BOOK.MARGIN_LEFT - CONFIG.BOOK.MARGIN_RIGHT
+    local contentHeight = backdrop:GetHeight() - CONFIG.BOOK.MARGIN_TOP  - CONFIG.BOOK.MARGIN_BOTTOM
 
-    local contentHeight =
-        backdrop:GetHeight()
-        - BOOK_TEXT_CONFIG.MARGIN_TOP
-        - BOOK_TEXT_CONFIG.MARGIN_BOTTOM
-
-    -- Scroll frame
     if ItemTextScrollFrame then
         ItemTextScrollFrame:ClearAllPoints()
-        ItemTextScrollFrame:SetPoint(
-            "TOPLEFT",
-            backdrop,
-            "TOPLEFT",
-            BOOK_TEXT_CONFIG.MARGIN_LEFT,
-            -BOOK_TEXT_CONFIG.MARGIN_TOP
-        )
+        ItemTextScrollFrame:SetPoint("TOPLEFT", backdrop, "TOPLEFT",
+            CONFIG.BOOK.MARGIN_LEFT, -CONFIG.BOOK.MARGIN_TOP)
         ItemTextScrollFrame:SetWidth(contentWidth)
         ItemTextScrollFrame:SetHeight(contentHeight)
     end
 
-    -- Text
     if ItemTextPageText then
-        ItemTextPageText:SetWidth(
-            contentWidth + BOOK_TEXT_CONFIG.TEXT_RIGHT_PADDING
-        )
+        ItemTextPageText:SetWidth(contentWidth + CONFIG.BOOK.TEXT_RIGHT_PADDING)
         ItemTextPageText:SetJustifyH("LEFT")
     end
 end
 
---------------------------------------------------
--- EVENTS
---------------------------------------------------
+-- Play the book's voice-over via SoundQueue
+local function PlayBookVoice()
+    if not ItemTextFrame or not ItemTextFrame:IsShown() then return end
 
-local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("ITEM_TEXT_BEGIN")
-eventFrame:RegisterEvent("ITEM_TEXT_READY")
+    local title = ItemTextTitleText and ItemTextTitleText:GetText()
+    if not title or title == "" then
+        Debug("BookVoice: no title found")
+        return
+    end
 
-eventFrame:SetScript("OnEvent", function()
+    local text = ItemTextGetText()
+    if not text or text == "" then
+        Debug("BookVoice: no text found")
+        return
+    end
+
+    if SoundQueue then
+        SoundQueue:AddSound(title, text, title)
+    end
+end
+
+-- Layout events
+local bookLayoutFrame = CreateFrame("Frame")
+bookLayoutFrame:RegisterEvent("ITEM_TEXT_BEGIN")
+bookLayoutFrame:RegisterEvent("ITEM_TEXT_READY")
+bookLayoutFrame:SetScript("OnEvent", function()
     this:SetScript("OnUpdate", function()
         ApplyItemTextLayout()
         this:SetScript("OnUpdate", nil)
     end)
 end)
 
---------------------------------------------------
--- PLAY BOOK VOICE (WITH DEBUG)
---------------------------------------------------
-local function PlayBookVoiceFromTooltip()
-
-    if not ItemTextFrame or not ItemTextFrame:IsShown() then return end
-
-    -- Get the book/note title
-    local title = ItemTextTitleText:GetText()
-    if not title or title == "" then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r No title found")
-        return
-    end
-
-    DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r Book title: " .. title)
-
-    -- Get the text of the book/note
-    local text = ItemTextGetText()
-    if not text or text == "" then
-        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r No text in ItemTextGetText()")
-        return
-    end
-
-    local key = NormalizeDialogText(text)
-    DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BookVoice]|r Normalized key: " .. key)
-    -- Use the title as the NPC/Item key
-
-        if SoundQueue then
-            SoundQueue:AddSound(title, text, title)
-        end
-end
-
--- Hook to ITEM_TEXT_READY
-local bookEventFrame = CreateFrame("Frame")
-bookEventFrame:RegisterEvent("ITEM_TEXT_READY")
-bookEventFrame:SetScript("OnEvent", function()
-    PlayBookVoiceFromTooltip()
+-- Voice-over trigger (fires when page text is actually available)
+local bookVoiceFrame = CreateFrame("Frame")
+bookVoiceFrame:RegisterEvent("ITEM_TEXT_READY")
+bookVoiceFrame:SetScript("OnEvent", function()
+    PlayBookVoice()
 end)
 
---------------------------------------------------
--- ONSHOW HOOK
---------------------------------------------------
-
+-- OnShow hook
 if ItemTextFrame then
-    local originalOnShow = ItemTextFrame:GetScript("OnShow")
+    local originalBookOnShow = ItemTextFrame:GetScript("OnShow")
     ItemTextFrame:SetScript("OnShow", function()
-        if originalOnShow then originalOnShow() end
+        if originalBookOnShow then originalBookOnShow() end
         ApplyItemTextLayout()
     end)
 end
+
+end  -- end Book do-block
