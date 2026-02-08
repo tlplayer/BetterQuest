@@ -40,6 +40,21 @@ function UI:ApplyDialogFrame(frame)
     )
 end
 
+function UI:ApplyQuestButtons()
+    for i = 1, 32 do
+        local button = getglobal("QuestTitleButton"..i)
+        if button and button:IsShown() then
+            button:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH)
+
+            local text = getglobal("QuestTitleButton"..i.."QuestTitle")
+            if text then
+                text:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH - 20)
+                text:SetJustifyH("LEFT")
+            end
+        end
+    end
+end
+
 -----------------------------------------------------------------------
 -- GENERIC SCROLL FRAME LAYOUT
 -----------------------------------------------------------------------

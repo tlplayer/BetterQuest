@@ -2,7 +2,33 @@
 -- Modular voice-over system for WoW 1.12.1
 -- UI components separated into individual initialization functions
 -- Fuzzy matching upgraded to Myers' bit-parallel edit distance (O(n) vs O(n²))
+do
+SoundQueue = {
+    -- Queue & playback state
+    sounds        = {},
+    currentSound  = nil,
+    isPlaying     = false,
+    isPaused      = false,
+    updateFrame   = nil,       -- Frame that drives CheckSoundFinished
 
+    -- History
+    history        = {},
+    maxHistorySize = 50,
+
+    -- UI caps
+    maxQueueDisplay = 5,
+
+    -- Portrait data referenced by ui.lua when building textures
+    portraitConfig = {
+        WIDTH          = 80,
+        HEIGHT         = 80,
+        PATH           = "Interface\\AddOns\\BetterQuest\\Textures\\",
+        DEFAULT_NPC    = "Interface\\Icons\\INV_Misc_QuestionMark",
+        DEFAULT_BOOK   = "Interface\\AddOns\\BetterQuest\\Textures\\Book",
+        PORTRAIT_PATH  = "Interface\\AddOns\\BetterQuest\\portraits\\",
+    },
+}
+end
 
 -------------------------------------------------
 -- UI UPDATE FUNCTIONS (Modular)
