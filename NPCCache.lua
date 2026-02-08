@@ -64,12 +64,8 @@ function Utils:LogMissingNPC(npcName, dialogText, dialogType)
         npcEntry.dialogs[normalizedText] = {
             dialog_text = dialogText,
             dialogType = dialogType or "gossip",
-            count = 0,
         }
     end
-
-    npcEntry.dialogs[normalizedText].count =
-        npcEntry.dialogs[normalizedText].count + 1
 end
 
 function Utils:WasPreviouslyMissing(npcName)
@@ -99,25 +95,4 @@ function Utils:ExportMissingNPCs()
         Debug("No missing NPC data to export")
         return
     end
-
-    local npcCount, totalDialogs = 0, 0
-    Debug("=== MISSING NPCs ===")
-
-    for _, data in pairs(BetterQuestDB.missingNPCs) do
-        npcCount = npcCount + 1
-        local dialogCount = 0
-        for _ in pairs(data.dialogs) do
-            dialogCount = dialogCount + 1
-            totalDialogs = totalDialogs + 1
-        end
-        Debug(string.format(
-            "%d. %s (%d dialog(s))",
-            npcCount, data.originalName, dialogCount
-        ))
-    end
-
-    Debug(string.format(
-        "Total: %d missing NPCs, %d missing dialogs",
-        npcCount, totalDialogs
-    ))
 end
