@@ -291,26 +291,6 @@ local function Utils:NormalizeNPCName(name)
   return name
 end
 
-function Utils:GetNPCMetadata(npcName)
-  if not npcName then return nil end
-  local lookupName = NormalizeNPCName(npcName)
-  local npc = NPC_DATABASE[lookupName]
-
-  
-  if npc then
-    return {
-      race = npc.race,
-      sex = npc.sex,
-      portrait = npc.portrait,
-      zone = npc.zone,
-      model_id = npc.model_id,
-      narrator = npc.narrator
-    }
-  end
-  
-  return nil
-end
-
 -------------------------------------------------
 -- CONTEXT HELPERS
 -------------------------------------------------
@@ -328,7 +308,7 @@ end
 function Utils:PlaySound(soundData)
     if not soundData then return nil end
 
-    filePath = NormalizePath(soundData.filePath)
+    filePath = Utils:NormalizePath(soundData.filePath)
 
     Debug("Loading" .. tostring(filePath))
     if not filePath or filePath == "" then
@@ -432,16 +412,16 @@ function Utils:GetNPCMetadata(npcName)
   if not npcName then return nil end
   
   -- Early exit if NPC is marked as missing in runtime cache
-  if IsNPCMissing(npcName) then
+  if Utils:IsNPCMissing(npcName) then
     return nil
   end
   
-  local lookupName = NormalizeNPCName(npcName)
+  local lookupName = Utils:NormalizeNPCName(npcName)
   local npc = NPC_DATABASE[lookupName]
 
   -- If NPC exists, remove from both caches
   if npc then
-    UnmarkNPCMissing(npcName)
+    Utils:UnmarkNPCMissing(npcName)
     Utils:RemoveFromMissingDB(npcName)  -- Also remove from persistent DB
     return {
       race = npc.race,
@@ -463,13 +443,13 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
     
     -- Early exit if NPC is marked as missing in runtime cache
-    if IsNPCMissing(npcName) then
+    if Utils:IsNPCMissing(npcName) then
         return nil
     end
     
     print(dialogText)
 
-    local lookupName = NormalizeNPCName(npcName)
+    local lookupName = Utils:NormalizeNPCName(npcName)
     local targetNpc  = NPC_DATABASE[lookupName]
     local targetSex  = targetNpc and targetNpc.sex
     local targetRace = targetNpc and targetNpc.race
@@ -491,7 +471,7 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
 
     -- Early check: same NPC first (fast path)
     if targetNpc and targetNpc.dialogs then
-        UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
+        Utils:UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
         Utils:RemoveFromMissingDB(npcName)  -- Also remove from persistent DB
         
         for dialogKey, entry in pairs(targetNpc.dialogs) do
@@ -500,7 +480,7 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
                 return nil
             end
 
-            local distance =  EditDistance(normalizedInput, dialogKey)
+            local distance =  Utils:EditDistance(normalizedInput, dialogKey)
             if distance <= MAX_DISTANCE and distance < bestDistance then
                 bestDistance = distance
                 bestMatch = entry
@@ -512,7 +492,7 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
         end
     elseif not targetNpc then
         -- NPC not in database, mark as missing in runtime cache only
-        MarkNPCMissing(npcName)
+        Utils:MarkNPCMissing(npcName)
     end
     
     -- Fallback: search other NPCs filtered by race + sex (to avoid unrelated matches)
@@ -557,101 +537,6 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
     return nil
 end
 
--- FindDialogSound with timeout on the full hash fallback loop
-function Utils:FindDialogSound(npcName, dialogText)
-  if not npcName or not dialogText then return nil end
-
-  -- Early exit if NPC is marked as missing in runtime cache (THIS SESSION)
-  if IsNPCMissing(npcName) then
-    return nil
-  end
-
-  local lookupName = NormalizeNPCName(npcName)
-  local key = NormalizeDialogText(dialogText)
-  if key == "" then return nil end
-
-  -- 1) Normal lookup
-  local npc = NPC_DATABASE[lookupName]
-  if npc and npc.dialogs and npc.dialogs[key] then
-    UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
-    Utils:RemoveFromMissingDB(npcName)  -- Also remove from persistent DB
-    local entry = npc.dialogs[key]
-    return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
-  end
-
-  -- If NPC doesn't exist at all, mark as missing in runtime cache only
-  if not npc then
-    MarkNPCMissing(npcName)
-    return nil
-  end
-
-  -- 2) Fallback: search all NPCs by text hash (with timeout guard)
-  local startTime = GetTime()
-  local TIMEOUT = 0.1
-  for otherNpcName, data in pairs(NPC_DATABASE) do
-    if GetTime() - startTime > TIMEOUT then
-        Debug("FindDialogSound fallback timeout - aborting full-hash scan")
-        break
-    end
-
-    if data.dialogs then
-      local entry = data.dialogs[key]
-      if entry then
-        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
-      end
-    end
-  end
-
-  -- 3) Fuzzy text search (Myers' algorithm + timeout)
-  local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds = FuzzyFindDialogSound(npcName, dialogText)
-  if fuzzyPath then
-    return fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds
-  end
-
-  return nil
-end
-
-
--------------------------------------------------
--- MISSING NPC TRACKING
--------------------------------------------------
-
-function  Utils:InitializeBetterQuestDB()
-    if not BetterQuestDB then
-        BetterQuestDB = {
-            missingNPCs = {}
-        }
-        Debug("BetterQuestDB initialized")
-    end
-end
-
-function  Utils:LogMissingNPC(npcName, dialogText, dialogType)
-    if not BetterQuestDB or not npcName or not dialogText then return end
-    
-    local normalizedName = NormalizeNPCName(npcName)
-    local normalizedText = NormalizeDialogText(dialogText)
-    
-    if normalizedText == "" then return end
-    
-    if not BetterQuestDB.missingNPCs[normalizedName] then
-        BetterQuestDB.missingNPCs[normalizedName] = {
-            originalName = npcName,
-            dialogs = {}
-        }
-    end
-    
-    local npcEntry = BetterQuestDB.missingNPCs[normalizedName]
-    
-    if not npcEntry.dialogs[normalizedText] then
-        npcEntry.dialogs[normalizedText] = {
-            dialog_text = dialogText,
-            dialogType = dialogType or "gossip",
-            count = 0
-        }
-    end
-    
-    npcEntry.dialogs[normalizedText].count = npcEntry.dialogs[normalizedText].count + 1
-end
 
 function Utils:ExportMissingNPCs()
     if not BetterQuestDB or not BetterQuestDB.missingNPCs then
@@ -678,9 +563,3 @@ function Utils:ExportMissingNPCs()
     Debug(string.format("Total: %d missing NPCs, %d missing dialogs", npcCount, totalDialogs))
 end
 
-function SoundQueue:ClearMissingNPCs()
-    if BetterQuestDB then
-        BetterQuestDB.missingNPCs = {}
-        Debug("Missing NPC database cleared")
-    end
-end
