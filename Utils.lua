@@ -23,28 +23,6 @@ SlashCmdList["BETTERQUEST_RELOAD"] = function()
     ReloadUI()
 end
 
--------------------------------------------------
--- HOOK / COMPATIBILITY HELPERS
--------------------------------------------------
-
-if not hooksecurefunc then
-    function hooksecurefunc(table, name, hook)
-        if not hook then
-            name, hook = table, name
-            table = _G
-        end
-
-        if not table or not name or not hook then return end
-
-        local old = table[name]
-        assert(type(old) == "function")
-        table[name] = function(...)
-            local result = { old(unpack(arg)) }
-            hook(unpack(arg))
-            return unpack(result)
-        end
-    end
-end
 
 -------------------------------------------------
 -- STRING / PATH NORMALIZERS
@@ -61,13 +39,13 @@ function Utils:NormalizePath(path)
 end
 
 -- Secondary / duplicate normalizers (kept as-is)
-local function Utils:NormalizeNPCName(name)
+function Utils:NormalizeNPCName(name)
     if not name then return nil end
     name = string.gsub(name, "['']", "")
     return name
 end
 
-local function Utils:NormalizePath(path)
+function Utils:NormalizePath(path)
     if not path then return nil end
     return string.gsub(path, "/+", "\\")
 end
@@ -117,20 +95,20 @@ end
 
 local MISSING_NPC_CACHE = {}
 
-local function Utils:IsNPCMissing(npcName)
+function Utils:IsNPCMissing(npcName)
     if not npcName then return false end
     local lookupName = Utils:NormalizeNPCName(npcName)
     return MISSING_NPC_CACHE[lookupName] == true
 end
 
-local function Utils:MarkNPCMissing(npcName)
+function Utils:MarkNPCMissing(npcName)
     if not npcName then return end
     local lookupName = Utils:NormalizeNPCName(npcName)
     MISSING_NPC_CACHE[lookupName] = true
     Debug("Marked NPC as missing: " .. tostring(npcName))
 end
 
-local function Utils:UnmarkNPCMissing(npcName)
+function Utils:UnmarkNPCMissing(npcName)
     if not npcName then return end
     local lookupName = Utils:NormalizeNPCName(npcName)
     if MISSING_NPC_CACHE[lookupName] then
@@ -158,8 +136,8 @@ end
 function Utils:LogMissingNPC(npcName, dialogText, dialogType)
     if not BetterQuestDB or not npcName or not dialogText then return end
 
-    local normalizedName = NormalizeNPCName(npcName)
-    local normalizedText = NormalizeDialogText(dialogText)
+    local normalizedName = Utils:NormalizeNPCName(npcName)
+    local normalizedText = Utils:NormalizeDialogText(dialogText)
     if normalizedText == "" then return end
 
     Utils:MarkNPCMissing(npcName)
@@ -186,13 +164,13 @@ end
 
 function Utils:WasPreviouslyMissing(npcName)
     if not BetterQuestDB or not npcName then return false end
-    local normalizedName = NormalizeNPCName(npcName)
+    local normalizedName = Utils:NormalizeNPCName(npcName)
     return BetterQuestDB.missingNPCs[normalizedName] ~= nil
 end
 
 function Utils:RemoveFromMissingDB(npcName)
     if not BetterQuestDB or not npcName then return end
-    local normalizedName = NormalizeNPCName(npcName)
+    local normalizedName = Utils:NormalizeNPCName(npcName)
     if BetterQuestDB.missingNPCs[normalizedName] then
         BetterQuestDB.missingNPCs[normalizedName] = nil
         Debug("Removed from persistent missing DB: " .. tostring(npcName))
