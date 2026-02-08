@@ -27,7 +27,6 @@ end
 
 function UI:ApplyDialogFrame(frame)
     if not frame then return end
-    Config = Utils:GetConfig()
 
     frame:SetWidth(CONFIG.DIALOG.FRAME_WIDTH)
     frame:SetHeight(CONFIG.DIALOG.FRAME_HEIGHT)

@@ -6,11 +6,6 @@ Utils = {}
 local playerName = UnitName("player")
 local _, playerClass = UnitClass("player")
 
-Utils.CONFIG = nil
-
-function Utils:GetConfig()
-    return self.CONFIG
-end
 
 -------------------------------------------------
 -- DEBUG / LOGGING
@@ -54,13 +49,6 @@ end
 -------------------------------------------------
 -- STRING / PATH NORMALIZERS
 -------------------------------------------------
-
--- Strip apostrophes so database keys match consistently
-function Utils:NormalizeNPCName(name)
-    if not name then return nil end
-    name = string.gsub(name, "['']", "")
-    return name
-end
 
 -- Guarantee backslashes, strip whitespace
 function Utils:NormalizePath(path)
@@ -269,9 +257,11 @@ end
 
 function Utils:StopSound(handle)
     if not handle then return end
-    pcall(function()
-        StopSoundFile(handle)
-    end)
+       if self.isPlaying and soundData.handle then
+        SetCVar("MasterSoundEffects", 0)
+        SetCVar("MasterSoundEffects", 1)
+    end
+    soundData.handle = nil 
 end
 
 -------------------------------------------------
