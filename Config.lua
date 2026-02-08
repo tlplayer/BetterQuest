@@ -1,4 +1,4 @@
-
+do
 CONFIG = {
     -- ================================================================
     -- SHARED DIALOG CONFIGURATION (Quest & Gossip)
@@ -148,3 +148,4 @@ COMPUTED = {
         
     DIALOG_TEXT_WIDTH = nil,  -- Computed in GetDialogTextWidth()
 }
+end

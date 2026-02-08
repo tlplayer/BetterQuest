@@ -21,7 +21,6 @@ Broadcast = {
     lastNPCText = nil,
 }
 
-Utils.CONFIG = CONFIG
 
 -- Duplicate-guard: same NPC saying the exact same thing back-to-back is skipped
 local function ShouldPlayNPCSound(npcName, text)
