@@ -352,7 +352,7 @@ function SoundQueue:RemoveSound(soundData)
             if self.updateFrame then 
                 self.updateFrame:Hide() 
             end
-            HideFrame()
+            self.HideFrame()
         end
     else
         -- Was queued
@@ -381,8 +381,8 @@ function SoundQueue:CreateQueueButton(parent, index)
     button.text:SetTextColor(0.7, 0.7, 0.7)
     
     button:SetScript("OnEnter", function()
-        self.bg:Show()
-        self.text:SetTextColor(1, 0.3, 0.3)
+        this.bg:Show()
+        this.text:SetTextColor(1, 0.3, 0.3)
         GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
         GameTooltip:SetText("Click to remove")
         GameTooltip:Show()

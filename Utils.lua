@@ -110,11 +110,9 @@ function Utils:PlaySound(soundData)
     return ok and handle or nil
 end
 
-function Utils:StopSound(handle)
-    if not handle then return end
-       if self.isPlaying and soundData.handle then
+function Utils:StopSound(soundData)
+    if soundData.handle then
         SetCVar("MasterSoundEffects", 0)
         SetCVar("MasterSoundEffects", 1)
     end
-    soundData.handle = nil 
 end
