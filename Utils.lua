@@ -6,6 +6,12 @@ Utils = {}
 local playerName = UnitName("player")
 local _, playerClass = UnitClass("player")
 
+Utils.CONFIG = nil
+
+function Utils:GetConfig()
+    return self.CONFIG
+end
+
 -------------------------------------------------
 -- DEBUG / LOGGING
 -------------------------------------------------
