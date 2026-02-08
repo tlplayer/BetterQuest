@@ -839,9 +839,146 @@ def build_gossip_index_map(df):
     
     return gossip_map
 
+def update_lua_database_incremental(npc_name, dialog_text, audio_filepath, dialog_type, quest_id, output_lua=OUTPUT_LUA):
+    """
+    Incrementally update the Lua database with a single new dialog entry.
+    This allows the game to access newly generated audio immediately without waiting for full sync.
+    LIVE VO: Player can /reload and hear audio as soon as it's generated!
+    
+    Args:
+        npc_name: Name of the NPC
+        dialog_text: Original dialog text
+        audio_filepath: Path to the generated audio file
+        dialog_type: Type of dialog (gossip, quest_progress, etc.)
+        quest_id: Quest ID if applicable
+        output_lua: Path to the Lua database file
+    """
+    import fcntl  # For file locking
+    
+    # Get metadata for this NPC
+    normalized_name = normalize_name(npc_name)
+    meta = NPC_LOOKUP.get(npc_name)
+    
+    if not meta:
+        return
+    
+    # Load YAML mappings
+    npc_race = invert_mapping(read_yaml(RACE_FILE))
+    npc_sex = invert_mapping(read_yaml(SEX_FILE))
+    npc_zone = invert_mapping(read_yaml(ZONE_FILE))
+    
+    race = npc_race.get(normalized_name) or meta.get("race")
+    sex = meta.get("sex") or npc_sex.get(normalized_name, "male")
+    zone = npc_zone.get(normalized_name, "")
+    model_id = meta.get("model_id")
+    
+    # Determine narrator info
+    if race:
+        narrator = f"{race}_female" if sex == "female" else race
+        portrait = race
+    else:
+        narrator = "narrator"
+        portrait = "default"
+    
+    # Create text hash for lookup
+    text_hash = create_text_hash(dialog_text)
+    
+    # Convert filesystem path to Lua path
+    # ../sounds/human/guard_thomas/halt.wav → Interface\\AddOns\\BetterQuest\\sounds\\human\\guard_thomas\\halt.wav
+    parts = audio_filepath.replace("../sounds/", "").replace("\\", "/").split("/")
+    lua_sound_path = "Interface\\\\AddOns\\\\BetterQuest\\\\sounds\\\\" + "\\\\".join(parts)
+    
+    # Get audio duration
+    try:
+        seconds = get_wav_duration_seconds(Path(audio_filepath))
+        if seconds is None:
+            seconds = 0.0
+    except:
+        seconds = 0.0
+    
+    # File locking to prevent corruption during concurrent access
+    lock_file = output_lua + ".lock"
+    
+    try:
+        with open(lock_file, 'w') as lock:
+            fcntl.flock(lock.fileno(), fcntl.LOCK_EX)
+            
+            # Read existing database
+            if os.path.exists(output_lua):
+                with open(output_lua, 'r', encoding='utf-8') as f:
+                    lua_content = f.read()
+            else:
+                # Create new database structure
+                lua_content = """-- Auto-generated unified NPC database
+-- Contains metadata + dialog mappings
+-- DO NOT EDIT MANUALLY
+
+NPC_DATABASE = {
+}
+"""
+            
+            # Check if NPC already exists in database
+            npc_marker = f'["{normalized_name}"] = {{'
+            
+            if npc_marker in lua_content:
+                # NPC exists - add dialog entry to existing NPC
+                npc_start = lua_content.find(npc_marker)
+                dialogs_marker = 'dialogs = {'
+                dialogs_start = lua_content.find(dialogs_marker, npc_start)
+                
+                if dialogs_start != -1:
+                    # Find the closing brace of dialogs
+                    dialogs_end = lua_content.find('},', dialogs_start)
+                    
+                    # Create new dialog entry
+                    quest_id_str = quest_id if quest_id is not None else "nil"
+                    dialog_entry = f'      ["{text_hash}"] = {{ path="{lua_sound_path}", dialog_type="{dialog_type}", quest_id={quest_id_str}, seconds={seconds} }},\n'
+                    
+                    # Insert before the closing brace
+                    lua_content = lua_content[:dialogs_end] + dialog_entry + lua_content[dialogs_end:]
+            
+            else:
+                # NPC doesn't exist - create full NPC entry
+                npc_entry = f"""  ["{normalized_name}"] = {{
+    race = "{race or ""}",
+    sex = "{sex}",
+    portrait = "{portrait}",
+    zone = "{zone}",
+    model_id = {model_id if model_id else "nil"},
+    narrator = "{narrator}",
+    dialogs = {{
+      ["{text_hash}"] = {{ path="{lua_sound_path}", dialog_type="{dialog_type}", quest_id={quest_id if quest_id is not None else "nil"}, seconds={seconds} }},
+    }},
+  }},
+"""
+                # Insert before the closing brace of NPC_DATABASE
+                insert_pos = lua_content.rfind('}')
+                lua_content = lua_content[:insert_pos] + npc_entry + lua_content[insert_pos:]
+            
+            # Write updated database atomically
+            with open(output_lua, 'w', encoding='utf-8') as f:
+                f.write(lua_content)
+            
+            fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
+            
+        # Remove lock file
+        if os.path.exists(lock_file):
+            os.remove(lock_file)
+        
+        print(f"[LIVE-VO] ✓ {normalized_name} → {text_hash[:16]}... ready for /reload!")
+        
+    except Exception as e:
+        print(f"[LIVE-VO] ✗ Failed to update Lua DB: {e}")
+        # Clean up lock file on error
+        if os.path.exists(lock_file):
+            try:
+                os.remove(lock_file)
+            except:
+                pass
+
 
 def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_map=None, narrator_override=None, 
-                         max_retries=3, retry_wait=10):
+                         max_retries=3, retry_wait=10, incremental_sync=True):
     """
     Generate TTS audio for a single row with retry logic for memory errors.
     
@@ -952,7 +1089,23 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
                         else:
                             raise  # Re-raise non-memory errors
 
-            # Success - return the filepath
+            # Success - generate completed!
+            
+            # LIVE VO: Update Lua database immediately so game can use audio right away
+            if incremental_sync:
+                # Extract quest_id if it was set
+                quest_id_for_sync = None
+                if has_quest_id and dialog_type != "gossip":
+                    quest_id_for_sync = int(qid)
+                
+                update_lua_database_incremental(
+                    npc_name=npc_name,
+                    dialog_text=row.get("text", ""),
+                    audio_filepath=filepath,
+                    dialog_type=dialog_type,
+                    quest_id=quest_id_for_sync
+                )
+            
             return filepath
 
         except RuntimeError as e:
@@ -1034,7 +1187,7 @@ def merge_item_text_rows(df):
     return df
 
 def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_override=None, 
-                   gpu_threshold=0.85, gpu_wait=5, gpu_check_interval=10, max_retries=3, retry_wait=10):
+                   gpu_threshold=0.85, gpu_wait=5, gpu_check_interval=10, max_retries=3, retry_wait=10, incremental_sync=True):
     """
     Generate TTS audio for all rows in dataframe.
     
@@ -1079,7 +1232,8 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
             gossip_map=gossip_map,
             narrator_override=narrator_override,
             max_retries=max_retries,
-            retry_wait=retry_wait
+            retry_wait=retry_wait,
+            incremental_sync=incremental_sync  # Pass through for live VO
         )
         
         if result:
@@ -1583,7 +1737,8 @@ def run_pipeline(args, betterquest_path=None):
             gpu_wait=args.gpu_wait,
             gpu_check_interval=args.gpu_check_interval,
             max_retries=args.max_retries,
-            retry_wait=args.retry_wait
+            retry_wait=args.retry_wait,
+            incremental_sync=True  # LIVE VO: Update DB after each file
         )
     else:
         print("\n=== STEP 2: Generating TTS audio [SKIPPED] ===")
