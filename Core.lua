@@ -83,7 +83,7 @@ local function QueueTrigger(npcName, eventType)
         end
 
         if text and text ~= "" then
-            Debug("Adding sound to queue:".. npcName)
+            Debug("Adding sound to queue from core:".. text)
             SoundQueue:AddSound(npcName, text, title)
         end
 

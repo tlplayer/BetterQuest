@@ -5,7 +5,7 @@
 
 -- Computes the Levenshtein (edit) distance between two strings
 -- Edit distance (Levenshtein) for Lua 5.0
-function EditDistance(s1, s2)
+function Utils:EditDistance(s1, s2)
     if not s1 or not s2 then return 9999 end
 
     -- lengths using string.len (Lua 5.0 safe)
@@ -203,19 +203,19 @@ function Utils:FindDialogSound(npcName, dialogText)
   if not npcName or not dialogText then return nil end
 
   -- Early exit if NPC is marked as missing in runtime cache (THIS SESSION)
-  if IsNPCMissing(npcName) then
+  if Utils:IsNPCMissing(npcName) then
     return nil
   end
 
-  local lookupName = NormalizeNPCName(npcName)
-  local key = NormalizeDialogText(dialogText)
+  local lookupName = Utils:NormalizeNPCName(npcName)
+  local key = Utils:NormalizeDialogText(dialogText)
   if key == "" then return nil end
 
   -- 1) Normal lookup
   local npc = NPC_DATABASE[lookupName]
   Debug("Found npc with metadata from the database:" .. tostring(npc))
   if npc and npc.dialogs and npc.dialogs[key] then
-    UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
+    Utils:UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
     Utils:RemoveFromMissingDB(npcName)  -- Also remove from persistent DB
     local entry = npc.dialogs[key]
     return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
@@ -223,7 +223,7 @@ function Utils:FindDialogSound(npcName, dialogText)
 
   -- If NPC doesn't exist at all, mark as missing in runtime cache only
   if not npc then
-    MarkNPCMissing(npcName)
+   Utils:MarkNPCMissing(npcName)
     return nil
   end
 
@@ -245,7 +245,7 @@ function Utils:FindDialogSound(npcName, dialogText)
   end
 
   -- 3) Fuzzy text search (Myers' algorithm + timeout)
-  local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds = FuzzyFindDialogSound(npcName, dialogText)
+  local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds =Utils:FuzzyFindDialogSound(npcName, dialogText)
   if fuzzyPath then
     return fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds
   end

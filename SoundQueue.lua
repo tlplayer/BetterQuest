@@ -270,7 +270,9 @@ function SoundQueue:GetCurrentSound()
 end
 
 function SoundQueue:AddSound(npcName, dialogText, title)
-    if not npcName or not dialogText or not FindDialogSound then return nil end
+    Debug("Adding Sound to queue: " .. npcName, dialogText, title)
+
+    if not npcName or not dialogText then return nil end
     Debug("Adding Sound to queue: " .. tostring(npcName))
  
     local soundPath, dialogType, questID, seconds = Utils:FindDialogSound(npcName, dialogText)
