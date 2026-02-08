@@ -2,46 +2,72 @@
 -- Modular voice-over system for WoW 1.12.1
 -- UI components separated into individual initialization functions
 -- Fuzzy matching upgraded to Myers' bit-parallel edit distance (O(n) vs O(n²))
-do
+
 SoundQueue = {
-    -- Queue & playback state
-    sounds        = {},
-    currentSound  = nil,
-    isPlaying     = false,
-    isPaused      = false,
-    updateFrame   = nil,       -- Frame that drives CheckSoundFinished
-
-    -- History
-    history        = {},
+    sounds = {},
+    currentSound = nil,
+    isPlaying = false,
+    isPaused = false,
+    updateFrame = nil,
+    delayFrame = nil,
+    history = {},
     maxHistorySize = 50,
-
-    -- UI caps
     maxQueueDisplay = 5,
-
-    -- Portrait data referenced by ui.lua when building textures
+    
     portraitConfig = {
-        WIDTH          = 80,
-        HEIGHT         = 80,
-        PATH           = "Interface\\AddOns\\BetterQuest\\Textures\\",
-        DEFAULT_NPC    = "Interface\\Icons\\INV_Misc_QuestionMark",
-        DEFAULT_BOOK   = "Interface\\AddOns\\BetterQuest\\Textures\\Book",
-        PORTRAIT_PATH  = "Interface\\AddOns\\BetterQuest\\portraits\\",
+        WIDTH = 80,
+        HEIGHT = 80,
+        PATH = "Interface\\AddOns\\BetterQuest\\Textures\\",
+        DEFAULT_NPC = "Interface\\Icons\\INV_Misc_QuestionMark",
+        DEFAULT_BOOK = "Interface\\AddOns\\BetterQuest\\Textures\\Book",
+        PORTRAIT_PATH = "Interface\\AddOns\\BetterQuest\\portraits\\"
     },
 }
+
+local playerName = UnitName("player")
+local _, playerClass = UnitClass("player")
+-------------------------------------------------
+-- PORTRAIT HELPERS
+-------------------------------------------------
+
+local function GetPortraitTexture(soundData)
+    if not soundData then
+        return SoundQueue.portraitConfig.DEFAULT_NPC
+    end
+    
+    if IsBookInteraction() then
+        return SoundQueue.portraitConfig.DEFAULT_BOOK
+    end
+    
+    local npcName = soundData.npcName
+    if npcName then
+        local metadata = GetNPCMetadata(npcName)
+        if metadata and metadata.race then
+            local filename = metadata.race
+            if metadata.sex == "female" then
+                filename = filename .. "_female"
+            end
+            
+            local path = SoundQueue.portraitConfig.PORTRAIT_PATH .. filename
+            return path
+        end
+    end
+    
+    return SoundQueue.portraitConfig.DEFAULT_NPC
 end
 
 -------------------------------------------------
 -- UI UPDATE FUNCTIONS (Modular)
 -------------------------------------------------
 
- function SoundQueue:UpdatePortrait(soundData)
+local function UpdatePortrait(soundData)
     if not SoundQueue.frame or not SoundQueue.frame.portrait then return end
     
-    local texture = PortraitManager:FindNPCPortrait(soundData)
+    local texture = GetPortraitTexture(soundData)
     SoundQueue.frame.portrait.texture:SetTexture(texture)
 end
 
-function SoundQueue:UpdateCurrentInfo(soundData)
+local function UpdateCurrentInfo(soundData)
     if not SoundQueue.frame then return end
     
     if soundData then
@@ -53,7 +79,7 @@ function SoundQueue:UpdateCurrentInfo(soundData)
     end
 end
 
- function SoundQueue:UpdatePauseButton()
+local function UpdatePauseButton()
     if not SoundQueue.frame or not SoundQueue.frame.pauseBtn then return end
     
     if SoundQueue.isPaused then
@@ -65,7 +91,7 @@ end
     end
 end
 
- function SoundQueue:UpdateStatusText()
+local function UpdateStatusText()
     if not SoundQueue.frame or not SoundQueue.frame.status then return end
     
     local current = SoundQueue.currentSound
@@ -85,12 +111,12 @@ end
     end
 end
 
- function SoundQueue:UpdateQueueList()
+local function UpdateQueueList()
     if not SoundQueue.frame or not SoundQueue.frame.queueButtons then return end
     
     for i = 1, SoundQueue.maxQueueDisplay do
         local button = SoundQueue.frame.queueButtons[i]
-        local soundData = SoundQueue.sounds[i]
+        local soundData = SoundQueue.sounds[i + 1]
         
         if soundData then
             button.text:SetText(string.format("%d. %s", i, soundData.npcName or "Unknown"))
@@ -101,13 +127,13 @@ end
     end
 end
 
-function SoundQueue:ShowFrame()
+local function ShowFrame()
     if SoundQueue.frame then
         SoundQueue.frame:Show()
     end
 end
 
- function SoundQueue:HideFrame()
+local function HideFrame()
     if SoundQueue.frame then
         SoundQueue.frame:Hide()
     end
@@ -174,14 +200,14 @@ function SoundQueue:PlaySound(soundData)
     
     if not soundData then return end
 
-    soundData.filePath = Utils:NormalizePath(soundData.filePath)
+    soundData.filePath = NormalizePath(soundData.filePath)
     
     if not soundData.filePath then
         Debug("ERROR: No valid file path")
         return
     end
 
-    Utils:PlaySound(soundData)
+    PlaySoundFile(soundData.filePath)
     soundData.handle = 1
 
     if soundData.isResuming then
@@ -205,20 +231,21 @@ function SoundQueue:PlaySound(soundData)
     end
     self.updateFrame:Show()
     
-    
-    SoundQueue:UpdatePortrait(soundData)
-    SoundQueue:UpdateCurrentInfo(soundData)
-    SoundQueue:UpdatePauseButton()
-    SoundQueue:UpdateStatusText()
-    SoundQueue:UpdateQueueList()
-    SoundQueue:ShowFrame()
+    -- Update UI components
+    UpdatePortrait(soundData)
+    UpdateCurrentInfo(soundData)
+    UpdatePauseButton()
+    UpdateStatusText()
+    UpdateQueueList()
+    ShowFrame()
     
     Debug("PlaySound complete")
 end
 
 function SoundQueue:StopSound(soundData)
     if not soundData then return end
-    Utils:StopSound(soundData)
+    SetCVar("MasterSoundEffects", 0)
+    SetCVar("MasterSoundEffects", 1)
     soundData.handle = nil
 end
 
@@ -235,8 +262,8 @@ function SoundQueue:TogglePause()
         self.isPaused = true
         self.isPlaying = false
         
-        SoundQueue:UpdatePauseButton()
-        SoundQueue:UpdateStatusText()
+        UpdatePauseButton()
+        UpdateStatusText()
     else
         -- RESUME
         Debug("Resuming")
@@ -248,7 +275,7 @@ end
 function SoundQueue:CheckSoundFinished()
     if not self.currentSound or self.isPaused then return end
     
-    SoundQueue:UpdateStatusText()
+    UpdateStatusText()
     
     local elapsed = GetTime() - self.currentSound.startTime
     if elapsed >= self.currentSound.duration then
@@ -269,18 +296,20 @@ function SoundQueue:GetCurrentSound()
     return self.sounds[1]
 end
 
-function SoundQueue:AddSound(npcName, dialogText, title)
-    Debug("Adding Sound to queue: " .. npcName, dialogText, title)
+function SoundQueue:FindSound(npcName, dialogText)
+    if not npcName or not dialogText or not FindDialogSound then return nil end
+    return FindDialogSound(npcName, dialogText)
+end
 
-    if not npcName or not dialogText then return nil end
-    Debug("Adding Sound to queue: " .. tostring(npcName))
- 
-    local soundPath, dialogType, questID, seconds = Utils:FindDialogSound(npcName, dialogText)
-    print(soundPath)
+function SoundQueue:AddSound(npcName, dialogText, title)
+    Debug("AddSound: " .. tostring(npcName))
+    
+    local soundPath, dialogType, questID, seconds = self:FindSound(npcName, dialogText)
     
     if not soundPath then 
         Debug("No sound found - logging to BetterQuestDB")
-        return nil
+        self:LogMissingNPC(npcName, dialogText, dialogType or "unknown")
+        return 
     end
     
     local soundData = {
@@ -299,7 +328,7 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     for _, queuedSound in ipairs(self.sounds) do
         if queuedSound.filePath == soundData.filePath then 
             Debug("Duplicate, skipping")
-            return nil
+            return 
         end
     end
     
@@ -307,10 +336,9 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     Debug("Added to queue (size: " .. table.getn(self.sounds) .. ")")
     
     if table.getn(self.sounds) == 1 then
-        Debug("Beginning to play the sound")
         self:PlaySound(soundData)
     else
-        self:UpdateQueueList()
+        UpdateQueueList()
     end
 end
 
@@ -356,7 +384,7 @@ function SoundQueue:RemoveSound(soundData)
         end
     else
         -- Was queued
-        SoundQueue:UpdateQueueList()
+        UpdateQueueList()
     end
 end
 
@@ -381,8 +409,8 @@ function SoundQueue:CreateQueueButton(parent, index)
     button.text:SetTextColor(0.7, 0.7, 0.7)
     
     button:SetScript("OnEnter", function()
-        self.bg:Show()
-        self.text:SetTextColor(1, 0.3, 0.3)
+        this.bg:Show()
+        this.text:SetTextColor(1, 0.3, 0.3)
         GameTooltip:SetOwner(this, "ANCHOR_RIGHT")
         GameTooltip:SetText("Click to remove")
         GameTooltip:Show()
@@ -507,7 +535,7 @@ function SoundQueue:InitQueueContainer()
     
     self.frame.queueButtons = {}
     for i = 1, self.maxQueueDisplay do
-        local btn = self:CreateQueueButton(self.frame.queueContainer, i )
+        local btn = self:CreateQueueButton(self.frame.queueContainer, i + 1)
         if i == 1 then
             btn:SetPoint("TOPLEFT", 0, 0)
             btn:SetPoint("TOPRIGHT", 0, 0)
@@ -639,7 +667,6 @@ function SoundQueue:QueueTrigger(npcName, eventType)
             elseif eventType == "GOSSIP_SHOW" then
                 text, title = GetGossipText(), "Gossip"
             end
-            SoundQueue:InitializeUI()
 
             if text and text ~= "" then
                 SoundQueue:AddSound(npcName, text, title)
@@ -660,10 +687,8 @@ function SoundQueue:Initialize()
     
     initFrame:SetScript("OnEvent", function()
         if event == "ADDON_LOADED" and arg1 == "BetterQuest" then
-                    -- Initialize UI so frame & queueButtons exist
-        if type(SoundQueue.InitializeUI) == "function" then
-            pcall(function() SoundQueue:InitializeUI() end)
-        end
+            SoundQueue:InitializeBetterQuestDB()
+            SoundQueue:InitializeUI()
             
             local gameEventFrame = CreateFrame("Frame")
             gameEventFrame:RegisterEvent("QUEST_DETAIL")
@@ -675,6 +700,7 @@ function SoundQueue:Initialize()
                 SoundQueue:QueueTrigger(UnitName("npc"), event)
             end)
             
+            Debug("SoundQueue Initialized (Refactored & Optimized with Myers' Algorithm)")
         end
     end)
 end
