@@ -274,10 +274,11 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     Debug("Adding Sound to queue: " .. tostring(npcName))
  
     local soundPath, dialogType, questID, seconds = Utils:FindDialogSound(npcName, dialogText)
+    print(soundPath)
     
     if not soundPath then 
         Debug("No sound found - logging to BetterQuestDB")
-        return 
+        return nil
     end
     
     local soundData = {
@@ -296,7 +297,7 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     for _, queuedSound in ipairs(self.sounds) do
         if queuedSound.filePath == soundData.filePath then 
             Debug("Duplicate, skipping")
-            return 
+            return nil
         end
     end
     
@@ -304,6 +305,7 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     Debug("Added to queue (size: " .. table.getn(self.sounds) .. ")")
     
     if table.getn(self.sounds) == 1 then
+        Debug("Beginning to play the sound")
         self:PlaySound(soundData)
     else
         UpdateQueueList()

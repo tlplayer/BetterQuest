@@ -199,6 +199,7 @@ end
 
 -- FindDialogSound with timeout on the full hash fallback loop
 function Utils:FindDialogSound(npcName, dialogText)
+    Debug("Finding dialog for:".. npcName, dialogText)
   if not npcName or not dialogText then return nil end
 
   -- Early exit if NPC is marked as missing in runtime cache (THIS SESSION)
@@ -212,6 +213,7 @@ function Utils:FindDialogSound(npcName, dialogText)
 
   -- 1) Normal lookup
   local npc = NPC_DATABASE[lookupName]
+  Debug("Found npc with metadata from the database:" .. tostring(npc))
   if npc and npc.dialogs and npc.dialogs[key] then
     UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
     Utils:RemoveFromMissingDB(npcName)  -- Also remove from persistent DB
