@@ -3,29 +3,47 @@
 -- EDIT DISTANCE
 -------------------------------------------------
 
-function Utils:EditDistance(s1, s2)
+-- Computes the Levenshtein (edit) distance between two strings
+-- Edit distance (Levenshtein) for Lua 5.0
+function EditDistance(s1, s2)
     if not s1 or not s2 then return 9999 end
-    local len1, len2 = string.len(s1), string.len(s2)
+
+    -- lengths using string.len (Lua 5.0 safe)
+    local len1 = string.len(s1)
+    local len2 = string.len(s2)
+
+    -- early exit for empty strings
     if len1 == 0 then return len2 end
     if len2 == 0 then return len1 end
 
+    -- create 2D matrix
     local matrix = {}
+    local i, j
     for i = 0, len1 do
-        matrix[i] = {[0] = i}
+        matrix[i] = {}
+        matrix[i][0] = i
     end
     for j = 0, len2 do
         matrix[0][j] = j
     end
 
+    -- fill matrix
     for i = 1, len1 do
         local c1 = string.sub(s1, i, i)
         for j = 1, len2 do
-            local cost = (c1 ~= string.sub(s2, j, j)) and 1 or 0
-            matrix[i][j] = math.min(
-                matrix[i-1][j] + 1,
-                matrix[i][j-1] + 1,
-                matrix[i-1][j-1] + cost
-            )
+            local c2 = string.sub(s2, j, j)
+            local cost = 0
+            if c1 ~= c2 then cost = 1 end
+
+            local deletion     = matrix[i-1][j] + 1
+            local insertion    = matrix[i][j-1] + 1
+            local substitution = matrix[i-1][j-1] + cost
+
+            local min = deletion
+            if insertion < min then min = insertion end
+            if substitution < min then min = substitution end
+
+            matrix[i][j] = min
         end
     end
 
@@ -67,6 +85,7 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
     
     -- Early exit if NPC is marked as missing in runtime cache
     if Utils:IsNPCMissing(npcName) then
+        Debug("NPC is in the missing cache")
         return nil
     end
     
@@ -175,4 +194,59 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
     end
 
     return nil
+end
+
+
+-- FindDialogSound with timeout on the full hash fallback loop
+function Utils:FindDialogSound(npcName, dialogText)
+  if not npcName or not dialogText then return nil end
+
+  -- Early exit if NPC is marked as missing in runtime cache (THIS SESSION)
+  if IsNPCMissing(npcName) then
+    return nil
+  end
+
+  local lookupName = NormalizeNPCName(npcName)
+  local key = NormalizeDialogText(dialogText)
+  if key == "" then return nil end
+
+  -- 1) Normal lookup
+  local npc = NPC_DATABASE[lookupName]
+  if npc and npc.dialogs and npc.dialogs[key] then
+    UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
+    Utils:RemoveFromMissingDB(npcName)  -- Also remove from persistent DB
+    local entry = npc.dialogs[key]
+    return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+  end
+
+  -- If NPC doesn't exist at all, mark as missing in runtime cache only
+  if not npc then
+    MarkNPCMissing(npcName)
+    return nil
+  end
+
+  -- 2) Fallback: search all NPCs by text hash (with timeout guard)
+  local startTime = GetTime()
+  local TIMEOUT = 0.1
+  for otherNpcName, data in pairs(NPC_DATABASE) do
+    if GetTime() - startTime > TIMEOUT then
+        Debug("FindDialogSound fallback timeout - aborting full-hash scan")
+        break
+    end
+
+    if data.dialogs then
+      local entry = data.dialogs[key]
+      if entry then
+        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+      end
+    end
+  end
+
+  -- 3) Fuzzy text search (Myers' algorithm + timeout)
+  local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds = FuzzyFindDialogSound(npcName, dialogText)
+  if fuzzyPath then
+    return fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds
+  end
+
+  return nil
 end

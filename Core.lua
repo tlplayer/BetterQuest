@@ -100,8 +100,9 @@ addonFrame:RegisterEvent("ADDON_LOADED")
 
 addonFrame:SetScript("OnEvent", function()
     if event ~= "ADDON_LOADED" or arg1 ~= "BetterQuest" then return end
-
-    -- 3) Quest / Gossip event dispatcher
+     Utils:InitializeBetterQuestDB()
+    
+     -- 3) Quest / Gossip event dispatcher
     local questGossipFrame = CreateFrame("Frame")
     questGossipFrame:RegisterEvent("QUEST_DETAIL")
     questGossipFrame:RegisterEvent("QUEST_PROGRESS")
