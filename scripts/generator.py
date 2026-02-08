@@ -70,7 +70,7 @@ def find_betterquest_file(base_path="../../../../WTF"):
     
     return None
 
-def monitor_file_changes(filepath, check_interval=1.5, callback=None):
+def monitor_file_changes(filepath, check_interval=5, callback=None):
     """
     Monitor a file for changes and execute callback when modified.
     
@@ -747,6 +747,70 @@ def normalize_dialog_text(text: str) -> str:
 
     return text.strip()
 
+def deduplicate_dialogs(df):
+    """
+    Pre-process dataframe to identify duplicate dialogs (same text + race + sex).
+    Marks duplicates with 'skip_generation' flag and 'link_to_npc' reference.
+    
+    Returns:
+        Modified dataframe with deduplication metadata
+    """
+    print("\n[DEDUP] Identifying duplicate dialogs across NPCs...")
+    
+    # Add columns for deduplication tracking
+    df['skip_generation'] = False
+    df['link_to_npc'] = None
+    
+    # Track first occurrence of each dialog signature
+    dialog_signature_map = {}  # signature -> (npc_name, row_index)
+    
+    duplicates_found = 0
+    
+    for idx, row in df.iterrows():
+        npc_name = row.get("npc_name")
+        if not npc_name:
+            continue
+        
+        # Get race and sex for this NPC
+        normalized_name = normalize_name(npc_name)
+        meta = NPC_LOOKUP.get(npc_name)
+        
+        if not meta:
+            continue
+            
+        race = meta.get("race")
+        sex = meta.get("sex")
+        
+        if not race or not sex:
+            continue
+        
+        # Create signature from ORIGINAL text + race + sex
+        original_text = row.get("text", "").strip()
+        if not original_text:
+            continue
+            
+        signature = f"{original_text}|{race}|{sex}"
+        sig_hash = hashlib.md5(signature.encode()).hexdigest()[:16]
+        
+        if sig_hash in dialog_signature_map:
+            # Duplicate found! Mark to skip generation and link to first occurrence
+            first_npc, first_idx = dialog_signature_map[sig_hash]
+            df.at[idx, 'skip_generation'] = True
+            df.at[idx, 'link_to_npc'] = first_npc
+            duplicates_found += 1
+            
+            print(f"[DEDUP] {npc_name} → links to {first_npc} (race={race}, sex={sex})")
+        else:
+            # First occurrence - will generate audio
+            dialog_signature_map[sig_hash] = (npc_name, idx)
+    
+    unique_dialogs = len(dialog_signature_map)
+    print(f"[DEDUP] Found {duplicates_found} duplicate dialogs")
+    print(f"[DEDUP] Will generate {unique_dialogs} unique audio files")
+    print(f"[DEDUP] Will skip {duplicates_found} duplicate generations")
+    
+    return df
+
 def build_gossip_index_map(df):
     """
     Pre-index all gossip lines per NPC from the CSV.
@@ -775,6 +839,7 @@ def build_gossip_index_map(df):
     
     return gossip_map
 
+
 def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_map=None, narrator_override=None, 
                          max_retries=3, retry_wait=10):
     """
@@ -789,6 +854,12 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
         max_retries: Maximum number of retries on memory errors
         retry_wait: Seconds to wait between retries
     """
+    # DEDUPLICATION: Skip if this dialog should link to another NPC's audio
+    if row.get('skip_generation', False):
+        link_to = row.get('link_to_npc', 'unknown')
+        print(f"[SKIP-DEDUP] {row['npc_name']} → links to {link_to}'s audio (duplicate dialog)")
+        return 'SKIPPED_DUPLICATE'
+    
     narrator_voice = get_narrator_from_metadata(row, narrator_override=narrator_override)
     if not narrator_voice or narrator_voice not in REF_CODES:
         print(f"[SKIP] No narrator metadata for NPC: {row['npc_name']}")
@@ -1151,7 +1222,6 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
 
     npc_database = {}
     missing_race = {}
-    missing_race['unknownn'] = []
     
     # FIX #3: Track dialog signatures to find duplicates
     dialog_signature_map = {}  # signature -> (npc_name, text_hash, sound_path)
@@ -1175,7 +1245,7 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
         model_id = meta.get("model_id")
         
         if not race:
-            missing_race['unknown'].append([normalized_name])
+            missing_race[normalized_name] = None
         
         # Determine narrator info
         if race:
@@ -1499,6 +1569,9 @@ def run_pipeline(args, betterquest_path=None):
     df_filtered = df_filtered.drop_duplicates(subset=["npc_name", "text"])
     df_filtered["text"] = df_filtered["text"].apply(normalize_dialog_text)
     df_filtered = merge_item_text_rows(df_filtered)
+    
+    # DEDUPLICATION: Identify duplicates BEFORE audio generation
+    df_filtered = deduplicate_dialogs(df_filtered)
     
     # Step 2: Generate audio (uses filtered dataframe)
     if not args.skip_audio:
