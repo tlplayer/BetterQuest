@@ -34,14 +34,14 @@ end
 -- UI UPDATE FUNCTIONS (Modular)
 -------------------------------------------------
 
-local function SoundQueue:UpdatePortrait(soundData)
+ function SoundQueue:UpdatePortrait(soundData)
     if not SoundQueue.frame or not SoundQueue.frame.portrait then return end
     
     local texture = GetPortraitTexture(soundData)
     SoundQueue.frame.portrait.texture:SetTexture(texture)
 end
 
-local function SoundQueue:UpdateCurrentInfo(soundData)
+function SoundQueue:UpdateCurrentInfo(soundData)
     if not SoundQueue.frame then return end
     
     if soundData then
@@ -53,7 +53,7 @@ local function SoundQueue:UpdateCurrentInfo(soundData)
     end
 end
 
-local function SoundQueue:UpdatePauseButton()
+ function SoundQueue:UpdatePauseButton()
     if not SoundQueue.frame or not SoundQueue.frame.pauseBtn then return end
     
     if SoundQueue.isPaused then
@@ -65,7 +65,7 @@ local function SoundQueue:UpdatePauseButton()
     end
 end
 
-local function SoundQueue:UpdateStatusText()
+ function SoundQueue:UpdateStatusText()
     if not SoundQueue.frame or not SoundQueue.frame.status then return end
     
     local current = SoundQueue.currentSound
@@ -85,7 +85,7 @@ local function SoundQueue:UpdateStatusText()
     end
 end
 
-local function SoundQueue:UpdateQueueList()
+ function SoundQueue:UpdateQueueList()
     if not SoundQueue.frame or not SoundQueue.frame.queueButtons then return end
     
     for i = 1, SoundQueue.maxQueueDisplay do
@@ -101,13 +101,13 @@ local function SoundQueue:UpdateQueueList()
     end
 end
 
-local function SoundQueue:ShowFrame()
+function SoundQueue:ShowFrame()
     if SoundQueue.frame then
         SoundQueue.frame:Show()
     end
 end
 
-local function SoundQueue:HideFrame()
+ function SoundQueue:HideFrame()
     if SoundQueue.frame then
         SoundQueue.frame:Hide()
     end
@@ -281,7 +281,6 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     
     if not soundPath then 
         Debug("No sound found - logging to BetterQuestDB")
-        self:LogMissingNPC(npcName, dialogText, dialogType or "unknown")
         return 
     end
     
@@ -660,8 +659,6 @@ function SoundQueue:Initialize()
     
     initFrame:SetScript("OnEvent", function()
         if event == "ADDON_LOADED" and arg1 == "BetterQuest" then
-            SoundQueue:InitializeBetterQuestDB()
-            SoundQueue:InitializeUI()
             
             local gameEventFrame = CreateFrame("Frame")
             gameEventFrame:RegisterEvent("QUEST_DETAIL")
@@ -673,7 +670,6 @@ function SoundQueue:Initialize()
                 SoundQueue:QueueTrigger(UnitName("npc"), event)
             end)
             
-            Debug("SoundQueue Initialized (Refactored & Optimized with Myers' Algorithm)")
         end
     end)
 end

@@ -114,8 +114,7 @@ function PortraitManager:GetNPCInfo()
 
     if not name then return nil end
 
-    local normalizedName = Utils:NormalizeNPCName(name)
-    local metadata = Utils:GetNPCMetadata(normalizedName)
+    local metadata = Utils:GetNPCMetadata(name)
 
     if not metadata then
         PMDebug("No metadata found for: " .. tostring(name))

@@ -47,33 +47,6 @@ local function OnNPCSay(msg, sender)
     end
 end
 
--- /broadcast slash commands
-SLASH_BROADCAST1 = "/broadcast"
-SLASH_BROADCAST2 = "/bc"
-
-SlashCmdList["BROADCAST"] = function(msg)
-    msg = string.lower(msg or "")
-
-    if msg == "on" then
-        Broadcast.enabled = true
-        Debug("Broadcast monitoring ENABLED")
-    elseif msg == "off" then
-        Broadcast.enabled = false
-        Debug("Broadcast monitoring DISABLED")
-    elseif msg == "status" then
-        local status = Broadcast.enabled
-            and "|cff00ff00ENABLED|r"
-            or  "|cffff0000DISABLED|r"
-        Debug("Broadcast status: " .. status)
-    elseif msg == "test" then
-        Debug("Broadcast: sending test NPC message…")
-        if SoundQueue then
-            SoundQueue:AddSound("Test NPC", "This is a test message", "Test")
-        end
-    else
-        Debug("Commands: /broadcast on|off|status|test")
-    end
-end
 
 -- =====================================================================
 --   QUEUE TRIGGER  —  delay wrapper between game events and AddSound
@@ -110,6 +83,7 @@ local function QueueTrigger(npcName, eventType)
         end
 
         if text and text ~= "" then
+            Debug("Adding sound to queue:".. npcName)
             SoundQueue:AddSound(npcName, text, title)
         end
 
@@ -126,12 +100,6 @@ addonFrame:RegisterEvent("ADDON_LOADED")
 
 addonFrame:SetScript("OnEvent", function()
     if event ~= "ADDON_LOADED" or arg1 ~= "BetterQuest" then return end
-
-    -- 1) Persistent DB
-    SoundQueue:InitializeBetterQuestDB()
-
-    -- 2) Build the SoundQueue mini-player UI (defined in ui.lua)
-    SoundQueue:InitializeUI()
 
     -- 3) Quest / Gossip event dispatcher
     local questGossipFrame = CreateFrame("Frame")
