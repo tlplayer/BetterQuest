@@ -13,6 +13,7 @@ import csv
 import wave
 import contextlib
 import yaml
+import hashlib
 
 # =========================
 # CONFIGURATION
@@ -69,7 +70,7 @@ def find_betterquest_file(base_path="../../../../WTF"):
     
     return None
 
-def monitor_file_changes(filepath, check_interval=5, callback=None):
+def monitor_file_changes(filepath, check_interval=1.5, callback=None):
     """
     Monitor a file for changes and execute callback when modified.
     
@@ -828,9 +829,15 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
     print(f"Generating {base_dir}/{filename} (using voice: {narrator_voice})")
     filepath = os.path.join(base_dir, filename)
 
+    # FIX #1: Check for zero-byte files and regenerate them
     if os.path.exists(filepath) and not regenerate:
-        print(f"[SKIP] File already exists: {filepath}")
-        return filepath
+        file_size = os.path.getsize(filepath)
+        if file_size == 0:
+            print(f"[REGENERATE] File exists but is empty (0 bytes): {filepath}")
+            os.remove(filepath)
+        else:
+            print(f"[SKIP] File already exists: {filepath}")
+            return filepath
 
     ref = REF_CODES[narrator_voice]
     text_chunks = chunk_text_robust(row["text"])
@@ -1093,8 +1100,19 @@ def invert_mapping(mapping):
                 inverted[n] = key
     return inverted
 
+def create_dialog_signature(text: str, race: str, sex: str) -> str:
+    """
+    FIX #3: Create a signature for dialog deduplication based on original text + race + sex.
+    Uses original text to preserve client-server sync.
+    """
+    # Use original text, just strip whitespace for comparison
+    clean_text = text.strip()
+    # Create a hash that includes race and sex to identify duplicates
+    signature = f"{clean_text}|{race or 'unknown'}|{sex or 'unknown'}"
+    return hashlib.md5(signature.encode()).hexdigest()[:16]
+
 def sync_metadata(df, output_lua=OUTPUT_LUA):
-    """Build and write unified NPC database to Lua"""
+    """Build and write unified NPC database to Lua with dialog deduplication"""
     print("\n=== STEP 3: Syncing metadata to Lua database ===")
     
     # Load YAML mappings
@@ -1102,6 +1120,10 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
     npc_sex = invert_mapping(read_yaml(SEX_FILE))
     npc_zone = invert_mapping(read_yaml(ZONE_FILE))
 
+    # FIX #2: Load ALL NPCs from metadata, not just those with generated audio
+    print("[INFO] Loading all NPCs from metadata (including those without audio)")
+    all_npcs_from_metadata = set(NPC_LOOKUP.keys())
+    
     # Merge item_text blocks (books/items are split into multiple rows in DB but generated as one file)
     item_text_rows = df[df["dialog_type"].str.lower().isin(["item_text", "book"])]
     merged_rows = []
@@ -1129,13 +1151,57 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
 
     npc_database = {}
     missing_race = {}
+    missing_race['unknownn'] = []
+    
+    # FIX #3: Track dialog signatures to find duplicates
+    dialog_signature_map = {}  # signature -> (npc_name, text_hash, sound_path)
 
+    # FIX #2: Initialize ALL NPCs from metadata first
+    for npc_name in all_npcs_from_metadata:
+        normalized_name = normalize_name(npc_name)
+        if not normalized_name:
+            continue
+            
+        meta = NPC_LOOKUP.get(npc_name)
+        if not meta:
+            continue
+            
+        race = npc_race.get(normalized_name) or meta.get("race")
+        sex = meta.get("sex")
+        if not sex:
+            sex = npc_sex.get(normalized_name, "male")
+        
+        zone = npc_zone.get(normalized_name, "")
+        model_id = meta.get("model_id")
+        
+        if not race:
+            missing_race['unknown'].append([normalized_name])
+        
+        # Determine narrator info
+        if race:
+            narrator = f"{race}_female" if sex == "female" else race
+            portrait = race
+        else:
+            narrator = "narrator"
+            portrait = "default"
+        
+        npc_database[normalized_name] = {
+            "race": race,
+            "sex": sex,
+            "portrait": portrait,
+            "zone": zone,
+            "model_id": model_id,
+            "narrator": narrator,
+            "dialogs": {}
+        }
+
+    # Now process dialog entries from CSV
     for _, row in df.iterrows():
         npc_name = normalize_name(row.get("npc_name"))
         if not npc_name:
             continue
 
-        # Initialize NPC entry if not exists
+        # Initialize NPC entry if not exists (for NPCs not in metadata)
         if npc_name not in npc_database:
             race = npc_race.get(npc_name)
             sex = row.get("sex")
@@ -1177,6 +1243,8 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
             continue
 
         narrator = npc_database[npc_name]["narrator"]
+        race = npc_database[npc_name]["race"]
+        sex = npc_database[npc_name]["sex"]
         npc_dirname = sanitize_filename(npc_name)
         quest_id = None
 
@@ -1214,13 +1282,36 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
         if seconds is None:
             continue
 
-        # Add to dialogs
-        npc_database[npc_name]["dialogs"][text_hash] = {
-            "path": sound_path,
-            "dialog_type": dialog_type,
-            "quest_id": quest_id,
-            "seconds": seconds,
-        }
+        # FIX #3: Check for duplicate dialogs across NPCs with same race/sex
+        # Use ORIGINAL text (before normalization) for signature to preserve client-server sync
+        original_text = row.get("text", "")
+        dialog_sig = create_dialog_signature(original_text, race, sex)
+        
+        if dialog_sig in dialog_signature_map:
+            # This dialog already exists for another NPC with same race/sex
+            # Link to the existing audio instead of duplicating
+            existing_npc, existing_hash, existing_path = dialog_signature_map[dialog_sig]
+            print(f"[DEDUP] Linking {npc_name} dialog to {existing_npc} (same race/sex, same text)")
+            
+            # Use the existing path (buddy link)
+            npc_database[npc_name]["dialogs"][text_hash] = {
+                "path": existing_path,
+                "dialog_type": dialog_type,
+                "quest_id": quest_id,
+                "seconds": seconds,
+                "linked_to": existing_npc  # Mark as linked
+            }
+        else:
+            # First occurrence of this dialog signature
+            dialog_signature_map[dialog_sig] = (npc_name, text_hash, sound_path)
+            
+            # Add to dialogs normally
+            npc_database[npc_name]["dialogs"][text_hash] = {
+                "path": sound_path,
+                "dialog_type": dialog_type,
+                "quest_id": quest_id,
+                "seconds": seconds,
+            }
 
     # Write missing races
     with open(MISSING_RACE_FILE, "w", encoding="utf-8") as f:
@@ -1233,9 +1324,19 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
         f.write("-- DO NOT EDIT MANUALLY\n\n")
         f.write("NPC_DATABASE = {\n")
 
+        npcs_with_dialogs = 0
+        npcs_without_dialogs = 0
+        total_dialog_entries = 0
+        linked_dialog_entries = 0
+
         for npc_name, data in sorted(npc_database.items()):
+            # FIX #2: Include ALL NPCs in database, even those without dialogs
             if not data["dialogs"]:
-                continue
+                npcs_without_dialogs += 1
+            else:
+                npcs_with_dialogs += 1
+                total_dialog_entries += len(data["dialogs"])
+                linked_dialog_entries += sum(1 for d in data["dialogs"].values() if "linked_to" in d)
 
             f.write(f'  ["{npc_name}"] = {{\n')
             
@@ -1252,22 +1353,38 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
             for text_hash, info in sorted(data["dialogs"].items()):
                 path = info["path"].replace("\\", "\\\\")
                 quest_id = info["quest_id"] if info["quest_id"] is not None else "nil"
+                linked_to = info.get("linked_to")
                 
-                f.write(
-                    f'      ["{text_hash}"] = {{ '
-                    f'path="{path}", '
-                    f'dialog_type="{info["dialog_type"]}", '
-                    f'quest_id={quest_id}, '
-                    f'seconds={info["seconds"]} '
-                    f'}},\n'
-                )
+                if linked_to:
+                    f.write(
+                        f'      ["{text_hash}"] = {{ '
+                        f'path="{path}", '
+                        f'dialog_type="{info["dialog_type"]}", '
+                        f'quest_id={quest_id}, '
+                        f'seconds={info["seconds"]}, '
+                        f'linked_to="{linked_to}" '
+                        f'}},\n'
+                    )
+                else:
+                    f.write(
+                        f'      ["{text_hash}"] = {{ '
+                        f'path="{path}", '
+                        f'dialog_type="{info["dialog_type"]}", '
+                        f'quest_id={quest_id}, '
+                        f'seconds={info["seconds"]} '
+                        f'}},\n'
+                    )
             f.write('    },\n')
             f.write('  },\n')
 
         f.write("}\n\n")
 
     print(f"✓ Generated unified database for {len(npc_database)} NPCs")
-    print(f"✓ Total dialog entries linked: {sum(len(v['dialogs']) for v in npc_database.values())}")
+    print(f"  - NPCs with dialogs: {npcs_with_dialogs}")
+    print(f"  - NPCs without dialogs (metadata only): {npcs_without_dialogs}")
+    print(f"✓ Total dialog entries: {total_dialog_entries}")
+    print(f"  - Linked (deduplicated): {linked_dialog_entries}")
+    print(f"  - Unique audio files: {total_dialog_entries - linked_dialog_entries}")
     print(f"✓ Missing races: {len(missing_race)}")
     print(f"✓ Output written to: {output_lua}")
 
@@ -1354,8 +1471,9 @@ def run_pipeline(args, betterquest_path=None):
     lua_path = betterquest_path or BETTERQUEST_LUA
     
     # Step 1: Sync game data
+    new_rows_added = 0
     if not args.skip_sync:
-        sync_game_data(lua_path=lua_path)
+        new_rows_added = sync_game_data(lua_path=lua_path)
     else:
         print("\n=== STEP 1: Syncing game data [SKIPPED] ===")
     
@@ -1365,6 +1483,19 @@ def run_pipeline(args, betterquest_path=None):
     
     # Apply filters for audio generation
     df_filtered = filter_dataframe(df_full.copy(), args)
+    
+    # DAEMON MODE OPTIMIZATION: Prioritize newly added missing NPC entries
+    if args.daemon and new_rows_added > 0:
+        print(f"\n[DAEMON] Prioritizing {new_rows_added} newly added missing NPC entries")
+        
+        # Get the last N rows (most recently added)
+        df_new_entries = df_filtered.tail(new_rows_added).copy()
+        df_old_entries = df_filtered.head(len(df_filtered) - new_rows_added).copy()
+        
+        # Reorder: new entries first, then old entries
+        df_filtered = pd.concat([df_new_entries, df_old_entries], ignore_index=True)
+        print(f"[DAEMON] Processing order: {len(df_new_entries)} new entries, then {len(df_old_entries)} existing entries")
+    
     df_filtered = df_filtered.drop_duplicates(subset=["npc_name", "text"])
     df_filtered["text"] = df_filtered["text"].apply(normalize_dialog_text)
     df_filtered = merge_item_text_rows(df_filtered)
