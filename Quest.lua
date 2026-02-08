@@ -10,10 +10,10 @@ local function ApplyQuestLayout()
     UI:ApplyDialogFrame(QuestFrame)
     UI:UpdateNPCPortrait(QuestFrame)
 
-    UI:ApplyScrollFrame(QuestDetailScrollFrame,   C().DIALOG.SCROLL_HEIGHT_DETAIL)
-    UI:ApplyScrollFrame(QuestProgressScrollFrame, C().DIALOG.SCROLL_HEIGHT_PROGRESS)
-    UI:ApplyScrollFrame(QuestRewardScrollFrame,   C().DIALOG.SCROLL_HEIGHT_REWARD)
-    UI:ApplyScrollFrame(QuestGreetingScrollFrame, C().DIALOG.SCROLL_HEIGHT_GREETING)
+    UI:ApplyScrollFrame(QuestDetailScrollFrame,   Config.DIALOG.SCROLL_HEIGHT_DETAIL)
+    UI:ApplyScrollFrame(QuestProgressScrollFrame, Config.DIALOG.SCROLL_HEIGHT_PROGRESS)
+    UI:ApplyScrollFrame(QuestRewardScrollFrame,   Config.DIALOG.SCROLL_HEIGHT_REWARD)
+    UI:ApplyScrollFrame(QuestGreetingScrollFrame, Config.DIALOG.SCROLL_HEIGHT_GREETING)
 
     UI:ApplyScrollChild(QuestDetailScrollChildFrame)
     UI:ApplyScrollChild(QuestProgressScrollChildFrame)
@@ -38,7 +38,7 @@ local function FixTextWidths()
     for _, f in ipairs(fields) do
         if f then
             f:SetWidth(width)
-            f:SetJustifyH(C().DIALOG.TEXT_JUSTIFY)
+            f:SetJustifyH(Config.DIALOG.TEXT_JUSTIFY)
         end
     end
 

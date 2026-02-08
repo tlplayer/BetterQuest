@@ -46,8 +46,6 @@ end
 
 function UI:ApplyScrollFrame(scrollFrame, height)
     if not scrollFrame then return end
-    Config = Utils:GetConfig()
-
 
     scrollFrame:ClearAllPoints()
     scrollFrame:SetPoint(

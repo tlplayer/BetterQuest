@@ -8,4 +8,11 @@
     <Script file="Config.lua"/>
     <Script file="Utils.lua"/>
     
+    <Script file="Portrait.lua"/>
+    <Script file="UI.lua"/>
+    <Script file="SoundQueue.lua"/>
+    <Script file="Gossip.lua"/>
+    <Script file="Quest.lua"/>
+    <Script file="Book.lua"/>
+    <Script file="Core.lua"/>
 </Ui>
