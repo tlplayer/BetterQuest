@@ -28,7 +28,7 @@ CONFIG = {
         
         -- Text area (can differ from content area)
         TEXT_WIDTH_OVERRIDE = 600,  -- Set to number to override, nil uses content width
-        TEXT_EXTRA_PADDING_RIGHT = 0,
+        TEXT_EXTRA_PADDING_RIGHT = 35,
         TEXT_JUSTIFY = "LEFT",
         
         -- Scroll frame heights by dialog type
