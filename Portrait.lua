@@ -107,23 +107,34 @@ end
 -------------------------------------------------------------------------
 -- PORTRAIT TEXTURE RESOLUTION (SINGLE SOURCE OF TRUTH)
 -------------------------------------------------------------------------
-local function ResolveNPCPortraitTexture(metadata)
-
-    Debug("Resolving portrait for" .. metadata.name)
+local function ResolveNPCPortraitTexture(npcName)
+    -- Check if this is a book interaction first
     if Utils:IsBookInteraction() then
+        Debug("Book interaction detected, using book portrait")
         return CONFIG.PORTRAIT.DEFAULT_BOOK
     end
 
-    if not metadata.name then
+    -- If no NPC name provided, try to get from active NPC
+    if not npcName then
+        npcName = activeNPCName
+    end
+    
+    if not npcName then
+        Debug("No NPC name available for portrait resolution")
         return CONFIG.PORTRAIT.DEFAULT_NPC
     end
 
-    if metadata and metadata.race  then
-    Debug("Found NPC Metadata for" .. npcName)
+    Debug("Resolving portrait for: " .. tostring(npcName))
+    
+    -- Look up NPC metadata from database
+    local metadata = Utils:GetNPCMetadata(npcName)
+    
+    if metadata and metadata.race then
+        Debug("Found NPC metadata for " .. npcName .. " (race: " .. metadata.race .. ", sex: " .. metadata.sex .. ")")
         return BuildPortraitPath(metadata.race, metadata.sex)
     end
-    Debug("Did not find metadata for" .. npcName)
-
+    
+    Debug("Did not find metadata for " .. npcName .. ", using default")
     return CONFIG.PORTRAIT.DEFAULT_NPC
 end
 
@@ -143,13 +154,37 @@ end
 -- PUBLIC PORTRAIT RESOLVERS
 -------------------------------------------------------------------------
 function PortraitManager:FindNPCPortrait(soundData)
-    if not soundData or not soundData.name then
+    -- Try to extract NPC name from various sources
+    local npcName = nil
+    
+    -- 1. From sound data parameter
+    if soundData then
+        if type(soundData) == "string" then
+            -- Direct NPC name passed
+            npcName = soundData
+        elseif type(soundData) == "table" then
+            -- Sound data object with name field
+            npcName = soundData.name or soundData.npcName
+        end
+    end
+    
+    -- 2. From active NPC if not found
+    if not npcName then
+        npcName = activeNPCName
+    end
+    
+    -- 3. Try to get current target/gossip NPC
+    if not npcName then
+        npcName = UnitName("npc") or UnitName("target")
+    end
+    
+    if not npcName then
         PMDebug("No NPC info available, using default")
         return CONFIG.PORTRAIT.DEFAULT_NPC
     end
 
-    local path = ResolveNPCPortraitTexture(soundData.name)
-    PMDebug("Using portrait: " .. tostring(path))
+    local path = ResolveNPCPortraitTexture(npcName)
+    PMDebug("Using portrait for " .. tostring(npcName) .. ": " .. tostring(path))
     return path
 end
 
@@ -172,6 +207,7 @@ function PortraitManager:SetPortrait(parentFrame, portraitType, customTexture)
     if customTexture then
         texturePath = customTexture
     elseif portraitType == self.Type.NPC then
+        -- Call FindNPCPortrait without arguments to use active NPC
         texturePath = self:FindNPCPortrait()
     elseif portraitType == self.Type.BOOK then
         texturePath = CONFIG.PORTRAIT.DEFAULT_BOOK
@@ -199,8 +235,10 @@ function PortraitManager:SetPortrait(parentFrame, portraitType, customTexture)
     return true
 end
 
-function PortraitManager:UpdateNPCPortrait(parentFrame)
-    return self:SetPortrait(parentFrame or QuestFrame, self.Type.NPC)
+function PortraitManager:UpdateNPCPortrait(parentFrame, soundData)
+    -- Pass soundData through to SetPortrait via FindNPCPortrait
+    local texturePath = self:FindNPCPortrait(soundData)
+    return self:SetPortrait(parentFrame or QuestFrame, self.Type.NPC, texturePath)
 end
 
 function PortraitManager:UpdateBookPortrait(parentFrame, itemName)
