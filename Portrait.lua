@@ -103,51 +103,26 @@ function PortraitManager:ClearActiveNPC()
     activeNPCName = nil
 end
 
--------------------------------------------------------------------------
--- NPC METADATA ACCESS
--------------------------------------------------------------------------
-function PortraitManager:GetNPCInfo()
-    local name =
-        activeNPCName
-        or UnitName("npc")
-        or UnitName("target")
-
-    if not name then return nil end
-
-    local metadata = Utils:GetNPCMetadata(name)
-
-    if not metadata then
-        PMDebug("No metadata found for: " .. tostring(name))
-        return nil
-    end
-
-    return {
-        name     = normalizedName,
-        race     = metadata.race     or "unknown",
-        sex      = metadata.sex      or "male",
-        portrait = metadata.portrait or metadata.race or "default",
-        zone     = metadata.zone     or GetZoneText() or "Unknown",
-        model_id = metadata.model_id,
-        narrator = metadata.narrator or "default",
-    }
-end
 
 -------------------------------------------------------------------------
 -- PORTRAIT TEXTURE RESOLUTION (SINGLE SOURCE OF TRUTH)
 -------------------------------------------------------------------------
-local function ResolveNPCPortraitTexture(npcName)
+local function ResolveNPCPortraitTexture(metadata)
+
+    Debug("Resolving portrait for" .. metadata.name)
     if Utils:IsBookInteraction() then
         return CONFIG.PORTRAIT.DEFAULT_BOOK
     end
 
-    if not npcName then
+    if not metadata.name then
         return CONFIG.PORTRAIT.DEFAULT_NPC
     end
 
-    local metadata = Utils:GetNPCMetadata(npcName)
-    if metadata and metadata.race then
+    if metadata and metadata.race  then
+    Debug("Found NPC Metadata for" .. npcName)
         return BuildPortraitPath(metadata.race, metadata.sex)
     end
+    Debug("Did not find metadata for" .. npcName)
 
     return CONFIG.PORTRAIT.DEFAULT_NPC
 end
@@ -167,14 +142,13 @@ end
 -------------------------------------------------------------------------
 -- PUBLIC PORTRAIT RESOLVERS
 -------------------------------------------------------------------------
-function PortraitManager:FindNPCPortrait()
-    local npc = self:GetNPCInfo()
-    if not npc then
+function PortraitManager:FindNPCPortrait(soundData)
+    if not soundData or not soundData.name then
         PMDebug("No NPC info available, using default")
         return CONFIG.PORTRAIT.DEFAULT_NPC
     end
 
-    local path = ResolveNPCPortraitTexture(npc.name)
+    local path = ResolveNPCPortraitTexture(soundData.name)
     PMDebug("Using portrait: " .. tostring(path))
     return path
 end
