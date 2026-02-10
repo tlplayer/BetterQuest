@@ -1400,7 +1400,7 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
         model_id = meta.get("model_id")
         
         if not race:
-            missing_race['unknown'].append(normalized_name)
+            missing_race['unknown'].append(npc_name)
         
         # Determine narrator info
         if race:
@@ -1439,7 +1439,7 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
             model_id = int(row.get("model_id")) if pd.notna(row.get("model_id")) else None
             
             if not race:
-                missing_race[npc_name] = None
+                missing_race["unknown"].append(npc_name)
             
             # Determine narrator info
             if race:
