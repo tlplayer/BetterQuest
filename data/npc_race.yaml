@@ -75,6 +75,15 @@ demon:
 - Zenn Foulhoof
 - Zggi
 trogg:
+- Rockjaw Ambusher
+- Stonesplinter Trogg
+- Stonesplinter Scout
+- Stonesplinter Skullthumper
+- Stonesplinter Bonesnapper
+- Stonesplinter Geomancer
+- Stonesplinter Seer
+- Stonesplinter Digger
+- Stonesplinter Shaman
 - Warosh
 - Rockjaw Skullthumper
 mechanical:
@@ -209,6 +218,8 @@ draenei:
 - Kum'isha the Collector
 - Magtoor
 dragon:
+- Hakkar
+- Blackwing
 - Anachronos
 - Awbee
 - Azuregos
@@ -3031,12 +3042,674 @@ nightelf:
 - Zamael Lunthistle
 - Zarrin
 object:
+- Wolf Master Nandos
+- Grubbis
+- Freed Soul
+- Priest
+- Priestess
+- Default Text
+- Magwin
+- Wounded
+- Big
+- Twiggy
+- Dawnforge
+- Aeranas
+- Lilatha
+- Kazzak
+- Nether Drake
+- Daranelle
+- Say Just Eaten
+- Draenei Survivor
+- Engineer Spark
+- Npc Redemption Target
+- Converted Sentry
+- Say Lump 0
+- Say Lump 1
+- Say Lump Defeat
+- Unkor
+- Lady Sylvanas
+- Say Guard Sil Aggro1
+- Say Guard Sil Aggro2
+- Say Guard Sil Aggro3
+- Injured Patient
+- Vekjik
+- Anvilward
+- Manaforge Control
+- Whisper Custodian 1
+- Whisper Custodian 2
+- Whisper Custodian 3
+- Whisper Custodian 4
+- Whisper Custodian 5
+- Whisper Custodian 6
+- Whisper Custodian 7
+- Whisper Custodian 8
+- Whisper Custodian 9
+- Whisper Custodian 10
+- Whisper Custodian 11
+- Whisper Custodian 12
+- Whisper Custodian 13
+- Whisper Custodian 14
+- Garments
+- Say Khad Serv 0
+- Say Khad Serv 1
+- Say Khad Serv 2
+- Say Khad Serv 3
+- Say Khad Serv 4
+- Say Khad Serv 5
+- Say Khad Serv 6
+- Say Khad Serv 7
+- Say Khad Serv 8
+- Say Khad Serv 9
+- Say Khad Serv 10
+- Say Khad Serv 11
+- Say Khad Serv 12
+- Say Khad Serv 13
+- Say Khad Serv 14
+- Say Khad Serv 15
+- Say Khad Serv 16
+- Say Khad Serv 17
+- Say Khad Serv 18
+- Say Khad Serv 19
+- Say Khad Serv 20
+- Say Khad Serv 21
+- Phizzlethorpe
+- Larry
+- Clintar
+- Oox
+- Stilwell
+- Wizzlecrank
+- Erland
+- Kelerun
+- Threshwackonator
+- Kayra
+- Kodo
+- Sprysprocket
+- Calvin
+- Kaya Say Start
+- Kaya Ambush
+- Kaya End
+- Paoka
+- Lakota
+- Gilthares
+- Wilda
+- Say Rin Free
+- Say Rin By Outrunner
+- Say Rin Help 1
+- Say Rin Help 2
+- Say Rin Complete
+- Say Rin Progress 1
+- Say Rin Progress 2
+- Twilight
+- Daphne
+- Hendel
+- Kerlonian
+- Ame01
+- Mana
+- Akuno
+- Maghar
+- Say Khad Start
+- Say Khad Injured
+- Say Khad Mind You
+- Say Khad Mind Always
+- Say Khad Aldor Greet
+- Say Khad Scryer Greet
+- Say Khad Haggard
+- Ancestral
+- Morokk
+- Letoll
+- Torloth
+- Lordillidan
+- Restless
+- Say Niby 1
+- Say Niby 2
+- Say Impsy 1
+- Say Niby 3
+- Galen
+- Say Kroshius Revive
+- Captive
+- Silvermoon
+- Mosswalker
+- Maxx
+- Isla
+- Say Lucky Hit 1
+- Say Lucky Hit 2
+- Say Lucky Hit 3
+- Say Lucky Hit Apple
+- Say Drostan Got Lucky 1
+- Say Drostan Got Lucky 2
+- Say Drostan Hit Bird 1
+- Say Drostan Hit Bird 2
+- Dragonmaw
+- Remulos
+- Eranikus
+- Voice
+- Feero
+- Forsaken
+- Balizar
+- Melizza
+- Lazy
+- Reuse Me
+- Skywing
+- Oronok
+- Torlok
+- Spirit
+- Eris
+- Squire
+- Reginald
+- Prestor
+- Jonathan
+- Guard
+- Bolvar
+- Grark
+- Jorell
+- Stinky
+- Tapoke
+- SlimS
+- Scarlet
+- Taelan
+- Isillien
+- Tirion
+- Shay
+- Say Cork Ambush1
+- Say Cork Ambush2
+- Say Cork Ambush3
+- Say Cork End
+- Say Rigger Ambush1
+- Say Rigger Ambush2
+- Say Rigger End
+- Dashel
+- Regthar
+- Gallywix
+- Silixiz
+- Venture
+- Krakles
+- Ruul
+- Kindal
+- Say Miran Ambush
+- Hornizz
+- Prisoner
+- Boss Arugal
+- Deathstalker
+- Wolf
+- Smite
+- Willix
+- Emi
+- Thermaplugg
+- Malfurion
+- Jammalan
+- Avatar
+- Mograine
+- Whitemane
+- Vishas
+- Doan
+- Trainee
+- Zumrah
+- Pyroguard
+- Nefarius
+- Rend
+- Rookery
+- Rocknot
+- Dagran
+- Grimstone
+- Dughal
+- Windsor
+- Tobias
+- Grim
+- Hurley
+- Anvilrage
+- Plugger
+- Emperor
+- Nagmara
+- Gandling
+- Venoxis
+- Jeklik
+- Marli
+- Thekal
+- Arlokk
+- Mandokir
+- Thuzadin
+- Baron
+- Barthilas
+- Ysida
+- Dathrohan
+- Yell Bastion Barricade
+- Yell Bastion Stairs
+- Yell Bastion Entrance
+- Yell Bastion Hall Lights
+- Yell Bastion Inner 1
+- Yell Bastion Inner 2
+- Majordomo
+- Highborne
+- Prince
+- Old
+- ChoRush
+- SlipKik
+- Broodlord
+- Victor Nefarius
+- Razorgore
+- Andorov
+- Rajaxx
+- Ossirian
+- Skeram
+- Reuse
+- Sartura
+- Veklor
+- Veknilash
+- Cthun
+- Anubrekhan
+- Faerlina
+- Gothik
+- Blaumeux
+- Korthazz
+- Zeliek
+- Noth
+- Kelthuzad
+- Lich King
+- Heigan
+- Razuvious
+- Example Creature
+- Example Escort
+- Example Gossip Codebox
+- Example Areatrigger
+- Velinde Starsong
+- Doctor Weavil
+- Myzrael
+- Shill Dinger
+- Ograbisi
+- Crest Killer
+- Lady Faltheress
+- Ironaya
+- Incantation of Celebras
+- The Masters Eye
+- Warcaller Finster
+- General Rajaxx
+- Captain Tuubid
+- Grimlok
+- Avatar of Hakkar
+- Hammerspine
+- Berserk Trogg
+- Grawmug
+- Boss Galgosh
+- Magosh
+
+- Justine Demalier
+- Admiral Barean Westwind
+- Admiral Proudmoores Orders
+- Aegwynn and the Dragon Hunt
+- Aftermath of the Second War
+- Alliance Military Ranks
+- Archbishop Alonsus Faol
+- Archimondes Return and the Flight to Kalimdor
+- Archmage Khadgar of the Kirin Tor
+- Arellas Fireleaf
+- Assassination Note
+- Baelogs Journal
+- Bathrahs Parchment
+- Beginnings of the Undead Threat
+- Beldugurs Note
+- Belamoores Research Journal
+- Berards Journal
+- Beyond the Dark Portal
+- Bloodsail Orders
+- Bloodstained Journal
+- Blue Punch Card
+- Bolvars Decree
+- Bonegrips Note
+- Book Soothsaying for Dummies
+- Book from Svens Farm
+- 'Brazier of Invocation: Users Manual'
+- Brocks List
+- Call to Arms Announcement
+- Call to Arms!
+- Calors Note
+- Captains Documents
+- Catalogue of the Wayward
+- Certificate of Thievery
+- Charge of the Dragonflights
+- Civil War in the Plaguelands
+- Cliffwatcher Longhorn Report
+- Cloth Request
+- Commendation - Elwynn Forest
+- Compendium of the Fallen
+- Consecrated Letter
+- Consecrated Rune
+- Control Console Operating Manual
+- 'Covert Ops Plans: Alpha & Beta'
+- Crate of Horseshoes
+- Crumpled Note
+- Crystal Pylon Users Manual
+- Crystallized Note
+- Damp Diary Page (Day 4)
+- Damp Diary Page (Day 512)
+- Damp Diary Page (Day 87)
+- Danath Trollbane
+- Dark Iron Script
+- Dark Keeper Nameplate
+- Deathstalker Report
+- Decoded Tablet Transcription
+- Decoded Twilight Text
+- Decorated Headstone
+- Decrypted Letter
+- Deepfurys Orders
+- Defias Docket
+- Defias Script
+- Deprecated Jkaplan TEST
+- Deprecated Remingtons List
+- Deprecated Writ of Lakeshire
+- Diary of Weavil
+- Divined Scroll
+- Dorgar Stoenbrow
+- Draconic for Dummies
+- Eastern Crystal Pylon
+- Ebonlockes Response to Solomon
+- Elizas Tombstone
+- Empires Fall
+- Exile of the High Elves
+- Extended Annals of Darrowshire
+- Fel Tracker Owners Manual
+- Fellari Swiftarrow
+- Ferren Marcus
+- Festive Gift
+- Final Clue to Sanders Treasure
+- Fishing Tournament!
+- Fizzle Brassbolts Letter
+- Fools Stout Report
+- For the Light!
+- Foreboding Plans
+- Forestlord and the first Druids
+- Forors Compendium of Dragon Slaying
+- Fossilized Egg
+- Fountain of Elune
+- Freezing Trap
+- From the Desk of Lord Victor Nefarius
+- Furens Instructions
+- Furlbrows Deed
+- General Turalyon
+- Geru Strider
+- Glyphic Letter
+- Glyphic Memorandum
+- Glyphic Scroll
+- Glyphic Tablet
+- Goblin Rumors
+- Goodsteel Ledger
+- Gramma Stonefields Note
+- Grand Admiral Daelin Proudmoore
+- Grape Manifest
+- Horatio Montgomery, M.D.
+- Horde Military Ranks
+- Icecrown and the Frozen Throne
+- Important Blackrock Documents
+- In Loving Memory
+- Invar One-Arm
+- Ironbands Progress Report
+- Ironforge - the Awakening of the Dwarves
+- Jar of ashes
+- Jitters Completed Journal
+- Jordans Weapon Notes
+- Journal Page
+- Kearnens Journal
+- KelThuzad and the Forming of the Scourge
+- Khazgorms Journal
+- Kiljaeden and the Shadow Pact
+- King Llane I of the House of Wrynn
+- Klaven Mortwakes Journal
+- Kodo Skin Scroll
+- Kravels Parts Order
+- Kravels Scheme
+- Kurdran Wildhammer
+- Lady Mara Fordragon
+- Lairds Response
+- Legacy of the Aspects
+- Legends of the Gurubashi, Volume 3
+- Lesser Wind Stone
+- Lethargy of the Orcs
+- Letter to Delgren
+- Letter to Ello
+- Letter to JinZil
+- Letter to Jorgen
+- Lewis Note
+- Libram of Constitution
+- Libram of Focus
+- Libram of Rumination
+- Libram of Tenacity
+- Lonebrows Journal
+- Lorgalis Manuscript
+- Maggrans Reserve Letter
+- Malyfouss Catalogue
+- Manual of Engineering Disciplines
+- Marshal McBrides Documents
+- Matrix Punchograph 3005-A
+- Matrix Punchograph 3005-B
+- Matrix Punchograph 3005-C
+- Matrix Punchograph 3005-D
+- Maybells Love Letter
+- Merrins Letter
+- Message for Elissa Starbreeze
+- Metzens Letters and Notes
+- Military Ranks of the Horde & Alliance
+- 'Missing: Corporal Keeshan'
+- Mists of Dawn
+- Monument of Remembrance
+- Monument to Grom Hellscream
+- Morzuls Instructions
+- Mount Hyjal and Illidans Gift
+- Mrs. Dalsons Diary
+- Muddy Journal Pages
+- Muddy Note
+- Musty Missive
+- Mythology of the Titans
+- Nat Pagles Guide to Extreme Anglin
+- Neekas Report
+- Northern Crystal Pylon
+- Northridge Lumber Mill Crate
+- Note from Neeru
+- Old Hatreds - The Colonization of Kalimdor
+- Orb of Command
+- Orman of Stromgarde
+- Peeling the Onion
+- Petrified Bark
+- Podrigs Order
+- Prismatic Punch Card
+- Proof of Deed
+- Pteradon Skeleton
+- QuelThalas Registry
+- Rabines Letter
+- Rackmores Log
+- Ranger Captain Alleria Windrunner
+- Recruitment Letter
+- Red Punch Card
+- Report on the Defias Brotherhood
+- Rexxars Testament
+- Ripped Note
+- Rise of the Blood Elves
+- Rise of the Horde
+- Rizzles Unguarded Plans
+- Roc Talon
+- Rock of Durotan
+- Rune-Inscribed Note
+- Rune-Inscribed Parchment
+- Rune-Inscribed Tablet
+- Sara Balloos Plea
+- Sargeras and the Betrayal
+- Saurial Egg
+- Scarlet Crusade Documents
+- Sealed Research Report
+- 'Secret Note #1'
+- 'Secret Note #2'
+- 'Secret Note #3'
+- Senirs Report
+- Sevrens Orders
+- Shani Proudtusks Remains
+- Shaws Report
+- Signed Recruitment Letter
+- Simple Letter
+- Simple Memorandum
+- Simple Note
+- Simple Parchment
+- Simple Rune
+- Simple Scroll
+- Simple Sigil
+- Simple Tablet
+- Skeletal Remains of Kariel Winthalus
+- Snufflenose Owners Manual
+- Solomons Plea to Darkshire
+- Solomons Plea to Westfall
+- Sorrow of the Earthmother
+- Spys Report
+- Stormpikes Request
+- Stormwind Armor Marker
+- Stoutmantles Response to Solomon
+- Strange Fronded Plant
+- Strange Fruited Plant
+- Studies in Spirit Speaking
+- Sully Balloos Letter
+- Sunwell - The Fall of QuelThalas
+- Syndicate Missive
+- Tabethas Instructions
+- Tablet of Theka
+- Tablet of the Seven
+- Tainted Letter
+- Tainted Memorandum
+- Tainted Parchment
+- Tainted Scroll
+- Teronis Journal
+- Test Language Item
+- Testing Equipment
+- The Alliance of Lordaeron
+- The Armor of Mannoroth
+- The Battle of Grim Batol
+- The Betrayer Ascendant
+- The Birth of the Lich King
+- The Book of Ur
+- The Collectors Schedule
+- The Dark Portal and the Fall of Stormwind
+- The Eye of Divinity
+- The Feast of Winter Veil
+- The First Troll Legend
+- The Founding of QuelThalas
+- The Fourth Troll Legend
+- The Frostwolf Artichoke
+- The Generals Response
+- The Green Hills of Stranglethorn
+- The Guardians of Tirisfal
+- The Hordes Hellscream
+- The Invasion of Draenor
+- The Kaldorei and the Well of Eternity
+- The Last Guardian
+- The Lich King Triumphant
+- The New Horde
+- The Old Gods and the Ordering of Azeroth
+- The Pariahs Instructions
+- The Scourge of Lordaeron
+- The Second Troll Legend
+- The Sentinels and the Long Vigil
+- The Seven Kingdoms
+- The Skull of Tyrannistrasz
+- The State of Lakeshire
+- The Story of Morgan Ladimore
+- The Third Troll Legend
+- The Twin Empires
+- The War of the Ancients
+- The War of the Shifting Sands
+- The White Stag and the Moon
+- The World Tree and the Emerald Dream
+- Thungrims Instructions
+- Thurmans Letter
+- Tinkees Letter
+- Toothgnashers Skeleton
+- Torn Note
+- Trans-dimensional Ship Repair for Simpletons
+- Translated Letter
+- Uldaman Relics
+- Uldaman Reliefs
+- Urs Treatise on Shadow Magic
+- Urgent Message
+- Uther the Lightbringer
+- Valea Twinblades
+- Velindes Journal
+- Venture Co. Documents
+- Verdant Note
+- Verdant Sigil
+- Vernas Westfall Stew Recipe
+- Verners Note
+- War of the Spider
+- War of the Three Hammers
+- Warchiefs Orders
+- Waroshs Scroll
+- White Punch Card
+- Wickerman Ember
+- Wileys Note
+- Williams Shipment
+- Wooden Outhouse
+- Words of the High Chief
+- Wrath of Soulflayer
+- Yana Bloodspear
+- Yellow Punch Card
+- Yurivs Tombstone
+- Zamahs Note
+- Grelin Whitebeards Journal
+- Grelins Report
+- Gryshkas Letter
+- Hallowed Letter
+- Hallowed Rune
+- Hallowed Scroll
+- Hallowed Sigil
+- Hallowed Tablet
+- Harthal Truesight
+- Hatred of the Centaur
+- Here Lies King Terenas Menethil II
+- Highborne Astrolabe
+- Hillsbrad Town Registry
+- HiveAshi Glyphed Crystal
+- Holia Sunshield
+- Green Hills of Stranglethorn - Chapter I
+- Green Hills of Stranglethorn - Chapter II
+- Green Hills of Stranglethorn - Chapter III
+- Green Hills of Stranglethorn - Chapter IV
+- Green Hills of Stranglethorn - Page 1
+- Green Hills of Stranglethorn - Page 21
+- Green Hills of Stranglethorn - Page 4
+- Encrypted Letter
+- Encrypted Memorandum
+- Encrypted Parchment
+- Encrypted Rune
+- Encrypted Scroll
+- Encrypted Sigil
+- Encrypted Tablet
+- Etched Note
+- Etched Parchment
+- Etched Rune
+- Etched Sigil
+- Etched Tablet
+- An Exotic Cookbook
+- An Undelivered Letter
+- Ancient Inscription
+- Ancient Tablet
+- Annals of Darrowshire
+- Another Clue to Sanders Treasure
+- Arathor and the Troll Wars
+- A Bloodstained Envelope
+- A Bloodstained Journal Page
+- A Careworn Note
+- Altar of Hakkar
+- Altar of Suntara
+- Altar of Zanza
+- A Clue to Sanders Treasure
+- A Crumpled Missive
+- A Dusty Unsent Letter
+- A Faded Journal Page
+- A Letter to Grelin Whitebeard
+- A Mysterious Message
+- A Ragged Page
+- A Smudged Document
+- A Torn Journal Page
+- A Torn Letter
+- A Treatise on Military Ranks
 - Crude Map
 - A Dwarven Corpse
 - Strange Snowman
 - Winter Reveler
 - Hildelves Journal
--
 - Flik's Frog
 - Metzen the Reindeer
 ogre:
@@ -3827,6 +4500,8 @@ spirit:
 - Vectus
 - Zaetar's Spirit
 spirit_female:
+- Spirit Healer
+- Spirit Healer (DND)
 - Aelthalyste
 - Blind Mary
 - Forlorn Spirit
