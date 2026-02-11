@@ -16,7 +16,7 @@ CONFIG = {
         
         -- Portrait configuration
         PORTRAIT_WIDTH  = 160,
-        PORTRAIT_HEIGHT = 260,
+        PORTRAIT_HEIGHT = 240,
         PORTRAIT_OFFSET_X = 30,
         PORTRAIT_OFFSET_Y = 60,
         
@@ -32,11 +32,11 @@ CONFIG = {
         TEXT_JUSTIFY = "LEFT",
         
         -- Scroll frame heights by dialog type
-        SCROLL_HEIGHT_DETAIL   = 250,
-        SCROLL_HEIGHT_PROGRESS = 250,
-        SCROLL_HEIGHT_REWARD   = 230,
-        SCROLL_HEIGHT_GREETING = 250,
-        SCROLL_HEIGHT_GOSSIP   = 250,
+        SCROLL_HEIGHT_DETAIL   = 240,
+        SCROLL_HEIGHT_PROGRESS = 240,
+        SCROLL_HEIGHT_REWARD   = 240,
+        SCROLL_HEIGHT_GREETING = 240,
+        SCROLL_HEIGHT_GOSSIP   = 240,
         
         -- Button positioning
         BUTTON_OFFSET_X = 80,   -- Distance from center
