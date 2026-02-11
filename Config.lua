@@ -146,6 +146,6 @@ COMPUTED = {
         - CONFIG.DIALOG.CONTENT_MARGIN_TOP 
         - CONFIG.DIALOG.CONTENT_MARGIN_BOTTOM,
         
-    DIALOG_TEXT_WIDTH = nil,  -- Computed in GetDialogTextWidth()
+    DIALOG_TEXT_WIDTH = 400,  -- Computed in GetDialogTextWidth()
 }
 end

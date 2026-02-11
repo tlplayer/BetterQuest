@@ -48,7 +48,7 @@ function UI:ApplyQuestButtons()
 
             local text = getglobal("QuestTitleButton"..i.."QuestTitle")
             if text then
-                text:SetWidth(COMPUTED.DIALOG_CONTENT_WIDTH - 20)
+                text:SetWidth(UI:GetDialogTextWidth())
                 text:SetJustifyH("LEFT")
             end
         end
@@ -125,9 +125,7 @@ function GossipResize(titleButton)
             0
         )
         text:SetWidth(
-            COMPUTED.DIALOG_CONTENT_WIDTH
-            - CONFIG.DIALOG.GOSSIP_BUTTON_TEXT_LEFT
-            - CONFIG.DIALOG.GOSSIP_BUTTON_TEXT_RIGHT
+            UI:GetDialogTextWidth()
         )
         text:SetJustifyH("LEFT")
     end
