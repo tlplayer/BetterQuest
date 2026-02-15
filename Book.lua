@@ -24,7 +24,7 @@ local function ApplyItemTextLayout()
         CONFIG.BOOK.ANCHOR_POINT, UIParent, CONFIG.BOOK.ANCHOR_RELATIVE,
         CONFIG.BOOK.OFFSET_X, CONFIG.BOOK.OFFSET_Y)
 
-    local contentWidth  = backdrop:GetWidth()  - CONFIG.BOOK.MARGIN_LEFT - CONFIG.BOOK.MARGIN_RIGHT
+    local contentWidth  = CONFIG.BOOK.TEXT_WIDTH_OVERRIDE
     local contentHeight = backdrop:GetHeight() - CONFIG.BOOK.MARGIN_TOP  - CONFIG.BOOK.MARGIN_BOTTOM
 
     if ItemTextScrollFrame then
@@ -36,7 +36,7 @@ local function ApplyItemTextLayout()
     end
 
     if ItemTextPageText then
-        ItemTextPageText:SetWidth(contentWidth + CONFIG.BOOK.TEXT_RIGHT_PADDING)
+        ItemTextPageText:SetWidth( CONFIG.BOOK.TEXT_WIDTH_OVERRIDE)
         ItemTextPageText:SetJustifyH("LEFT")
     end
 end
