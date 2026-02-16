@@ -276,7 +276,6 @@ function SoundQueue:AddSound(npcName, dialogText, title)
     Debug("Adding Sound to queue: " .. tostring(npcName))
  
     local soundPath, dialogType, questID, seconds = Utils:FindDialogSound(npcName, dialogText)
-    print(soundPath)
     
     if not soundPath then 
         Debug("No sound found - logging to BetterQuestDB")

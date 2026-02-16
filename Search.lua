@@ -89,7 +89,6 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
         return nil
     end
     
-    print(dialogText)
 
     local lookupName = Utils:NormalizeNPCName(npcName)
     local targetNpc  = NPC_DATABASE[lookupName]
@@ -97,7 +96,6 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
     local targetRace = targetNpc and targetNpc.race
 
     local normalizedInput = Utils:NormalizeDialogText(dialogText)
-    print(normalizedInput)
     if normalizedInput == "" then return nil end
 
     -- dynamic distance threshold: allow ~10% of pattern length, capped
@@ -109,7 +107,7 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
     local bestDistance = 999
 
     local startTime = GetTime()
-    local TIMEOUT = 0.1
+    local TIMEOUT = 0.01
 
     -------------------------------------------------
     -- FAST PATH: SAME NPC
@@ -213,36 +211,19 @@ function Utils:FindDialogSound(npcName, dialogText)
 
   -- 1) Normal lookup
   local npc = NPC_DATABASE[lookupName]
-  Debug("Found npc with metadata from the database:" .. tostring(npc))
+  Debug("Found npc with metadata from the database:" .. npcName)
   if npc and npc.dialogs and npc.dialogs[key] then
     Utils:UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
     Utils:RemoveFromMissingDB(npcName)  -- Also remove from persistent DB
     local entry = npc.dialogs[key]
-    return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+    if entry then 
+        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
+    end
   end
 
   -- If NPC doesn't exist at all, mark as missing in runtime cache only
-  if not npc then
-   Utils:MarkNPCMissing(npcName)
-    return nil
-  end
+  --  Utils:MarkNPCMissing(npcName)
 
-  -- 2) Fallback: search all NPCs by text hash (with timeout guard)
-  local startTime = GetTime()
-  local TIMEOUT = 0.1
-  for otherNpcName, data in pairs(NPC_DATABASE) do
-    if GetTime() - startTime > TIMEOUT then
-        Debug("FindDialogSound fallback timeout - aborting full-hash scan")
-        break
-    end
-
-    if data.dialogs then
-      local entry = data.dialogs[key]
-      if entry then
-        return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
-      end
-    end
-  end
 
   -- 3) Fuzzy text search (Myers' algorithm + timeout)
   local fuzzyPath, fuzzyDialogType, fuzzyQuestID, fuzzySeconds =Utils:FuzzyFindDialogSound(npcName, dialogText)

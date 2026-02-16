@@ -78,7 +78,7 @@ CONFIG = {
     BOOK = {
         FRAME_WIDTH  = 620,
         FRAME_HEIGHT = 400,
-        TEXT_WIDTH_OVERRIDE = 600,  -- Set to number to override, nil uses content width
+        TEXT_WIDTH_OVERRIDE = 550,  -- Set to number to override, nil uses content width
 
         
         ANCHOR_POINT    = "BOTTOM",

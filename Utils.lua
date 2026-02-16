@@ -5,6 +5,7 @@
 Utils = {}
 local playerName = UnitName("player")
 local _, playerClass = UnitClass("player")
+local DEBUG_ENABLED = true
 
 
 -------------------------------------------------
@@ -12,7 +13,9 @@ local _, playerClass = UnitClass("player")
 -------------------------------------------------
 
 function Debug(msg)
-    DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BetterQuest]|r " .. tostring(msg))
+    if DEBUG_ENABLED then
+        DEFAULT_CHAT_FRAME:AddMessage("|cff88ccff[BetterQuest]|r " .. tostring(msg))
+    end
 end
 
 -- ===== Slash command to reload UI =====
