@@ -133,9 +133,63 @@ def monitor_file_changes(filepath, check_interval=5, callback=None):
 # =========================
 # LOAD NPC METADATA
 # =========================
+# Add this function near the other database functions (around line 1100)
+def load_existing_lua_database(output_lua=OUTPUT_LUA):
+    """
+    Load existing Lua database into memory for fast lookups.
+    Returns dict: {npc_name: {dialog_hash: True}}
+    """
+    if not os.path.exists(output_lua):
+        return {}
+    
+    print(f"[CACHE] Loading existing Lua database into memory...")
+    db_cache = {}
+    
+    try:
+        with open(output_lua, 'r', encoding='utf-8') as f:
+            content = f.read()
+        
+        # Parse NPC entries
+        import re
+        # Find all NPC entries: ["npc_name"] = {
+        npc_pattern = r'\["([^"]+)"\]\s*=\s*\{'
+        
+        for match in re.finditer(npc_pattern, content):
+            npc_name = match.group(1)
+            npc_start = match.end()
+            
+            # Find dialogs section for this NPC
+            dialogs_marker = 'dialogs = {'
+            dialogs_pos = content.find(dialogs_marker, npc_start)
+            if dialogs_pos == -1:
+                continue
+            
+            # Find all dialog hashes for this NPC
+            dialogs_start = dialogs_pos + len(dialogs_marker)
+            dialogs_end = content.find('},', dialogs_start)
+            if dialogs_end == -1:
+                continue
+            
+            dialogs_block = content[dialogs_start:dialogs_end]
+            
+            # Extract all dialog hashes
+            hash_pattern = r'\["([^"]+)"\]\s*='
+            hashes = set(re.findall(hash_pattern, dialogs_block))
+            
+            if hashes:
+                db_cache[npc_name] = hashes
+        
+        print(f"[CACHE] Loaded {len(db_cache)} NPCs with existing dialogs")
+        return db_cache
+    
+    except Exception as e:
+        print(f"[CACHE] Failed to load database: {e}")
+        return {}
+
 
 def load_npc_metadata():
-    """Load and normalize NPC metadata from JSON"""
+    """Load and normalize NPC metadata from JSON, then merge YAML files as source of truth"""
+    # Load base metadata from JSON
     with open(NPC_METADATA_JSON, "r", encoding="utf-8") as f:
         metadata = json.load(f)
     
@@ -149,6 +203,55 @@ def load_npc_metadata():
         }
     else:
         raise ValueError("npc_metadata.json has an unsupported format")
+    
+    # YAML files are source of truth - merge them in
+    # This creates entries for NPCs that exist in YAML but not in JSON
+    
+    # Load and invert YAML mappings
+    if os.path.exists(RACE_FILE):
+        race_mapping = yaml.safe_load(open(RACE_FILE, encoding="utf-8"))
+        for race, npc_names in race_mapping.items():
+            if isinstance(npc_names, list):
+                for name in npc_names:
+                    normalized = name.strip().replace('"', '').replace("'", "")
+                    if normalized not in lookup:
+                        lookup[normalized] = {"name": normalized}
+                    lookup[normalized]["race"] = race
+            elif isinstance(npc_names, str):
+                normalized = npc_names.strip().replace('"', '').replace("'", "")
+                if normalized not in lookup:
+                    lookup[normalized] = {"name": normalized}
+                lookup[normalized]["race"] = race
+    
+    if os.path.exists(SEX_FILE):
+        sex_mapping = yaml.safe_load(open(SEX_FILE, encoding="utf-8"))
+        for sex, npc_names in sex_mapping.items():
+            if isinstance(npc_names, list):
+                for name in npc_names:
+                    normalized = name.strip().replace('"', '').replace("'", "")
+                    if normalized not in lookup:
+                        lookup[normalized] = {"name": normalized}
+                    lookup[normalized]["sex"] = sex
+            elif isinstance(npc_names, str):
+                normalized = npc_names.strip().replace('"', '').replace("'", "")
+                if normalized not in lookup:
+                    lookup[normalized] = {"name": normalized}
+                lookup[normalized]["sex"] = sex
+    
+    if os.path.exists(ZONE_FILE):
+        zone_mapping = yaml.safe_load(open(ZONE_FILE, encoding="utf-8"))
+        for zone, npc_names in zone_mapping.items():
+            if isinstance(npc_names, list):
+                for name in npc_names:
+                    normalized = name.strip().replace('"', '').replace("'", "")
+                    if normalized not in lookup:
+                        lookup[normalized] = {"name": normalized}
+                    lookup[normalized]["zone"] = zone
+            elif isinstance(npc_names, str):
+                normalized = npc_names.strip().replace('"', '').replace("'", "")
+                if normalized not in lookup:
+                    lookup[normalized] = {"name": normalized}
+                lookup[normalized]["zone"] = zone
     
     return lookup
 
@@ -1041,10 +1144,25 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
     if os.path.exists(filepath) and not regenerate:
         file_size = os.path.getsize(filepath)
         if file_size == 0:
-            print(f"[REGENERATE] File exists but is empty (0 bytes): {filepath}")
             os.remove(filepath)
         else:
-            print(f"[SKIP] File already exists: {filepath}")
+            
+            # LIVE VO: Update Lua database for existing files too!
+            if incremental_sync:
+                quest_id_for_sync = None
+                qid = row.get("quest_id")
+                has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
+                if has_quest_id and dialog_type != "gossip":
+                    quest_id_for_sync = int(qid)
+                
+                update_lua_database_incremental(
+                    npc_name=npc_name,
+                    dialog_text=row.get("text", ""),
+                    audio_filepath=filepath,
+                    dialog_type=dialog_type,
+                    quest_id=quest_id_for_sync
+                )
+            
             return filepath
 
     ref = REF_CODES[narrator_voice]
@@ -1203,6 +1321,8 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
         retry_wait: Seconds to wait before retrying failed generation
     """
     print("\n=== STEP 2: Generating TTS audio ===")
+    # Load existing database once for fast lookups
+    db_cache = load_existing_lua_database() if incremental_sync else {}
     
     # Display GPU info at start
     if torch.cuda.is_available():
@@ -1739,7 +1859,7 @@ def run_pipeline(args, betterquest_path=None):
             gpu_check_interval=args.gpu_check_interval,
             max_retries=args.max_retries,
             retry_wait=args.retry_wait,
-            incremental_sync=True  # LIVE VO: Update DB after each file
+            incremental_sync=False  # LIVE VO: Update DB after each file
         )
     else:
         print("\n=== STEP 2: Generating TTS audio [SKIPPED] ===")
