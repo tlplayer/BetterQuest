@@ -56057,6 +56057,12 @@ NPC_DATABASE = {
     model_id = 10035,
     narrator = "satyr",
     dialogs = {
+      ["ah what a sweet adventurer i knew you would come i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\satyr\\zenn_foulhoof\\489_quest_complete.wav", dialog_type="quest_complete", quest_id=489, seconds=10.4 },
+      ["bring zenn foulhoof outside of dolanaar 3 nightsab"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\satyr\\zenn_foulhoof\\488_quest_objective.wav", dialog_type="quest_objective", quest_id=488, seconds=8.24 },
+      ["eager for work i see lucky for you a day never goe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\satyr\\zenn_foulhoof\\488_quest_accept.wav", dialog_type="quest_accept", quest_id=488, seconds=31.64 },
+      ["ha ha well done indeed who would have ever guessed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\satyr\\zenn_foulhoof\\488_quest_complete.wav", dialog_type="quest_complete", quest_id=488, seconds=16.48 },
+      ["have you been a busy little bee adventurer ive bee"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\satyr\\zenn_foulhoof\\488_quest_progress.wav", dialog_type="quest_progress", quest_id=488, seconds=5.48 },
+      ["ribbit no this cannotribbitbe you have duped me wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\satyr\\zenn_foulhoof\\489_quest_complete.wav", dialog_type="quest_complete", quest_id=489, seconds=10.4 },
     },
   },
   ["Zevrost"] = {

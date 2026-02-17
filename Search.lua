@@ -138,7 +138,7 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
 
     elseif not targetNpc then
         -- NPC not in database, mark as missing in runtime cache only
-        Utils:MarkNPCMissing(npcName)
+        Utils:LogMissingNPC(npcName, dialogText, "gossip")
     end
     
     -------------------------------------------------

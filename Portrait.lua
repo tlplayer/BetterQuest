@@ -116,6 +116,7 @@ local function ResolveNPCPortraitTexture(npcName)
 
     -- If no NPC name provided, try to get from active NPC
     if not npcName then
+        Debug("No npcName was provided, defaulting to active NPC:" .. activeNPCName)
         npcName = activeNPCName
     end
     

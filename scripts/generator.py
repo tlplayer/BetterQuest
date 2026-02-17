@@ -130,6 +130,61 @@ def monitor_file_changes(filepath, check_interval=5, callback=None):
         elapsed = (datetime.now() - last_processed).total_seconds() / 60
         print(f"[DAEMON] Last processed: {elapsed:.1f} minutes ago")
 
+import os
+import subprocess
+import shlex
+
+def sync_to_proton(linux_path, app_id="2180100"):
+    """
+    Forces the running Proton instance to recognize a file or directory
+    by touching it from INSIDE the Wine environment.
+    """
+    # 1. Configuration - Adjust these if your paths differ
+    steam_root = os.path.expanduser("~/.steam/debian-installation") # or ~/.steam/steam
+    compat_data = os.path.join(steam_root, "steamapps/compatdata", app_id)
+    proton_pfx = os.path.join(compat_data, "pfx")
+    
+    # Check if Proton is actually running/configured
+    if not os.path.exists(proton_pfx):
+        print(f"[WARN] Proton prefix not found at {proton_pfx}. Skipping sync.")
+        return
+
+    # 2. Convert Linux Path to Wine Z: Path
+    # Z: usually maps to filesystem root "/"
+    wine_path = "Z:" + linux_path.replace("/", "\\")
+
+    # 3. Construct the command
+    # We use the 'steam-run' or direct wine binary. 
+    # NOTE: To attach to the RUNNING game, we must set WINEPREFIX correctly.
+    
+    # Find the specific wine binary used by this game (optional, system wine usually works if version matches)
+    # But strictly speaking, we just need ANY wine binary to talk to the existing wineserver socket
+    # located in the prefix.
+    
+    env = os.environ.copy()
+    env["WINEPREFIX"] = proton_pfx
+    env["WINEDEBUG"] = "-all" # Silence logs
+
+    try:
+        if os.path.isdir(linux_path):
+            # Force directory recognition by trying to create it (ignoring errors if exists)
+            cmd = ["wine", "cmd", "/c", "if", "not", "exist", wine_path, "mkdir", wine_path]
+        else:
+            # Force file recognition by "touching" it (append nothing)
+            # This forces wineserver to open a file handle, refreshing the entry
+            cmd = ["wine", "cmd", "/c", "type", "NUL", ">>", wine_path]
+
+        # Execute quietly
+        subprocess.run(cmd, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+        # print(f"[PROTON] Synced: {os.path.basename(linux_path)}")
+
+    except Exception as e:
+        print(f"[ERROR] Proton sync failed: {e}")
+
+# --- USAGE IN YOUR PIPELINE ---
+# After generating the file:
+# sync_to_proton(full_directory_path)  <-- Fixes the "New Directory" invisible issue
+# sync_to_proton(full_file_path)       <-- Fixes the "New File" invisible issue
 # =========================
 # LOAD NPC METADATA
 # =========================

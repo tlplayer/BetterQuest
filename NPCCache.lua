@@ -46,7 +46,7 @@ end
 function Utils:LogMissingNPC(npcName, dialogText, dialogType)
     if not BetterQuestDB or not npcName or not dialogText then return end
 
-    local normalizedName = Utils:NormalizeNPCName(npcName)
+    local normalizedName = npcName
     local normalizedText = Utils:NormalizeDialogText(dialogText)
     if normalizedText == "" then return end
 
@@ -78,17 +78,11 @@ function Utils:RemoveFromMissingDB(npcName)
     if not BetterQuestDB or not npcName then return end
     local normalizedName = Utils:NormalizeNPCName(npcName)
     if BetterQuestDB.missingNPCs[normalizedName] then
-        BetterQuestDB.missingNPCs[normalizedName] = nil
+        --BetterQuestDB.missingNPCs[normalizedName] = nil
         Debug("Removed from persistent missing DB: " .. tostring(npcName))
     end
 end
 
-function Utils:ClearMissingNPCs()
-    if BetterQuestDB then
-        BetterQuestDB.missingNPCs = {}
-        Debug("Missing NPC database cleared")
-    end
-end
 
 function Utils:ExportMissingNPCs()
     if not BetterQuestDB or not BetterQuestDB.missingNPCs then
