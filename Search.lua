@@ -198,8 +198,6 @@ function Utils:FindDialogSound(npcName, dialogText)
   local npc = NPC_DATABASE[lookupName]
   Debug("Found npc with metadata from the database:" .. npcName)
   if npc and npc.dialogs and npc.dialogs[key] then
-    Utils:UnmarkNPCMissing(npcName)  -- Found in database (runtime cache)
-    Utils:RemoveFromMissingDB(npcName)  -- Also remove from persistent DB
     local entry = npc.dialogs[key]
     if entry then 
         return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
