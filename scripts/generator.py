@@ -1135,54 +1135,58 @@ NPC_DATABASE = {
                 pass
 
 
-def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_map=None, narrator_override=None, 
-                         max_retries=3, retry_wait=10, incremental_sync=True):
+def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_map=None, narrator_override=None,
+                         max_retries=3, retry_wait=10, incremental_sync=True, cutoff_dt=None):
     """
     Generate TTS audio for a single row with retry logic for memory errors.
-    
+ 
     Args:
         row: DataFrame row with dialog data
         output_dir: Output directory for audio files
-        regenerate: Whether to regenerate existing files
+        regenerate: Whether to regenerate existing files (overrides cutoff_dt)
         gossip_map: Pre-built gossip index map
         narrator_override: Optional narrator voice override
         max_retries: Maximum number of retries on memory errors
         retry_wait: Seconds to wait between retries
+        incremental_sync: Update Lua DB after each file is generated
+        cutoff_dt: datetime object; existing files whose mtime is older than
+                   this value are regenerated.  Files newer than cutoff_dt are
+                   skipped.  If None, falls back to the regenerate flag.
     """
     # DEDUPLICATION: Skip if this dialog should link to another NPC's audio
     if row.get('skip_generation', False):
         link_to = row.get('link_to_npc', 'unknown')
         print(f"[SKIP-DEDUP] {row['npc_name']} → links to {link_to}'s audio (duplicate dialog)")
         return 'SKIPPED_DUPLICATE'
-    
+ 
     narrator_voice = get_narrator_from_metadata(row, narrator_override=narrator_override)
     if not narrator_voice or narrator_voice not in REF_CODES:
         print(f"[SKIP] No narrator metadata for NPC: {row['npc_name']}")
         return None
-
+ 
     # Get the original race/sex for folder structure
     folder_race = get_narrator_from_metadata(row, narrator_override=None)
     if not folder_race:
         folder_race = narrator_voice
-
+ 
     npc_name = row.get("npc_name") or "narrator"
     dialog_type = row.get("dialog_type", "gossip").lower()
-
+ 
     # ✅ BOOKS
     if dialog_type in ("book", "item_text"):
         base_dir = os.path.join(output_dir, folder_race)
         os.makedirs(base_dir, exist_ok=True)
         filename = f"{sanitize_filename(npc_name)}.wav"
-
+ 
     # ---------- NPCs ----------
     else:
         npc_dirname = sanitize_filename(npc_name)
         base_dir = os.path.join(output_dir, folder_race, npc_dirname)
         os.makedirs(base_dir, exist_ok=True)
-
+ 
         qid = row.get("quest_id")
         has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
-
+ 
         if has_quest_id and dialog_type != "gossip":
             quest_id = str(int(qid))
             filename = f"{quest_id}_{dialog_type}.wav"
@@ -1191,25 +1195,58 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
             if not clean_text:
                 clean_text = "unknown_dialog"
             filename = f"{clean_text[:50]}.wav"
-
+ 
     print(f"Generating {base_dir}/{filename} (using voice: {narrator_voice})")
     filepath = os.path.join(base_dir, filename)
-
-    # FIX #1: Check for zero-byte files and regenerate them
-    if os.path.exists(filepath) and not regenerate:
+ 
+    # ------------------------------------------------------------------
+    # Decide whether to (re)generate this file.
+    #
+    # Priority:
+    #   1. cutoff_dt supplied → regenerate if file mtime < cutoff_dt,
+    #      skip if file mtime >= cutoff_dt.
+    #   2. regenerate flag → always regenerate.
+    #   3. Neither → skip if file already exists (and is non-zero).
+    # ------------------------------------------------------------------
+    if os.path.exists(filepath):
         file_size = os.path.getsize(filepath)
+ 
         if file_size == 0:
+            # Always remove zero-byte files regardless of any flag.
             os.remove(filepath)
-        else:
-            
-            # LIVE VO: Update Lua database for existing files too!
+            print(f"[REGEN] Removed zero-byte file, will regenerate: {filepath}")
+        elif cutoff_dt is not None:
+            # Time-based check: compare file mtime to the cutoff date.
+            import datetime as _dt
+            file_mtime = _dt.datetime.fromtimestamp(os.path.getmtime(filepath))
+            if file_mtime >= cutoff_dt:
+                # File is newer than (or equal to) cutoff — keep it.
+                if incremental_sync:
+                    quest_id_for_sync = None
+                    qid = row.get("quest_id")
+                    has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
+                    if has_quest_id and dialog_type != "gossip":
+                        quest_id_for_sync = int(qid)
+                    update_lua_database_incremental(
+                        npc_name=npc_name,
+                        dialog_text=row.get("text", ""),
+                        audio_filepath=filepath,
+                        dialog_type=dialog_type,
+                        quest_id=quest_id_for_sync
+                    )
+                return filepath
+            else:
+                # File is older than cutoff — delete and regenerate.
+                os.remove(filepath)
+                print(f"[REGEN] File older than cutoff ({file_mtime.date()} < {cutoff_dt.date()}), regenerating: {filepath}")
+        elif not regenerate:
+            # No time filter, no regenerate flag — skip existing file.
             if incremental_sync:
                 quest_id_for_sync = None
                 qid = row.get("quest_id")
                 has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
                 if has_quest_id and dialog_type != "gossip":
                     quest_id_for_sync = int(qid)
-                
                 update_lua_database_incremental(
                     npc_name=npc_name,
                     dialog_text=row.get("text", ""),
@@ -1217,16 +1254,16 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
                     dialog_type=dialog_type,
                     quest_id=quest_id_for_sync
                 )
-            
             return filepath
-
+        # else: regenerate=True and no cutoff — fall through to generation.
+ 
     ref = REF_CODES[narrator_voice]
     text_chunks = chunk_text_robust(row["text"])
     SAMPLE_RATE = 24000
-
+ 
     if not text_chunks:
         return None
-
+ 
     # Retry logic for TTS generation
     for attempt in range(max_retries):
         try:
@@ -1237,40 +1274,40 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
                 channels=1,
                 subtype="PCM_16",
             ) as f, torch.no_grad():
-
+ 
                 for chunk_idx, chunk in enumerate(text_chunks):
                     try:
                         wav = tts.generate(
                             chunk,
                             audio_prompt_path=ref["audio_path"]
                         )
-
+ 
                         if isinstance(wav, torch.Tensor):
                             wav = wav.detach().cpu().numpy()
-
+ 
                         wav = wav.squeeze()
                         wav = (wav * 32767).clip(-32768, 32767).astype("int16")
                         f.write(wav)
-
+ 
                         del wav
                         torch.cuda.empty_cache()
-                    
+ 
                     except RuntimeError as e:
                         if "out of memory" in str(e).lower() or "cuda" in str(e).lower():
                             print(f"[ERROR] GPU memory error on chunk {chunk_idx+1}/{len(text_chunks)}: {e}")
                             raise  # Re-raise to trigger outer retry logic
                         else:
                             raise  # Re-raise non-memory errors
-
+ 
             # Success - generate completed!
-            
+ 
             # LIVE VO: Update Lua database immediately so game can use audio right away
             if incremental_sync:
                 # Extract quest_id if it was set
                 quest_id_for_sync = None
                 if has_quest_id and dialog_type != "gossip":
                     quest_id_for_sync = int(qid)
-                
+ 
                 update_lua_database_incremental(
                     npc_name=npc_name,
                     dialog_text=row.get("text", ""),
@@ -1278,38 +1315,38 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
                     dialog_type=dialog_type,
                     quest_id=quest_id_for_sync
                 )
-            
+ 
             return filepath
-
+ 
         except RuntimeError as e:
             error_msg = str(e).lower()
             is_memory_error = "out of memory" in error_msg or "cuda" in error_msg
-            
+ 
             if is_memory_error and attempt < max_retries - 1:
                 print(f"[RETRY] Memory error on attempt {attempt + 1}/{max_retries}")
                 print(f"[RETRY] Waiting {retry_wait}s for memory to free up...")
-                
+ 
                 # Aggressive memory cleanup
                 import gc
                 import time
-                
+ 
                 if torch.cuda.is_available():
                     torch.cuda.empty_cache()
                     torch.cuda.synchronize()
-                
+ 
                 gc.collect()
                 time.sleep(retry_wait)
-                
+ 
                 # Check memory status before retry
                 if torch.cuda.is_available():
                     mem_info = get_gpu_memory_info()
                     print(f"[RETRY] GPU memory after cleanup: {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
-                
+ 
                 # Remove partial file if it exists
                 if os.path.exists(filepath):
                     os.remove(filepath)
                     print(f"[RETRY] Removed partial file, retrying...")
-                
+ 
                 continue  # Retry
             else:
                 # Final attempt failed or non-memory error
@@ -1318,7 +1355,7 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
                 if os.path.exists(filepath):
                     os.remove(filepath)
                 return None
-        
+ 
         except Exception as e:
             # Non-CUDA errors
             print(f"[ERROR] Unexpected error generating audio: {e}")
@@ -1326,7 +1363,7 @@ def generate_tts_for_row(row, output_dir=SOUNDS_DIR, regenerate=False, gossip_ma
             if os.path.exists(filepath):
                 os.remove(filepath)
             return None
-    
+ 
     # Should not reach here, but just in case
     return None
 
@@ -1359,11 +1396,12 @@ def merge_item_text_rows(df):
 
     return df
 
-def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_override=None, 
-                   gpu_threshold=0.85, gpu_wait=5, gpu_check_interval=10, max_retries=3, retry_wait=10, incremental_sync=True):
+def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_override=None,
+                   gpu_threshold=0.85, gpu_wait=5, gpu_check_interval=10, max_retries=3, retry_wait=10,
+                   incremental_sync=True, time_cutoff=None):
     """
     Generate TTS audio for all rows in dataframe.
-    
+ 
     Args:
         df: DataFrame with dialog data
         output_dir: Output directory for audio files
@@ -1374,11 +1412,27 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
         gpu_check_interval: Check GPU memory every N files
         max_retries: Maximum retries for failed TTS generation
         retry_wait: Seconds to wait before retrying failed generation
+        incremental_sync: Update Lua DB after each file (live VO)
+        time_cutoff: Optional YYYY-MM-DD string from --time flag.  Files whose
+                     mtime predates this date are regenerated; newer files are
+                     kept.  When supplied, the regenerate flag is ignored for
+                     existing files.
     """
     print("\n=== STEP 2: Generating TTS audio ===")
+ 
+    # Parse the time_cutoff string into a datetime object once, up front.
+    cutoff_dt = None
+    if time_cutoff:
+        import datetime as _dt
+        try:
+            cutoff_dt = _dt.datetime.strptime(time_cutoff, "%Y-%m-%d")
+            print(f"[TIME] Regenerating files older than: {cutoff_dt.date()}")
+        except ValueError:
+            print(f"[ERROR] --time value '{time_cutoff}' is not a valid YYYY-MM-DD date. Ignoring.")
+ 
     # Load existing database once for fast lookups
     db_cache = load_existing_lua_database() if incremental_sync else {}
-    
+ 
     # Display GPU info at start
     if torch.cuda.is_available():
         mem_info = get_gpu_memory_info()
@@ -1386,20 +1440,20 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
         print(f"[GPU] Memory threshold: {gpu_threshold*100:.0f}%")
         print(f"[GPU] Check interval: every {gpu_check_interval} files")
         print(f"[GPU] Retry settings: max {max_retries} retries, {retry_wait}s wait")
-    
+ 
     gossip_map = build_gossip_index_map(df)
     missing_narrators = []
     files_processed = 0
-    
+ 
     for idx, row in df.iterrows():
         # Check GPU memory periodically
         if torch.cuda.is_available() and files_processed > 0 and files_processed % gpu_check_interval == 0:
             mem_info = get_gpu_memory_info()
             print(f"\n[GPU] Status check ({files_processed} files): {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
-            
+ 
             if mem_info['usage_percent'] >= gpu_threshold:
                 wait_for_gpu_memory(threshold=gpu_threshold, wait_seconds=gpu_wait)
-        
+ 
         result = generate_tts_for_row(
             row,
             output_dir=output_dir,
@@ -1408,9 +1462,10 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
             narrator_override=narrator_override,
             max_retries=max_retries,
             retry_wait=retry_wait,
-            incremental_sync=incremental_sync  # Pass through for live VO
+            incremental_sync=incremental_sync,  # Pass through for live VO
+            cutoff_dt=cutoff_dt,                # Pass through time filter
         )
-        
+ 
         if result:
             files_processed += 1
         else:
@@ -1418,19 +1473,20 @@ def generate_audio(df, output_dir=SOUNDS_DIR, regenerate=False, narrator_overrid
                 "npc_name": row["npc_name"],
                 "dialog_type": row["dialog_type"]
             })
-
+ 
     if missing_narrators:
         missing_csv = os.path.join(output_dir, "missing_narrators.csv")
         pd.DataFrame(missing_narrators).to_csv(missing_csv, index=False)
         print(f"✓ Saved {len(missing_narrators)} rows with missing narrators → {missing_csv}")
-    
+ 
     # Final GPU memory report
     if torch.cuda.is_available():
         mem_info = get_gpu_memory_info()
         print(f"\n[GPU] Final memory: {mem_info['allocated_gb']:.2f}GB / {mem_info['total_gb']:.2f}GB ({mem_info['usage_percent']*100:.1f}%)")
-    
+ 
     print(f"✓ Audio generation complete ({files_processed} files processed)")
-
+ 
+ 
 # =========================
 # PART 3: SYNC METADATA
 # =========================
@@ -1805,25 +1861,29 @@ def parse_args():
     parser.add_argument("--skip-sync", action="store_true", help="Skip game data sync step")
     parser.add_argument("--skip-audio", action="store_true", help="Skip audio generation step")
     parser.add_argument("--skip-metadata", action="store_true", help="Skip metadata sync step")
-    parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default="cuda", 
+    parser.add_argument("--device", type=str, choices=["cpu", "cuda"], default="cuda",
                         help="Device to use for TTS model (default: cuda)")
-    parser.add_argument("--gpu-threshold", type=float, default=0.85, 
+    parser.add_argument("--gpu-threshold", type=float, default=0.85,
                         help="GPU memory usage threshold (0.0-1.0) before waiting (default: 0.85)")
-    parser.add_argument("--gpu-wait", type=int, default=5, 
+    parser.add_argument("--gpu-wait", type=int, default=5,
                         help="Seconds to wait when GPU memory is high (default: 5)")
-    parser.add_argument("--gpu-check-interval", type=int, default=10, 
+    parser.add_argument("--gpu-check-interval", type=int, default=10,
                         help="Check GPU memory every N files (default: 10)")
-    parser.add_argument("--max-retries", type=int, default=3, 
+    parser.add_argument("--max-retries", type=int, default=3,
                         help="Maximum retries for failed TTS generation (default: 3)")
-    parser.add_argument("--retry-wait", type=int, default=10, 
+    parser.add_argument("--retry-wait", type=int, default=10,
                         help="Seconds to wait before retrying failed generation (default: 10)")
-    parser.add_argument("--daemon", action="store_true", 
+    parser.add_argument("--daemon", action="store_true",
                         help="Run in daemon mode, monitoring BetterQuest.lua for changes")
-    parser.add_argument("--time", action="store_true", type=str,
-                        help="Like regenerate, it will regenerate/replace files older than YYYY-MM-DD timestamp")
-    parser.add_argument("--daemon-interval", type=int, default=5, 
+    # FIX: was incorrectly declared as both action="store_true" and type=str.
+    # Now it accepts an optional YYYY-MM-DD date string.  When supplied, any
+    # existing audio file whose mtime is OLDER than that date is regenerated;
+    # files newer than (or equal to) the cutoff are left alone.
+    parser.add_argument("--time", type=str, default=None, metavar="YYYY-MM-DD",
+                        help="Regenerate audio files older than this date (format: YYYY-MM-DD)")
+    parser.add_argument("--daemon-interval", type=int, default=5,
                         help="Seconds between file checks in daemon mode (default: 5)")
-    parser.add_argument("--wtf-path", type=str, default="../../../../WTF", 
+    parser.add_argument("--wtf-path", type=str, default="../../../../WTF",
                         help="Path to WTF directory for finding BetterQuest.lua (default: ../../../../WTF)")
     return parser.parse_args()
 
@@ -1916,7 +1976,8 @@ def run_pipeline(args, betterquest_path=None):
             gpu_check_interval=args.gpu_check_interval,
             max_retries=args.max_retries,
             retry_wait=args.retry_wait,
-            incremental_sync=False  # LIVE VO: Update DB after each file
+            incremental_sync=False,  # LIVE VO: Update DB after each file
+            time_cutoff=args.time
         )
     else:
         print("\n=== STEP 2: Generating TTS audio [SKIPPED] ===")
