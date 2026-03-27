@@ -75,10 +75,16 @@ function Utils:GetNPCMetadata(npcName)
 
     return nil
 end
+local function GetThreshold(m)
+    if m <= 10  then return 0 end
+    if m <= 25  then return 1 end
+    if m <= 50  then return 2 end
+    if m <= 100 then return 3 end
+    return math.min(6, math.floor(m * 0.05))
+end
 
 function Utils:FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
-    
 
     local lookupName = Utils:NormalizeNPCName(npcName)
     local targetNpc  = NPC_DATABASE[lookupName]
@@ -88,32 +94,33 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
     local normalizedInput = Utils:NormalizeDialogText(dialogText)
     if normalizedInput == "" then return nil end
 
-    -- dynamic distance threshold: allow ~10% of pattern length, capped
     local strlen = strlen or string.len
     local m = strlen(normalizedInput)
-    local MAX_DISTANCE = math.min(8, math.max(2, math.ceil(m * 0.10)))
+    local MAX_DISTANCE = GetThreshold(m)
 
-    local bestMatch = nil
+    local bestMatch    = nil
     local bestDistance = 999
 
     local startTime = GetTime()
-    local TIMEOUT = 0.01
+    local TIMEOUT   = 0.01
 
     -------------------------------------------------
     -- FAST PATH: SAME NPC
     -------------------------------------------------
     if targetNpc and targetNpc.dialogs then
-        
         for dialogKey, entry in pairs(targetNpc.dialogs) do
             if GetTime() - startTime > TIMEOUT then
                 Debug("Fuzzy search timeout (same NPC) - aborting fuzzy lookup")
                 return nil
             end
 
-            local distance = Utils:EditDistance(normalizedInput, dialogKey)
-            if distance <= MAX_DISTANCE and distance < bestDistance then
-                bestDistance = distance
-                bestMatch = entry
+            -- O(1) length pre-reject before expensive Levenshtein
+            if math.abs(strlen(dialogKey) - m) <= MAX_DISTANCE then
+                local distance = Utils:EditDistance(normalizedInput, dialogKey)
+                if distance <= MAX_DISTANCE and distance < bestDistance then
+                    bestDistance = distance
+                    bestMatch    = entry
+                end
             end
         end
 
@@ -123,15 +130,15 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
                    bestMatch.quest_id,
                    bestMatch.seconds
         end
-
-    elseif not targetNpc then
-        -- NPC not in database, mark as missing in runtime cache only
-        Utils:LogMissingNPC(npcName, dialogText, "gossip")
     end
-    
+
     -------------------------------------------------
     -- FALLBACK: OTHER NPCs (race + sex filtered)
     -------------------------------------------------
+    -- Tighter threshold for cross-NPC matches to reduce false positives
+    local FALLBACK_MAX_DISTANCE = math.max(0, MAX_DISTANCE - 1)
+    local earlyReturnThreshold  = math.max(1, math.floor(m * 0.05))
+
     for otherName, data in pairs(NPC_DATABASE) do
         if GetTime() - startTime > TIMEOUT then
             Debug("Fuzzy search timeout (other NPCs) - aborting fuzzy lookup")
@@ -149,20 +156,23 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
                     return nil
                 end
 
-                local distance = Utils:EditDistance(normalizedInput, dialogKey)
-                if distance <= MAX_DISTANCE then
-                    if distance < bestDistance then
-                        bestDistance = distance
-                        bestMatch = entry
-                    end
+                -- O(1) length pre-reject
+                if math.abs(strlen(dialogKey) - m) <= FALLBACK_MAX_DISTANCE then
+                    local distance = Utils:EditDistance(normalizedInput, dialogKey)
 
-                    -- Near-perfect match → early return
-                    if distance == 0
-                       or distance <= math.max(3, math.floor(m * 0.05)) then
-                        return entry.path,
-                               entry.dialog_type,
-                               entry.quest_id,
-                               entry.seconds
+                    if distance <= FALLBACK_MAX_DISTANCE then
+                        if distance < bestDistance then
+                            bestDistance = distance
+                            bestMatch    = entry
+                        end
+
+                        -- Near-perfect match → early return
+                        if distance == 0 or distance <= earlyReturnThreshold then
+                            return entry.path,
+                                   entry.dialog_type,
+                                   entry.quest_id,
+                                   entry.seconds
+                        end
                     end
                 end
             end
@@ -186,7 +196,10 @@ end
 -- FindDialogSound with timeout on the full hash fallback loop
 function Utils:FindDialogSound(npcName, dialogText)
     Debug("Finding dialog for:".. npcName, dialogText)
-  if not npcName or not dialogText then return nil end
+  if not npcName or not dialogText then
+    Debug("NPCName or dialogText is nil".. npcName,dialogText) 
+    return nil 
+  end
 
 
 
@@ -205,7 +218,7 @@ function Utils:FindDialogSound(npcName, dialogText)
   end
 
   -- If NPC doesn't exist at all, mark as missing in runtime cache only
-  --  Utils:MarkNPCMissing(npcName)
+  Utils:LogMissingNPC(npc,dialogText,"gossip")
 
 
   -- 3) Fuzzy text search (Myers' algorithm + timeout)

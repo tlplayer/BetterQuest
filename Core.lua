@@ -41,7 +41,7 @@ local function OnNPCSay(msg, sender)
     Broadcast.lastNPCText = msg
 
     if SoundQueue then
-        SoundQueue:AddSound(sender, msg, sender)
+        SoundQueue:AddSound(sender, msg, msg)
     else
         Debug("ERROR: SoundQueue not available for Broadcast")
     end
