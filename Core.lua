@@ -114,15 +114,27 @@ addonFrame:SetScript("OnEvent", function()
     end)
 
     -- 4) World NPC speech dispatcher
-    local broadcastFrame = CreateFrame("Frame")
-    broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_SAY")
-    broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_YELL")
+local broadcastFrame = CreateFrame("Frame")
+broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_SAY")
+broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_YELL")
+broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_EMOTE")
+broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_WHISPER")
 
-    broadcastFrame:SetScript("OnEvent", function()
-        if event == "CHAT_MSG_MONSTER_SAY" or event == "CHAT_MSG_MONSTER_YELL" then
-            OnNPCSay(arg1, arg2)
-        end
-    end)
+-- catch-all fallback for non-monster NPCs
+broadcastFrame:RegisterEvent("CHAT_MSG_SAY")
+broadcastFrame:RegisterEvent("CHAT_MSG_YELL")
+
+broadcastFrame:SetScript("OnEvent", function()
+    if event == "CHAT_MSG_MONSTER_SAY"
+    or event == "CHAT_MSG_MONSTER_YELL"
+    or event == "CHAT_MSG_MONSTER_EMOTE"
+    or event == "CHAT_MSG_MONSTER_WHISPER"
+    or event == "CHAT_MSG_SAY"
+    or event == "CHAT_MSG_YELL" then
+
+        OnNPCSay(arg1, arg2)
+    end
+end)
 
     Debug("BetterQuest initialized")
 end)

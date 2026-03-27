@@ -171,6 +171,8 @@ end
 
 function SoundQueue:PlaySound(soundData)
     Debug("PlaySound called for: " .. tostring(soundData and soundData.npcName))
+    Debug("PlaySound called for: " .. soundData.filePath)
+
     
     if not soundData then return end
 
