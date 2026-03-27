@@ -1819,6 +1819,8 @@ def parse_args():
                         help="Seconds to wait before retrying failed generation (default: 10)")
     parser.add_argument("--daemon", action="store_true", 
                         help="Run in daemon mode, monitoring BetterQuest.lua for changes")
+    parser.add_argument("--time", action="store_true", type=str,
+                        help="Like regenerate, it will regenerate/replace files older than YYYY-MM-DD timestamp")
     parser.add_argument("--daemon-interval", type=int, default=5, 
                         help="Seconds between file checks in daemon mode (default: 5)")
     parser.add_argument("--wtf-path", type=str, default="../../../../WTF", 

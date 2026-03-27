@@ -1376,6 +1376,16 @@ NPC_DATABASE = {
       ["well met adventurer my advice to you is this as yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead_female\\isabella\\well_met_adventurer_my_advice_to_you_is_this_as_yo.wav", dialog_type="gossip", quest_id=nil, seconds=7.8, linked_to="Isabella" },
     },
   },
+  ["Anaya"] = {
+    race = "",
+    sex = "nan",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
+    },
+  },
   ["Anaya Dawnrunner"] = {
     race = "night_elf",
     sex = "female",
@@ -8584,6 +8594,16 @@ NPC_DATABASE = {
     narrator = "ogre",
     dialogs = {
       ["uh i sorry i attack you boss you no kill me please"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\chorush_the_observer\\uh_i_sorry_i_attack_you_boss_you_no_kill_me_please.wav", dialog_type="gossip", quest_id=nil, seconds=10.64 },
+    },
+  },
+  ["Choksul"] = {
+    race = "",
+    sex = "nan",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
     },
   },
   ["Christoph Faral"] = {
@@ -20270,6 +20290,16 @@ NPC_DATABASE = {
       ["hello rogue ready for some training"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\david_trias\\hello_rogue_ready_for_some_training.wav", dialog_type="gossip", quest_id=nil, seconds=2.84, linked_to="David Trias" },
       ["i can not train you you need to talk to your class"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\david_trias\\i_can_not_train_you_you_need_to_talk_to_your_class.wav", dialog_type="gossip", quest_id=nil, seconds=4.72, linked_to="David Trias" },
       ["through rigorous retraining i have had to break ma"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\cain_firesong\\through_rigorous_retraining_i_have_had_to_break_ma.wav", dialog_type="gossip", quest_id=nil, seconds=23.44, linked_to="Cain Firesong" },
+    },
+  },
+  ["Greishan Ironstove"] = {
+    race = "",
+    sex = "nan",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
     },
   },
   ["Grelborg the Miser"] = {
@@ -50161,6 +50191,16 @@ NPC_DATABASE = {
     dialogs = {
     },
   },
+  ["The Fall of AmethAran"] = {
+    race = "",
+    sex = "nan",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
+    },
+  },
   ["The Feast of Winter Veil"] = {
     race = "object",
     sex = "male",
@@ -50278,6 +50318,16 @@ NPC_DATABASE = {
     zone = "",
     model_id = nil,
     narrator = "object",
+    dialogs = {
+    },
+  },
+  ["The Lay of AmethAran"] = {
+    race = "",
+    sex = "nan",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
     dialogs = {
     },
   },
@@ -51810,6 +51860,7 @@ NPC_DATABASE = {
     dialogs = {
       ["alms for the poor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\topper_mcnabb\\alms_for_the_poor.wav", dialog_type="unknown", quest_id=nil, seconds=1.36 },
       ["help a poor bloke out"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\topper_mcnabb\\help_a_poor_bloke_out.wav", dialog_type="unknown", quest_id=nil, seconds=1.56 },
+      ["i will gladly pay you tuesday for a hamburger toda"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\topper_mcnabb\\i_will_gladly_pay_you_tuesday_for_a_hamburger_toda.wav", dialog_type="unknown", quest_id=nil, seconds=3.3 },
       ["it looks like youve already found love you can giv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\stormwind_city_guard\\it_looks_like_youve_already_found_love_you_can_giv.wav", dialog_type="gossip", quest_id=nil, seconds=7.84, linked_to="Stormwind City Guard" },
       ["its all their fault stupid alliance army just had "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\topper_mcnabb\\its_all_their_fault_stupid_alliance_army_just_had_.wav", dialog_type="unknown", quest_id=nil, seconds=4.92 },
     },
