@@ -5,7 +5,7 @@
 Utils = {}
 local playerName = UnitName("player")
 local _, playerClass = UnitClass("player")
-local DEBUG_ENABLED = false
+local DEBUG_ENABLED = true
 
 
 -------------------------------------------------

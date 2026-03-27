@@ -58,14 +58,11 @@ local FALLBACK_TIMEOUT = 0.1
 
 function Utils:GetNPCMetadata(npcName)
     if not npcName then return nil end
-    if Utils:IsNPCMissing(npcName) then return nil end
 
     local lookupName = Utils:NormalizeNPCName(npcName)
     local npc = NPC_DATABASE[lookupName]
 
     if npc then
-        Utils:UnmarkNPCMissing(npcName)
-        Utils:RemoveFromMissingDB(npcName)
         return {
             race = npc.race,
             sex = npc.sex,
@@ -76,18 +73,11 @@ function Utils:GetNPCMetadata(npcName)
         }
     end
 
-    Utils:MarkNPCMissing(npcName)
     return nil
 end
 
 function Utils:FuzzyFindDialogSound(npcName, dialogText)
     if not npcName or not dialogText then return nil end
-    
-    -- Early exit if NPC is marked as missing in runtime cache
-    if Utils:IsNPCMissing(npcName) then
-        Debug("NPC is in the missing cache")
-        return nil
-    end
     
 
     local lookupName = Utils:NormalizeNPCName(npcName)
@@ -113,8 +103,6 @@ function Utils:FuzzyFindDialogSound(npcName, dialogText)
     -- FAST PATH: SAME NPC
     -------------------------------------------------
     if targetNpc and targetNpc.dialogs then
-        Utils:UnmarkNPCMissing(npcName)
-        Utils:RemoveFromMissingDB(npcName)
         
         for dialogKey, entry in pairs(targetNpc.dialogs) do
             if GetTime() - startTime > TIMEOUT then
@@ -200,10 +188,7 @@ function Utils:FindDialogSound(npcName, dialogText)
     Debug("Finding dialog for:".. npcName, dialogText)
   if not npcName or not dialogText then return nil end
 
-  -- Early exit if NPC is marked as missing in runtime cache (THIS SESSION)
-  if Utils:IsNPCMissing(npcName) then
-    return nil
-  end
+
 
   local lookupName = Utils:NormalizeNPCName(npcName)
   local key = Utils:NormalizeDialogText(dialogText)
