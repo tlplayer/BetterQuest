@@ -1573,7 +1573,6 @@ def create_dialog_signature(text: str, race: str, sex: str) -> str:
     # Create a hash that includes race and sex to identify duplicates
     signature = f"{clean_text}|{race or 'unknown'}|{sex or 'unknown'}"
     return hashlib.md5(signature.encode()).hexdigest()[:16]
-
 def sync_metadata(df, output_lua=OUTPUT_LUA):
     """Build and write unified NPC database to Lua with dialog deduplication"""
     print("\n=== STEP 3: Syncing metadata to Lua database ===")
@@ -1618,6 +1617,12 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
     
     # FIX #3: Track dialog signatures to find duplicates
     dialog_signature_map = {}  # signature -> (npc_name, text_hash, sound_path)
+
+    # Mirrors seen_quest_id_dialog_type in generate_tts_for_row.
+    # Key format: "{narrator}_{quest_id}_{dialog_type}.wav"
+    # When a quest_id+dialog_type pair is seen a second time for the same narrator,
+    # we downgrade that row to gossip — exactly as the TTS generator does.
+    seen_quest_id_dialog_type_metadata = set()
 
     # FIX #2: Initialize ALL NPCs from metadata first
     for npc_name in all_npcs_from_metadata:
@@ -1722,9 +1727,21 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
             qid = row.get("quest_id")
             has_quest_id = pd.notna(qid) and str(qid).replace('.', '').isdigit() and int(qid) > 0
 
-            if has_quest_id:
+            if has_quest_id and dialog_type != "gossip":
                 quest_id = int(qid)
-                filename = f"{quest_id}_{dialog_type}.wav"
+                key = f"{narrator}_{quest_id}_{dialog_type}.wav"
+                if key not in seen_quest_id_dialog_type_metadata:
+                    seen_quest_id_dialog_type_metadata.add(key)
+                    filename = f"{quest_id}_{dialog_type}.wav"
+                else:
+                    # Duplicate quest_id+dialog_type for this narrator — downgrade to gossip,
+                    # mirroring exactly what generate_tts_for_row does.
+                    quest_id = None
+                    dialog_type = "gossip"
+                    clean_text = sanitize_filename(text)
+                    if not clean_text:
+                        continue
+                    filename = f"{clean_text[:50]}.wav"
             else:
                 clean_text = sanitize_filename(text)
                 if not clean_text:
