@@ -1,4 +1,5 @@
 animal:
+- Precocious
 - Flik's Frog
 - ' Polly'
 - A
@@ -92,6 +93,9 @@ mechanical:
 - A-Me 01
 - Electrocutioner 6000
 - Fishbot 5000
+- Homing Robot entries
+- Vendor‑Tron 1000
+- Super‑Seller 680
 - Homing Robot OOX-09/HL
 - Homing Robot OOX-17/TN
 - Homing Robot OOX-22/FE
@@ -270,6 +274,7 @@ dragon:
 - Itharius
 - Lord Arkkoroc
 dwarf:
+- Greishan Ironstove
 - Yarlyn Amberstill
 - Advisor Belgrum
 - Aedis Brom
@@ -909,6 +914,8 @@ gnome:
 - Wizzle Brassbolts
 - Yebb Neblegear
 goblin:
+- Sprocketz
+- Steamwheedle Port Authority
 - Alchemist Pestlezugg
 - Azzleby
 - Baron Revilgaz
@@ -1684,6 +1691,8 @@ highelf:
 - Zaldimar Wefhellt
 - Zardeth of the Black Claw
 human:
+- Farmer Getz
+- Defias Footpad
 - \Stinky Ignatz
 - '"Auntie" Bernice Stonefield'
 - '"Pretty Boy" Duncan'
@@ -3720,6 +3729,7 @@ object:
 - Flik's Frog
 - Metzen the Reindeer
 ogre:
+- Choksul
 - Boss Tho'grun
 - Boulderfist Brute
 - Boulderfist Enforcer
@@ -4805,6 +4815,7 @@ tauren:
 - Zarlman Two-Moons
 - Earthcaller Franzahl
 troll:
+- Jess Rimon
 - Al'tabim the All-Seeing
 - Antu'sul
 - Argent Outfitter
@@ -4955,6 +4966,8 @@ troll:
 - Spoops
 - Torta
 undead:
+- Apothecary Zraedus
+- Trelane
 - Abigail Sawyer
 - Acolyte Wytula
 - Adrian Bartlett

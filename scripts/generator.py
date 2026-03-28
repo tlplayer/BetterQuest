@@ -1505,6 +1505,7 @@ def normalize_name(name):
     name = re.sub(r"\s*\(.*?\)", "", name)
     # Normalize curly quotes to straight quotes
     name = re.sub(r"[‘’]", "'", name)
+    name = name.lstrip("\\")
     return name.strip().replace('"', '').replace("'", "")
 
 def normalize_text_for_matching(text: str) -> str:
