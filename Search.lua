@@ -194,7 +194,7 @@ end
 
 -- FindDialogSound with timeout on the full hash fallback loop
 function Utils:FindDialogSound(npcName, dialogText)
-    Debug("Finding dialog for:".. npcName, dialogText)
+    Debug("Finding dialog for:".. npcName)
   if not npcName or not dialogText then
     Debug("NPCName or dialogText is nil".. npcName,dialogText) 
     return nil 
@@ -206,10 +206,11 @@ function Utils:FindDialogSound(npcName, dialogText)
 
   -- 1) Normal lookup
   local npc = NPC_DATABASE[lookupName]
-  Debug("Found npc with metadata from the database:" .. npcName, key)
+  Debug("Found npc with metadata from the database:" .. npcName)
   if npc and npc.dialogs and npc.dialogs[key] then
     local entry = npc.dialogs[key]
     if entry then 
+        Debug("Found entry with this key from the database:" ..  key)
         return entry.path, entry.dialog_type, entry.quest_id, entry.seconds
     end
   end
