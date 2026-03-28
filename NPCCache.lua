@@ -29,7 +29,7 @@ function Utils:LogMissingNPC(npcName, dialogText, dialogType)
     if not npcEntry.dialogs[normalizedText] then
         npcEntry.dialogs[normalizedText] = {
             dialog_text = dialogText,
-            dialogType = dialogType or "gossip",
+            dialogType =  "gossip",
         }
     end
 end

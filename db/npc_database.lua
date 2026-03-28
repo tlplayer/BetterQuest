@@ -2173,12 +2173,12 @@ NPC_DATABASE = {
     },
   },
   ["Apothecary Zraedus"] = {
-    race = "",
+    race = "undead",
     sex = "male",
-    portrait = "default",
+    portrait = "undead",
     zone = "Western_Plaguelands",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "undead",
     dialogs = {
     },
   },
@@ -2317,7 +2317,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "tauren",
     zone = "Thunder_Bluff",
-    model_id = nil,
+    model_id = 4519,
     narrator = "tauren",
     dialogs = {
       ["at ease private if youre here to unload soil from "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\arch_druid_hamuul_runetotem\\3761_quest_progress.wav", dialog_type="quest_progress", quest_id=3761, seconds=7.64 },
@@ -5044,7 +5044,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "highelf",
     zone = "Eastern_Plaguelands",
-    model_id = 6630,
+    model_id = nil,
     narrator = "highelf",
     dialogs = {
     },
@@ -5054,7 +5054,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "highelf",
     zone = "Eastern_Plaguelands",
-    model_id = nil,
+    model_id = 6631,
     narrator = "highelf",
     dialogs = {
     },
@@ -8233,7 +8233,7 @@ NPC_DATABASE = {
     sex = "female",
     portrait = "tauren",
     zone = "Thunder_Bluff",
-    model_id = nil,
+    model_id = 7625,
     narrator = "tauren_female",
     dialogs = {
     },
@@ -8441,13 +8441,14 @@ NPC_DATABASE = {
     },
   },
   ["Choksul"] = {
-    race = "",
-    sex = "nan",
-    portrait = "default",
+    race = "ogre",
+    sex = "male",
+    portrait = "ogre",
     zone = "",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "ogre",
     dialogs = {
+      ["me smash you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\choksul\\me_smash_you.wav", dialog_type="gossip", quest_id=nil, seconds=1.4 },
     },
   },
   ["Christoph Faral"] = {
@@ -9092,7 +9093,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "human",
     zone = "Stormwind_City",
-    model_id = 2965,
+    model_id = nil,
     narrator = "human",
     dialogs = {
       ["a pleasure to meet you adventurer i am commander s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\commander_samaul\\1264_quest_complete.wav", dialog_type="quest_complete", quest_id=1264, seconds=0.0 },
@@ -11762,12 +11763,12 @@ NPC_DATABASE = {
     },
   },
   ["Defias Footpad"] = {
-    race = "",
-    sex = "nan",
-    portrait = "default",
+    race = "human",
+    sex = "male",
+    portrait = "human",
     zone = "",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "human",
     dialogs = {
     },
   },
@@ -12620,7 +12621,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "undead",
     zone = "Western_Plaguelands",
-    model_id = nil,
+    model_id = 10576,
     narrator = "undead",
     dialogs = {
       ["with alchemy you can turn found herbs into healing"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\undead\\serge_hinott\\with_alchemy_you_can_turn_found_herbs_into_healing.wav", dialog_type="gossip", quest_id=nil, seconds=4.72, linked_to="Serge Hinott" },
@@ -13865,7 +13866,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "dwarf",
     zone = "Dun_Morogh",
-    model_id = nil,
+    model_id = 1409,
     narrator = "dwarf",
     dialogs = {
       ["deliver the bundle of crocolisk skins to james hal"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\einar_stonegrip\\469_quest_objective.wav", dialog_type="quest_objective", quest_id=469, seconds=4.96 },
@@ -14925,7 +14926,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "human",
     zone = "Stormwind_City",
-    model_id = 3246,
+    model_id = nil,
     narrator = "human",
     dialogs = {
       ["a contact of mine retired in the wetlands at the h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\elling_trias\\1248_quest_accept.wav", dialog_type="quest_accept", quest_id=1248, seconds=32.08 },
@@ -16145,12 +16146,12 @@ NPC_DATABASE = {
     },
   },
   ["Farmer Getz"] = {
-    race = "",
-    sex = "male",
-    portrait = "default",
+    race = "human",
+    sex = "female",
+    portrait = "human",
     zone = "Hillsbrad_Foothills",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "human_female",
     dialogs = {
     },
   },
@@ -17020,7 +17021,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "object",
     zone = "",
-    model_id = 14936,
+    model_id = nil,
     narrator = "object",
     dialogs = {
       ["kiss me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\fliks_frog\\kiss_me.wav", dialog_type="gossip", quest_id=nil, seconds=1.2 },
@@ -20030,13 +20031,14 @@ NPC_DATABASE = {
     },
   },
   ["Greishan Ironstove"] = {
-    race = "",
-    sex = "nan",
-    portrait = "default",
+    race = "dwarf",
+    sex = "male",
+    portrait = "dwarf",
     zone = "",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "dwarf",
     dialogs = {
+      ["weard frean dum hrim modr weard frean thon"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\greishan_ironstove\\weard_frean_dum_hrim_modr_weard_frean_thon.wav", dialog_type="gossip", quest_id=nil, seconds=3.56 },
     },
   },
   ["Grelborg the Miser"] = {
@@ -22761,7 +22763,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "construct",
     zone = "Un'Goro_Crater",
-    model_id = nil,
+    model_id = 6909,
     narrator = "construct",
     dialogs = {
       ["escort oox09hl to the shoreline beyond overlook cl"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\construct\\homing_robot_oox-09hl\\836_quest_objective.wav", dialog_type="quest_objective", quest_id=836, seconds=8.14 },
@@ -22774,7 +22776,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "construct",
     zone = "Un'Goro_Crater",
-    model_id = 6909,
+    model_id = nil,
     narrator = "construct",
     dialogs = {
       ["escort oox17tn to steamwheedle port then report to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\construct\\homing_robot_oox-17tn\\648_quest_objective.wav", dialog_type="quest_objective", quest_id=648, seconds=7.34 },
@@ -22797,12 +22799,12 @@ NPC_DATABASE = {
     },
   },
   ["Homing Robot entries"] = {
-    race = "",
+    race = "mechanical",
     sex = "male",
-    portrait = "default",
+    portrait = "mechanical",
     zone = "",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "mechanical",
     dialogs = {
     },
   },
@@ -23153,7 +23155,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "tauren",
     zone = "Silithus",
-    model_id = 15371,
+    model_id = nil,
     narrator = "tauren",
     dialogs = {
       ["adventurer although we had hoped the twilights ham"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\huum_wildmane\\8331_quest_accept.wav", dialog_type="quest_accept", quest_id=8331, seconds=32.76 },
@@ -25974,12 +25976,12 @@ NPC_DATABASE = {
     },
   },
   ["Jess Rimon"] = {
-    race = "",
+    race = "troll",
     sex = "male",
-    portrait = "default",
+    portrait = "troll",
     zone = "Azshara",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "troll",
     dialogs = {
     },
   },
@@ -39462,12 +39464,12 @@ NPC_DATABASE = {
     },
   },
   ["Precocious"] = {
-    race = "",
+    race = "animal",
     sex = "male",
-    portrait = "default",
+    portrait = "animal",
     zone = "",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "animal",
     dialogs = {
     },
   },
@@ -39486,7 +39488,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "human",
     zone = "Stormwind_City",
-    model_id = nil,
+    model_id = 4641,
     narrator = "human",
     dialogs = {
     },
@@ -47092,12 +47094,12 @@ NPC_DATABASE = {
     },
   },
   ["Sprocketz"] = {
-    race = "",
+    race = "goblin",
     sex = "male",
-    portrait = "default",
+    portrait = "goblin",
     zone = "Tanaris",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "goblin",
     dialogs = {
     },
   },
@@ -48118,12 +48120,12 @@ NPC_DATABASE = {
     },
   },
   ["Super‑Seller 680"] = {
-    race = "",
+    race = "mechanical",
     sex = "female",
-    portrait = "default",
+    portrait = "mechanical",
     zone = "",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "mechanical_female",
     dialogs = {
     },
   },
@@ -51838,12 +51840,12 @@ NPC_DATABASE = {
     },
   },
   ["Trelane"] = {
-    race = "",
+    race = "undead",
     sex = "male",
-    portrait = "default",
+    portrait = "undead",
     zone = "Arathi_Highlands",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "undead",
     dialogs = {
     },
   },
@@ -52922,12 +52924,17 @@ NPC_DATABASE = {
   },
   ["Vaelastrasz the Corrupt"] = {
     race = "dragon",
-    sex = "female",
+    sex = "male",
     portrait = "dragon",
     zone = "Blackrock_Spire",
-    model_id = nil,
-    narrator = "dragon_female",
+    model_id = 13992,
+    narrator = "dragon",
     dialogs = {
+      ["another of our heroes lost to the spawn of deathwi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\vaelastrasz_the_corrupt\\8730_quest_progress.wav", dialog_type="quest_progress", quest_id=8730, seconds=7.76 },
+      ["champion is it you a thousand years it has been si"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\vaelastrasz_the_corrupt\\8730_quest_accept.wav", dialog_type="quest_accept", quest_id=8730, seconds=24.32 },
+      ["i i have failed adventurer the lord of bla the lor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\vaelastrasz_the_corrupt\\i_i_have_failed_adventurer_the_lord_of_bla_the_lor.wav", dialog_type="gossip", quest_id=nil, seconds=16.8 },
+      ["i perform one final service i pray it is sufficien"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\vaelastrasz_the_corrupt\\i_perform_one_final_service_i_pray_it_is_sufficien.wav", dialog_type="gossip", quest_id=nil, seconds=4.12 },
+      ["slay nefarian and recover the red scepter shard re"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dragon\\vaelastrasz_the_corrupt\\8730_quest_objective.wav", dialog_type="quest_objective", quest_id=8730, seconds=14.64 },
     },
   },
   ["Vahgruk"] = {
@@ -53296,12 +53303,12 @@ NPC_DATABASE = {
     },
   },
   ["Vendor‑Tron 1000"] = {
-    race = "",
+    race = "mechanical",
     sex = "female",
-    portrait = "default",
+    portrait = "mechanical",
     zone = "",
     model_id = nil,
-    narrator = "narrator",
+    narrator = "mechanical_female",
     dialogs = {
     },
   },
@@ -54482,7 +54489,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "goblin",
     zone = "The_Barrens",
-    model_id = nil,
+    model_id = 7053,
     narrator = "goblin",
     dialogs = {
       ["a small enough crate yes i should be able to find "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\wharfmaster_dizzywig\\1492_quest_complete.wav", dialog_type="quest_complete", quest_id=1492, seconds=14.24 },
