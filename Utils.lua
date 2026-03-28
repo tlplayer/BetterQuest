@@ -60,6 +60,16 @@ end
 function Utils:NormalizeDialogText(text)
     if not text then return "" end
 
+    -- Normalize racial greetings to "adventurer"
+local races = {
+    "human", "gnome", "dwarf", "orc",
+    "undead", "troll", "elf", "night elf"
+}
+
+for _, race in ipairs(races) do
+    -- word boundary match (avoid partial matches)
+    text = string.gsub(text, "%f[%a]" .. race .. "%f[%A]", "adventurer")
+end
     text = string.gsub(text, "%$[nNcCrR]", "adventurer")
     text = string.gsub(text, "%$g[^;]*;", "adventurer")
 
