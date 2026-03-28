@@ -168,6 +168,7 @@ centaur:
 - Verog the Dervish
 - Warug
 child:
+- Adam
 - Billy
 - Billy Maclure
 - Bo
@@ -2007,6 +2008,7 @@ human:
 - Kyra Boucher
 - Lady Hoteshem
 - Lady Jaina Proudmoore
+- Lady Jaina Proudmoore (travels)
 - Lady Katrana Prestor
 - Lara Moore
 - Larimaine Purdue
@@ -3044,6 +3046,9 @@ night_elf:
 - Zamael Lunthistle
 - Zarrin
 object:
+- The Fall of AmethAran
+- The Lay of AmethAran
+- 'WANTED: Murkdeep!'
 - Wolf Master Nandos
 - Grubbis
 - Freed Soul
@@ -4500,7 +4505,6 @@ spirit:
 - Spirit of Lord Valthalak
 - Stalagg
 - Vectus
-- Zaetar's Spirit
 spirit_female:
 - Spirit Healer
 - Spirit Healer (DND)
@@ -5276,6 +5280,5 @@ undead:
 - Winna Hazzard
 - Yvette Farthing
 - Zachariah Post
-- Zaetar's Spirit
 - Zane Bradford
 - Zarise

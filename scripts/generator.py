@@ -1502,6 +1502,7 @@ def normalize_name(name):
     """Normalize NPC name for metadata lookup"""
     if not isinstance(name, str):
         return None
+    name = re.sub(r"\s*\(.*?\)", "", name)
     return name.strip().replace('"', '').replace("'", "")
 
 def normalize_text_for_matching(text: str) -> str:
