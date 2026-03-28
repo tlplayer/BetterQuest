@@ -76,11 +76,10 @@ function Utils:GetNPCMetadata(npcName)
     return nil
 end
 local function GetThreshold(m)
-    if m <= 10  then return 0 end
-    if m <= 25  then return 1 end
-    if m <= 50  then return 2 end
-    if m <= 100 then return 3 end
-    return math.min(6, math.floor(m * 0.05))
+    if m <= 10  then return 3 end
+    if m <= 25  then return 4 end
+    if m <= 50  then return 6 end
+    return math.min(5, math.floor(m * 0.05))
 end
 
 function Utils:FuzzyFindDialogSound(npcName, dialogText)
@@ -201,15 +200,13 @@ function Utils:FindDialogSound(npcName, dialogText)
     return nil 
   end
 
-
-
   local lookupName = Utils:NormalizeNPCName(npcName)
   local key = Utils:NormalizeDialogText(dialogText)
   if key == "" then return nil end
 
   -- 1) Normal lookup
   local npc = NPC_DATABASE[lookupName]
-  Debug("Found npc with metadata from the database:" .. npcName)
+  Debug("Found npc with metadata from the database:" .. npcName, key)
   if npc and npc.dialogs and npc.dialogs[key] then
     local entry = npc.dialogs[key]
     if entry then 
@@ -217,7 +214,8 @@ function Utils:FindDialogSound(npcName, dialogText)
     end
   end
 
-  -- If NPC doesn't exist at all, mark as missing in runtime cache only
+  -- If npc + dialog missing, we log to a config file and read that from the python
+  Debug("Did not find key in the database adding to missing db:" .. key)
   Utils:LogMissingNPC(npc,dialogText,"gossip")
 
 
