@@ -1502,8 +1502,20 @@ def normalize_name(name):
     """Normalize NPC name for metadata lookup"""
     if not isinstance(name, str):
         return None
+
+    # Remove parenthetical text
     name = re.sub(r"\s*\(.*?\)", "", name)
-    return name.strip().replace('"', '').replace("'", "")
+
+    # Normalize curly quotes to straight quotes
+    name = re.sub(r"[‘’]", "'", name)
+
+    # Remove possessive 's (optional but useful for WoW names like Zaetar's Spirit)
+    name = re.sub(r"'s\b", "", name)
+
+    # Remove remaining quotes
+    name = name.replace('"', '').replace("'", "")
+
+    return name.strip()
 
 def normalize_text_for_matching(text: str) -> str:
     """Used for the Lua lookup key (text_hash), not the filename."""
