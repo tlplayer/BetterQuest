@@ -89,6 +89,7 @@ trogg:
 - Warosh
 - Rockjaw Skullthumper
 mechanical:
+- Archaedas
 - 7:XT
 - A-Me 01
 - Electrocutioner 6000
@@ -715,16 +716,13 @@ furbolg:
 - Ogtinc
 - Salfa
 giant:
-- Archaedas
 - Baron Kazum
 - Lord Arkkoroc
-- Lore Keeper of Norgannon
 - Maexxna
 - Magmus
 - Mok'rash
 - Negolash
 - Rockbiter
-- Stone Watcher of Norgannon
 - Thenan
 gnoll:
 - Ardo Dirtpaw
@@ -2286,7 +2284,6 @@ imp:
 - Pusillin
 keeper:
 - Anilia
-- Archaedas
 - Cavindra
 - Celebras the Redeemed
 - Celebrian Dryad
@@ -2296,10 +2293,8 @@ keeper:
 - Keeper Albagorm
 - Keeper Marandis
 - Keeper Remulos
-- Lore Keeper of Norgannon
 - Selendra
 - Shael'dryn
-- Stone Watcher of Norgannon
 - Tarindrella
 - Therylune
 - Therysil
@@ -2691,9 +2686,7 @@ night_elf:
 - Yldan
 - Zamael Lunthistle
 - Zarrin
-- Tarindrella
 - Anilia
-- Archaedas
 - Celebrian Dryad
 - Fiora Longears
 - Illiyana
@@ -2704,7 +2697,6 @@ night_elf:
 - Lore Keeper of Norgannon
 - Selendra
 - Shael'dryn
-- Stone Watcher of Norgannon
 - Aayndia Floralwind
 - Aethalas
 - Ainethil
