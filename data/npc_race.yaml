@@ -1,4 +1,5 @@
 animal:
+- Flik's Frog
 - ' Polly'
 - A
 - Ancient Equine Spirit
@@ -1682,6 +1683,7 @@ highelf:
 - Zaldimar Wefhellt
 - Zardeth of the Black Claw
 human:
+- \Stinky Ignatz
 - '"Auntie" Bernice Stonefield'
 - '"Pretty Boy" Duncan'
 - '"Sea Wolf" MacKinley'
@@ -1751,7 +1753,6 @@ human:
 - Big Will
 - Bishop DeLavey
 - Bishop Farthing
-- Bloodmage Lynnore
 - Bloodsail Traitor
 - Brant Jasperbloom
 - Brother Anton
@@ -2706,6 +2707,7 @@ night_elf:
 - Alyissia
 - Anadyia
 - Anaya Dawnrunner
+- Anaya
 - Androl Oakhand
 - Andrus
 - Angelas Moonbreeze
