@@ -217,7 +217,7 @@ function Utils:FindDialogSound(npcName, dialogText)
 
   -- If npc + dialog missing, we log to a config file and read that from the python
   Debug("Did not find key in the database adding to missing db:" .. key)
-  Utils:LogMissingNPC(npc,dialogText)
+  Utils:LogMissingNPC(npcName,dialogText)
 
 
   -- 3) Fuzzy text search (Myers' algorithm + timeout)

@@ -149,3 +149,16 @@ function Utils:StopSound(soundData)
         SetCVar("MasterSoundEffects", 1)
     end
 end
+
+
+function Utils:PrintTable(tbl)
+    for k, v in pairs(tbl) do
+        if type(k) == "table" then
+            Debug("TABLE KEY FOUND:")
+            Utils:PrintTable(k)
+        else
+            Debug("Key: " .. tostring(k))
+            Debug("Value: " .. tostring(v))
+        end
+    end
+end

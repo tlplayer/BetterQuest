@@ -6,16 +6,16 @@
 
 
     <!-- Core systems -->
-    <Script file="core\Config.lua"/>
-    <Script file="core\Utils.lua"/>
-    <Script file="core\Cache.lua"/>
-    <Script file="core\Search.lua"/>
+    <Include file="core\Config.lua"/>
+    <Include file="core\Utils.lua"/>
+    <Include file="core\Cache.lua"/>
+    <Include file="core\Search.lua"/>
     
-    <Script file="core\Portrait.lua"/>
-    <Script file="core\UI.lua"/>
-    <Script file="core\SoundQueue.lua"/>
-    <Script file="core\Gossip.lua"/>
-    <Script file="core\Quest.lua"/>
-    <Script file="core\Book.lua"/>
-    <Script file="core\Core.lua"/>
+    <Include file="core\Portrait.lua"/>
+    <Include file="core\UI.lua"/>
+    <Include file="core\SoundQueue.lua"/>
+    <Include file="core\Gossip.lua"/>
+    <Include file="core\Quest.lua"/>
+    <Include file="core\Book.lua"/>
+    <Include file="core\Core.lua"/>
 </Ui>
