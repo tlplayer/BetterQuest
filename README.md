@@ -1,149 +1,185 @@
-[![Video title](https://img.youtube.com/vi/EvMl5aSn4VU/0.jpg)](https://www.youtube.com/watch?v=EvMl5aSn4VU)
-[![Video title](https://img.youtube.com/vi/DhcekpqKZiA/0.jpg)](https://www.youtube.com/watch?v=DhcekpqKZiA)
+# BetterQuest
 
+Local voice generation and playback for WoW 1.12 (Vanilla) private servers.
 
-# Features
+| Feature | Preview |
+|---|---|
+| Quest dialog & NPC voice | [![Quest voices](https://img.youtube.com/vi/EvMl5aSn4VU/0.jpg)](https://www.youtube.com/watch?v=EvMl5aSn4VU) |
+| Gossip, items & sound queue | [![Gossip & items](https://img.youtube.com/vi/DhcekpqKZiA/0.jpg)](https://www.youtube.com/watch?v=DhcekpqKZiA) |
 
-1. Fully functioning local voice cloning for quests, items, gossip, and NPC in-game speech
-2. Sound queue for controlling and skipping sounds
-3. Wide, centered quest dialog with a left pane for customizable portraits based on speaker race and sex
-
-> **Note**
-> This addon assumes and requires **pfUI**: [https://github.com/shagu/pfUI](https://github.com/shagu/pfUI)
-
----
-
-## BetterQuest Voice Generation Pipeline
-
-This guide explains how to use the Python tools to generate NPC voices and synchronize them with the WoW addon.
+**What it does:**
+- In game narration: quests, speech bubbles, items, books, etc. 
+- Generates NPC voices locally on CPU or GPU (1060) using [Chatterbox TTS](https://huggingface.co/resemble-ai/chatterbox)
+- Sound queue with skip support
+- Wide quest dialog with speaker portraits
+- Syncs missing data from game back to a local csv for sharing/filling gaps 
 
 ---
 
-## 🛠 Prerequisites
+**Requirements:** [pfUI](https://github.com/shagu/pfUI) a computer (intel CPU 2017 with 1060 GPU 6GB Vram )
 
-* **GPU**: Preferably an NVIDIA GPU. This was tested on a GTX 1060 (6GB VRAM). The Chatterbox model is very lightweight.
-* **Hugging Face Account**: Required to download the Chatterbox model (free, no payment required).
-* **Authentication**: You must authenticate via the Hugging Face CLI before downloading models.
+---
+**What it does NOT do:**
 
-### Hugging Face Authentication
+- Have voice lines included
+- Have voice samples included
 
-Before you can download private or gated models (e.g., Llama 3) or upload your own work, authenticate your machine.
+---
 
-1. **Get your token**
-   Visit: [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)
+## Installation
 
-2. **Create a new token**
-   Select **Write** if you plan on uploading models; otherwise, **Read** is sufficient.
+### 1. Addon
 
-3. **Install and log in via CLI**
+Place the addon folder inside your WoW addons directory:
+
+```
+World of Warcraft/
+└── Interface/
+    └── AddOns/
+        └── BetterQuest/
+            ├── sounds/       ← generated .wav files go here
+            ├── portraits/    ← .tga portrait files go here
+            ├── samples/      ← .wav samples to be cloned human.wav human_female.wav etc. go here
+            ├── scripts/      ← .py generator.py is what you call to generate voicelines go here
+            └── data/         ← .csv and .yaml files for races + sex of NPCs and voice lines + who says them
+```
+
+Install [pfUI](https://github.com/shagu/pfUI) if you haven't already. BetterQuest requires it.
+
+### 2. Python (pyenv)
+
+open terminal
+
+```sh
+# install pyenv
+curl https://pyenv.run | bash
+
+# add to shell
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+
+# install and pin python version
+pyenv install 3.11
+pyenv local 3.11
+
+# create and activate venv
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+
+# install dependencies
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+### 3. Hugging Face
+
+The Chatterbox model requires a free Hugging Face account.
+
+1. Create an account at [huggingface.co](https://huggingface.co)
+2. Generate a token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) (Read is sufficient)
+3. Authenticate:
 
 ```sh
 pip install --upgrade huggingface_hub
 huggingface-cli login
 ```
 
-4. **Enter your token**
-   Paste your token when prompted (it will not be visible while typing).
+### 4. FFmpeg
 
-5. **Git credentials**
-   When asked whether to add the token as a Git credential, answering `Y` is usually recommended.
+Required for audio conversion. Install via your package manager:
+
+```sh
+# macOS
+brew install ffmpeg
+
+# Ubuntu/Debian
+sudo apt install ffmpeg
+
+```
 
 ---
 
-### Python Environment
+## Quickstart
 
 ```sh
+# activate env
 source venv/bin/activate
-pip install mysql-connector-python slpp pyyaml
-```
 
-### Additional Requirements
+# test generation (CPU, single file)
+python generation/generator.py --limit 1 --device cpu
 
-* **FFmpeg**: Required for audio conversion and fixing sample rates
-* **Database**: A local C-MaNGOS or TrinityCore database running on MySQL or MariaDB
-
----
-
-## 🚀 Workflow
-
-### 1. Data Extraction & Preprocessing
-
-> **Optional**: Skip this section if you only want to generate voices.
-
-NPC metadata (race, sex, and dialog) has been extracted, but some entries are incomplete. The database queries used were not fully comprehensive, so missing values are expected.
-
-You can modify `extract.py` and supply your own database with:
-
-* `name`
-* `dialog_type` (quest, gossip, item_text, etc.)
-
-As long as the generator can find the corresponding `samples/*.wav` files, the pipeline should still work.
-
-```sh
-cd extraction/
-python extract.py                   # Extracts quest, gossip, and broadcast text
-python npc_metadata_extractor.py    # Maps NPCs to their race and gender
-```
-
-This updates `data/npc_metadata.json` and ensures NPCs are mapped according to `data/npc_race.yml`.
-
----
-
-### 2. Voice Generation (`generator.py`)
-
-Use the generator to create `.wav` files. The script uses the NPC's race and gender (`npc_race.yml` + `npc_sex.yml` → `npc_metadata.json`) to select the appropriate voice sample.
-
-**Generate voices for a specific NPC:**
-
-```sh
-python generation/generator.py --npc "Sentinel Aynasha"
-```
-
-**Generate voices for a specific race:**
-
-```sh
-python generation/generator.py --race night_elf
-```
-
-**Limit generation (for testing):**
-
-```sh
-python generation/generator.py --race human --limit 5
-```
-
-**Generate narrator voices (books and items):**
-
-```sh
-python generation/generator.py --race narrator
 ```
 
 ---
 
-### 3. Synchronization (`sync.py`)
+## Syncing Dialog from Your Server
 
-After generating new audio files, you must sync them so the Lua addon knows which files exist and how long they play.
+The addonn scrapes dialogue from in game, saves it in a settings file, then the python reads it: 
 
-```sh
-cd extraction/
-python sync.py
+```bash
+~/Applications/wow/Interface/AddOns/BetterQuest$ ls ../../../WTF/Account/ADMIN/SavedVariables |grep BetterQuest.lua
+BetterQuest.lua
+
+
 ```
 
-This updates the Lua database files and maps file durations (e.g., `334_quest_accept.wav`) so the in-game sound queue functions correctly.
 
 ---
 
-## 🎨 Portrait Management
+## Voice Generation
 
-If you add new NPC portraits, they must be converted to Blizzard-compatible TGA format:
+Voice samples are selected by NPC race and sex. Priority order:
 
-* 256×256 resolution
-* 24-bit color depth
+1. NPC-specific sample: `samples/bolvar.wav`
+2. Race + sex: `samples/night_elf_female.wav`
+3. Fallback (if configured)
 
-Portraits follow the same lookup logic as voices (race + sex). For example:
+**Generate for a specific NPC:**
 
-* `night_elf_female.tga`
+```sh
+python generation/generator.py --npc "Sentinel Aynasha" --cpu
+```
 
-### Batch Convert Images to TGA
+**Generate by race:**
+
+```sh
+python generation/generator.py --race night_elf --cpu
+```
+
+**Test run (limit output):**
+
+```sh
+python generation/generator.py --race human --limit 1 --cpu
+```
+
+**Narrator voice (books, item flavor text):**
+
+```sh
+python generation/generator.py --race narrator --cpu
+```
+
+After generation, always run:
+
+```sh
+python extraction/sync.py
+```
+
+---
+
+## Portraits
+
+Portraits are matched by race and sex using the same logic as voice samples.
+
+**Naming:** `race_sex.tga` — e.g., `night_elf_female.tga`, `orc_male.tga`
+
+**Format requirements:**
+- 256×256 resolution
+- 24-bit RGB
+- `.tga` extension
+
+Wrong format causes silent failure in WoW — no error is shown.
+
+**Batch convert from PNG:**
 
 ```sh
 cd portraits/
@@ -152,43 +188,40 @@ for f in *.png; do
 done
 ```
 
----
-
-## 🤝 Contributing
-
-Help is very welcome, especially in the following areas:
-
-### UI
-
-* The current UI relies on pfUI and does not look very "classic"
-* UI improvements or redesigns are highly encouraged
-
-### Race & Sex Fixes
-
-* Some NPCs have incorrect or missing race, sex, or dialog mappings
-* These can be fixed manually or systematically in the YAML files
-* Identifying the correct speakers for quest, gossip, broadcast, and item text is difficult in the source databases
-* Improving `all_npc_dialog.csv` with accurate mappings would be a huge help
+Place converted `.tga` files in `BetterQuest/portraits/`.
 
 ---
 
-## 💖 Show Gratitude
+## Troubleshooting
 
-If you’d like to support this project:
-
-* Check out my [Ko-fi](https://ko-fi.com/tlplayer)
-* Also check out Mr. Thinger’s [Ko-fi](https://github.com/mrthinger/wow-voiceover)
-
-This addon was inspired by Mr. Thinger’s work, though that project has been inactive for about three years at the time of writing.
+| Problem | Fix |
+|---|---|
+| No audio in-game | Run `sync.py`. Check file is in `sounds/`. Check FFmpeg is installed. |
+| Model download fails | Run `huggingface-cli login` |
+| Audio cuts off early | Re-run `sync.py` to resync durations |
+| Wrong voice for NPC | Check `data/npc_metadata.json` and `data/npc_race.yml` |
 
 ---
 
-## Motivation
+## Contributing
 
-> **Why did you do this?**
+Most useful contributions:
 
-I’ve been playing WoW since I was six years old and didn’t know how to read very well at that time. WoW has a lot of text and not the best UI for reading, and sometimes you just want to vibe.
+- **Race/sex mappings** — fix incorrect or missing entries in `data/npc_race.yml`, `data/npc_sex.yml`, and `data/all_npc_dialog.csv`
+- **UI** — the current UI is pfUI-dependent and not styled to match the classic WoW aesthetic
+- **Speaker attribution** — identifying which NPC delivers which gossip/broadcast text is the hardest part of the data problem
 
-My ultimate goal is to use voice-over to motivate people to engage with the game’s stories and read more.
+---
 
-It could even be something personal—like a parent cloning their voice for their child or grandchild, giving them something meaningful to remember them by.
+## Support
+
+- [Ko-fi (this project)](https://ko-fi.com/tlplayer)
+- [Mr. Thinger's Ko-fi](https://github.com/mrthinger/wow-voiceover) — original inspiration
+
+---
+
+## Why
+
+I've played WoW since I was six and couldn't read well. The game has a lot of text and a poor reading UX. Voice-over makes the stories accessible and encourages engagement with the writing.
+
+One use case I care about: a parent cloning their voice for a child to hear in-game — something permanent and personal.

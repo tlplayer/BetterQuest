@@ -7,7 +7,7 @@
     <!-- Core systems -->
     <Script file="Config.lua"/>
     <Script file="Utils.lua"/>
-    <Script file="NPCCache.lua"/>
+    <Script file="Cache.lua"/>
     <Script file="Search.lua"/>
     
     <Script file="Portrait.lua"/>
