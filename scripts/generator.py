@@ -1775,7 +1775,7 @@ def sync_metadata(df, output_lua=OUTPUT_LUA):
             # This dialog already exists for another NPC with same race/sex
             # Link to the existing audio instead of duplicating
             existing_npc, existing_hash, existing_path = dialog_signature_map[dialog_sig]
-            print(f"[DEDUP] Linking {npc_name} dialog to {existing_npc} (same race/sex, same text)")
+            #print(f"[DEDUP] Linking {npc_name} dialog to {existing_npc} (same race/sex, same text)")
             
             # Use the existing path (buddy link)
             npc_database[npc_name]["dialogs"][text_hash] = {

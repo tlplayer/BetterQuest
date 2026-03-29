@@ -5,7 +5,7 @@
 
 function Utils:InitializeBetterQuestDB()
     if not BetterQuestDB then
-        BetterQuestDB = { missingNPCs = {} }
+        BetterQuestDB = {}
         Debug("BetterQuestDB initialized")
     end
 end
@@ -20,14 +20,14 @@ function Utils:LogMissingNPC(npcName, dialogText)
         return 
     end
 
-    if not BetterQuestDB.missingNPCs[normalizedName] then
-        BetterQuestDB.missingNPCs[normalizedName] = {
+    if not BetterQuestDB[normalizedName] then
+        BetterQuestDB[normalizedName] = {
             originalName = npcName,
             dialogs = {}
         }
     end
 
-    local npcEntry = BetterQuestDB.missingNPCs[normalizedName]
+    local npcEntry = BetterQuestDB[normalizedName]
     if not npcEntry.dialogs[normalizedText] then
         npcEntry.dialogs[normalizedText] = dialogText
     end
