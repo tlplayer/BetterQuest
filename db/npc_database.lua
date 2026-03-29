@@ -2321,7 +2321,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "tauren",
     zone = "Thunder_Bluff",
-    model_id = 4519,
+    model_id = nil,
     narrator = "tauren",
     dialogs = {
       ["at ease private if youre here to unload soil from "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\tauren\\arch_druid_hamuul_runetotem\\3761_quest_progress.wav", dialog_type="quest_progress", quest_id=3761, seconds=7.64 },
@@ -3301,7 +3301,7 @@ NPC_DATABASE = {
     sex = "female",
     portrait = "human",
     zone = "Elwynn_Forest",
-    model_id = 3329,
+    model_id = nil,
     narrator = "human_female",
     dialogs = {
     },
@@ -3928,7 +3928,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "human",
     zone = "Stranglethorn_Vale",
-    model_id = 797,
+    model_id = nil,
     narrator = "human",
     dialogs = {
     },
@@ -5062,7 +5062,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "highelf",
     zone = "Eastern_Plaguelands",
-    model_id = 6631,
+    model_id = nil,
     narrator = "highelf",
     dialogs = {
     },
@@ -6718,7 +6718,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "human",
     zone = "Undercity",
-    model_id = 5549,
+    model_id = nil,
     narrator = "human",
     dialogs = {
       ["go to the royal library in stormwind keep and spea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\brother_kristoff\\343_quest_objective.wav", dialog_type="quest_objective", quest_id=343, seconds=8.48 },
@@ -7274,7 +7274,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "human",
     zone = "Theramore_Isle",
-    model_id = 2952,
+    model_id = nil,
     narrator = "human",
     dialogs = {
       ["a report from an orc spy how did you find this no "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\human\\captain_garran_vimes\\a_report_from_an_orc_spy_how_did_you_find_this_no_.wav", dialog_type="gossip", quest_id=nil, seconds=5.88 },
@@ -10626,6 +10626,16 @@ NPC_DATABASE = {
       ["a glimmer of life long vacant from the poor beast "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\spirit\\darkreavers_fallen_charger\\7647_quest_complete.wav", dialog_type="quest_complete", quest_id=7647, seconds=36.08 },
     },
   },
+  ["Darkreaver’s Fallen Charger"] = {
+    race = "",
+    sex = "male",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
+    },
+  },
   ["Darkspear Commendation Officer"] = {
     race = "troll",
     sex = "male",
@@ -10667,7 +10677,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "night_elf",
     zone = "Warsong_Gulch",
-    model_id = 15707,
+    model_id = nil,
     narrator = "night_elf",
     dialogs = {
       ["for those adventurers who have but a single commen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf\\darnassus_commendation_officer\\8811_quest_progress.wav", dialog_type="quest_progress", quest_id=8811, seconds=27.4 },
@@ -13895,7 +13905,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "dwarf",
     zone = "Dun_Morogh",
-    model_id = 1409,
+    model_id = nil,
     narrator = "dwarf",
     dialogs = {
       ["deliver the bundle of crocolisk skins to james hal"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\einar_stonegrip\\469_quest_objective.wav", dialog_type="quest_objective", quest_id=469, seconds=4.96 },
@@ -17063,6 +17073,16 @@ NPC_DATABASE = {
     dialogs = {
       ["kiss me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\fliks_frog\\kiss_me.wav", dialog_type="gossip", quest_id=nil, seconds=1.2 },
       ["ribbit"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\fliks_frog\\ribbit.wav", dialog_type="gossip", quest_id=nil, seconds=0.76 },
+    },
+  },
+  ["Flik’s Frog"] = {
+    race = "",
+    sex = "male",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
     },
   },
   ["Flint Shadowmore"] = {
@@ -22825,7 +22845,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "construct",
     zone = "Un'Goro_Crater",
-    model_id = 6909,
+    model_id = nil,
     narrator = "construct",
     dialogs = {
       ["escort oox17tn to steamwheedle port then report to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\construct\\homing_robot_oox-17tn\\648_quest_objective.wav", dialog_type="quest_objective", quest_id=648, seconds=7.34 },
@@ -29735,7 +29755,7 @@ NPC_DATABASE = {
     sex = "female",
     portrait = "blood_elf",
     zone = "Undercity",
-    model_id = 11657,
+    model_id = nil,
     narrator = "blood_elf_female",
     dialogs = {
       ["it pleases me greatly to see the battle hardened j"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\blood_elf_female\\lady_sylvanas_windrunner\\5961_quest_accept.wav", dialog_type="quest_accept", quest_id=5961, seconds=33.96 },
@@ -32838,7 +32858,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "goblin",
     zone = "Tanaris",
-    model_id = 7185,
+    model_id = nil,
     narrator = "goblin",
     dialogs = {
       ["blech this stuff tastes terrible so much for that "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\marin_noggenfogger\\2606_quest_accept.wav", dialog_type="quest_accept", quest_id=2606, seconds=32.08 },
@@ -47553,7 +47573,7 @@ NPC_DATABASE = {
     sex = "male",
     portrait = "human",
     zone = "Tirisfal_Glades",
-    model_id = 4684,
+    model_id = nil,
     narrator = "human",
     dialogs = {
     },
@@ -56431,6 +56451,16 @@ NPC_DATABASE = {
     dialogs = {
     },
   },
+  ["Zaetar’s Spirit"] = {
+    race = "",
+    sex = "female",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
+    },
+  },
   ["Zaldimar Wefhellt"] = {
     race = "human",
     sex = "male",
@@ -57061,4 +57091,3 @@ NPC_DATABASE = {
     },
   },
 }
-
