@@ -23,7 +23,6 @@ function Cache:LogMissingNPC(npcName, dialogText, dialogType)
         BetterQuestDB.missingNPCs[normalizedName] = {
             originalName = npcName,
             dialogs = {},
-            version = Utils:VERSION
         }
     end
 
