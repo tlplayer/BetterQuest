@@ -41,6 +41,26 @@ function Utils:NormalizePath(path)
     return path
 end
 
+function Utils:NormalizeName(npcName)
+    if type(npcName) == "string" then
+        return npcName
+    end
+
+    if type(npcName) == "table" then
+        -- common WoW patterns
+        if npcName.name then
+            return npcName.name
+        end
+
+        if npcName[1] then
+            return npcName[1]
+        end
+
+    end
+
+    return nil
+end
+
 -- Secondary / duplicate normalizers (kept as-is)
 function Utils:NormalizeNPCName(name)
     if not name then return nil end

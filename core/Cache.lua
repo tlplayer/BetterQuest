@@ -9,29 +9,27 @@ function Utils:InitializeBetterQuestDB()
         Debug("BetterQuestDB initialized")
     end
 end
-Cache = {}
 
-function Cache:LogMissingNPC(npcName, dialogText, dialogType)
+function Utils:LogMissingNPC(npcName, dialogText)
     if not BetterQuestDB or not npcName or not dialogText then return end
 
-    local normalizedName = npcName
+    local normalizedName = Utils:NormalizeName(npcName)
     local normalizedText = Utils:NormalizeDialogText(dialogText)
-    if normalizedText == "" then return end
-
+    if normalizedText == "" then 
+        Debug("normalized text became empty:".. dialogText)
+        return 
+    end
 
     if not BetterQuestDB.missingNPCs[normalizedName] then
         BetterQuestDB.missingNPCs[normalizedName] = {
             originalName = npcName,
-            dialogs = {},
+            dialogs = {}
         }
     end
 
     local npcEntry = BetterQuestDB.missingNPCs[normalizedName]
     if not npcEntry.dialogs[normalizedText] then
-        npcEntry.dialogs[normalizedText] = {
-            dialog_text = dialogText,
-            dialogType =  "gossip",
-        }
+        npcEntry.dialogs[normalizedText] = dialogText
     end
 end
 
