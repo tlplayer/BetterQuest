@@ -10049,6 +10049,16 @@ NPC_DATABASE = {
       ["where would you like to fly to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\daelyshia\\where_would_you_like_to_fly_to.wav", dialog_type="gossip", quest_id=nil, seconds=1.9 },
     },
   },
+  ["Daemon"] = {
+    race = "",
+    sex = "male",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
+    },
+  },
   ["Daera Brightspear"] = {
     race = "dwarf",
     sex = "female",
@@ -12166,6 +12176,16 @@ NPC_DATABASE = {
     narrator = "night_elf_female",
     dialogs = {
       ["it looks like youve already found love you can giv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\shailiea\\it_looks_like_youve_already_found_love_you_can_giv.wav", dialog_type="gossip", quest_id=nil, seconds=9.5, linked_to="Shailiea" },
+    },
+  },
+  ["Denis"] = {
+    race = "",
+    sex = "male",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
     },
   },
   ["Dennika"] = {
@@ -19795,6 +19815,16 @@ NPC_DATABASE = {
     dialogs = {
       ["about time you showed me some results now ill show"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\grarnik_goodstitch\\about_time_you_showed_me_some_results_now_ill_show.wav", dialog_type="gossip", quest_id=nil, seconds=3.68 },
       ["greetings can i teach you how to turn found cloth "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\goblin\\grarnik_goodstitch\\greetings_can_i_teach_you_how_to_turn_found_cloth_.wav", dialog_type="gossip", quest_id=nil, seconds=3.56 },
+    },
+  },
+  ["Gravelflint Scout"] = {
+    race = "",
+    sex = "male",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
     },
   },
   ["Grawmug"] = {
@@ -40111,18 +40141,25 @@ NPC_DATABASE = {
     narrator = "dwarf",
     dialogs = {
       ["ah i remember now i gave the mysterious fossil to "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\ah_i_remember_now_i_gave_the_mysterious_fossil_to_.wav", dialog_type="gossip", quest_id=nil, seconds=5.36 },
+      ["can you get this cracked golem off me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\can_you_get_this_cracked_golem_off_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
+      ["help me this cracked golem wont get off of me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\help_me_this_cracked_golem_wont_get_off_of_me.wav", dialog_type="gossip", quest_id=nil, seconds=3.2 },
       ["hollee is that you i need some help chiseling this"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\729_quest_complete.wav", dialog_type="quest_complete", quest_id=729, seconds=33.84 },
       ["hrm nothing up here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\hrm_nothing_up_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
       ["i bet you i left it in the tent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\i_bet_you_i_left_it_in_the_tent.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
       ["interesting i hadnt noticed this earlier"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\interesting_i_hadnt_noticed_this_earlier.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
       ["is the prospector alive"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\731_quest_progress.wav", dialog_type="quest_progress", quest_id=731, seconds=1.8 },
+      ["looks like weve uncovered this cracked golem now h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\looks_like_weve_uncovered_this_cracked_golem_now_h.wav", dialog_type="gossip", quest_id=nil, seconds=3.56 },
+      ["looks like weve uncovered this unknown now help me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\looks_like_weve_uncovered_this_unknown_now_help_me.wav", dialog_type="gossip", quest_id=nil, seconds=3.52 },
       ["no mysterious fossil here ah but my copy of green "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\no_mysterious_fossil_here_ah_but_my_copy_of_green_.wav", dialog_type="gossip", quest_id=nil, seconds=6.28 },
       ["nope didnt leave the fossil back here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\nope_didnt_leave_the_fossil_back_here.wav", dialog_type="gossip", quest_id=nil, seconds=3.0 },
       ["now where did i put that mysterious fossil ah mayb"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\now_where_did_i_put_that_mysterious_fossil_ah_mayb.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
+      ["oh my whats this help"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\oh_my_whats_this_help.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
       ["oh wait im supposed to be looking for that mysteri"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\oh_wait_im_supposed_to_be_looking_for_that_mysteri.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
       ["oh wait thats hollees tent and its empty"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\oh_wait_thats_hollees_tent_and_its_empty.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
       ["ok adventurer lets go find where i left that myste"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\731_quest_accept.wav", dialog_type="quest_accept", quest_id=731, seconds=29.04 },
       ["protect prospector remtravel as he searches for th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\731_quest_objective.wav", dialog_type="quest_objective", quest_id=731, seconds=7.04 },
+      ["s goes back to work oblivious to everything around"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\s_goes_back_to_work_oblivious_to_everything_around.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
+      ["s inspects the ancient mossy stone"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\s_inspects_the_ancient_mossy_stone.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
       ["so then hollee oh thats right you are not hollee w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\prospector_remtravel\\so_then_hollee_oh_thats_right_you_are_not_hollee_w.wav", dialog_type="gossip", quest_id=nil, seconds=29.16 },
     },
   },

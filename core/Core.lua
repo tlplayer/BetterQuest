@@ -119,16 +119,11 @@ broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_SAY")
 broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_YELL")
 broadcastFrame:RegisterEvent("CHAT_MSG_MONSTER_WHISPER")
 
--- catch-all fallback for non-monster NPCs
-broadcastFrame:RegisterEvent("CHAT_MSG_SAY")
-broadcastFrame:RegisterEvent("CHAT_MSG_YELL")
-
 broadcastFrame:SetScript("OnEvent", function()
     if event == "CHAT_MSG_MONSTER_SAY"
     or event == "CHAT_MSG_MONSTER_YELL"
     or event == "CHAT_MSG_MONSTER_WHISPER"
-    or event == "CHAT_MSG_SAY"
-    or event == "CHAT_MSG_YELL" then
+    then
 
         OnNPCSay(arg1, arg2)
     end
