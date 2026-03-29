@@ -28845,6 +28845,16 @@ NPC_DATABASE = {
       ["you think you can summon us we are the ones that s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\ogre\\kormok\\you_think_you_can_summon_us_we_are_the_ones_that_s.wav", dialog_type="gossip", quest_id=nil, seconds=9.24 },
     },
   },
+  ["Korra"] = {
+    race = "",
+    sex = "male",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
+    dialogs = {
+    },
+  },
   ["Korran"] = {
     race = "troll",
     sex = "male",
@@ -40548,6 +40558,7 @@ NPC_DATABASE = {
       ["find shaeldryn at the moonwell to the northeast"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\raene_wolfrunner\\1024_quest_objective.wav", dialog_type="quest_objective", quest_id=1024, seconds=3.42 },
       ["find teronis in ashenvale"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\raene_wolfrunner\\991_quest_objective.wav", dialog_type="quest_objective", quest_id=991, seconds=2.78 },
       ["hello how are you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\raene_wolfrunner\\1024_quest_progress.wav", dialog_type="quest_progress", quest_id=1024, seconds=1.72 },
+      ["i know these forests as if they were a part of me "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\raene_wolfrunner\\i_know_these_forests_as_if_they_were_a_part_of_me_.wav", dialog_type="gossip", quest_id=nil, seconds=9.58 },
       ["kill 1 den watcher 2 ursas 10 totemics and 12 warr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\raene_wolfrunner\\1025_quest_objective.wav", dialog_type="quest_objective", quest_id=1025, seconds=8.9 },
       ["so this is the skull of the fiercest furbolg threa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\raene_wolfrunner\\1046_quest_complete.wav", dialog_type="quest_complete", quest_id=1046, seconds=23.5 },
       ["the furbolg were not always our enemy adventurer b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\night_elf_female\\raene_wolfrunner\\1025_quest_progress.wav", dialog_type="quest_progress", quest_id=1025, seconds=10.64 },

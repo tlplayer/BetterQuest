@@ -172,37 +172,33 @@ def _find_field_string(block, fieldname):
     return parsed
 
 
-def _find_field_token(block, fieldname):
-    """Extract a Lua non-string field value: ["fieldname"] = token """
-    marker = '["' + fieldname + '"]'
-    pos = block.find(marker)
-    if pos == -1:
-        return None
-    eq = block.find("=", pos)
-    if eq == -1:
-        return None
-    tstart = eq + 1
-    while tstart < len(block) and block[tstart].isspace():
-        tstart += 1
-    tend = tstart
-    while tend < len(block) and block[tend] not in (",", "}"):
-        tend += 1
-    token = block[tstart:tend].strip()
-    return token or None
-
-
 def _extract_missing_npcs_from_lua(lua_text):
     """
     Parse BetterQuestDB.lua and return:
-        { npc_name: [ { hash, dialog_text, dialogType, count }, ... ] }
-    Uses originalName when present as the dict key.
+        { npc_name: [ dialog_text, ... ] }
+
+    Expected Lua schema:
+        BetterQuestDB = {
+            ["NPC Name"] = {
+                ["originalName"] = "NPC Name",   -- optional
+                ["dialogs"] = {
+                    ["hash_key"] = "Full dialog text.",
+                    ...
+                },
+            },
+            ...
+        }
+
+    Dialog values are plain strings, not sub-tables.
+    Uses originalName as the result key when present.
     """
     result = {}
-    marker = '["missingNPCs"]'
+
+    # Find the top-level table: BetterQuestDB = { ... }
+    marker = "BetterQuestDB"
     idx = lua_text.find(marker)
     if idx == -1:
         return result
-
     eq_idx = lua_text.find("=", idx)
     if eq_idx == -1:
         return result
@@ -213,48 +209,39 @@ def _extract_missing_npcs_from_lua(lua_text):
     if end_brace == -1:
         return result
 
-    block = lua_text[brace_idx : end_brace + 1]
+    top_block = lua_text[brace_idx : end_brace + 1]
     i = 0
-    L = len(block)
+    L = len(top_block)
 
     while i < L:
-        start_key = block.find('["', i)
+        # Find next NPC key: ["NPC Name"]
+        start_key = top_block.find('["', i)
         if start_key == -1:
             break
         key_start = start_key + 2
-        key_end = block.find('"]', key_start)
+        key_end = top_block.find('"]', key_start)
         if key_end == -1:
             break
-        npc_key = block[key_start:key_end]
+        npc_key = top_block[key_start:key_end]
 
-        eq = block.find("=", key_end)
+        # Find '=' then opening '{' for this NPC's sub-table
+        eq = top_block.find("=", key_end)
         if eq == -1:
             i = key_end + 2
             continue
-        npc_brace = block.find("{", eq)
+        npc_brace = top_block.find("{", eq)
         if npc_brace == -1:
             i = eq + 1
             continue
-        npc_end = _find_matching_brace(block, npc_brace)
+        npc_end = _find_matching_brace(top_block, npc_brace)
         if npc_end == -1:
             break
-        npc_block = block[npc_brace : npc_end + 1]
+        npc_block = top_block[npc_brace : npc_end + 1]
 
-        # originalName (optional)
-        original_name = None
-        on_pos = npc_block.find('["originalName"]')
-        if on_pos != -1:
-            on_eq = npc_block.find("=", on_pos)
-            if on_eq != -1:
-                q = npc_block.find('"', on_eq)
-                if q == -1:
-                    q = npc_block.find("'", on_eq)
-                if q != -1:
-                    parsed, _ = _parse_lua_string(npc_block, q)
-                    if parsed is not None:
-                        original_name = parsed
+        # Extract originalName (optional override for the key)
+        original_name = _find_field_string(npc_block, "originalName")
 
-        # dialogs table
+        # Find the dialogs sub-table
         dialogs = []
         dpos = npc_block.find('["dialogs"]')
         if dpos != -1:
@@ -268,6 +255,7 @@ def _extract_missing_npcs_from_lua(lua_text):
                         j = 0
                         M = len(dialogs_block)
                         while j < M:
+                            # Find each ["hash_key"] entry
                             kstart = dialogs_block.find('["', j)
                             if kstart == -1:
                                 break
@@ -275,43 +263,27 @@ def _extract_missing_npcs_from_lua(lua_text):
                             k_e = dialogs_block.find('"]', k_s)
                             if k_e == -1:
                                 break
-                            dialog_hash = dialogs_block[k_s:k_e]
 
+                            # Value after '=' is a plain string (not a sub-table)
                             keq = dialogs_block.find("=", k_e)
                             if keq == -1:
                                 j = k_e + 2
                                 continue
-                            kbrace = dialogs_block.find("{", keq)
-                            if kbrace == -1:
+
+                            # Skip whitespace to find the opening quote
+                            vstart = keq + 1
+                            while vstart < M and dialogs_block[vstart].isspace():
+                                vstart += 1
+
+                            if vstart >= M or dialogs_block[vstart] not in ('"', "'"):
+                                # Not a string value — skip this entry
                                 j = keq + 1
                                 continue
-                            k_end = _find_matching_brace(dialogs_block, kbrace)
-                            if k_end == -1:
-                                break
-                            entry_block = dialogs_block[kbrace : k_end + 1]
 
-                            dialog_text = _find_field_string(entry_block, "dialog_text")
-                            dialog_type = _find_field_string(entry_block, "dialogType")
-                            if dialog_type is None:
-                                tok = _find_field_token(entry_block, "dialogType")
-                                if tok:
-                                    dialog_type = tok.strip('"').strip("'")
-
-                            count_tok = _find_field_token(entry_block, "count")
-                            count = None
-                            if count_tok:
-                                try:
-                                    count = int(count_tok)
-                                except Exception:
-                                    pass
-
-                            dialogs.append({
-                                "hash":        dialog_hash,
-                                "dialog_text": dialog_text,
-                                "dialogType":  dialog_type or "gossip",
-                                "count":       count or 1,
-                            })
-                            j = k_end + 1
+                            dialog_text, after = _parse_lua_string(dialogs_block, vstart)
+                            if dialog_text is not None:
+                                dialogs.append(dialog_text)
+                            j = after if after > vstart else vstart + 1
 
         npc_name_key = (original_name or npc_key).strip()
         if dialogs:
@@ -375,11 +347,12 @@ def sync_game_data(csv_path, lua_path):
     to_append = []
 
     for npc_name, dialogs in missing.items():
-        for d in dialogs:
-            text = (d.get("dialog_text") or "").strip()
+        for text in dialogs:
+            # Collapse all internal whitespace sequences (including newlines) to a single space
+            text = " ".join(text.split())
             if not text:
                 continue
-            dialog_type = (d.get("dialogType") or "gossip").lower()
+            dialog_type = "gossip"
             key = (npc_name.strip(), dialog_type, "", text)
             if key not in existing:
                 to_append.append({
