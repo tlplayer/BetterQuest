@@ -120,6 +120,7 @@ The addonn scrapes dialogue from in game, saves it in a settings file, then the 
 ~/Applications/wow/Interface/AddOns/BetterQuest$ ls ../../../WTF/Account/ADMIN/SavedVariables |grep BetterQuest.lua
 BetterQuest.lua
 
+# This looks like the following:
 
 ```
 
@@ -192,17 +193,6 @@ Place converted `.tga` files in `BetterQuest/portraits/`.
 
 ---
 
-## Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| No audio in-game | Run `sync.py`. Check file is in `sounds/`. Check FFmpeg is installed. |
-| Model download fails | Run `huggingface-cli login` |
-| Audio cuts off early | Re-run `sync.py` to resync durations |
-| Wrong voice for NPC | Check `data/npc_metadata.json` and `data/npc_race.yml` |
-
----
-
 ## Contributing
 
 Most useful contributions:
@@ -210,18 +200,21 @@ Most useful contributions:
 - **Race/sex mappings** — fix incorrect or missing entries in `data/npc_race.yml`, `data/npc_sex.yml`, and `data/all_npc_dialog.csv`
 - **UI** — the current UI is pfUI-dependent and not styled to match the classic WoW aesthetic
 - **Speaker attribution** — identifying which NPC delivers which gossip/broadcast text is the hardest part of the data problem
+- **Share your sync'd data** - When you contribute to the all_npc_dialog.csv everyone can then use the underlying data 
 
 ---
 
 ## Support
 
 - [Ko-fi (this project)](https://ko-fi.com/tlplayer)
-- [Mr. Thinger's Ko-fi](https://github.com/mrthinger/wow-voiceover) — original inspiration
 
 ---
 
 ## Why
 
-I've played WoW since I was six and couldn't read well. The game has a lot of text and a poor reading UX. Voice-over makes the stories accessible and encourages engagement with the writing.
+- I've played WoW since I was six and I love this game.
+- Getting fixes/patches that improve the game improves my enjoyment aswell as yours
+- Contributions to the database npc makes the addon better
+- I have a ko-fi and getting tips is always nice
 
-One use case I care about: a parent cloning their voice for a child to hear in-game — something permanent and personal.
+
