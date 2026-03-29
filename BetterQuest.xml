@@ -4,6 +4,10 @@
     <!-- Databases -->
     <Include file="db\npc_database.lua"/>
 
+    <!-- Find out what version of wow this is running -->
+    <Script file="Version.lua"/>
+
+
     <!-- Core systems -->
     <Script file="Config.lua"/>
     <Script file="Utils.lua"/>

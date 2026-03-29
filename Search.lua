@@ -54,7 +54,7 @@ end
 -- NPC METADATA + DIALOG SOUND LOOKUP
 -------------------------------------------------
 
-local FALLBACK_TIMEOUT = 0.4
+local FALLBACK_TIMEOUT = 0.5
 
 function Utils:GetNPCMetadata(npcName)
     if not npcName then return nil end
