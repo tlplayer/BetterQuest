@@ -150,6 +150,9 @@ function Utils:StopSound(soundData)
     end
 end
 
+function Utils:GetZone()
+    return GetRealZoneText()
+end
 
 function Utils:PrintTable(tbl)
     for k, v in pairs(tbl) do

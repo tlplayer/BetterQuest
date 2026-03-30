@@ -20,16 +20,20 @@ function Utils:LogMissingNPC(npcName, dialogText)
         return 
     end
 
+    local zone = Utils:GetZone()
+
     if not BetterQuestDB[normalizedName] then
         BetterQuestDB[normalizedName] = {
             originalName = npcName,
-            dialogs = {}
+            dialogs = {},
+            zones = {}
         }
     end
 
     local npcEntry = BetterQuestDB[normalizedName]
     if not npcEntry.dialogs[normalizedText] then
         npcEntry.dialogs[normalizedText] = dialogText
+        npcEntry.zones[zone] = zone
     end
 end
 
