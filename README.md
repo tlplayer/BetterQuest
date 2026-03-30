@@ -4,8 +4,10 @@ Local voice generation and playback for WoW 1.12 (Vanilla) private servers.
 
 | Feature | Preview |
 |---|---|
+| Overall Demo of Features| [![Overall Showcase](https://img.youtube.com/vi/o_XpBgDgaQM/0.jpg)](https://www.youtube.com/watch?v=o_XpBgDgaQM)
 | Quest dialog & NPC voice | [![Quest voices](https://img.youtube.com/vi/EvMl5aSn4VU/0.jpg)](https://www.youtube.com/watch?v=EvMl5aSn4VU) |
 | Gossip, items & sound queue | [![Gossip & items](https://img.youtube.com/vi/DhcekpqKZiA/0.jpg)](https://www.youtube.com/watch?v=DhcekpqKZiA) |
+| Explainer LONG | [![Gossip & items](https://img.youtube.com/vi/k3VKKurGKqk/0.jpg)](https://www.youtube.com/watch?v=k3VKKurGKqk) |
 
 **What it does:**
 - In game narration: quests, speech bubbles, items, books, etc. 
@@ -40,7 +42,7 @@ World of Warcraft/
             ├── sounds/       ← generated .wav files go here
             ├── portraits/    ← .tga portrait files go here
             ├── samples/      ← .wav samples to be cloned human.wav human_female.wav etc. go here
-            ├── scripts/      ← .py generator.py is what you call to generate voicelines go here
+            ├── scripts/      ← .py core.py is what you call to generate voicelines go here
             └── data/         ← .csv and .yaml files for races + sex of NPCs and voice lines + who says them
 ```
 
@@ -71,7 +73,7 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 3. Hugging Face
+### 3. Hugging Face required for VO
 
 The Chatterbox model requires a free Hugging Face account.
 
@@ -84,9 +86,9 @@ pip install --upgrade huggingface_hub
 huggingface-cli login
 ```
 
-### 4. FFmpeg
+### 4. FFmpeg (OPTIONAL)
 
-Required for audio conversion. Install via your package manager:
+for audio conversion. Install via your package manager:
 
 ```sh
 # macOS
@@ -105,8 +107,10 @@ sudo apt install ffmpeg
 # activate env
 source venv/bin/activate
 
+cd scripts
+
 # test generation (CPU, single file)
-python generation/generator.py --limit 1 --device cpu
+python core.py --limit 1 --device cpu
 
 ```
 
@@ -138,32 +142,27 @@ Voice samples are selected by NPC race and sex. Priority order:
 **Generate for a specific NPC:**
 
 ```sh
-python generation/generator.py --npc "Sentinel Aynasha" --cpu
+python core.py --npc "Sentinel Aynasha" --device cpu
 ```
 
 **Generate by race:**
 
 ```sh
-python generation/generator.py --race night_elf --cpu
+python core.py --race night_elf --device cpu
 ```
 
 **Test run (limit output):**
 
 ```sh
-python generation/generator.py --race human --limit 1 --cpu
+python core.py --race human --limit 1 --device cpu
 ```
 
 **Narrator voice (books, item flavor text):**
 
 ```sh
-python generation/generator.py --race narrator --cpu
+python core.py --race object --device cpu
 ```
 
-After generation, always run:
-
-```sh
-python extraction/sync.py
-```
 
 ---
 
