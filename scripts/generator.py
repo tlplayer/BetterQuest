@@ -162,7 +162,7 @@ def get_narrator_for_row(row, npc_lookup, ref_codes, narrator_override=None):
 
     dialog_type = str(row.get("dialog_type", "")).lower()
 
-    if dialog_type in ("book", "item_text"):
+    if dialog_type in ("book", "item_text") and npc_lookup == None:
         if "narrator" in ref_codes:
             return "narrator"
         print("[SKIP] No 'narrator' voice sample.")
@@ -180,11 +180,16 @@ def get_narrator_for_row(row, npc_lookup, ref_codes, narrator_override=None):
     race = meta.get("race")
     sex  = meta.get("sex")
 
-    if not race or not sex:
+    if not race:
         print(f"[SKIP] Missing race/sex for NPC: {npc_name}")
         return None
 
-    narrator = f"{race}_{sex}".lower()
+
+    narrator = f"{race}".lower()
+
+    if sex:
+        narrator += f"_{sex}"
+
     if narrator in ref_codes:
         return narrator
 

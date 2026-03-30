@@ -3,16 +3,6 @@
 -- DO NOT EDIT MANUALLY
 
 NPC_DATABASE = {
-  ["- H.M.M."] = {
-    race = "",
-    sex = "male",
-    portrait = "default",
-    zone = "",
-    model_id = nil,
-    narrator = "narrator",
-    dialogs = {
-    },
-  },
   ["...of all things"] = {
     race = "",
     sex = "male",
@@ -553,6 +543,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["avruus magic is broken im free once again"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\aeranas\\avruus_magic_is_broken_im_free_once_again.wav", dialog_type="gossip", quest_id=nil, seconds=3.56 },
+      ["avruus magic it still controls me you must fight m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\aeranas\\avruus_magic_it_still_controls_me_you_must_fight_m.wav", dialog_type="gossip", quest_id=nil, seconds=7.76 },
     },
   },
   ["Aethalas"] = {
@@ -725,6 +717,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["beware more cultists come"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\akuno\\beware_more_cultists_come.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
+      ["i can find my way from here my friend mekeda will "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\akuno\\i_can_find_my_way_from_here_my_friend_mekeda_will_.wav", dialog_type="gossip", quest_id=nil, seconds=5.56 },
+      ["let us leave this place ive had enough of these ma"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\akuno\\let_us_leave_this_place_ive_had_enough_of_these_ma.wav", dialog_type="gossip", quest_id=nil, seconds=3.88 },
+      ["you will not escape us so easily"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\akuno\\you_will_not_escape_us_so_easily.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
+      ["youll go nowhere fool"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\akuno\\youll_go_nowhere_fool.wav", dialog_type="gossip", quest_id=nil, seconds=2.0 },
     },
   },
   ["Alaindia"] = {
@@ -1261,6 +1258,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["adventurer no hurt ame ame good"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\ame01\\adventurer_no_hurt_a-me_a-me_good.wav", dialog_type="gossip", quest_id=nil, seconds=4.08 },
+      ["ame good good ame follow follow ame home ame go ho"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\ame01\\a-me_good_good_a-me_follow_follow_a-me_home_a-me_g.wav", dialog_type="gossip", quest_id=nil, seconds=7.84 },
+      ["ame home ame good good ame home home home"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\ame01\\a-me_home_a-me_good_good_a-me_home_home_home.wav", dialog_type="gossip", quest_id=nil, seconds=5.92 },
+      ["bad adventurer adventurer bad"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\ame01\\bad_adventurer_adventurer_bad.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
+      ["danger danger adventurer try hurt ame"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\ame01\\danger_danger_adventurer_try_hurt_a-me.wav", dialog_type="gossip", quest_id=nil, seconds=4.04 },
+      ["good good ame ame good home find home"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\ame01\\good_good_a-me_a-me_good_home_find_home.wav", dialog_type="gossip", quest_id=nil, seconds=5.8 },
     },
   },
   ["An Exotic Cookbook"] = {
@@ -1395,6 +1398,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["welcome kind spirit what has brought you to us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\ancestral\\welcome_kind_spirit_what_has_brought_you_to_us.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
     },
   },
   ["Ancestral Spirit"] = {
@@ -1867,6 +1871,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["very well lets see what you have to show me advent"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\anvilward\\very_well_lets_see_what_you_have_to_show_me_advent.wav", dialog_type="gossip", quest_id=nil, seconds=4.04 },
+      ["what manner of trick is this adventurer if you see"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\anvilward\\what_manner_of_trick_is_this_adventurer_if_you_see.wav", dialog_type="gossip", quest_id=nil, seconds=8.48 },
     },
   },
   ["Anya Maulray"] = {
@@ -3720,6 +3726,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["not quite so sure of yourself without the purifier"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\balizar\\not_quite_so_sure_of_yourself_without_the_purifier.wav", dialog_type="gossip", quest_id=nil, seconds=3.96 },
     },
   },
   ["Balizar the Umbrage"] = {
@@ -4619,6 +4626,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["ready when you are adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\big\\ready_when_you_are_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
     },
   },
   ["Big Will"] = {
@@ -5393,6 +5401,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["dragon filth guards guards seize this monster"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\bolvar\\dragon_filth_guards_guards_seize_this_monster.wav", dialog_type="gossip", quest_id=nil, seconds=4.08 },
+      ["reginald i i am sorry"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\bolvar\\reginald_i_i_am_sorry.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["to the safe hall your majesty"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\bolvar\\to_the_safe_hall_your_majesty.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
     },
   },
   ["Bolvars Decree"] = {
@@ -5483,6 +5494,16 @@ NPC_DATABASE = {
     zone = "",
     model_id = nil,
     narrator = "object",
+    dialogs = {
+    },
+  },
+  ["Book: The Powers Below"] = {
+    race = "",
+    sex = "male",
+    portrait = "default",
+    zone = "",
+    model_id = nil,
+    narrator = "narrator",
     dialogs = {
     },
   },
@@ -5608,6 +5629,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["another falls"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\boss_arugal\\another_falls.wav", dialog_type="gossip", quest_id=nil, seconds=1.6 },
+      ["release your rage"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\boss_arugal\\release_your_rage.wav", dialog_type="gossip", quest_id=nil, seconds=1.8 },
+      ["who dares interfere with the sons of arugal"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\boss_arugal\\who_dares_interfere_with_the_sons_of_arugal.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
+      ["you too shall serve"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\boss_arugal\\you_too_shall_serve.wav", dialog_type="gossip", quest_id=nil, seconds=2.08 },
     },
   },
   ["Boss Galgosh"] = {
@@ -7299,6 +7324,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["okay okay gimme a minute to rest now you gone and "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\calvin\\okay_okay_gimme_a_minute_to_rest_now_you_gone_and_.wav", dialog_type="gossip", quest_id=nil, seconds=5.0 },
     },
   },
   ["Calvin Montague"] = {
@@ -7646,6 +7672,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["gross"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\captive\\gross.wav", dialog_type="gossip", quest_id=nil, seconds=1.16 },
+      ["i think those weird bird guys were going to eat us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\captive\\i_think_those_weird_bird_guys_were_going_to_eat_us.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
+      ["yay were free"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\captive\\yay_were_free.wav", dialog_type="gossip", quest_id=nil, seconds=1.76 },
     },
   },
   ["Captured Arkonarin"] = {
@@ -8863,6 +8892,13 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["a shadowy sinister presence has invaded the emeral"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\clintar\\a_shadowy_sinister_presence_has_invaded_the_emeral.wav", dialog_type="gossip", quest_id=nil, seconds=14.48 },
+      ["begone from this place"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\clintar\\begone_from_this_place.wav", dialog_type="gossip", quest_id=nil, seconds=1.88 },
+      ["ive recovered the second relic take a moment to re"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\clintar\\ive_recovered_the_second_relic_take_a_moment_to_re.wav", dialog_type="gossip", quest_id=nil, seconds=6.72 },
+      ["lurosa i am entrusting the relics of aviana to adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\clintar\\lurosa_i_am_entrusting_the_relics_of_aviana_to_adv.wav", dialog_type="gossip", quest_id=nil, seconds=14.76 },
+      ["thats the first relic but there are still two more"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\clintar\\thats_the_first_relic_but_there_are_still_two_more.wav", dialog_type="gossip", quest_id=nil, seconds=5.8 },
+      ["the emerald dream will never be yours"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\clintar\\the_emerald_dream_will_never_be_yours.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
+      ["we have all three of the relics but my energy is r"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\clintar\\we_have_all_three_of_the_relics_but_my_energy_is_r.wav", dialog_type="gossip", quest_id=nil, seconds=10.44 },
     },
   },
   ["Cloth Request"] = {
@@ -9378,6 +9414,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["deployment sucessful trespassers will be neutraliz"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\converted_sentry\\deployment_sucessful_trespassers_will_be_neutraliz.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
+      ["objective acquired initiating security routines"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\converted_sentry\\objective_acquired_initiating_security_routines.wav", dialog_type="gossip", quest_id=nil, seconds=3.84 },
     },
   },
   ["Cook Ghilm"] = {
@@ -10449,6 +10487,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["kill her take the farm"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\daphne\\kill_her_take_the_farm.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
+      ["the light is with us this day"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\daphne\\the_light_is_with_us_this_day.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["you wont ruin my lands you scum"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\daphne\\you_wont_ruin_my_lands_you_scum.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
     },
   },
   ["Daphne Stilwell"] = {
@@ -10498,6 +10539,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["good adventurer you are under the spells influence"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\daranelle\\good_adventurer_you_are_under_the_spells_influence.wav", dialog_type="gossip", quest_id=nil, seconds=7.44 },
     },
   },
   ["Darcy"] = {
@@ -11038,6 +11080,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["its okay boys back off youve done enough ill meet "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dashel\\its_okay_boys_back_off_youve_done_enough_ill_meet_.wav", dialog_type="gossip", quest_id=nil, seconds=4.96 },
+      ["now youre gonna get it good adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dashel\\now_youre_gonna_get_it_good_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["okay okay enough fighting no one else needs to get"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dashel\\okay_okay_enough_fighting_no_one_else_needs_to_get.wav", dialog_type="gossip", quest_id=nil, seconds=4.28 },
     },
   },
   ["Dashel Stonefist"] = {
@@ -11124,6 +11169,16 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["duro will be reinforced ultris was a complete disa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\duro_will_be_reinforced_ultris_was_a_complete_disa.wav", dialog_type="gossip", quest_id=nil, seconds=6.36 },
+      ["i am returning to tempest keep see to it that i do"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\i_am_returning_to_tempest_keep_see_to_it_that_i_do.wav", dialog_type="gossip", quest_id=nil, seconds=5.92 },
+      ["indeed it is not a request"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\indeed_it_is_not_a_request.wav", dialog_type="gossip", quest_id=nil, seconds=2.36 },
+      ["my lord"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\my_lord.wav", dialog_type="gossip", quest_id=nil, seconds=1.36 },
+      ["see to it ardonis"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\see_to_it_ardonis.wav", dialog_type="gossip", quest_id=nil, seconds=1.92 },
+      ["we need you to send reinforcements to manaforge du"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\we_need_you_to_send_reinforcements_to_manaforge_du.wav", dialog_type="gossip", quest_id=nil, seconds=7.44 },
+      ["weve had too many setbacks along the way hellfire "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\weve_had_too_many_setbacks_along_the_way_hellfire_.wav", dialog_type="gossip", quest_id=nil, seconds=15.36 },
+      ["yes my lord"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\yes_my_lord.wav", dialog_type="gossip", quest_id=nil, seconds=1.32 },
+      ["you cannot be serious we are severely understaffed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\you_cannot_be_serious_we_are_severely_understaffed.wav", dialog_type="gossip", quest_id=nil, seconds=6.52 },
+      ["you will do as ordered manaforge duro has come und"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dawnforge\\you_will_do_as_ordered_manaforge_duro_has_come_und.wav", dialog_type="gossip", quest_id=nil, seconds=11.96 },
     },
   },
   ["Dawnwatcher Selgorm"] = {
@@ -11704,6 +11759,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["arrrgh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\deathstalker\\arrrgh.wav", dialog_type="gossip", quest_id=nil, seconds=1.2 },
     },
   },
   ["Deathstalker Adamant"] = {
@@ -13130,6 +13186,14 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["adventurer where am i who are you oh no what happe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\draenei_survivor\\adventurer_where_am_i_who_are_you_oh_no_what_happe.wav", dialog_type="gossip", quest_id=nil, seconds=5.48 },
+      ["adventurer you saved me i owe you a debt that i ca"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\draenei_survivor\\adventurer_you_saved_me_i_owe_you_a_debt_that_i_ca.wav", dialog_type="gossip", quest_id=nil, seconds=8.12 },
+      ["everything hurts please make it stop"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\draenei_survivor\\everything_hurts_please_make_it_stop.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
+      ["i dont know if i can make it please help me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\draenei_survivor\\i_dont_know_if_i_can_make_it_please_help_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
+      ["oh the pain"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\draenei_survivor\\oh_the_pain.wav", dialog_type="gossip", quest_id=nil, seconds=1.44 },
+      ["the last thing i remember is the ship falling and "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\draenei_survivor\\the_last_thing_i_remember_is_the_ship_falling_and_.wav", dialog_type="gossip", quest_id=nil, seconds=7.2 },
+      ["ugh what is this place is that all thats left of t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\draenei_survivor\\ugh_what_is_this_place_is_that_all_thats_left_of_t.wav", dialog_type="gossip", quest_id=nil, seconds=4.6 },
+      ["ughhh i hurt can you help me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\draenei_survivor\\ughhh_i_hurt_can_you_help_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
     },
   },
   ["Dragonmaw"] = {
@@ -13140,6 +13204,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["hey me not feel so good"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dragonmaw\\hey_me_not_feel_so_good.wav", dialog_type="gossip", quest_id=nil, seconds=2.32 },
+      ["it put the mutton in the stomach"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dragonmaw\\it_put_the_mutton_in_the_stomach.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["me so hungry yum"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dragonmaw\\me_so_hungry_yum.wav", dialog_type="gossip", quest_id=nil, seconds=2.24 },
+      ["time for eating"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dragonmaw\\time_for_eating.wav", dialog_type="gossip", quest_id=nil, seconds=1.64 },
+      ["you is bad orc baaad or argh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\dragonmaw\\you_is_bad_orc_baaad_or_argh.wav", dialog_type="gossip", quest_id=nil, seconds=4.16 },
     },
   },
   ["Dragonmaw Centurion"] = {
@@ -15246,6 +15315,29 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["10 seconds to blast stand back"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\10_seconds_to_blast_stand_back.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
+      ["5 seconds until detonation"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\5_seconds_until_detonation.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["adventurer attacking help"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\adventurer_attacking_help.wav", dialog_type="gossip", quest_id=nil, seconds=2.12 },
+      ["did you hear something"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wounded\\did_you_hear_something.wav", dialog_type="gossip", quest_id=nil, seconds=1.36, linked_to="Wounded" },
+      ["fire in the hole"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\fire_in_the_hole.wav", dialog_type="gossip", quest_id=nil, seconds=1.68 },
+      ["get this adventurer off of me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\get_this_adventurer_off_of_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["i dont think one charge is going to cut it keep fe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\i_dont_think_one_charge_is_going_to_cut_it_keep_fe.wav", dialog_type="gossip", quest_id=nil, seconds=3.92 },
+      ["i heard something over there"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\i_heard_something_over_there.wav", dialog_type="gossip", quest_id=nil, seconds=1.92 },
+      ["incoming blast in 10 seconds"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\incoming_blast_in_10_seconds.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
+      ["incoming blast in 5 seconds clear the tunnel stay "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\incoming_blast_in_5_seconds_clear_the_tunnel_stay_.wav", dialog_type="gossip", quest_id=nil, seconds=4.24 },
+      ["its quiet here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\its_quiet_here.wav", dialog_type="gossip", quest_id=nil, seconds=1.52 },
+      ["lets see if we can find out where these troggs are"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\lets_see_if_we_can_find_out_where_these_troggs_are.wav", dialog_type="gossip", quest_id=nil, seconds=6.6 },
+      ["look over there at the tunnel wall"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\look_over_there_at_the_tunnel_wall.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
+      ["more troggs ward them off as i prepare the explosi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\more_troggs_ward_them_off_as_i_prepare_the_explosi.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
+      ["nice work ill set off the charges to prevent any m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\nice_work_ill_set_off_the_charges_to_prevent_any_m.wav", dialog_type="gossip", quest_id=nil, seconds=5.96 },
+      ["such devastation what a horrible mess"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\such_devastation_what_a_horrible_mess.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
+      ["superb because of your help my people stand a chan"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\superb_because_of_your_help_my_people_stand_a_chan.wav", dialog_type="gossip", quest_id=nil, seconds=8.36 },
+      ["the charges are set get back before they blow"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\the_charges_are_set_get_back_before_they_blow.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
+      ["the final charge is set stand back"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\the_final_charge_is_set_stand_back.wav", dialog_type="gossip", quest_id=nil, seconds=3.12 },
+      ["too quiet"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\too_quiet.wav", dialog_type="gossip", quest_id=nil, seconds=1.44 },
+      ["trogg incursion defend me while i blast the hole c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\trogg_incursion_defend_me_while_i_blast_the_hole_c.wav", dialog_type="gossip", quest_id=nil, seconds=4.24 },
+      ["well done without your help i would have never bee"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\well_done_without_your_help_i_would_have_never_bee.wav", dialog_type="gossip", quest_id=nil, seconds=6.16 },
+      ["with your help i can evaluate these tunnels"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\emi\\with_your_help_i_can_evaluate_these_tunnels.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
     },
   },
   ["Emmisary Gormok"] = {
@@ -15395,6 +15487,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["now i cut you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\engineer_spark\\now_i_cut_you.wav", dialog_type="gossip", quest_id=nil, seconds=1.48 },
+      ["yes master all goes along as planned"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\engineer_spark\\yes_master_all_goes_along_as_planned.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
     },
   },
   ["Enohar Thunderbrew"] = {
@@ -15443,6 +15537,21 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["and heroes i hold that which you seek may it once "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\and_heroes_i_hold_that_which_you_seek_may_it_once_.wav", dialog_type="gossip", quest_id=nil, seconds=12.64 },
+      ["but malfurion cenarius ysera they still fight they"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\but_malfurion_cenarius_ysera_they_still_fight_they.wav", dialog_type="gossip", quest_id=nil, seconds=10.04 },
+      ["defeated my minions then face me mortals"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\defeated_my_minions_then_face_me_mortals.wav", dialog_type="gossip", quest_id=nil, seconds=3.6 },
+      ["for so long i was lost the nightmares corruption h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\for_so_long_i_was_lost_the_nightmares_corruption_h.wav", dialog_type="gossip", quest_id=nil, seconds=13.36 },
+      ["i i feel i feel the touch of elune upon my being o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\i_i_feel_i_feel_the_touch_of_elune_upon_my_being_o.wav", dialog_type="gossip", quest_id=nil, seconds=9.4 },
+      ["it burns the pain searing"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\it_burns_the_pain_searing.wav", dialog_type="gossip", quest_id=nil, seconds=3.76 },
+      ["my lady i am unworthy of your prayer truly you are"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\my_lady_i_am_unworthy_of_your_prayer_truly_you_are.wav", dialog_type="gossip", quest_id=nil, seconds=21.28 },
+      ["my redemption you are bold little one my redemptio"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\my_redemption_you_are_bold_little_one_my_redemptio.wav", dialog_type="gossip", quest_id=nil, seconds=6.56 },
+      ["pitful predictable mortals you know not what you h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\pitful_predictable_mortals_you_know_not_what_you_h.wav", dialog_type="gossip", quest_id=nil, seconds=11.8 },
+      ["remulos look how easy they fall before me you can "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\remulos_look_how_easy_they_fall_before_me_you_can_.wav", dialog_type="gossip", quest_id=nil, seconds=9.8 },
+      ["rise servants of the nightmare rise and destroy th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\rise_servants_of_the_nightmare_rise_and_destroy_th.wav", dialog_type="gossip", quest_id=nil, seconds=7.88 },
+      ["where is your savior how long can you hold out aga"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\where_is_your_savior_how_long_can_you_hold_out_aga.wav", dialog_type="gossip", quest_id=nil, seconds=4.88 },
+      ["why why did this happen to to me where were you ty"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\why_why_did_this_happen_to_to_me_where_were_you_ty.wav", dialog_type="gossip", quest_id=nil, seconds=8.68 },
+      ["you are certainly not your father insect should it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\you_are_certainly_not_your_father_insect_should_it.wav", dialog_type="gossip", quest_id=nil, seconds=15.48 },
+      ["your world shall suffer an unmerciful end the nigh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eranikus\\your_world_shall_suffer_an_unmerciful_end_the_nigh.wav", dialog_type="gossip", quest_id=nil, seconds=5.56 },
     },
   },
   ["Erelas Ambersky"] = {
@@ -15555,6 +15664,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["be healed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eris\\be_healed.wav", dialog_type="gossip", quest_id=nil, seconds=1.2 },
+      ["i have failed once more"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eris\\i_have_failed_once_more.wav", dialog_type="gossip", quest_id=nil, seconds=1.92 },
+      ["i now return to whence i came only to find myself "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eris\\i_now_return_to_whence_i_came_only_to_find_myself_.wav", dialog_type="gossip", quest_id=nil, seconds=8.56 },
+      ["we are saved the peasants have escaped the scourge"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\eris\\we_are_saved_the_peasants_have_escaped_the_scourge.wav", dialog_type="gossip", quest_id=nil, seconds=3.88 },
     },
   },
   ["Eris Havenfire"] = {
@@ -15600,6 +15713,19 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["a adventurer attacks"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\a_adventurer_attacks.wav", dialog_type="gossip", quest_id=nil, seconds=2.0 },
+      ["be careful adventurer those wolves like to hide am"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\be_careful_adventurer_those_wolves_like_to_hide_am.wav", dialog_type="gossip", quest_id=nil, seconds=4.36 },
+      ["beware i am under attack"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\beware_i_am_under_attack.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
+      ["hello quinn how are you faring"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\hello_quinn_how_are_you_faring.wav", dialog_type="gossip", quest_id=nil, seconds=2.36 },
+      ["if i am excused then id like to check on quinn"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\if_i_am_excused_then_id_like_to_check_on_quinn.wav", dialog_type="gossip", quest_id=nil, seconds=3.6 },
+      ["its good to see you again erland what is your repo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\its_good_to_see_you_again_erland_what_is_your_repo.wav", dialog_type="gossip", quest_id=nil, seconds=3.56 },
+      ["ive been better ivar the foul got the better of me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\ive_been_better_ivar_the_foul_got_the_better_of_me.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
+      ["lets get to the others and keep an eye open for th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\lets_get_to_the_others_and_keep_an_eye_open_for_th.wav", dialog_type="gossip", quest_id=nil, seconds=4.72 },
+      ["masses of wolves are to the east and whoever lived"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\masses_of_wolves_are_to_the_east_and_whoever_lived.wav", dialog_type="gossip", quest_id=nil, seconds=5.76 },
+      ["oh no a adventurer is upon us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\oh_no_a_adventurer_is_upon_us.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
+      ["try to take better care of yourself quinn you were"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\try_to_take_better_care_of_yourself_quinn_you_were.wav", dialog_type="gossip", quest_id=nil, seconds=4.2 },
+      ["we made it thanks adventurer i couldnt have gotten"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\we_made_it_thanks_adventurer_i_couldnt_have_gotten.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
+      ["were almost there"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\erland\\were_almost_there.wav", dialog_type="gossip", quest_id=nil, seconds=1.44 },
     },
   },
   ["Erma"] = {
@@ -16494,6 +16620,14 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["assassins from that cult you found lets get moving"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\feero\\assassins_from_that_cult_you_found_lets_get_moving.wav", dialog_type="gossip", quest_id=nil, seconds=6.48 },
+      ["hold i sense an evil presence undead"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\feero\\hold_i_sense_an_evil_presence_undead.wav", dialog_type="gossip", quest_id=nil, seconds=3.76 },
+      ["ill finish you off for good this time"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\feero\\ill_finish_you_off_for_good_this_time.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["it looks like were in trouble look lively here the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\feero\\it_looks_like_were_in_trouble_look_lively_here_the.wav", dialog_type="gossip", quest_id=nil, seconds=3.6 },
+      ["lets go adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\feero\\lets_go_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=1.88 },
+      ["these three again"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\feero\\these_three_again.wav", dialog_type="gossip", quest_id=nil, seconds=1.48 },
+      ["theyre coming out of the woodwork today lets keep "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\feero\\theyre_coming_out_of_the_woodwork_today_lets_keep_.wav", dialog_type="gossip", quest_id=nil, seconds=6.72 },
+      ["well done i should be fine on my own from here rem"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\feero\\well_done_i_should_be_fine_on_my_own_from_here_rem.wav", dialog_type="gossip", quest_id=nil, seconds=8.56 },
     },
   },
   ["Feero Ironhand"] = {
@@ -17434,6 +17568,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["a adventurer slaying him would please the master a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\forsaken\\a_adventurer_slaying_him_would_please_the_master_a.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
     },
   },
   ["Forsaken Scout"] = {
@@ -17960,6 +18095,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["help im under attack"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\galen\\help_im_under_attack.wav", dialog_type="gossip", quest_id=nil, seconds=2.08 },
+      ["help please you must help me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\galen\\help_please_you_must_help_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["let us leave this place"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\galen\\let_us_leave_this_place.wav", dialog_type="gossip", quest_id=nil, seconds=1.88 },
+      ["look out the adventurer attacks"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\galen\\look_out_the_adventurer_attacks.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["thank you adventurer i will remember you always yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\galen\\thank_you_adventurer_i_will_remember_you_always_yo.wav", dialog_type="gossip", quest_id=nil, seconds=7.32 },
     },
   },
   ["Galen Goodward"] = {
@@ -18008,6 +18148,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["who would be foolish enough to enter the tower of "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gallywix\\who_would_be_foolish_enough_to_enter_the_tower_of_.wav", dialog_type="gossip", quest_id=nil, seconds=4.08 },
     },
   },
   ["Galthuk"] = {
@@ -18190,6 +18331,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["ah adventurer you came along just in time i apprec"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\garments\\ah_adventurer_you_came_along_just_in_time_i_apprec.wav", dialog_type="gossip", quest_id=nil, seconds=5.08 },
+      ["farewell to you and may elune be with you always"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\garments\\farewell_to_you_and_may_elune_be_with_you_always.wav", dialog_type="gossip", quest_id=nil, seconds=4.2 },
+      ["farewell to you and may our ancestors be with you "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\garments\\farewell_to_you_and_may_our_ancestors_be_with_you_.wav", dialog_type="gossip", quest_id=nil, seconds=3.88 },
+      ["farewell to you and may shadow always protect you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\garments\\farewell_to_you_and_may_shadow_always_protect_you.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
+      ["farewell to you and may the light be with you alwa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\garments\\farewell_to_you_and_may_the_light_be_with_you_alwa.wav", dialog_type="gossip", quest_id=nil, seconds=3.88 },
+      ["thank you thank you adventurer now i can take on t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\garments\\thank_you_thank_you_adventurer_now_i_can_take_on_t.wav", dialog_type="gossip", quest_id=nil, seconds=5.68 },
     },
   },
   ["Garneg Charskull"] = {
@@ -18832,6 +18979,17 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["adventurer coming right at us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\adventurer_coming_right_at_us.wav", dialog_type="gossip", quest_id=nil, seconds=2.12 },
+      ["adventurer heading this way fast time for revenge"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\adventurer_heading_this_way_fast_time_for_revenge.wav", dialog_type="gossip", quest_id=nil, seconds=3.6 },
+      ["ah the sweet salt air of ratchet"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\ah_the_sweet_salt_air_of_ratchet.wav", dialog_type="gossip", quest_id=nil, seconds=3.4 },
+      ["almost back to ratchet lets keep up the pace"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\almost_back_to_ratchet_lets_keep_up_the_pace.wav", dialog_type="gossip", quest_id=nil, seconds=3.52 },
+      ["at last free from northwatch hold i need a moment "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\at_last_free_from_northwatch_hold_i_need_a_moment_.wav", dialog_type="gossip", quest_id=nil, seconds=5.28 },
+      ["captain brightsun adventurer here has freed me adv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\captain_brightsun_adventurer_here_has_freed_me_adv.wav", dialog_type="gossip", quest_id=nil, seconds=8.48 },
+      ["get this adventurer off of me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\get_this_adventurer_off_of_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
+      ["help adventurer attacking"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\help_adventurer_attacking.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["looks like the southsea freebooters are heavily en"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\looks_like_the_southsea_freebooters_are_heavily_en.wav", dialog_type="gossip", quest_id=nil, seconds=5.8 },
+      ["now i feel better lets get back to ratchet come on"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\now_i_feel_better_lets_get_back_to_ratchet_come_on.wav", dialog_type="gossip", quest_id=nil, seconds=4.88 },
+      ["stay close adventurer ill need all the help i can "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\gilthares\\stay_close_adventurer_ill_need_all_the_help_i_can_.wav", dialog_type="gossip", quest_id=nil, seconds=5.84 },
     },
   },
   ["Gilthares Firebough"] = {
@@ -19933,6 +20091,16 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["i doubt you will be so lucky the next time you enc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\i_doubt_you_will_be_so_lucky_the_next_time_you_enc.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
+      ["i know the way insect there is no need to prod me "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\i_know_the_way_insect_there_is_no_need_to_prod_me_.wav", dialog_type="gossip", quest_id=nil, seconds=5.12 },
+      ["on darkest wing they fly prepare to meet your end"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\on_darkest_wing_they_fly_prepare_to_meet_your_end.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
+      ["run them through brothers"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\run_them_through_brothers.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
+      ["surely you do not think that you will get away wit"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\surely_you_do_not_think_that_you_will_get_away_wit.wav", dialog_type="gossip", quest_id=nil, seconds=8.08 },
+      ["the worst is yet to come"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\the_worst_is_yet_to_come.wav", dialog_type="gossip", quest_id=nil, seconds=2.2 },
+      ["they come for you fool"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\they_come_for_you_fool.wav", dialog_type="gossip", quest_id=nil, seconds=2.08 },
+      ["time to make your final stand insect"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\time_to_make_your_final_stand_insect.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
+      ["what do you think you accomplish from this fool ev"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\what_do_you_think_you_accomplish_from_this_fool_ev.wav", dialog_type="gossip", quest_id=nil, seconds=8.24 },
+      ["you have come to play then let us play"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\grark\\you_have_come_to_play_then_let_us_play.wav", dialog_type="gossip", quest_id=nil, seconds=3.0 },
     },
   },
   ["Grark Lorkrub"] = {
@@ -21089,6 +21257,13 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["a living legend"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\guard\\a_living_legend.wav", dialog_type="gossip", quest_id=nil, seconds=1.76 },
+      ["a moment i shall remember for always"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\guard\\a_moment_i_shall_remember_for_always.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["light be with you sir"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\guard\\light_be_with_you_sir.wav", dialog_type="gossip", quest_id=nil, seconds=1.88 },
+      ["make way"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\guard\\make_way.wav", dialog_type="gossip", quest_id=nil, seconds=1.0 },
+      ["nerves of thorium"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\guard\\nerves_of_thorium.wav", dialog_type="gossip", quest_id=nil, seconds=1.76 },
+      ["we are but dirt beneath your feet sir"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\guard\\we_are_but_dirt_beneath_your_feet_sir.wav", dialog_type="gossip", quest_id=nil, seconds=3.0 },
+      ["you are an inspiration to us all sir"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\guard\\you_are_an_inspiration_to_us_all_sir.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
     },
   },
   ["Guard Berton"] = {
@@ -22222,6 +22397,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["s too injured gives up the chase"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\hendel\\s_too_injured_gives_up_the_chase.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
     },
   },
   ["Henry Stern"] = {
@@ -23127,6 +23303,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["always on the go that girl"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\hornizz\\always_on_the_go_that_girl.wav", dialog_type="gossip", quest_id=nil, seconds=2.36 },
+      ["bye better luck next time"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\hornizz\\bye_better_luck_next_time.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
     },
   },
   ["Hornizz Brimbuzzle"] = {
@@ -23606,16 +23784,6 @@ NPC_DATABASE = {
     dialogs = {
     },
   },
-  ["In memory of my dear mentor"] = {
-    race = "",
-    sex = "male",
-    portrait = "default",
-    zone = "",
-    model_id = nil,
-    narrator = "narrator",
-    dialogs = {
-    },
-  },
   ["Incantation of Celebras"] = {
     race = "object",
     sex = "male",
@@ -23671,6 +23839,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["hooray i am saved"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\injured_patient\\hooray_i_am_saved.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
+      ["im saved thank you doctor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\injured_patient\\im_saved_thank_you_doctor.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
+      ["sweet sweet embrace take me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\injured_patient\\sweet_sweet_embrace_take_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
     },
   },
   ["Injured Peasant"] = {
@@ -25223,6 +25394,7 @@ NPC_DATABASE = {
       ["well now yell need papers to form a guild and jond"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_guard\\well_now_yell_need_papers_to_form_a_guild_and_jond.wav", dialog_type="gossip", quest_id=nil, seconds=12.52 },
       ["well well youve come to the right place to learn m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_guard\\well_well_youve_come_to_the_right_place_to_learn_m.wav", dialog_type="gossip", quest_id=nil, seconds=11.36 },
       ["well yed be sure to find some training in the magi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_guard\\well_yed_be_sure_to_find_some_training_in_the_magi.wav", dialog_type="gossip", quest_id=nil, seconds=11.04 },
+      ["what do ye need directions to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_mountaineer\\what_do_ye_need_directions_to.wav", dialog_type="gossip", quest_id=nil, seconds=1.88, linked_to="Ironforge Mountaineer" },
       ["where better to look for a dark and brooding lot t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_guard\\where_better_to_look_for_a_dark_and_brooding_lot_t.wav", dialog_type="gossip", quest_id=nil, seconds=14.88 },
       ["where is the auction house why its right by the ga"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_guard\\where_is_the_auction_house_why_its_right_by_the_ga.wav", dialog_type="gossip", quest_id=nil, seconds=8.4 },
       ["which class trainer might ye be looking for"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\dwarf\\ironforge_guard\\which_class_trainer_might_ye_be_looking_for.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
@@ -25358,6 +25530,15 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["did you really believe that you could defeat me yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\did_you_really_believe_that_you_could_defeat_me_yo.wav", dialog_type="gossip", quest_id=nil, seconds=5.68 },
+      ["enough"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\enough.wav", dialog_type="gossip", quest_id=nil, seconds=0.96 },
+      ["it is as they say like father like son you are as "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\it_is_as_they_say_like_father_like_son_you_are_as_.wav", dialog_type="gossip", quest_id=nil, seconds=12.84 },
+      ["the end is now fordring"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\the_end_is_now_fordring.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["the grand crusader has charged me with destroying "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\the_grand_crusader_has_charged_me_with_destroying_.wav", dialog_type="gossip", quest_id=nil, seconds=11.92 },
+      ["then come hermit"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\then_come_hermit.wav", dialog_type="gossip", quest_id=nil, seconds=1.56 },
+      ["tragic the elder fordring lives on you are too lat"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\tragic_the_elder_fordring_lives_on_you_are_too_lat.wav", dialog_type="gossip", quest_id=nil, seconds=12.0 },
+      ["you disappoint me taelan i had plans for you grand"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\you_disappoint_me_taelan_i_had_plans_for_you_grand.wav", dialog_type="gossip", quest_id=nil, seconds=11.64 },
+      ["you will not make it to the forests edge fordring"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isillien\\you_will_not_make_it_to_the_forests_edge_fordring.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
     },
   },
   ["Isla"] = {
@@ -25368,6 +25549,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["alright lets do this"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isla\\alright_lets_do_this.wav", dialog_type="gossip", quest_id=nil, seconds=1.92 },
+      ["damsel in distress over here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isla\\damsel_in_distress_over_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.2 },
+      ["dont leave me in here cause if you do i will find "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isla\\dont_leave_me_in_here_cause_if_you_do_i_will_find_.wav", dialog_type="gossip", quest_id=nil, seconds=4.12 },
+      ["hello help"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isla\\hello_help.wav", dialog_type="gossip", quest_id=nil, seconds=1.52 },
+      ["ok lets get out of here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isla\\ok_lets_get_out_of_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
+      ["you sure youre ready take a moment"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isla\\you_sure_youre_ready_take_a_moment.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
     },
   },
   ["Islen Waterseer"] = {
@@ -26616,6 +26803,13 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["go reginald may the light guide your hand"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\jonathan\\go_reginald_may_the_light_guide_your_hand.wav", dialog_type="gossip", quest_id=nil, seconds=3.68 },
+      ["i am ashamed old friend i know not what i do anymo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\jonathan\\i_am_ashamed_old_friend_i_know_not_what_i_do_anymo.wav", dialog_type="gossip", quest_id=nil, seconds=21.8 },
+      ["move aside let them pass"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\jonathan\\move_aside_let_them_pass.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
+      ["reginald windsor is not to be harmed he shall pass"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\jonathan\\reginald_windsor_is_not_to_be_harmed_he_shall_pass.wav", dialog_type="gossip", quest_id=nil, seconds=5.2 },
+      ["reginald you know that i cannot let you pass"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\jonathan\\reginald_you_know_that_i_cannot_let_you_pass.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
+      ["stand down can you not see that heroes walk among "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\jonathan\\stand_down_can_you_not_see_that_heroes_walk_among_.wav", dialog_type="gossip", quest_id=nil, seconds=4.16 },
+      ["we shame our ancestors we shame those lost to us f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\jonathan\\we_shame_our_ancestors_we_shame_those_lost_to_us_f.wav", dialog_type="gossip", quest_id=nil, seconds=5.56 },
     },
   },
   ["Jonathan Carevin"] = {
@@ -26716,6 +26910,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["you have my word that i shall find a use for your "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\jorell\\you_have_my_word_that_i_shall_find_a_use_for_your_.wav", dialog_type="gossip", quest_id=nil, seconds=6.12 },
     },
   },
   ["Jorgen"] = {
@@ -27633,6 +27828,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["look out were under attack"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kaya_ambush\\look_out_were_under_attack.wav", dialog_type="gossip", quest_id=nil, seconds=2.36 },
     },
   },
   ["Kaya End"] = {
@@ -27643,6 +27839,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["thank you for helping me i know my way back from h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kaya_end\\thank_you_for_helping_me_i_know_my_way_back_from_h.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
     },
   },
   ["Kaya Flathoof"] = {
@@ -27665,6 +27862,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["lets go before they find out im free"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kaya_say_start\\lets_go_before_they_find_out_im_free.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
     },
   },
   ["Kayla Smithe"] = {
@@ -27739,6 +27937,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["is the way clear lets get out while we can adventu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kayra\\is_the_way_clear_lets_get_out_while_we_can_adventu.wav", dialog_type="gossip", quest_id=nil, seconds=3.76 },
+      ["lets keep moving were not safe here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kayra\\lets_keep_moving_were_not_safe_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
+      ["look out adventurer enemies ahead"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kayra\\look_out_adventurer_enemies_ahead.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
+      ["looks like we wont get away so easy get ready"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kayra\\looks_like_we_wont_get_away_so_easy_get_ready.wav", dialog_type="gossip", quest_id=nil, seconds=3.52 },
+      ["were almost to the refuge lets go"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kayra\\were_almost_to_the_refuge_lets_go.wav", dialog_type="gossip", quest_id=nil, seconds=2.84 },
     },
   },
   ["Kazzak"] = {
@@ -27749,6 +27952,17 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["all life must be eradicated"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\all_life_must_be_eradicated.wav", dialog_type="gossip", quest_id=nil, seconds=2.36 },
+      ["all mortals will perish"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\all_mortals_will_perish.wav", dialog_type="gossip", quest_id=nil, seconds=2.24 },
+      ["contemptible wretch"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\contemptible_wretch.wav", dialog_type="gossip", quest_id=nil, seconds=1.84 },
+      ["i remember well the sting of defeat at the conclus"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\i_remember_well_the_sting_of_defeat_at_the_conclus.wav", dialog_type="gossip", quest_id=nil, seconds=18.48 },
+      ["ill rip the flesh from your bones"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\ill_rip_the_flesh_from_your_bones.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
+      ["impudent whelps you only delay the inevitable wher"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\impudent_whelps_you_only_delay_the_inevitable_wher.wav", dialog_type="gossip", quest_id=nil, seconds=10.0 },
+      ["invaders you dangle upon the precipice of oblivion"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\invaders_you_dangle_upon_the_precipice_of_oblivion.wav", dialog_type="gossip", quest_id=nil, seconds=8.48 },
+      ["kirel narak"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\kirel_narak.wav", dialog_type="gossip", quest_id=nil, seconds=1.48 },
+      ["the legion will conquer all"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\the_legion_will_conquer_all.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
+      ["the legion will never fall"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\the_legion_will_never_fall.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
+      ["the universe will be remade"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kazzak\\the_universe_will_be_remade.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
     },
   },
   ["Kearnens Journal"] = {
@@ -27993,6 +28207,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["champion lightrend make me proud"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kelerun\\champion_lightrend_make_me_proud.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["let the trial begin bloodwrath attack"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kelerun\\let_the_trial_begin_bloodwrath_attack.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["show adventurer the meaning of pain sunstriker"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kelerun\\show_adventurer_the_meaning_of_pain_sunstriker.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
+      ["show this upstart how a real blood knight fights s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kelerun\\show_this_upstart_how_a_real_blood_knight_fights_s.wav", dialog_type="gossip", quest_id=nil, seconds=4.44 },
     },
   },
   ["Kelgruk Bloodaxe"] = {
@@ -28178,6 +28396,14 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["be on the alert the blackwood furbolgs are numerou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kerlonian\\be_on_the_alert_the_blackwood_furbolgs_are_numerou.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
+      ["its quiet too quiet"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kerlonian\\its_quiet_too_quiet.wav", dialog_type="gossip", quest_id=nil, seconds=2.68 },
+      ["liladris has been waiting for me at maestras post "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kerlonian\\liladris_has_been_waiting_for_me_at_maestras_post_.wav", dialog_type="gossip", quest_id=nil, seconds=5.88 },
+      ["oh i am so tired"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kerlonian\\oh_i_am_so_tired.wav", dialog_type="gossip", quest_id=nil, seconds=1.92 },
+      ["oh i can see liladris from here tell her im here w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kerlonian\\oh_i_can_see_liladris_from_here_tell_her_im_here_w.wav", dialog_type="gossip", quest_id=nil, seconds=5.52 },
+      ["this looks like the perfect place for a nap"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kerlonian\\this_looks_like_the_perfect_place_for_a_nap.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
+      ["yaaaaawwwwwnnnn"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kerlonian\\yaaaaawwwwwnnnn.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
+      ["you dont mind if i stop here for a moment do you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kerlonian\\you_dont_mind_if_i_stop_here_for_a_moment_do_you.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
     },
   },
   ["Kerlonian Evershade"] = {
@@ -28520,6 +28746,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["die adventurer elune will not have you harm her cr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kindal\\die_adventurer_elune_will_not_have_you_harm_her_cr.wav", dialog_type="gossip", quest_id=nil, seconds=4.96 },
+      ["im ready when you are adventurer lead the way"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kindal\\im_ready_when_you_are_adventurer_lead_the_way.wav", dialog_type="gossip", quest_id=nil, seconds=3.52 },
+      ["weve done it meet me back by jerkai above the grim"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kindal\\weve_done_it_meet_me_back_by_jerkai_above_the_grim.wav", dialog_type="gossip", quest_id=nil, seconds=4.68 },
+      ["you dare touch me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kindal\\you_dare_touch_me.wav", dialog_type="gossip", quest_id=nil, seconds=1.84 },
     },
   },
   ["Kindal Moonweaver"] = {
@@ -28898,6 +29128,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["ahthe wondrous sound of kodos i love the way they "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kodo\\ahthe_wondrous_sound_of_kodos_i_love_the_way_they_.wav", dialog_type="gossip", quest_id=nil, seconds=11.56 },
+      ["hey look out with that kodo you had better inspect"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kodo\\hey_look_out_with_that_kodo_you_had_better_inspect.wav", dialog_type="gossip", quest_id=nil, seconds=5.48 },
+      ["that kodo sure is a beauty wait a minute where are"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\kodo\\that_kodo_sure_is_a_beauty_wait_a_minute_where_are.wav", dialog_type="gossip", quest_id=nil, seconds=7.44 },
     },
   },
   ["Kodo Skin Scroll"] = {
@@ -29214,6 +29447,19 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["113 degrees kraklenheit cant you do any better"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\113_degrees_kraklenheit_cant_you_do_any_better.wav", dialog_type="gossip", quest_id=nil, seconds=4.2 },
+      ["8536 degrees kraklenheit is the reading tired of m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\8536_degrees_kraklenheit_is_the_reading_tired_of_m.wav", dialog_type="gossip", quest_id=nil, seconds=4.88 },
+      ["ding 428000 degrees kraklenheit exactly well appro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\ding_428000_degrees_kraklenheit_exactly_well_appro.wav", dialog_type="gossip", quest_id=nil, seconds=10.92 },
+      ["holy krakle the temperature is 428000 degrees krak"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\holy_krakle_the_temperature_is_428000_degrees_krak.wav", dialog_type="gossip", quest_id=nil, seconds=5.68 },
+      ["its 40 degrees kraklenheit can you feel the heat n"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\its_40_degrees_kraklenheit_can_you_feel_the_heat_n.wav", dialog_type="gossip", quest_id=nil, seconds=6.08 },
+      ["its 428000 degrees kraklenheit whats happening hot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\its_428000_degrees_kraklenheit_whats_happening_hot.wav", dialog_type="gossip", quest_id=nil, seconds=5.4 },
+      ["measuring by kraklenheit it is 428000 degrees that"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\measuring_by_kraklenheit_it_is_428000_degrees_that.wav", dialog_type="gossip", quest_id=nil, seconds=6.2 },
+      ["the temperature is 12 degrees kraklenheit how exci"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\the_temperature_is_12_degrees_kraklenheit_how_exci.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
+      ["the temperature is 122 degrees kraklenheit"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\the_temperature_is_122_degrees_kraklenheit.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
+      ["the temperature is 564 degrees kraklenheit"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\the_temperature_is_564_degrees_kraklenheit.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
+      ["the temperature is 9280 degrees kraklenheit thats "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\the_temperature_is_9280_degrees_kraklenheit_thats_.wav", dialog_type="gossip", quest_id=nil, seconds=4.24 },
+      ["wow its 3 degrees kraklenheit keep looking"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\wow_its_3_degrees_kraklenheit_keep_looking.wav", dialog_type="gossip", quest_id=nil, seconds=3.84 },
+      ["youre getting warmer 7039 degrees kraklenheit"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\krakles\\youre_getting_warmer_7039_degrees_kraklenheit.wav", dialog_type="gossip", quest_id=nil, seconds=4.36 },
     },
   },
   ["Krakles Thermometer"] = {
@@ -29992,6 +30238,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["belore"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lady_sylvanas\\belore.wav", dialog_type="gossip", quest_id=nil, seconds=1.36 },
     },
   },
   ["Lady Sylvanas Windrunner"] = {
@@ -30054,6 +30301,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["be on guard arnak has some strange power over the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lakota\\be_on_guard_arnak_has_some_strange_power_over_the_.wav", dialog_type="gossip", quest_id=nil, seconds=7.6 },
+      ["finally free at last i must be going now thanks fo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lakota\\finally_free_at_last_i_must_be_going_now_thanks_fo.wav", dialog_type="gossip", quest_id=nil, seconds=9.04 },
+      ["here they come"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lakota\\here_they_come.wav", dialog_type="gossip", quest_id=nil, seconds=1.56 },
+      ["look out the grimtotem are upon us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lakota\\look_out_the_grimtotem_are_upon_us.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
+      ["more grimtotems are coming this way"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lakota\\more_grimtotems_are_coming_this_way.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
     },
   },
   ["Lakota Windsong"] = {
@@ -30295,6 +30547,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["1"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\larry\\1.wav", dialog_type="gossip", quest_id=nil, seconds=0.88 },
+      ["2"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\larry\\2.wav", dialog_type="gossip", quest_id=nil, seconds=1.32 },
+      ["alright we give up dont hurt us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\larry\\alright_we_give_up_dont_hurt_us.wav", dialog_type="gossip", quest_id=nil, seconds=3.08 },
+      ["now im gonna give you to the count of 3 to get out"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\larry\\now_im_gonna_give_you_to_the_count_of_3_to_get_out.wav", dialog_type="gossip", quest_id=nil, seconds=6.56 },
+      ["time to meet your maker"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\larry\\time_to_meet_your_maker.wav", dialog_type="gossip", quest_id=nil, seconds=1.96 },
+      ["time to teach you a lesson in manners little adven"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\larry\\time_to_teach_you_a_lesson_in_manners_little_adven.wav", dialog_type="gossip", quest_id=nil, seconds=3.12 },
     },
   },
   ["Lars"] = {
@@ -30458,6 +30716,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["ow ok ill get back to work adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lazy\\ow_ok_ill_get_back_to_work_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
     },
   },
   ["Lazy Peon"] = {
@@ -30615,6 +30874,26 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["almost got it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\almost_got_it.wav", dialog_type="gossip", quest_id=nil, seconds=1.84 },
+      ["aright adventurer just keep us safe from harm whil"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\aright_adventurer_just_keep_us_safe_from_harm_whil.wav", dialog_type="gossip", quest_id=nil, seconds=6.2 },
+      ["aright listen up form a circle around me and move "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\aright_listen_up_form_a_circle_around_me_and_move_.wav", dialog_type="gossip", quest_id=nil, seconds=3.76 },
+      ["by branns brittle bananas what is it it it looks l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\by_branns_brittle_bananas_what_is_it_it_it_looks_l.wav", dialog_type="gossip", quest_id=nil, seconds=6.04 },
+      ["dont just stand there help him out"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\dont_just_stand_there_help_him_out.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
+      ["have ye gone mad you expect me to leave behind a d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\have_ye_gone_mad_you_expect_me_to_leave_behind_a_d.wav", dialog_type="gossip", quest_id=nil, seconds=10.48 },
+      ["i dont think it can top the one time where he told"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\i_dont_think_it_can_top_the_one_time_where_he_told.wav", dialog_type="gossip", quest_id=nil, seconds=15.64 },
+      ["i dunno it cant possibly beat the time he tried to"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\i_dunno_it_cant_possibly_beat_the_time_he_tried_to.wav", dialog_type="gossip", quest_id=nil, seconds=16.08 },
+      ["i think theres somethin buried here beneath the sa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\i_think_theres_somethin_buried_here_beneath_the_sa.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
+      ["in your face i told you there was somethin here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\in_your_face_i_told_you_there_was_somethin_here.wav", dialog_type="gossip", quest_id=nil, seconds=3.6 },
+      ["or that time when you told us that youd discovered"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\or_that_time_when_you_told_us_that_youd_discovered.wav", dialog_type="gossip", quest_id=nil, seconds=7.56 },
+      ["say do you guys hear that"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\say_do_you_guys_hear_that.wav", dialog_type="gossip", quest_id=nil, seconds=2.08 },
+      ["shut yer yaps im gonna bang on this drum and thats"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\shut_yer_yaps_im_gonna_bang_on_this_drum_and_thats.wav", dialog_type="gossip", quest_id=nil, seconds=3.68 },
+      ["the dig site is just north of here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\the_dig_site_is_just_north_of_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.2 },
+      ["this discovery will surely rock the foundation of "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\this_discovery_will_surely_rock_the_foundation_of_.wav", dialog_type="gossip", quest_id=nil, seconds=4.64 },
+      ["this reminds me of that one time where you made us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\this_reminds_me_of_that_one_time_where_you_made_us.wav", dialog_type="gossip", quest_id=nil, seconds=5.96 },
+      ["were here start diggin"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\were_here_start_diggin.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
+      ["wow a drum"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\wow_a_drum.wav", dialog_type="gossip", quest_id=nil, seconds=1.88 },
+      ["yea great can we leave now this desert is giving m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\yea_great_can_we_leave_now_this_desert_is_giving_m.wav", dialog_type="gossip", quest_id=nil, seconds=5.4 },
+      ["youve been a tremendous help adventurer lets get o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\letoll\\youve_been_a_tremendous_help_adventurer_lets_get_o.wav", dialog_type="gossip", quest_id=nil, seconds=10.96 },
     },
   },
   ["Letter to Delgren"] = {
@@ -31011,6 +31290,13 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["adventurer lets use the antechamber to the right"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lilatha\\adventurer_lets_use_the_antechamber_to_the_right.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
+      ["captain helios ive been rescued from the amani cat"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lilatha\\captain_helios_ive_been_rescued_from_the_amani_cat.wav", dialog_type="gossip", quest_id=nil, seconds=5.84 },
+      ["i can see the light at the end of the tunnel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lilatha\\i_can_see_the_light_at_the_end_of_the_tunnel.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["lets go"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lilatha\\lets_go.wav", dialog_type="gossip", quest_id=nil, seconds=1.04 },
+      ["liatha get someone to look at those injuries thank"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lilatha\\liatha_get_someone_to_look_at_those_injuries_thank.wav", dialog_type="gossip", quest_id=nil, seconds=5.08 },
+      ["thank you for saving my life and bringing me back "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lilatha\\thank_you_for_saving_my_life_and_bringing_me_back_.wav", dialog_type="gossip", quest_id=nil, seconds=3.6 },
+      ["theres farstrider enclave now adventurer not far t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lilatha\\theres_farstrider_enclave_now_adventurer_not_far_t.wav", dialog_type="gossip", quest_id=nil, seconds=6.96 },
     },
   },
   ["Lilith the Lithe"] = {
@@ -31654,6 +31940,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["destroy them torloth let loose their blood like a "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lordillidan\\destroy_them_torloth_let_loose_their_blood_like_a_.wav", dialog_type="gossip", quest_id=nil, seconds=5.76 },
+      ["run while you still can the highlords come soon"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lordillidan\\run_while_you_still_can_the_highlords_come_soon.wav", dialog_type="gossip", quest_id=nil, seconds=3.4 },
+      ["so you have defeated the crimson sigil you now see"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lordillidan\\so_you_have_defeated_the_crimson_sigil_you_now_see.wav", dialog_type="gossip", quest_id=nil, seconds=18.64 },
+      ["torloth your master calls"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lordillidan\\torloth_your_master_calls.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["what manner of fool dares stand before illidan sto"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lordillidan\\what_manner_of_fool_dares_stand_before_illidan_sto.wav", dialog_type="gossip", quest_id=nil, seconds=7.32 },
+      ["you are no challenge for the crimson sigil mind br"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\lordillidan\\you_are_no_challenge_for_the_crimson_sigil_mind_br.wav", dialog_type="gossip", quest_id=nil, seconds=5.88 },
     },
   },
   ["Lore Keeper of Norgannon"] = {
@@ -32321,6 +32613,13 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["dont let them escape kill the strong one first"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maghar\\dont_let_them_escape_kill_the_strong_one_first.wav", dialog_type="gossip", quest_id=nil, seconds=3.2 },
+      ["frost shock"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maghar\\frost_shock.wav", dialog_type="gossip", quest_id=nil, seconds=1.56 },
+      ["it is best that we split up now in case they send "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maghar\\it_is_best_that_we_split_up_now_in_case_they_send_.wav", dialog_type="gossip", quest_id=nil, seconds=9.32 },
+      ["look out"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maghar\\look_out.wav", dialog_type="gossip", quest_id=nil, seconds=0.96 },
+      ["more of them coming watch out"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maghar\\more_of_them_coming_watch_out.wav", dialog_type="gossip", quest_id=nil, seconds=2.28 },
+      ["ride the lightning filth"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maghar\\ride_the_lightning_filth.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
+      ["where do you think youre going kill them all"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maghar\\where_do_you_think_youre_going_kill_them_all.wav", dialog_type="gossip", quest_id=nil, seconds=3.2 },
     },
   },
   ["Maginor Dumas"] = {
@@ -32589,6 +32888,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["father father youre alive"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\magwin\\father_father_youre_alive.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
+      ["help me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\magwin\\help_me.wav", dialog_type="gossip", quest_id=nil, seconds=1.08 },
+      ["my poor family everything has been destroyed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\magwin\\my_poor_family_everything_has_been_destroyed.wav", dialog_type="gossip", quest_id=nil, seconds=3.6 },
+      ["our house is this way through the thicket"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\magwin\\our_house_is_this_way_through_the_thicket.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
+      ["you can thank adventurer for getting me back here "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\magwin\\you_can_thank_adventurer_for_getting_me_back_here_.wav", dialog_type="gossip", quest_id=nil, seconds=3.72 },
     },
   },
   ["Mahani"] = {
@@ -32794,6 +33098,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["are you really surprised is it hard to believe tha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\malfurion\\are_you_really_surprised_is_it_hard_to_believe_tha.wav", dialog_type="gossip", quest_id=nil, seconds=0.0 },
+      ["the walls of the chamber tremble something is happ"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\malfurion\\the_walls_of_the_chamber_tremble_something_is_happ.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
     },
   },
   ["Malfurion Stormrage"] = {
@@ -32920,6 +33226,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["1"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\larry\\1.wav", dialog_type="gossip", quest_id=nil, seconds=1.0, linked_to="Larry" },
+      ["2"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\larry\\2.wav", dialog_type="gossip", quest_id=nil, seconds=0.88, linked_to="Larry" },
+      ["3"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mana\\3.wav", dialog_type="gossip", quest_id=nil, seconds=1.08 },
+      ["4"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mana\\4.wav", dialog_type="gossip", quest_id=nil, seconds=1.04 },
+      ["5"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mana\\5.wav", dialog_type="gossip", quest_id=nil, seconds=1.24 },
     },
   },
   ["Manaforge Control"] = {
@@ -32930,6 +33241,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["emergency shutdown aborted"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\manaforge_control\\emergency_shutdown_aborted.wav", dialog_type="gossip", quest_id=nil, seconds=2.48 },
+      ["emergency shutdown complete"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\manaforge_control\\emergency_shutdown_complete.wav", dialog_type="gossip", quest_id=nil, seconds=2.04 },
+      ["emergency shutdown will complete in one minute"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\manaforge_control\\emergency_shutdown_will_complete_in_one_minute.wav", dialog_type="gossip", quest_id=nil, seconds=3.24 },
+      ["emergency shutdown will complete in ten seconds"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\manaforge_control\\emergency_shutdown_will_complete_in_ten_seconds.wav", dialog_type="gossip", quest_id=nil, seconds=3.24 },
+      ["emergency shutdown will complete in thirty seconds"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\manaforge_control\\emergency_shutdown_will_complete_in_thirty_seconds.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
     },
   },
   ["Mandokir"] = {
@@ -34225,6 +34541,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["all systems online prepare yourself we leave short"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maxx\\all_systems_on-line_prepare_yourself_we_leave_shor.wav", dialog_type="gossip", quest_id=nil, seconds=4.56 },
+      ["be careful in there and come back in one piece"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maxx\\be_careful_in_there_and_come_back_in_one_piece.wav", dialog_type="gossip", quest_id=nil, seconds=3.36 },
+      ["proceed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maxx\\proceed.wav", dialog_type="gossip", quest_id=nil, seconds=1.08 },
+      ["youre back were you able to get all of the machine"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\maxx\\youre_back_were_you_able_to_get_all_of_the_machine.wav", dialog_type="gossip", quest_id=nil, seconds=3.48 },
     },
   },
   ["Mayara Brightwing"] = {
@@ -34534,6 +34854,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["hey hornizz im back and there are some people behi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\melizza\\hey_hornizz_im_back_and_there_are_some_people_behi.wav", dialog_type="gossip", quest_id=nil, seconds=6.24 },
+      ["thanks adventurer now lets get out of here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\melizza\\thanks_adventurer_now_lets_get_out_of_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
+      ["we made it thanks again im going to run ahead"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\melizza\\we_made_it_thanks_again_im_going_to_run_ahead.wav", dialog_type="gossip", quest_id=nil, seconds=3.36 },
+      ["well im off to the gelkis theyre not as dumb as th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\melizza\\well_im_off_to_the_gelkis_theyre_not_as_dumb_as_th.wav", dialog_type="gossip", quest_id=nil, seconds=5.48 },
+      ["were going to have to scratch the maraudines off o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\melizza\\were_going_to_have_to_scratch_the_maraudines_off_o.wav", dialog_type="gossip", quest_id=nil, seconds=5.76 },
     },
   },
   ["Melizza Brimbuzzle"] = {
@@ -35845,6 +36170,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["me scared me run now"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\morokk\\me_scared_me_run_now.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
+      ["puny adventurer wanna fight s me beat you me boss "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\morokk\\puny_adventurer_wanna_fight_s_me_beat_you_me_boss_.wav", dialog_type="gossip", quest_id=nil, seconds=4.96 },
     },
   },
   ["Morridune"] = {
@@ -36126,6 +36453,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["i do something bad i sorry"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mosswalker\\i_do_something_bad_i_sorry.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["please take my shinies all done"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mosswalker\\please_take_my_shinies_all_done.wav", dialog_type="gossip", quest_id=nil, seconds=3.24 },
+      ["thankyou"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mosswalker\\thankyou.wav", dialog_type="gossip", quest_id=nil, seconds=1.56 },
+      ["use my shiniesmake weather good againmake undead t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mosswalker\\use_my_shiniesmake_weather_good_againmake_undead_t.wav", dialog_type="gossip", quest_id=nil, seconds=5.4 },
+      ["we gave shinies to shrine we not greedy why this h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mosswalker\\we_gave_shinies_to_shrine_we_not_greedy_why_this_h.wav", dialog_type="gossip", quest_id=nil, seconds=4.92 },
+      ["we not do anything to them i no understand"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\mosswalker\\we_not_do_anything_to_them_i_no_understand.wav", dialog_type="gossip", quest_id=nil, seconds=3.36 },
     },
   },
   ["Mot Dawnstrider"] = {
@@ -37496,6 +37829,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["all of draenor shall quick beneath my feet i will "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\nether_drake\\all_of_draenor_shall_quick_beneath_my_feet_i_will_.wav", dialog_type="gossip", quest_id=nil, seconds=7.64 },
+      ["muahahahaha you fool youve released me from my ban"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\nether_drake\\muahahahaha_you_fool_youve_released_me_from_my_ban.wav", dialog_type="gossip", quest_id=nil, seconds=8.72 },
+      ["no doubt the fools that banished me are long dead "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\nether_drake\\no_doubt_the_fools_that_banished_me_are_long_dead_.wav", dialog_type="gossip", quest_id=nil, seconds=11.96 },
+      ["nooooooooooo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\nether_drake\\nooooooooooo.wav", dialog_type="gossip", quest_id=nil, seconds=2.08 },
+      ["where shall i begin i cannot bother myself with a "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\nether_drake\\where_shall_i_begin_i_cannot_bother_myself_with_a_.wav", dialog_type="gossip", quest_id=nil, seconds=6.72 },
     },
   },
   ["Newton Burnside"] = {
@@ -37852,6 +38190,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["thank you dear adventurer you just saved my life"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\npc_redemption_target\\thank_you_dear_adventurer_you_just_saved_my_life.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
     },
   },
   ["Nurse Neela"] = {
@@ -38465,6 +38804,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["cloaking systems online cluck engaging cloak for t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oox\\cloaking_systems_online_cluck_engaging_cloak_for_t.wav", dialog_type="gossip", quest_id=nil, seconds=5.96 },
+      ["cluck sensors detect spatial anomaly danger immine"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oox\\cluck_sensors_detect_spatial_anomaly_-_danger_immi.wav", dialog_type="gossip", quest_id=nil, seconds=5.4 },
+      ["emergency power activated initializing ambulatory "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oox\\emergency_power_activated_initializing_ambulatory_.wav", dialog_type="gossip", quest_id=nil, seconds=4.72 },
+      ["no one challenges the wastewander nomads not even "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oox\\no_one_challenges_the_wastewander_nomads_-_not_eve.wav", dialog_type="gossip", quest_id=nil, seconds=5.56 },
+      ["physical threat detected evasive action cluck"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oox\\physical_threat_detected_evasive_action_cluck.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
+      ["threat analyzed activating combat plan beta cluck"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oox\\threat_analyzed_activating_combat_plan_beta_cluck.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
     },
   },
   ["Ophek"] = {
@@ -38902,6 +39247,13 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["give these to the heroes that made this possible"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oronok\\give_these_to_the_heroes_that_made_this_possible.wav", dialog_type="gossip", quest_id=nil, seconds=3.08 },
+      ["they are redeemed then we have won"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oronok\\they_are_redeemed_then_we_have_won.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["we leave torlok i have only one request"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oronok\\we_leave_torlok_i_have_only_one_request.wav", dialog_type="gossip", quest_id=nil, seconds=3.28 },
+      ["we will fight when you are ready"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oronok\\we_will_fight_when_you_are_ready.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
+      ["we will set the elements free of your grasp by for"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oronok\\we_will_set_the_elements_free_of_your_grasp_by_for.wav", dialog_type="gossip", quest_id=nil, seconds=3.48 },
+      ["what say the elements torlok i only hear silence"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oronok\\what_say_the_elements_torlok_i_only_hear_silence.wav", dialog_type="gossip", quest_id=nil, seconds=4.08 },
+      ["you do not fight alone n together we will banish t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\oronok\\you_do_not_fight_alone_n_together_we_will_banish_t.wav", dialog_type="gossip", quest_id=nil, seconds=5.68 },
     },
   },
   ["Orphan Matron Battlewail"] = {
@@ -39264,6 +39616,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["lets go adventurer i am ready to reach whitereach "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\paoka\\lets_go_adventurer_i_am_ready_to_reach_whitereach_.wav", dialog_type="gossip", quest_id=nil, seconds=4.48 },
+      ["now this looks familiar if we keep heading east i "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\paoka\\now_this_looks_familiar_if_we_keep_heading_east_i_.wav", dialog_type="gossip", quest_id=nil, seconds=7.08 },
+      ["thanks a bunch i can find my way back to whitereac"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\paoka\\thanks_a_bunch_i_can_find_my_way_back_to_whitereac.wav", dialog_type="gossip", quest_id=nil, seconds=9.88 },
     },
   },
   ["Paoka Swiftmountain"] = {
@@ -39546,6 +39901,14 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["almost done just a little longer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\phizzlethorpe\\almost_done_just_a_little_longer.wav", dialog_type="gossip", quest_id=nil, seconds=3.0 },
+      ["doctor draxlegauge will give you further instructi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\phizzlethorpe\\doctor_draxlegauge_will_give_you_further_instructi.wav", dialog_type="gossip", quest_id=nil, seconds=6.44 },
+      ["help get these things off me so i can get my work "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\phizzlethorpe\\help_get_these_things_off_me_so_i_can_get_my_work_.wav", dialog_type="gossip", quest_id=nil, seconds=4.28 },
+      ["i discovered this cave on our first day here i bel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\phizzlethorpe\\i_discovered_this_cave_on_our_first_day_here_i_bel.wav", dialog_type="gossip", quest_id=nil, seconds=6.56 },
+      ["ill begin drawing energy from the stone your job a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\phizzlethorpe\\ill_begin_drawing_energy_from_the_stone_your_job_a.wav", dialog_type="gossip", quest_id=nil, seconds=9.08 },
+      ["ive done it i have harnessed the power of the ston"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\phizzlethorpe\\ive_done_it_i_have_harnessed_the_power_of_the_ston.wav", dialog_type="gossip", quest_id=nil, seconds=6.12 },
+      ["ok adventurer follow me to the cave where ill atte"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\phizzlethorpe\\ok_adventurer_follow_me_to_the_cave_where_ill_atte.wav", dialog_type="gossip", quest_id=nil, seconds=8.08 },
+      ["phew glad to be back from that creepy cave"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\phizzlethorpe\\phew_glad_to_be_back_from_that_creepy_cave.wav", dialog_type="gossip", quest_id=nil, seconds=3.76 },
     },
   },
   ["Pierce Shackleton"] = {
@@ -39934,6 +40297,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["and as your limp body dangles from the rafters i s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prestor\\and_as_your_limp_body_dangles_from_the_rafters_i_s.wav", dialog_type="gossip", quest_id=nil, seconds=16.72 },
+      ["seize him seize the worthless criminal and his all"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prestor\\seize_him_seize_the_worthless_criminal_and_his_all.wav", dialog_type="gossip", quest_id=nil, seconds=4.16 },
+      ["you will be incarcerated and tried for treason win"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prestor\\you_will_be_incarcerated_and_tried_for_treason_win.wav", dialog_type="gossip", quest_id=nil, seconds=10.36 },
     },
   },
   ["Pretty Boy Duncan"] = {
@@ -40210,6 +40576,15 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["about time someone killed the wretch"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\about_time_someone_killed_the_wretch.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
+      ["follow me and ill open the courtyard door for you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\follow_me_and_ill_open_the_courtyard_door_for_you.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
+      ["for once i agree with you scum"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\for_once_i_agree_with_you_scum.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["free from this wretched cell at last let me show y"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\free_from_this_wretched_cell_at_last_let_me_show_y.wav", dialog_type="gossip", quest_id=nil, seconds=4.24 },
+      ["good luck with arugal i must hurry back to hadrec "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\good_luck_with_arugal_i_must_hurry_back_to_hadrec_.wav", dialog_type="gossip", quest_id=nil, seconds=3.84 },
+      ["i have just the spell to get this door open too ba"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\i_have_just_the_spell_to_get_this_door_open_too_ba.wav", dialog_type="gossip", quest_id=nil, seconds=6.36 },
+      ["there it is wide open good luck to you conquering "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\there_it_is_wide_open_good_luck_to_you_conquering_.wav", dialog_type="gossip", quest_id=nil, seconds=8.2 },
+      ["there we go"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\there_we_go.wav", dialog_type="gossip", quest_id=nil, seconds=1.04 },
+      ["you are indeed courageous for wanting to brave the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\prisoner\\you_are_indeed_courageous_for_wanting_to_brave_the.wav", dialog_type="gossip", quest_id=nil, seconds=5.32 },
     },
   },
   ["Private Draxlegauge"] = {
@@ -41569,6 +41944,25 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["as was fated a lifetime ago in karazhan monster i "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\as_was_fated_a_lifetime_ago_in_karazhan_monster_-_.wav", dialog_type="gossip", quest_id=nil, seconds=8.68 },
+      ["be brave friends the reptile will thrash wildly it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\be_brave_friends_the_reptile_will_thrash_wildly_it.wav", dialog_type="gossip", quest_id=nil, seconds=8.64 },
+      ["bol bolvar the medallion use"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\bol_bolvar_the_medallion_use.wav", dialog_type="gossip", quest_id=nil, seconds=4.04 },
+      ["dear friend you honor them with your vigilant watc"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\dear_friend_you_honor_them_with_your_vigilant_watc.wav", dialog_type="gossip", quest_id=nil, seconds=14.56 },
+      ["do not let her escape"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\do_not_let_her_escape.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
+      ["follow me friends to stormwind keep"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\follow_me_friends_to_stormwind_keep.wav", dialog_type="gossip", quest_id=nil, seconds=3.08 },
+      ["holding me here is not the right decision marcus"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\holding_me_here_is_not_the_right_decision_marcus.wav", dialog_type="gossip", quest_id=nil, seconds=3.52 },
+      ["i knew you would come adventurer it is good to see"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\i_knew_you_would_come_adventurer_it_is_good_to_see.wav", dialog_type="gossip", quest_id=nil, seconds=4.84 },
+      ["listen dragon let the truth resonate throughout th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\listen_dragon_let_the_truth_resonate_throughout_th.wav", dialog_type="gossip", quest_id=nil, seconds=3.72 },
+      ["majesty run while you still can she is not what yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\majesty_run_while_you_still_can_she_is_not_what_yo.wav", dialog_type="gossip", quest_id=nil, seconds=5.2 },
+      ["now it is time to bring her reign to an end marcus"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\now_it_is_time_to_bring_her_reign_to_an_end_marcus.wav", dialog_type="gossip", quest_id=nil, seconds=5.96 },
+      ["on guard friend the lady dragon will not give in w"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\on_guard_friend_the_lady_dragon_will_not_give_in_w.wav", dialog_type="gossip", quest_id=nil, seconds=4.96 },
+      ["onward"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\onward.wav", dialog_type="gossip", quest_id=nil, seconds=1.04 },
+      ["thank you old friend you have done the right thing"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\thank_you_old_friend_you_have_done_the_right_thing.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
+      ["the dark irons thought these tablets to be encoded"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\the_dark_irons_thought_these_tablets_to_be_encoded.wav", dialog_type="gossip", quest_id=nil, seconds=9.4 },
+      ["the masquerade is over lady prestor or should i ca"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\the_masquerade_is_over_lady_prestor_or_should_i_ca.wav", dialog_type="gossip", quest_id=nil, seconds=6.84 },
+      ["yawww"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\yawww.wav", dialog_type="gossip", quest_id=nil, seconds=1.92 },
+      ["you must do what you think is right marcus we serv"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\you_must_do_what_you_think_is_right_marcus_we_serv.wav", dialog_type="gossip", quest_id=nil, seconds=17.96 },
+      ["you will not escape your fate onyxia it has been p"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reginald\\you_will_not_escape_your_fate_onyxia_it_has_been_p.wav", dialog_type="gossip", quest_id=nil, seconds=9.8 },
     },
   },
   ["Reginald Grimsford"] = {
@@ -41651,6 +42045,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["a defender has fallen"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\regthar\\a_defender_has_fallen.wav", dialog_type="gossip", quest_id=nil, seconds=2.0 },
+      ["beware adventurer look to the west"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\regthar\\beware_adventurer_look_to_the_west.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
+      ["the kolkar invaders are retreating"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\regthar\\the_kolkar_invaders_are_retreating.wav", dialog_type="gossip", quest_id=nil, seconds=2.72 },
     },
   },
   ["Regthar Deathgate"] = {
@@ -41826,6 +42223,18 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["defend nightaven hero"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\defend_nightaven_hero.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["fiend face the might of cenarius"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\fiend_face_the_might_of_cenarius.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
+      ["he will stop at nothing to get to malfurions physi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\he_will_stop_at_nothing_to_get_to_malfurions_physi.wav", dialog_type="gossip", quest_id=nil, seconds=12.12 },
+      ["hurry adventurer we must find protective cover"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\hurry_adventurer_we_must_find_protective_cover.wav", dialog_type="gossip", quest_id=nil, seconds=3.52 },
+      ["it will be done eranikus be well ancient one"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\it_will_be_done_eranikus_be_well_ancient_one.wav", dialog_type="gossip", quest_id=nil, seconds=3.68 },
+      ["let us leave nighthave hero seek me out at the gro"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\let_us_leave_nighthave_hero_seek_me_out_at_the_gro.wav", dialog_type="gossip", quest_id=nil, seconds=4.6 },
+      ["please champion protect our people"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\please_champion_protect_our_people.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
+      ["the rift will be opened there above the lake eluna"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\the_rift_will_be_opened_there_above_the_lake_eluna.wav", dialog_type="gossip", quest_id=nil, seconds=11.44 },
+      ["to nighthaven keep your army close champion"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\to_nighthaven_keep_your_army_close_champion.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
+      ["we will battle these fiends together nighthavens d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\we_will_battle_these_fiends_together_nighthavens_d.wav", dialog_type="gossip", quest_id=nil, seconds=15.0 },
+      ["we will locate the origin of the nightmare through"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\we_will_locate_the_origin_of_the_nightmare_through.wav", dialog_type="gossip", quest_id=nil, seconds=17.44 },
+      ["who is the predictable one beast surely you did no"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\remulos\\who_is_the_predictable_one_beast_surely_you_did_no.wav", dialog_type="gossip", quest_id=nil, seconds=13.64 },
     },
   },
   ["Remy Two Times"] = {
@@ -41891,6 +42300,14 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["go away whoever you are witch hill is mine mine"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\restless\\go_away_whoever_you_are_witch_hill_is_mine_mine.wav", dialog_type="gossip", quest_id=nil, seconds=4.44 },
+      ["it is too late for jarl its hold is too strong"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\restless\\it_is_too_late_for_jarl_its_hold_is_too_strong.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
+      ["it is too late for us living one take yourself and"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\restless\\it_is_too_late_for_us_living_one_take_yourself_and.wav", dialog_type="gossip", quest_id=nil, seconds=7.16 },
+      ["it was terrible the demon"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\restless\\it_was_terrible_the_demon.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
+      ["the darkness the corruption they came too quickly "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\restless\\the_darkness_the_corruption_they_came_too_quickly_.wav", dialog_type="gossip", quest_id=nil, seconds=5.28 },
+      ["the darkness will consume all all the living"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\restless\\the_darkness_will_consume_all_all_the_living.wav", dialog_type="gossip", quest_id=nil, seconds=3.48 },
+      ["the manor someone else will soon be consumed"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\restless\\the_manor_someone_else_will_soon_be_consumed.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
+      ["why have you come here outsider you will only find"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\restless\\why_have_you_come_here_outsider_you_will_only_find.wav", dialog_type="gossip", quest_id=nil, seconds=6.64 },
     },
   },
   ["Rethiel the Greenwarden"] = {
@@ -41934,6 +42351,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["reuse_me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\reuse_me\\reuse_me.wav", dialog_type="gossip", quest_id=nil, seconds=1.88 },
     },
   },
   ["Rexxar"] = {
@@ -43123,6 +43541,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["thank you for freeing me speak with my sister in s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\ruul\\thank_you_for_freeing_me_speak_with_my_sister_in_s.wav", dialog_type="gossip", quest_id=nil, seconds=6.92 },
     },
   },
   ["Ruul Eagletalon"] = {
@@ -43612,6 +44031,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["hey you call yourself a body guard get to work and"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_cork_ambush1\\hey_you_call_yourself_a_body_guard_get_to_work_and.wav", dialog_type="gossip", quest_id=nil, seconds=4.8 },
     },
   },
   ["Say Cork Ambush2"] = {
@@ -43622,6 +44042,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["mister body guard are you going to earn your money"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_cork_ambush2\\mister_body_guard_are_you_going_to_earn_your_money.wav", dialog_type="gossip", quest_id=nil, seconds=4.2 },
     },
   },
   ["Say Cork Ambush3"] = {
@@ -43632,6 +44053,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["youre fired i mean help"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_cork_ambush3\\youre_fired_i_mean_help.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
     },
   },
   ["Say Cork End"] = {
@@ -43642,6 +44064,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["blast those stupid centaurs sigh well it seems you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_cork_end\\blast_those_stupid_centaurs_sigh_-_well_it_seems_y.wav", dialog_type="gossip", quest_id=nil, seconds=11.88 },
     },
   },
   ["Say Drostan Got Lucky 1"] = {
@@ -43652,6 +44075,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["stop whining youve still got your luck"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_drostan_got_lucky_1\\stop_whining_youve_still_got_your_luck.wav", dialog_type="gossip", quest_id=nil, seconds=2.88 },
     },
   },
   ["Say Drostan Got Lucky 2"] = {
@@ -43662,6 +44086,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["bah its an improvement"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_drostan_got_lucky_2\\bah_its_an_improvement.wav", dialog_type="gossip", quest_id=nil, seconds=2.04 },
     },
   },
   ["Say Drostan Hit Bird 1"] = {
@@ -43672,6 +44097,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["calm down lad its just a birdshot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_drostan_hit_bird_1\\calm_down_lad_its_just_a_birdshot.wav", dialog_type="gossip", quest_id=nil, seconds=2.96 },
     },
   },
   ["Say Drostan Hit Bird 2"] = {
@@ -43682,6 +44108,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the only thing hurt is your pride lad buck up"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_drostan_hit_bird_2\\the_only_thing_hurt_is_your_pride_lad_buck_up.wav", dialog_type="gossip", quest_id=nil, seconds=3.36 },
     },
   },
   ["Say Guard Sil Aggro1"] = {
@@ -43692,6 +44119,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["taste blade mongrel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_guard_sil_aggro1\\taste_blade_mongrel.wav", dialog_type="gossip", quest_id=nil, seconds=2.08 },
     },
   },
   ["Say Guard Sil Aggro2"] = {
@@ -43702,6 +44130,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["please tell me that you didnt just do what i think"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_guard_sil_aggro2\\please_tell_me_that_you_didnt_just_do_what_i_think.wav", dialog_type="gossip", quest_id=nil, seconds=7.2 },
     },
   },
   ["Say Guard Sil Aggro3"] = {
@@ -43712,6 +44141,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["as if we dont have enough problems you go and crea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_guard_sil_aggro3\\as_if_we_dont_have_enough_problems_you_go_and_crea.wav", dialog_type="gossip", quest_id=nil, seconds=3.84 },
     },
   },
   ["Say Impsy 1"] = {
@@ -43722,6 +44152,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["niby you re an idiot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_impsy_1\\niby_you_re_an_idiot.wav", dialog_type="gossip", quest_id=nil, seconds=2.52 },
     },
   },
   ["Say Just Eaten"] = {
@@ -43732,6 +44163,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["thank you mortal"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_just_eaten\\thank_you_mortal.wav", dialog_type="gossip", quest_id=nil, seconds=1.44 },
     },
   },
   ["Say Khad Aldor Greet"] = {
@@ -43742,6 +44174,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["light be with you adventurer and welcome to shattr"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_aldor_greet\\light_be_with_you_adventurer_and_welcome_to_shattr.wav", dialog_type="gossip", quest_id=nil, seconds=3.84 },
     },
   },
   ["Say Khad Haggard"] = {
@@ -43752,6 +44185,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["khadgar himself is showing you around you must hav"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_haggard\\khadgar_himself_is_showing_you_around_you_must_hav.wav", dialog_type="gossip", quest_id=nil, seconds=5.76 },
     },
   },
   ["Say Khad Injured"] = {
@@ -43762,6 +44196,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["a newcomer to shattrath make sure to drop by later"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_injured\\a_newcomer_to_shattrath_make_sure_to_drop_by_later.wav", dialog_type="gossip", quest_id=nil, seconds=7.04 },
     },
   },
   ["Say Khad Mind Always"] = {
@@ -43772,6 +44207,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["are you joking im a scryer i always watch what i s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_mind_always\\are_you_joking_im_a_scryer_i_always_watch_what_i_s.wav", dialog_type="gossip", quest_id=nil, seconds=7.6 },
     },
   },
   ["Say Khad Mind You"] = {
@@ -43782,6 +44218,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["be mindful of what you say this ones being shown a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_mind_you\\be_mindful_of_what_you_say_this_ones_being_shown_a.wav", dialog_type="gossip", quest_id=nil, seconds=5.44 },
     },
   },
   ["Say Khad Scryer Greet"] = {
@@ -43792,6 +44229,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["were rather selective of who we befriend adventure"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_scryer_greet\\were_rather_selective_of_who_we_befriend_adventure.wav", dialog_type="gossip", quest_id=nil, seconds=5.08 },
     },
   },
   ["Say Khad Serv 0"] = {
@@ -43802,6 +44240,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["follow me stranger this wont take long"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_0\\follow_me_stranger_this_wont_take_long.wav", dialog_type="gossip", quest_id=nil, seconds=3.24 },
     },
   },
   ["Say Khad Serv 1"] = {
@@ -43812,6 +44251,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["shattrath was once the draenei capital of this wor"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_1\\shattrath_was_once_the_draenei_capital_of_this_wor.wav", dialog_type="gossip", quest_id=nil, seconds=7.16 },
     },
   },
   ["Say Khad Serv 10"] = {
@@ -43822,6 +44262,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the blood elves laid down their weapons in front o"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_10\\the_blood_elves_laid_down_their_weapons_in_front_o.wav", dialog_type="gossip", quest_id=nil, seconds=12.92 },
     },
   },
   ["Say Khad Serv 11"] = {
@@ -43832,6 +44273,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["as the naaru approached him vorenthal kneeled befo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_11\\as_the_naaru_approached_him_vorenthal_kneeled_befo.wav", dialog_type="gossip", quest_id=nil, seconds=17.52 },
     },
   },
   ["Say Khad Serv 12"] = {
@@ -43842,6 +44284,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the defection of vorenthal and his followers was t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_12\\the_defection_of_vorenthal_and_his_followers_was_t.wav", dialog_type="gossip", quest_id=nil, seconds=17.4 },
     },
   },
   ["Say Khad Serv 13"] = {
@@ -43852,6 +44295,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the naaru accepted the defectors who would become "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_13\\the_naaru_accepted_the_defectors_who_would_become_.wav", dialog_type="gossip", quest_id=nil, seconds=11.2 },
     },
   },
   ["Say Khad Serv 14"] = {
@@ -43862,6 +44306,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the aldor are followers of the light and forgivene"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_14\\the_aldor_are_followers_of_the_light_and_forgivene.wav", dialog_type="gossip", quest_id=nil, seconds=11.92 },
     },
   },
   ["Say Khad Serv 15"] = {
@@ -43872,6 +44317,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["many of the priesthood had been slain by the same "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_15\\many_of_the_priesthood_had_been_slain_by_the_same_.wav", dialog_type="gossip", quest_id=nil, seconds=10.12 },
     },
   },
   ["Say Khad Serv 16"] = {
@@ -43882,6 +44328,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the aldors most holy temple and its surrounding dw"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_16\\the_aldors_most_holy_temple_and_its_surrounding_dw.wav", dialog_type="gossip", quest_id=nil, seconds=10.32 },
     },
   },
   ["Say Khad Serv 17"] = {
@@ -43892,6 +44339,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the attacks against shattrath continued but the ci"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_17\\the_attacks_against_shattrath_continued_but_the_ci.wav", dialog_type="gossip", quest_id=nil, seconds=13.68 },
     },
   },
   ["Say Khad Serv 18"] = {
@@ -43902,6 +44350,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["there he continues to wage war on illidan with the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_18\\there_he_continues_to_wage_war_on_illidan_with_the.wav", dialog_type="gossip", quest_id=nil, seconds=10.48 },
     },
   },
   ["Say Khad Serv 19"] = {
@@ -43912,6 +44361,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["such is their animosity that they vie for the hono"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_19\\such_is_their_animosity_that_they_vie_for_the_hono.wav", dialog_type="gossip", quest_id=nil, seconds=16.6 },
     },
   },
   ["Say Khad Serv 2"] = {
@@ -43922,6 +44372,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["when the burning legion turned the orcs against th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_2\\when_the_burning_legion_turned_the_orcs_against_th.wav", dialog_type="gossip", quest_id=nil, seconds=11.84 },
     },
   },
   ["Say Khad Serv 20"] = {
@@ -43932,6 +44383,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["khadgar should be ready to see you again just reme"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_20\\khadgar_should_be_ready_to_see_you_again_just_reme.wav", dialog_type="gossip", quest_id=nil, seconds=14.08 },
     },
   },
   ["Say Khad Serv 21"] = {
@@ -43942,6 +44394,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["good luck stranger and welcome to shattrath city"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_21\\good_luck_stranger_and_welcome_to_shattrath_city.wav", dialog_type="gossip", quest_id=nil, seconds=3.4 },
     },
   },
   ["Say Khad Serv 3"] = {
@@ -43952,6 +44405,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the city was left in ruins and darkness until the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_3\\the_city_was_left_in_ruins_and_darkness_until_the_.wav", dialog_type="gossip", quest_id=nil, seconds=4.88 },
     },
   },
   ["Say Khad Serv 4"] = {
@@ -43962,6 +44416,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["let us go into the lower city i will warn you that"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_4\\let_us_go_into_the_lower_city_i_will_warn_you_that.wav", dialog_type="gossip", quest_id=nil, seconds=12.28 },
     },
   },
   ["Say Khad Serv 5"] = {
@@ -43972,6 +44427,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the shatar or born from light are the naaru that c"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_5\\the_shatar_or_born_from_light_are_the_naaru_that_c.wav", dialog_type="gossip", quest_id=nil, seconds=8.24 },
     },
   },
   ["Say Khad Serv 6"] = {
@@ -43982,6 +44438,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["they were drawn to the ruins of shattrath city whe"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_6\\they_were_drawn_to_the_ruins_of_shattrath_city_whe.wav", dialog_type="gossip", quest_id=nil, seconds=10.12 },
     },
   },
   ["Say Khad Serv 7"] = {
@@ -43992,6 +44449,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the priesthood known as the aldor quickly regained"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_7\\the_priesthood_known_as_the_aldor_quickly_regained.wav", dialog_type="gossip", quest_id=nil, seconds=14.56 },
     },
   },
   ["Say Khad Serv 8"] = {
@@ -44002,6 +44460,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["it wouldnt be long however before the city came un"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_8\\it_wouldnt_be_long_however_before_the_city_came_un.wav", dialog_type="gossip", quest_id=nil, seconds=15.6 },
     },
   },
   ["Say Khad Serv 9"] = {
@@ -44012,6 +44471,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["as the regiment of blood elves crossed this very b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_serv_9\\as_the_regiment_of_blood_elves_crossed_this_very_b.wav", dialog_type="gossip", quest_id=nil, seconds=11.48 },
     },
   },
   ["Say Khad Start"] = {
@@ -44022,6 +44482,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["show our guest around shattrath will you keep an e"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_khad_start\\show_our_guest_around_shattrath_will_you_keep_an_e.wav", dialog_type="gossip", quest_id=nil, seconds=5.56 },
     },
   },
   ["Say Kroshius Revive"] = {
@@ -44032,6 +44493,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["kroshius live kroshius crush"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_kroshius_revive\\kroshius_live_kroshius_crush.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
     },
   },
   ["Say Lucky Hit 1"] = {
@@ -44042,6 +44504,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["ouch thats it i quit the target business"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_lucky_hit_1\\ouch_thats_it_i_quit_the_target_business.wav", dialog_type="gossip", quest_id=nil, seconds=3.2 },
     },
   },
   ["Say Lucky Hit 2"] = {
@@ -44052,6 +44515,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["my ear you grazed my ear"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_lucky_hit_2\\my_ear_you_grazed_my_ear.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
     },
   },
   ["Say Lucky Hit 3"] = {
@@ -44062,6 +44526,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["not the stache now im asymmetrical"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_lucky_hit_3\\not_the_stache_now_im_asymmetrical.wav", dialog_type="gossip", quest_id=nil, seconds=3.08 },
     },
   },
   ["Say Lucky Hit Apple"] = {
@@ -44072,6 +44537,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["good shot"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_lucky_hit_apple\\good_shot.wav", dialog_type="gossip", quest_id=nil, seconds=1.04 },
     },
   },
   ["Say Lump 0"] = {
@@ -44082,6 +44548,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["in nagrand food hunt ogre"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_lump_0\\in_nagrand_food_hunt_ogre.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
     },
   },
   ["Say Lump 1"] = {
@@ -44092,6 +44559,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["you taste good with maybe a little salt and pepper"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_lump_1\\you_taste_good_with_maybe_a_little_salt_and_pepper.wav", dialog_type="gossip", quest_id=nil, seconds=3.04 },
     },
   },
   ["Say Lump Defeat"] = {
@@ -44102,6 +44570,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["ok ok lump give up"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_lump_defeat\\ok_ok_lump_give_up.wav", dialog_type="gossip", quest_id=nil, seconds=2.32 },
     },
   },
   ["Say Miran Ambush"] = {
@@ -44112,6 +44581,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["help were being attacked dark irons"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_miran_ambush\\help_were_being_attacked_dark_irons.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
     },
   },
   ["Say Niby 1"] = {
@@ -44122,6 +44592,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["stand back stand clear the infernal will need to b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_niby_1\\stand_back_stand_clear_the_infernal_will_need_to_b.wav", dialog_type="gossip", quest_id=nil, seconds=5.24 },
     },
   },
   ["Say Niby 2"] = {
@@ -44132,6 +44603,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["bow down to the almighty bow down before my infern"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_niby_2\\bow_down_to_the_almighty_bow_down_before_my_infern.wav", dialog_type="gossip", quest_id=nil, seconds=6.04 },
     },
   },
   ["Say Niby 3"] = {
@@ -44142,6 +44614,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["silence servant vengeance will be mine death to st"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_niby_3\\silence_servant_vengeance_will_be_mine_death_to_st.wav", dialog_type="gossip", quest_id=nil, seconds=7.72 },
     },
   },
   ["Say Rigger Ambush1"] = {
@@ -44152,6 +44625,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["eeck demons hungry for the kodos"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rigger_ambush1\\eeck_demons_hungry_for_the_kodos.wav", dialog_type="gossip", quest_id=nil, seconds=3.12 },
     },
   },
   ["Say Rigger Ambush2"] = {
@@ -44162,6 +44636,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["what am i paying you for the kodos are nearly dead"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rigger_ambush2\\what_am_i_paying_you_for_the_kodos_are_nearly_dead.wav", dialog_type="gossip", quest_id=nil, seconds=3.92 },
     },
   },
   ["Say Rigger End"] = {
@@ -44172,6 +44647,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["wow we did it not sure why we thought we needed th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rigger_end\\wow_we_did_it_not_sure_why_we_thought_we_needed_th.wav", dialog_type="gossip", quest_id=nil, seconds=10.84 },
     },
   },
   ["Say Rin By Outrunner"] = {
@@ -44182,6 +44658,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["attack my sisters the troll must not escape"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rin_by_outrunner\\attack_my_sisters_the_troll_must_not_escape.wav", dialog_type="gossip", quest_id=nil, seconds=3.56 },
     },
   },
   ["Say Rin Complete"] = {
@@ -44192,6 +44669,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["rinji can see road now adventurer rinji knows the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rin_complete\\rinji_can_see_road_now_adventurer_rinji_knows_the_.wav", dialog_type="gossip", quest_id=nil, seconds=5.36 },
     },
   },
   ["Say Rin Free"] = {
@@ -44202,6 +44680,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["rinji is free"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rin_free\\rinji_is_free.wav", dialog_type="gossip", quest_id=nil, seconds=1.64 },
     },
   },
   ["Say Rin Help 1"] = {
@@ -44212,6 +44691,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["rinji needs help"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rin_help_1\\rinji_needs_help.wav", dialog_type="gossip", quest_id=nil, seconds=1.72 },
     },
   },
   ["Say Rin Help 2"] = {
@@ -44222,6 +44702,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["rinji is being attacked"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rin_help_2\\rinji_is_being_attacked.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
     },
   },
   ["Say Rin Progress 1"] = {
@@ -44232,6 +44713,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["rinji will tell you secret now adventurer should g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rin_progress_1\\rinji_will_tell_you_secret_now_adventurer_should_g.wav", dialog_type="gossip", quest_id=nil, seconds=9.08 },
     },
   },
   ["Say Rin Progress 2"] = {
@@ -44242,6 +44724,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["you find it you keep it dont tell no one that rinj"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\say_rin_progress_2\\you_find_it_you_keep_it_dont_tell_no_one_that_rinj.wav", dialog_type="gossip", quest_id=nil, seconds=5.16 },
     },
   },
   ["Sayge"] = {
@@ -44275,6 +44758,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["hey what is going on over there sir are you alrigh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\scarlet\\hey_what_is_going_on_over_there_sir_are_you_alrigh.wav", dialog_type="gossip", quest_id=nil, seconds=3.8 },
+      ["something is wrong with the highlord do something"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\scarlet\\something_is_wrong_with_the_highlord_do_something.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
+      ["what the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\scarlet\\what_the.wav", dialog_type="gossip", quest_id=nil, seconds=1.2 },
     },
   },
   ["Scarlet Cavalier"] = {
@@ -45919,6 +46405,15 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["are we taking the scenic route"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\are_we_taking_the_scenic_route.wav", dialog_type="gossip", quest_id=nil, seconds=2.0 },
+      ["are you sure this is the right way maybe we should"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\are_you_sure_this_is_the_right_way_maybe_we_should.wav", dialog_type="gossip", quest_id=nil, seconds=4.24 },
+      ["dont forget to get my bell out of the chest here a"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\dont_forget_to_get_my_bell_out_of_the_chest_here_a.wav", dialog_type="gossip", quest_id=nil, seconds=9.32 },
+      ["hmmm i wonder whats over this way"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\hmmm_i_wonder_whats_over_this_way.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
+      ["oh here you are rockbiter im sorry i know im not s"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\oh_here_you_are_rockbiter_im_sorry_i_know_im_not_s.wav", dialog_type="gossip", quest_id=nil, seconds=6.24 },
+      ["oh i wandered off again im sorry"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\oh_i_wandered_off_again_im_sorry.wav", dialog_type="gossip", quest_id=nil, seconds=3.08 },
+      ["oh what a beautiful flower over there"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\oh_what_a_beautiful_flower_over_there.wav", dialog_type="gossip", quest_id=nil, seconds=2.76 },
+      ["the bell again such a sweet sound"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\the_bell_again_such_a_sweet_sound.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["this is quite an adventure"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\shay\\this_is_quite_an_adventure.wav", dialog_type="gossip", quest_id=nil, seconds=1.96 },
     },
   },
   ["Shay Leafrunner"] = {
@@ -46463,6 +46958,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["who goes there"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\silixiz\\who_goes_there.wav", dialog_type="gossip", quest_id=nil, seconds=1.2 },
     },
   },
   ["Siln Skychaser"] = {
@@ -46511,6 +47007,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["do not test me scurvy dog im trained in the way of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\silvermoon\\do_not_test_me_scurvy_dog_im_trained_in_the_way_of.wav", dialog_type="gossip", quest_id=nil, seconds=4.84 },
+      ["ill pay ill pay eeeek please dont hurt me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\silvermoon\\ill_pay_ill_pay_eeeek_please_dont_hurt_me.wav", dialog_type="gossip", quest_id=nil, seconds=4.84 },
     },
   },
   ["Silverwing Emissary"] = {
@@ -46823,6 +47321,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["free at last from that horrible curse thank you pl"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\skywing\\free_at_last_from_that_horrible_curse_thank_you_pl.wav", dialog_type="gossip", quest_id=nil, seconds=12.28 },
     },
   },
   ["Slagg"] = {
@@ -46954,6 +47453,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["dah now youre making me angry"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\smite\\dah_now_youre_making_me_angry.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
+      ["were under attack a vast ye swabs repel the invade"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\smite\\were_under_attack_a_vast_ye_swabs_repel_the_invade.wav", dialog_type="gossip", quest_id=nil, seconds=4.44 },
+      ["you land lubbers are tougher than i thought ill ha"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\smite\\you_land_lubbers_are_tougher_than_i_thought_ill_ha.wav", dialog_type="gossip", quest_id=nil, seconds=4.4 },
+      ["you there check out that noise"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\smite\\you_there_check_out_that_noise.wav", dialog_type="gossip", quest_id=nil, seconds=2.56 },
     },
   },
   ["Smith Argus"] = {
@@ -47375,6 +47878,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["farewell mortals the earthmender knows what fire f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\spirit\\farewell_mortals_the_earthmender_knows_what_fire_f.wav", dialog_type="gossip", quest_id=nil, seconds=4.8 },
+      ["it is now as it should be shaman you have done wel"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\spirit\\it_is_now_as_it_should_be_shaman_you_have_done_wel.wav", dialog_type="gossip", quest_id=nil, seconds=3.92 },
+      ["yes well enough for the elements that are here but"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\spirit\\yes_well_enough_for_the_elements_that_are_here_but.wav", dialog_type="gossip", quest_id=nil, seconds=15.48 },
     },
   },
   ["Spirit Healer"] = {
@@ -47615,6 +48121,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["all right you win i surrender just dont hurt me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\sprysprocket\\all_right_you_win_i_surrender_just_dont_hurt_me.wav", dialog_type="gossip", quest_id=nil, seconds=4.28 },
+      ["just chill"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\sprysprocket\\just_chill.wav", dialog_type="gossip", quest_id=nil, seconds=1.4 },
+      ["stupid grenade picked a fine time to backfire so m"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\sprysprocket\\stupid_grenade_picked_a_fine_time_to_backfire_so_m.wav", dialog_type="gossip", quest_id=nil, seconds=5.92 },
+      ["you there hand over that moonstone and nobody gets"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\sprysprocket\\you_there_hand_over_that_moonstone_and_nobody_gets.wav", dialog_type="gossip", quest_id=nil, seconds=3.76 },
     },
   },
   ["Sputtervalve"] = {
@@ -47672,6 +48182,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the signal has been sent he should be arriving sho"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\squire\\the_signal_has_been_sent_he_should_be_arriving_sho.wav", dialog_type="gossip", quest_id=nil, seconds=3.4 },
     },
   },
   ["Squire Leoren Malderath"] = {
@@ -47898,6 +48409,11 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["meet me down by the orchardi just need to put my g"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stilwell\\meet_me_down_by_the_orchard--i_just_need_to_put_my.wav", dialog_type="gossip", quest_id=nil, seconds=4.4 },
+      ["one more down"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stilwell\\one_more_down.wav", dialog_type="gossip", quest_id=nil, seconds=1.28 },
+      ["to the house stay close to me no matter what i hav"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stilwell\\to_the_house_stay_close_to_me_no_matter_what_i_hav.wav", dialog_type="gossip", quest_id=nil, seconds=5.72 },
+      ["we showed that one"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stilwell\\we_showed_that_one.wav", dialog_type="gossip", quest_id=nil, seconds=1.64 },
+      ["weve done it we won"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stilwell\\weve_done_it_we_won.wav", dialog_type="gossip", quest_id=nil, seconds=2.0 },
     },
   },
   ["Stinky"] = {
@@ -47908,6 +48424,18 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["ah theres one"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\ah_theres_one.wav", dialog_type="gossip", quest_id=nil, seconds=1.4 },
+      ["come adventurer lets go over there and collect it"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\come_adventurer_lets_go_over_there_and_collect_it.wav", dialog_type="gossip", quest_id=nil, seconds=3.48 },
+      ["help im under attack"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\galen\\help_im_under_attack.wav", dialog_type="gossip", quest_id=nil, seconds=2.08, linked_to="Galen" },
+      ["help the beast is on me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\help_the_beast_is_on_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.4 },
+      ["i can make it from here thanks adventurer and talk"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\i_can_make_it_from_here_thanks_adventurer_and_talk.wav", dialog_type="gossip", quest_id=nil, seconds=5.08 },
+      ["im glad youre here because i need your help"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\im_glad_youre_here_because_i_need_your_help.wav", dialog_type="gossip", quest_id=nil, seconds=3.12 },
+      ["look out the adventurer attacks"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\galen\\look_out_the_adventurer_attacks.wav", dialog_type="gossip", quest_id=nil, seconds=2.56, linked_to="Galen" },
+      ["nope not here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\nope_not_here.wav", dialog_type="gossip", quest_id=nil, seconds=1.68 },
+      ["now lets look for the herb"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\now_lets_look_for_the_herb.wav", dialog_type="gossip", quest_id=nil, seconds=2.2 },
+      ["ok lets get out of here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\isla\\ok_lets_get_out_of_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.36, linked_to="Isla" },
+      ["ok lets get started"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\ok_lets_get_started.wav", dialog_type="gossip", quest_id=nil, seconds=1.8 },
+      ["there must be one around here somewhere"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\stinky\\there_must_be_one_around_here_somewhere.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
     },
   },
   ["Stinky Ignatz"] = {
@@ -48931,6 +49459,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["i will lead us through hearthglen to the forests e"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\taelan\\i_will_lead_us_through_hearthglen_to_the_forests_e.wav", dialog_type="gossip", quest_id=nil, seconds=6.84 },
+      ["isillien"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\taelan\\isillien.wav", dialog_type="gossip", quest_id=nil, seconds=1.24 },
+      ["its not much further the main road is just up ahea"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\taelan\\its_not_much_further_the_main_road_is_just_up_ahea.wav", dialog_type="gossip", quest_id=nil, seconds=3.24 },
+      ["nooooooooooooo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\taelan\\nooooooooooooo.wav", dialog_type="gossip", quest_id=nil, seconds=1.36 },
+      ["remove your disguise lest you feel the bite of my "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\taelan\\remove_your_disguise_lest_you_feel_the_bite_of_my_.wav", dialog_type="gossip", quest_id=nil, seconds=5.96 },
+      ["this is not your fight stranger protect yourself f"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\taelan\\this_is_not_your_fight_stranger_protect_yourself_f.wav", dialog_type="gossip", quest_id=nil, seconds=7.88 },
     },
   },
   ["Taerar"] = {
@@ -49445,6 +49979,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["i have a few notes from the job back at my place i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tapoke\\i_have_a_few_notes_from_the_job_back_at_my_place_i.wav", dialog_type="gossip", quest_id=nil, seconds=6.0 },
+      ["oh its on now but you thought id be alone too huh"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tapoke\\oh_its_on_now_but_you_thought_id_be_alone_too_huh.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
+      ["okay okay no need to get all violent ill talk ill "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tapoke\\okay_okay_no_need_to_get_all_violent_ill_talk_ill_.wav", dialog_type="gossip", quest_id=nil, seconds=5.64 },
     },
   },
   ["Tapoke Slim Jahn"] = {
@@ -50161,6 +50698,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["lord lothar rallied the remnants of azeroths armie"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\the_alliance_of_lordaeron.wav", dialog_type="item_text", quest_id=nil, seconds=332.84 },
     },
   },
   ["The Armor of Mannoroth"] = {
@@ -50624,16 +51162,6 @@ NPC_DATABASE = {
     dialogs = {
     },
   },
-  ["The world is full of the sick and weary. It is our job"] = {
-    race = "",
-    sex = "male",
-    portrait = "default",
-    zone = "",
-    model_id = nil,
-    narrator = "narrator",
-    dialogs = {
-    },
-  },
   ["Thekal"] = {
     race = "object",
     sex = "male",
@@ -50837,6 +51365,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["and stay dead he got served"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\thermaplugg\\and_stay_dead_he_got_served.wav", dialog_type="gossip", quest_id=nil, seconds=3.2 },
+      ["explosions more explosions ive got to have more ex"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\thermaplugg\\explosions_more_explosions_ive_got_to_have_more_ex.wav", dialog_type="gossip", quest_id=nil, seconds=4.36 },
+      ["my machines are the future theyll destroy you all"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\thermaplugg\\my_machines_are_the_future_theyll_destroy_you_all.wav", dialog_type="gossip", quest_id=nil, seconds=3.12 },
+      ["usurpers gnomeregan is mine"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\thermaplugg\\usurpers_gnomeregan_is_mine.wav", dialog_type="gossip", quest_id=nil, seconds=3.44 },
     },
   },
   ["Thersa Windsong"] = {
@@ -51246,6 +51778,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["threshwackonator first mate unit prepared to follo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\threshwackonator\\threshwackonator_first_mate_unit_prepared_to_follo.wav", dialog_type="gossip", quest_id=nil, seconds=3.76 },
+      ["yarrr swabie what have ye done hes gone mad baton "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\threshwackonator\\yarrr_swabie_what_have_ye_done_hes_gone_mad_baton_.wav", dialog_type="gossip", quest_id=nil, seconds=10.56 },
     },
   },
   ["Thrumn"] = {
@@ -51738,6 +52272,13 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["a thousand more like him exist ten thousand should"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tirion\\a_thousand_more_like_him_exist_ten_thousand_should.wav", dialog_type="gossip", quest_id=nil, seconds=8.0 },
+      ["face me coward face the faith and strength that yo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tirion\\face_me_coward_face_the_faith_and_strength_that_yo.wav", dialog_type="gossip", quest_id=nil, seconds=5.04 },
+      ["look what they did to my boy"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tirion\\look_what_they_did_to_my_boy.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
+      ["may your soul burn in anguish isillien light give "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tirion\\may_your_soul_burn_in_anguish_isillien_light_give_.wav", dialog_type="gossip", quest_id=nil, seconds=6.76 },
+      ["this i promise this i vow"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tirion\\this_i_promise_this_i_vow.wav", dialog_type="gossip", quest_id=nil, seconds=2.44 },
+      ["too long have i sat idle gripped in this haze this"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tirion\\too_long_have_i_sat_idle_gripped_in_this_haze_this.wav", dialog_type="gossip", quest_id=nil, seconds=8.56 },
+      ["what have you done isillien you once fought with h"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\tirion\\what_have_you_done_isillien_you_once_fought_with_h.wav", dialog_type="gossip", quest_id=nil, seconds=8.76 },
     },
   },
   ["Tirion Fordring"] = {
@@ -52067,6 +52608,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["i hear what you hear brother look behind you"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\torlok\\i_hear_what_you_hear_brother_look_behind_you.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
+      ["the tornheart men give their weapons to earthmende"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\torlok\\the_torn-heart_men_give_their_weapons_to_earthmend.wav", dialog_type="gossip", quest_id=nil, seconds=4.68 },
     },
   },
   ["Torloth"] = {
@@ -52077,6 +52620,9 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["as you desire lord illidan"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\torloth\\as_you_desire_lord_illidan.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
+      ["at your command my liege"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\torloth\\at_your_command_my_liege.wav", dialog_type="gossip", quest_id=nil, seconds=2.16 },
+      ["yes lord illidan i would sacrifice to you this mag"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\torloth\\yes_lord_illidan_i_would_sacrifice_to_you_this_mag.wav", dialog_type="gossip", quest_id=nil, seconds=7.84 },
     },
   },
   ["Torm Ragetotem"] = {
@@ -52662,6 +53208,10 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["challenger is down"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\twiggy\\challenger_is_down.wav", dialog_type="gossip", quest_id=nil, seconds=1.72 },
+      ["the affray has begun adventurer get ready to fight"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\twiggy\\the_affray_has_begun_adventurer_get_ready_to_fight.wav", dialog_type="gossip", quest_id=nil, seconds=4.08 },
+      ["the affray is over"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\twiggy\\the_affray_is_over.wav", dialog_type="gossip", quest_id=nil, seconds=1.8 },
+      ["you enter the fray"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\twiggy\\you_enter_the_fray.wav", dialog_type="gossip", quest_id=nil, seconds=2.32 },
     },
   },
   ["Twilight"] = {
@@ -52672,6 +53222,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["come adventurer see what the nightmare brings"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\twilight\\come_adventurer_see_what_the_nightmare_brings.wav", dialog_type="gossip", quest_id=nil, seconds=3.64 },
     },
   },
   ["Twilight Corrupter"] = {
@@ -53166,6 +53717,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["i give up please dont kill me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\unkor\\i_give_up_please_dont_kill_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.92 },
     },
   },
   ["Urda"] = {
@@ -53741,6 +54293,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["frenzyheart kill you if you come back you no welco"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\vekjik\\frenzyheart_kill_you_if_you_come_back_you_no_welco.wav", dialog_type="gossip", quest_id=nil, seconds=4.48 },
     },
   },
   ["Veklor"] = {
@@ -53866,6 +54419,8 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["did you hear that"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\venture\\did_you_hear_that.wav", dialog_type="gossip", quest_id=nil, seconds=1.28 },
+      ["i smell rogue"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\venture\\i_smell_rogue.wav", dialog_type="gossip", quest_id=nil, seconds=1.88 },
     },
   },
   ["Venture Co. Documents"] = {
@@ -54374,6 +54929,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["anudorini talah ru shallora enudoril"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\voice\\anudorini_talah_ru_shallora_enudoril.wav", dialog_type="gossip", quest_id=nil, seconds=4.32 },
     },
   },
   ["Voice of Elune"] = {
@@ -55087,6 +55643,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["greetings adventurer i will guide you through the "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_1\\greetings_adventurer_i_will_guide_you_through_the_.wav", dialog_type="gossip", quest_id=nil, seconds=6.28 },
     },
   },
   ["Whisper Custodian 10"] = {
@@ -55097,6 +55654,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["we have very little information on this timeway sa"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_10\\we_have_very_little_information_on_this_timeway_sa.wav", dialog_type="gossip", quest_id=nil, seconds=21.12 },
     },
   },
   ["Whisper Custodian 11"] = {
@@ -55107,6 +55665,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["this timeway is currently collapsing what that may"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_11\\this_timeway_is_currently_collapsing_what_that_may.wav", dialog_type="gossip", quest_id=nil, seconds=7.44 },
     },
   },
   ["Whisper Custodian 12"] = {
@@ -55117,6 +55676,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["the timeways are currently ranked in order from le"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_12\\the_timeways_are_currently_ranked_in_order_from_le.wav", dialog_type="gossip", quest_id=nil, seconds=24.88 },
     },
   },
   ["Whisper Custodian 13"] = {
@@ -55127,6 +55687,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["all we know of this timeway is that it leads to mo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_13\\all_we_know_of_this_timeway_is_that_it_leads_to_mo.wav", dialog_type="gossip", quest_id=nil, seconds=24.4 },
     },
   },
   ["Whisper Custodian 14"] = {
@@ -55137,6 +55698,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["our time is at an end adventurer i would wish you "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_14\\our_time_is_at_an_end_adventurer_i_would_wish_you_.wav", dialog_type="gossip", quest_id=nil, seconds=5.72 },
     },
   },
   ["Whisper Custodian 2"] = {
@@ -55147,6 +55709,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["we do not know if the caverns of time have always "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_2\\we_do_not_know_if_the_caverns_of_time_have_always_.wav", dialog_type="gossip", quest_id=nil, seconds=19.16 },
     },
   },
   ["Whisper Custodian 3"] = {
@@ -55157,6 +55720,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["it is strange i know most mortals cannot actually "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_3\\it_is_strange_i_know_most_mortals_cannot_actually_.wav", dialog_type="gossip", quest_id=nil, seconds=11.04 },
     },
   },
   ["Whisper Custodian 4"] = {
@@ -55167,6 +55731,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["follow me please"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_4\\follow_me_please.wav", dialog_type="gossip", quest_id=nil, seconds=1.48 },
     },
   },
   ["Whisper Custodian 5"] = {
@@ -55177,6 +55742,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["there are only two truths to be found here first t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_5\\there_are_only_two_truths_to_be_found_here_first_t.wav", dialog_type="gossip", quest_id=nil, seconds=12.08 },
     },
   },
   ["Whisper Custodian 6"] = {
@@ -55187,6 +55753,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["as custodians of time we watch over and care for n"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_6\\as_custodians_of_time_we_watch_over_and_care_for_n.wav", dialog_type="gossip", quest_id=nil, seconds=23.16 },
     },
   },
   ["Whisper Custodian 7"] = {
@@ -55197,6 +55764,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["for normal maintenance of time the keepers of time"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_7\\for_normal_maintenance_of_time_the_keepers_of_time.wav", dialog_type="gossip", quest_id=nil, seconds=18.32 },
     },
   },
   ["Whisper Custodian 8"] = {
@@ -55207,6 +55775,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["these tunnels that you see are called timeways the"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_8\\these_tunnels_that_you_see_are_called_timeways_the.wav", dialog_type="gossip", quest_id=nil, seconds=24.76 },
     },
   },
   ["Whisper Custodian 9"] = {
@@ -55217,6 +55786,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["this timeway is in great disarray we have agents i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\whisper_custodian_9\\this_timeway_is_in_great_disarray_we_have_agents_i.wav", dialog_type="gossip", quest_id=nil, seconds=21.68 },
     },
   },
   ["White Punch Card"] = {
@@ -55281,6 +55851,16 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["grant me protection adventurer i must break trough"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\grant_me_protection_adventurer_i_must_break_trough.wav", dialog_type="gossip", quest_id=nil, seconds=5.0 },
+      ["i sense the tortured spirits adventurer they are t"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\i_sense_the_tortured_spirits_adventurer_they_are_t.wav", dialog_type="gossip", quest_id=nil, seconds=5.16 },
+      ["it shouldnt be much further adventurer the exit is"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\it_shouldnt_be_much_further_adventurer_the_exit_is.wav", dialog_type="gossip", quest_id=nil, seconds=4.0 },
+      ["lady vashj must answer for these atrocities she mu"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\lady_vashj_must_answer_for_these_atrocities_she_mu.wav", dialog_type="gossip", quest_id=nil, seconds=5.72 },
+      ["naga attackers defend yourself"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\naga_attackers_defend_yourself.wav", dialog_type="gossip", quest_id=nil, seconds=3.16 },
+      ["now we must find the exit"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\now_we_must_find_the_exit.wav", dialog_type="gossip", quest_id=nil, seconds=1.96 },
+      ["thank you adventurer please return to my brethren "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\thank_you_adventurer_please_return_to_my_brethren_.wav", dialog_type="gossip", quest_id=nil, seconds=12.32 },
+      ["the naga of coilskar are exceptionally cruel to th"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\the_naga_of_coilskar_are_exceptionally_cruel_to_th.wav", dialog_type="gossip", quest_id=nil, seconds=12.44 },
+      ["the tumultuous nature of the great waterways of az"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\the_tumultuous_nature_of_the_great_waterways_of_az.wav", dialog_type="gossip", quest_id=nil, seconds=8.04 },
+      ["watch out"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wilda\\watch_out.wav", dialog_type="gossip", quest_id=nil, seconds=1.0 },
     },
   },
   ["Wilder Thistlenettle"] = {
@@ -55427,6 +56007,19 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["adventurer heading this way fast to arms"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\adventurer_heading_this_way_fast_to_arms.wav", dialog_type="gossip", quest_id=nil, seconds=3.32 },
+      ["eek adventurer coming right at us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\eek_adventurer_coming_right_at_us.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
+      ["egads adventurer on me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\egads_adventurer_on_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["finally ill be glad to get out of this place"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\finally_ill_be_glad_to_get_out_of_this_place.wav", dialog_type="gossip", quest_id=nil, seconds=3.2 },
+      ["glad to be out of that wretched trench not much ni"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\glad_to_be_out_of_that_wretched_trench_not_much_ni.wav", dialog_type="gossip", quest_id=nil, seconds=4.6 },
+      ["help get this adventurer off of me"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\help_get_this_adventurer_off_of_me.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
+      ["i dont see how these foul animals live in this pla"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\i_dont_see_how_these_foul_animals_live_in_this_pla.wav", dialog_type="gossip", quest_id=nil, seconds=5.04 },
+      ["i think i see a way for us to get out of this big "] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\i_think_i_see_a_way_for_us_to_get_out_of_this_big_.wav", dialog_type="gossip", quest_id=nil, seconds=4.96 },
+      ["i think ill rest a moment and catch my breath befo"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\i_think_ill_rest_a_moment_and_catch_my_breath_befo.wav", dialog_type="gossip", quest_id=nil, seconds=6.56 },
+      ["there could be danger around every corner here"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\there_could_be_danger_around_every_corner_here.wav", dialog_type="gossip", quest_id=nil, seconds=2.6 },
+      ["theres blueleaf tuber in this trench its like gold"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\theres_blueleaf_tuber_in_this_trench_its_like_gold.wav", dialog_type="gossip", quest_id=nil, seconds=5.8 },
+      ["up there is where charlga razorflank resides blast"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\up_there_is_where_charlga_razorflank_resides_blast.wav", dialog_type="gossip", quest_id=nil, seconds=5.52 },
+      ["woo hoo finally getting out of here its going to b"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\willix\\woo_hoo_finally_getting_out_of_here_its_going_to_b.wav", dialog_type="gossip", quest_id=nil, seconds=6.64 },
     },
   },
   ["Willix the Importer"] = {
@@ -55932,6 +56525,14 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["alright alright i think i can figure out how to op"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wizzlecrank\\alright_alright_i_think_i_can_figure_out_how_to_op.wav", dialog_type="gossip", quest_id=nil, seconds=4.48 },
+      ["arrrgh this isnt right"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wizzlecrank\\arrrgh_this_isnt_right.wav", dialog_type="gossip", quest_id=nil, seconds=2.24 },
+      ["come on dont break down on me now"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wizzlecrank\\come_on_dont_break_down_on_me_now.wav", dialog_type="gossip", quest_id=nil, seconds=2.64 },
+      ["hmm i dont think this blinking red light is a good"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wizzlecrank\\hmm_i_dont_think_this_blinking_red_light_is_a_good.wav", dialog_type="gossip", quest_id=nil, seconds=3.88 },
+      ["looks like were out of woods eh wonder what this d"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wizzlecrank\\looks_like_were_out_of_woods_eh_wonder_what_this_d.wav", dialog_type="gossip", quest_id=nil, seconds=3.4 },
+      ["okay i think ive got it now follow me adventurer"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wizzlecrank\\okay_i_think_ive_got_it_now_follow_me_adventurer.wav", dialog_type="gossip", quest_id=nil, seconds=3.92 },
+      ["that was a close one well lets get going its still"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wizzlecrank\\that_was_a_close_one_well_lets_get_going_its_still.wav", dialog_type="gossip", quest_id=nil, seconds=5.24 },
+      ["theres the stolen shredder stop it or lugwizzle wi"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wizzlecrank\\theres_the_stolen_shredder_stop_it_or_lugwizzle_wi.wav", dialog_type="gossip", quest_id=nil, seconds=4.76 },
     },
   },
   ["Wizzlecranks Shredder"] = {
@@ -55959,6 +56560,7 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["i cant believe it youve destroyed my pack now face"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wolf_master_nandos\\i_cant_believe_it_youve_destroyed_my_pack_now_face.wav", dialog_type="gossip", quest_id=nil, seconds=5.56, linked_to="Wolf Master Nandos" },
     },
   },
   ["Wolf Master Nandos"] = {
@@ -56147,6 +56749,12 @@ NPC_DATABASE = {
     model_id = nil,
     narrator = "object",
     dialogs = {
+      ["allow me a moment to rest the journey taxes what l"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wounded\\allow_me_a_moment_to_rest_the_journey_taxes_what_l.wav", dialog_type="gossip", quest_id=nil, seconds=5.68 },
+      ["did you hear something"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wounded\\did_you_hear_something.wav", dialog_type="gossip", quest_id=nil, seconds=1.32 },
+      ["falcon watch at last now wheres my oh no my pack i"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wounded\\falcon_watch_at_last_now_wheres_my_oh_no_my_pack_i.wav", dialog_type="gossip", quest_id=nil, seconds=6.72 },
+      ["over there theyre following us"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wounded\\over_there_theyre_following_us.wav", dialog_type="gossip", quest_id=nil, seconds=2.28 },
+      ["thank you for agreeing to help now lets get out of"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wounded\\thank_you_for_agreeing_to_help_now_lets_get_out_of.wav", dialog_type="gossip", quest_id=nil, seconds=4.16 },
+      ["you wont keep me from getting to falcon watch"] = { path="Interface\\AddOns\\BetterQuest\\sounds\\object\\wounded\\you_wont_keep_me_from_getting_to_falcon_watch.wav", dialog_type="gossip", quest_id=nil, seconds=2.8 },
     },
   },
   ["Wrath of Soulflayer"] = {
