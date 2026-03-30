@@ -333,7 +333,7 @@ def generate_tts_for_row(
     global _seen_quest_id_dialog_type
 
     if row.get("skip_generation", False):
-        print(f"[SKIP-DEDUP] {row['npc_name']} → {row.get('link_to_npc', '?')}")
+        #print(f"[SKIP-DEDUP] {row['npc_name']} → {row.get('link_to_npc', '?')}")
         return "SKIPPED_DUPLICATE"
 
     narrator_voice = get_narrator_for_row(row, npc_lookup, ref_codes, narrator_override)
@@ -389,7 +389,6 @@ def generate_tts_for_row(
     os.makedirs(base_dir, exist_ok=True)
     filepath = os.path.join(base_dir, filename)
 
-    print(f"[GEN] {filepath}  (voice: {narrator_voice})")
 
     # ------------------------------------------------------------------
     # Decide whether to (re)generate
@@ -419,6 +418,7 @@ def generate_tts_for_row(
     # ------------------------------------------------------------------
     # TTS generation with retry logic
     # ------------------------------------------------------------------
+    print(f"[GEN] {filepath}  (voice: {narrator_voice})")
     ref        = ref_codes[narrator_voice]
     text_chunks = chunk_text_robust(row["text"])
     if not text_chunks:
@@ -508,7 +508,7 @@ def generate_audio(
     narrator_override=None,
     gpu_threshold=0.85,
     gpu_wait=5,
-    gpu_check_interval=10,
+    gpu_check_interval=1000,
     max_retries=3,
     retry_wait=10,
     incremental_sync=False,
@@ -537,6 +537,7 @@ def generate_audio(
     config           : Config dict forwarded to adapter_db helpers
     """
     print("\n=== STEP 2: Generating TTS audio ===")
+    
 
     # Reset per-run dedup state
     global _seen_quest_id_dialog_type
@@ -590,13 +591,12 @@ def generate_audio(
         elif result is None:
             missing_narrators.append({
                 "npc_name":    row.get("npc_name"),
-                "dialog_type": row.get("dialog_type"),
             })
 
     if missing_narrators:
         import pandas as _pd
-        missing_csv = os.path.join(sounds_dir, "missing_narrators.csv")
-        _pd.DataFrame(missing_narrators).to_csv(missing_csv, index=False)
+        missing_csv = os.path.join("../data", "missing_narrators.csv")
+        _pd.DataFrame(missing_narrators).drop_duplicates(subset=["npc_name"]).to_csv(missing_csv, index=False)
         print(f"[WARN] {len(missing_narrators)} rows with no narrator → {missing_csv}")
 
     if torch.cuda.is_available():

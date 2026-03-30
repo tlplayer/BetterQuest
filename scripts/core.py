@@ -88,7 +88,7 @@ def parse_args():
     # GPU tuning
     p.add_argument("--gpu-threshold",      type=float, default=0.85)
     p.add_argument("--gpu-wait",           type=int,   default=5)
-    p.add_argument("--gpu-check-interval", type=int,   default=10)
+    p.add_argument("--gpu-check-interval", type=int,   default=1000)
     p.add_argument("--max-retries",        type=int,   default=3)
     p.add_argument("--retry-wait",         type=int,   default=10)
 
