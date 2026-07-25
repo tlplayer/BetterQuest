@@ -29,6 +29,16 @@ local function ShouldPlayNPCSound(npcName, text)
     if text == ""                    then return false end
     if Broadcast.lastNPCName == npcName
        and Broadcast.lastNPCText == text then return false end
+        if not sender then return false end
+
+    -- Reject player name
+    if npcName == UnitName("player") then return false end
+
+    -- If we have an NPC unit, enforce match
+    local npcName = UnitName("npc")
+    if npcName and sender ~= npcName then
+        return false
+    end
     return true
 end
 
