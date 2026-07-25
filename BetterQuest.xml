@@ -6,16 +6,16 @@
 
 
     <!-- Core systems -->
-    <Include file="core\Config.lua"/>
-    <Include file="core\Utils.lua"/>
-    <Include file="core\Cache.lua"/>
-    <Include file="core\Search.lua"/>
+    <Include file="core\1.12.1\Config.lua"/>
+    <Include file="core\1.12.1\Utils.lua"/>
+    <Include file="core\1.12.1\Cache.lua"/>
+    <Include file="core\1.12.1\Search.lua"/>
     
-    <Include file="core\Portrait.lua"/>
-    <Include file="core\UI.lua"/>
-    <Include file="core\SoundQueue.lua"/>
-    <Include file="core\Gossip.lua"/>
-    <Include file="core\Quest.lua"/>
-    <Include file="core\Book.lua"/>
-    <Include file="core\Core.lua"/>
+    <Include file="core\1.12.1\Portrait.lua"/>
+    <Include file="core\1.12.1\UI.lua"/>
+    <Include file="core\1.12.1\SoundQueue.lua"/>
+    <Include file="core\1.12.1\Gossip.lua"/>
+    <Include file="core\1.12.1\Quest.lua"/>
+    <Include file="core\1.12.1\Book.lua"/>
+    <Include file="core\1.12.1\Core.lua"/>
 </Ui>
