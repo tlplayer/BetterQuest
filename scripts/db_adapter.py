@@ -444,7 +444,10 @@ def sync_metadata(df, npc_lookup, config=None):
                 if (pd.notna(raw_sex) and str(raw_sex).isdigit())
                 else npc_sex.get(npc_name, "male")
             )
-            zone     = npc_zone.get(npc_name, "")
+            raw_zone = row.get("zone")
+            zone = npc_zone.get(npc_name) or (
+                str(raw_zone).strip() if pd.notna(raw_zone) else ""
+            )
             raw_mid  = row.get("model_id")
             model_id = int(raw_mid) if (pd.notna(raw_mid)) else None
             if not race:
@@ -452,6 +455,9 @@ def sync_metadata(df, npc_lookup, config=None):
             npc_database[npc_name] = _make_npc_entry(npc_name, race, sex, zone, model_id)
 
         entry    = npc_database[npc_name]
+        raw_zone = row.get("zone")
+        if not entry["zone"] and pd.notna(raw_zone):
+            entry["zone"] = str(raw_zone).strip()
         narrator = entry["narrator"]
         race     = entry["race"]
         sex      = entry["sex"]

@@ -70,7 +70,16 @@ def parse_args():
     p.add_argument("--race",     help="Filter by NPC race")
     p.add_argument("--sex",      help="Filter by NPC sex (male/female)")
     p.add_argument("--npc",      help="Filter by specific NPC name")
-    p.add_argument("--zone",     help="Filter by zone")
+    p.add_argument(
+        "--zone",
+        action="append",
+        help="Filter by zone; repeat the option or use commas for multiple zones",
+    )
+    p.add_argument(
+        "--expansion",
+        action="append",
+        help="Filter by expansion; repeat the option or use commas (for example vanilla,tbc)",
+    )
     p.add_argument("--type",     dest="dialog_type", help="Filter by dialog type")
     p.add_argument("--narrator", help="Voice override (wav filename without .wav)")
     p.add_argument("--limit",    type=int, help="Max rows to process")
@@ -106,7 +115,23 @@ def parse_args():
 
 def load_csv(csv_path):
     df = pd.read_csv(csv_path)
+    for optional_column in ("zone", "expansion", "client_version"):
+        if optional_column not in df.columns:
+            df[optional_column] = ""
     return df[df["text"].notna()]
+
+
+def _requested_values(raw_values):
+    if not raw_values:
+        return set()
+    if isinstance(raw_values, str):
+        raw_values = [raw_values]
+    return {
+        value.strip().lower().replace("_", " ")
+        for raw_value in raw_values
+        for value in raw_value.split(",")
+        if value.strip()
+    }
 
 
 def filter_dataframe(df, args, npc_lookup):
@@ -121,8 +146,25 @@ def filter_dataframe(df, args, npc_lookup):
         allowed = {n for n, m in npc_lookup.items() if m.get("sex") == args.sex}
         df = df[df["npc_name"].isin(allowed)]
     if args.zone:
-        allowed = {n for n, m in npc_lookup.items() if m.get("zone") == args.zone}
-        df = df[df["npc_name"].isin(allowed)]
+        requested_zones = _requested_values(args.zone)
+        row_zones = df["zone"].fillna("").astype(str)
+        normalized_row_zones = row_zones.str.lower().str.replace("_", " ", regex=False).str.strip()
+        fallback_zones = df["npc_name"].map(
+            lambda name: str(npc_lookup.get(name, {}).get("zone") or "")
+            .lower()
+            .replace("_", " ")
+            .strip()
+        )
+        df = df[
+            normalized_row_zones.isin(requested_zones)
+            | ((normalized_row_zones == "") & fallback_zones.isin(requested_zones))
+        ]
+    if getattr(args, "expansion", None):
+        requested_expansions = _requested_values(args.expansion)
+        row_expansions = (
+            df["expansion"].fillna("").astype(str).str.lower().str.replace("_", " ", regex=False).str.strip()
+        )
+        df = df[row_expansions.isin(requested_expansions)]
     if args.limit:
         df = df.head(args.limit)
     return df

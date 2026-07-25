@@ -92,6 +92,16 @@ DIALOG_TYPES = {
 OUTPUT_CSV = "../data/all_npc_dialog.csv"
 RACE_YAML = "../data/npc_race.yaml"
 SEX_YAML = "../data/npc_sex.yaml"
+CSV_FIELDNAMES = [
+    "npc_name",
+    "sex",
+    "zone",
+    "expansion",
+    "client_version",
+    "dialog_type",
+    "quest_id",
+    "text",
+]
 
 # https://wowpedia.fandom.com/wiki/RaceId
 RACE_DICT = {
@@ -1528,7 +1538,8 @@ def extract_all_dialog():
         with open(INVESTIGATION_CSV, "w", encoding="utf-8", newline="") as f:
             writer = csv.DictWriter(
                 f,
-                fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"]
+                fieldnames=CSV_FIELDNAMES,
+                lineterminator="\n",
             )
             writer.writeheader()
             writer.writerows(deduped_unknown)
@@ -1620,6 +1631,13 @@ if __name__ == "__main__":
     print("Extracting dialog...")
     data, db = extract_all_dialog()
 
+    # The source database currently used by this extractor is Vanilla 1.12.1.
+    # Keep zone optional; it can be enriched later from game captures or YAML.
+    for row in data:
+        row.setdefault("zone", "")
+        row.setdefault("expansion", "vanilla")
+        row.setdefault("client_version", "1.12.1")
+
     # ---------------------------------------------------------
     # SOT REGRESSION CHECK (BEFORE WRITING)
     # ---------------------------------------------------------
@@ -1642,7 +1660,8 @@ if __name__ == "__main__":
     with open(OUTPUT_CSV, "w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(
             f,
-            fieldnames=["npc_name", "sex", "dialog_type", "quest_id", "text"]
+            fieldnames=CSV_FIELDNAMES,
+            lineterminator="\n",
         )
         writer.writeheader()
         writer.writerows(data)

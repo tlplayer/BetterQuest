@@ -8,6 +8,17 @@ function Utils:InitializeBetterQuestDB()
         BetterQuestDB = {}
         Debug("BetterQuestDB initialized")
     end
+
+    local detectedClientVersion = CONFIG.GAME.CLIENT_VERSION
+    if GetBuildInfo then
+        detectedClientVersion = GetBuildInfo() or detectedClientVersion
+    end
+
+    BetterQuestDB.metadata = {
+        schemaVersion = 2,
+        clientVersion = detectedClientVersion,
+        expansion = CONFIG.GAME.EXPANSION
+    }
 end
 
 function Utils:LogMissingNPC(npcName, dialogText)
@@ -31,9 +42,19 @@ function Utils:LogMissingNPC(npcName, dialogText)
     end
 
     local npcEntry = BetterQuestDB[normalizedName]
-    if not npcEntry.dialogs[normalizedText] then
-        npcEntry.dialogs[normalizedText] = dialogText
+    npcEntry.dialogs = npcEntry.dialogs or {}
+    npcEntry.zones = npcEntry.zones or {}
+    local existingDialog = npcEntry.dialogs[normalizedText]
+    if not existingDialog or type(existingDialog) == "string" then
+        npcEntry.dialogs[normalizedText] = {
+            text = existingDialog or dialogText,
+            zone = zone,
+            expansion = CONFIG.GAME.EXPANSION,
+            clientVersion = BetterQuestDB.metadata.clientVersion
+        }
+    end
+
+    if zone and zone ~= "" then
         npcEntry.zones[zone] = zone
     end
 end
-

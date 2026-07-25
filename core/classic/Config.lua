@@ -1,5 +1,10 @@
 do
 CONFIG = {
+    GAME = {
+        CLIENT_VERSION = "classic",
+        EXPANSION = "vanilla",
+    },
+
     -- ================================================================
     -- SHARED DIALOG CONFIGURATION (Quest & Gossip)
     -- ================================================================

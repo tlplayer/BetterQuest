@@ -157,6 +157,16 @@ python core.py --race night_elf --device cpu
 python core.py --race human --limit 1 --device cpu
 ```
 
+**Generate only selected expansion and zone content:**
+
+```sh
+python core.py --expansion vanilla --zone "Elwynn Forest" --device cpu
+python core.py --expansion tbc,wotlk --zone "Outland" --zone "Northrend" --device cpu
+```
+
+`--zone` and `--expansion` may be repeated or given comma-separated values.
+Captured row-level zones take priority; older rows fall back to `data/npc_zone.yaml`.
+
 **Narrator voice (books, item flavor text):**
 
 ```sh
@@ -215,5 +225,4 @@ Most useful contributions:
 - Getting fixes/patches that improve the game improves my enjoyment aswell as yours
 - Contributions to the database npc makes the addon better
 - I have a ko-fi and getting tips is always nice
-
 

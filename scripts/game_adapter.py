@@ -14,6 +14,7 @@ monitor_file_changes(filepath, check_interval, callback)
 import csv
 import glob
 import os
+import tempfile
 import time
 from datetime import datetime
 
@@ -172,24 +173,71 @@ def _find_field_string(block, fieldname):
     return parsed
 
 
+def _find_field_table(block, fieldname):
+    """Return the complete Lua table assigned to a named field."""
+    marker = '["' + fieldname + '"]'
+    pos = block.find(marker)
+    if pos == -1:
+        return None
+    eq = block.find("=", pos)
+    if eq == -1:
+        return None
+    start = block.find("{", eq)
+    if start == -1:
+        return None
+    end = _find_matching_brace(block, start)
+    return block[start : end + 1] if end != -1 else None
+
+
+def _find_string_table_values(block, fieldname):
+    """Extract string values from a simple SavedVariables table field."""
+    table = _find_field_table(block, fieldname)
+    if not table:
+        return []
+
+    values = []
+    i = 0
+    while i < len(table):
+        eq = table.find("=", i)
+        if eq == -1:
+            break
+        value_start = eq + 1
+        while value_start < len(table) and table[value_start].isspace():
+            value_start += 1
+        if value_start < len(table) and table[value_start] in ('"', "'"):
+            value, after = _parse_lua_string(table, value_start)
+            if value is not None and value not in values:
+                values.append(value)
+            i = after
+        else:
+            i = value_start + 1
+    return values
+
+
 def _extract_missing_npcs_from_lua(lua_text):
     """
-    Parse BetterQuestDB.lua and return:
-        { npc_name: [ dialog_text, ... ] }
+    Parse BetterQuest.lua and return:
+        { npc_name: [{text, zone, expansion, client_version}, ...] }
 
     Expected Lua schema:
         BetterQuestDB = {
             ["NPC Name"] = {
                 ["originalName"] = "NPC Name",   -- optional
                 ["dialogs"] = {
-                    ["hash_key"] = "Full dialog text.",
+                    ["hash_key"] = "Legacy dialog text.",
+                    ["new_hash"] = {
+                        ["text"] = "Full dialog text.",
+                        ["zone"] = "Elwynn Forest",
+                        ["expansion"] = "vanilla",
+                        ["clientVersion"] = "1.12.1",
+                    },
                     ...
                 },
             },
             ...
         }
 
-    Dialog values are plain strings, not sub-tables.
+    Both legacy string values and schema-v2 record values are accepted.
     Uses originalName as the result key when present.
     """
     result = {}
@@ -210,6 +258,9 @@ def _extract_missing_npcs_from_lua(lua_text):
         return result
 
     top_block = lua_text[brace_idx : end_brace + 1]
+    metadata_block = _find_field_table(top_block, "metadata") or ""
+    saved_expansion = _find_field_string(metadata_block, "expansion") or ""
+    saved_client_version = _find_field_string(metadata_block, "clientVersion") or ""
     i = 0
     L = len(top_block)
 
@@ -240,6 +291,8 @@ def _extract_missing_npcs_from_lua(lua_text):
 
         # Extract originalName (optional override for the key)
         original_name = _find_field_string(npc_block, "originalName")
+        npc_zones = _find_string_table_values(npc_block, "zones")
+        legacy_zone = npc_zones[0] if len(npc_zones) == 1 else ""
 
         # Find the dialogs sub-table
         dialogs = []
@@ -264,7 +317,6 @@ def _extract_missing_npcs_from_lua(lua_text):
                             if k_e == -1:
                                 break
 
-                            # Value after '=' is a plain string (not a sub-table)
                             keq = dialogs_block.find("=", k_e)
                             if keq == -1:
                                 j = k_e + 2
@@ -275,19 +327,37 @@ def _extract_missing_npcs_from_lua(lua_text):
                             while vstart < M and dialogs_block[vstart].isspace():
                                 vstart += 1
 
-                            if vstart >= M or dialogs_block[vstart] not in ('"', "'"):
-                                # Not a string value — skip this entry
+                            if vstart < M and dialogs_block[vstart] in ('"', "'"):
+                                dialog_text, after = _parse_lua_string(dialogs_block, vstart)
+                                if dialog_text is not None:
+                                    dialogs.append({
+                                        "text": dialog_text,
+                                        "zone": legacy_zone,
+                                        "expansion": saved_expansion,
+                                        "client_version": saved_client_version,
+                                    })
+                                j = after if after > vstart else vstart + 1
+                            elif vstart < M and dialogs_block[vstart] == "{":
+                                value_end = _find_matching_brace(dialogs_block, vstart)
+                                if value_end == -1:
+                                    j = vstart + 1
+                                    continue
+                                value_block = dialogs_block[vstart : value_end + 1]
+                                dialog_text = _find_field_string(value_block, "text")
+                                if dialog_text is not None:
+                                    dialogs.append({
+                                        "text": dialog_text,
+                                        "zone": _find_field_string(value_block, "zone") or legacy_zone,
+                                        "expansion": _find_field_string(value_block, "expansion") or saved_expansion,
+                                        "client_version": _find_field_string(value_block, "clientVersion") or saved_client_version,
+                                    })
+                                j = value_end + 1
+                            else:
                                 j = keq + 1
-                                continue
-
-                            dialog_text, after = _parse_lua_string(dialogs_block, vstart)
-                            if dialog_text is not None:
-                                dialogs.append(dialog_text)
-                            j = after if after > vstart else vstart + 1
 
         npc_name_key = (original_name or npc_key).strip()
         if dialogs:
-            result[npc_name_key] = dialogs
+            result.setdefault(npc_name_key, []).extend(dialogs)
 
         i = npc_end + 1
 
@@ -298,12 +368,49 @@ def _extract_missing_npcs_from_lua(lua_text):
 # CSV I/O
 # ---------------------------------------------------------------------------
 
-_CSV_FIELDNAMES = ["npc_name", "sex", "dialog_type", "quest_id", "text"]
+_CSV_FIELDNAMES = [
+    "npc_name",
+    "sex",
+    "zone",
+    "expansion",
+    "client_version",
+    "dialog_type",
+    "quest_id",
+    "text",
+]
+
+
+def _ensure_csv_schema(csv_path):
+    """Add optional provenance columns to an older CSV without losing rows."""
+    if not os.path.exists(csv_path):
+        return _CSV_FIELDNAMES
+
+    with open(csv_path, "r", encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f)
+        original_fields = reader.fieldnames or []
+        rows = list(reader)
+
+    extra_fields = [field for field in original_fields if field not in _CSV_FIELDNAMES]
+    fieldnames = _CSV_FIELDNAMES + extra_fields
+    if all(field in original_fields for field in _CSV_FIELDNAMES):
+        return fieldnames
+
+    csv_dir = os.path.dirname(os.path.abspath(csv_path))
+    with tempfile.NamedTemporaryFile(
+        "w", encoding="utf-8", newline="", dir=csv_dir, delete=False
+    ) as tmp:
+        writer = csv.DictWriter(tmp, fieldnames=fieldnames, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+        temp_path = tmp.name
+    os.replace(temp_path, csv_path)
+    print(f"[INFO] Upgraded CSV columns in {csv_path}")
+    return fieldnames
 
 
 def _load_csv_index(csv_path):
     """
-    Return a set of (npc_name, dialog_type, quest_id, text) tuples from csv_path.
+    Return a set of identifying dialog tuples from csv_path.
     Returns empty set if file does not exist.
     """
     existing = set()
@@ -316,6 +423,8 @@ def _load_csv_index(csv_path):
                 (r.get("dialog_type") or "").strip(),
                 (r.get("quest_id") or "").strip(),
                 (r.get("text") or "").strip(),
+                (r.get("zone") or "").strip(),
+                (r.get("expansion") or "").strip().lower(),
             ))
     return existing
 
@@ -343,21 +452,28 @@ def sync_game_data(csv_path, lua_path):
         print("[INFO] No missingNPCs found in BetterQuest.lua")
         return 0
 
+    csv_fieldnames = _ensure_csv_schema(csv_path)
     existing = _load_csv_index(csv_path)
     to_append = []
 
     for npc_name, dialogs in missing.items():
-        for text in dialogs:
+        for dialog in dialogs:
+            text = dialog["text"]
             # Collapse all internal whitespace sequences (including newlines) to a single space
             text = " ".join(text.split())
             if not text:
                 continue
             dialog_type = "gossip"
-            key = (npc_name.strip(), dialog_type, "", text)
+            zone = dialog["zone"].strip()
+            expansion = dialog["expansion"].strip().lower()
+            key = (npc_name.strip(), dialog_type, "", text, zone, expansion)
             if key not in existing:
                 to_append.append({
                     "npc_name":    npc_name.strip(),
                     "sex":         "",
+                    "zone":        zone,
+                    "expansion":   expansion,
+                    "client_version": dialog["client_version"].strip(),
                     "dialog_type": dialog_type,
                     "quest_id":    "",
                     "text":        text,
@@ -369,10 +485,12 @@ def sync_game_data(csv_path, lua_path):
         return 0
 
     write_header = not os.path.exists(csv_path)
-    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+    csv_parent = os.path.dirname(csv_path)
+    if csv_parent:
+        os.makedirs(csv_parent, exist_ok=True)
 
     with open(csv_path, "a", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=_CSV_FIELDNAMES)
+        writer = csv.DictWriter(f, fieldnames=csv_fieldnames, lineterminator="\n")
         if write_header:
             writer.writeheader()
         writer.writerows(to_append)
