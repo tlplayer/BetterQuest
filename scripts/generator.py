@@ -309,7 +309,7 @@ def merge_item_text_rows(df):
 # Reset by generate_audio() at the start of each run.
 _seen_quest_id_dialog_type = set()
 
-SAMPLE_RATE = 24000
+DEFAULT_SAMPLE_RATE = 24000
 
 
 def generate_tts_for_row(
@@ -431,7 +431,8 @@ def generate_tts_for_row(
 
     for attempt in range(max_retries):
         try:
-            with sf.SoundFile(filepath, mode="w", samplerate=SAMPLE_RATE, channels=1, subtype="PCM_16") as f:
+            sample_rate = getattr(tts, "sampling_rate", DEFAULT_SAMPLE_RATE)
+            with sf.SoundFile(filepath, mode="w", samplerate=sample_rate, channels=1, subtype="PCM_16") as f:
                 with torch.no_grad():
                     for chunk_idx, chunk in enumerate(text_chunks):
                         wav = tts.generate(chunk, audio_prompt_path=ref["audio_path"])
@@ -526,7 +527,7 @@ def generate_audio(
     Parameters
     ----------
     df               : DataFrame with columns npc_name, dialog_type, text, quest_id, …
-    tts              : Initialized ChatterboxTurboTTS instance
+    tts              : Initialized OmniVoiceBackend instance
     ref_codes        : { narrator: { audio_path } } from build_ref_codes()
     npc_lookup       : { npc_name: meta } from load_npc_metadata()
     sounds_dir       : Root directory for audio output

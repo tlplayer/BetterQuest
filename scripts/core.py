@@ -88,6 +88,15 @@ def parse_args():
     p.add_argument("--regenerate",     action="store_true", help="Overwrite existing audio files")
     p.add_argument("--time",           metavar="YYYY-MM-DD", help="Regenerate files older than this date")
     p.add_argument("--device",         choices=["cpu", "cuda"], default="cuda")
+    p.add_argument("--tts-model",      default="k2-fsa/OmniVoice", help="OmniVoice model ID or local path")
+    p.add_argument("--tts-language",   default="English", help="OmniVoice language name or code")
+    p.add_argument("--tts-steps",      type=int, default=16, help="Diffusion steps; 16 is fast, 32 favors quality")
+    p.add_argument("--tts-speed",      type=float, default=1.0, help="Speaking speed multiplier")
+    p.add_argument(
+        "--asr-model",
+        default="openai/whisper-tiny.en",
+        help="ASR model used only when a reference sample has no matching .txt transcript",
+    )
 
     # Skip flags
     p.add_argument("--skip-sync",      action="store_true")
@@ -290,9 +299,16 @@ def main():
     # Initialize TTS model once (skip if not generating audio)
     tts = None
     if not args.skip_audio:
-        from chatterbox.tts_turbo import ChatterboxTurboTTS
-        print(f"[INFO] Loading TTS model on {args.device}…")
-        tts = ChatterboxTurboTTS.from_pretrained(device=args.device)
+        from omnivoice_backend import OmniVoiceBackend
+        print(f"[INFO] Loading {args.tts_model} on {args.device}…")
+        tts = OmniVoiceBackend.from_pretrained(
+            args.tts_model,
+            device=args.device,
+            language=args.tts_language,
+            num_step=args.tts_steps,
+            speed=args.tts_speed,
+            asr_model_name=args.asr_model,
+        )
         print("[INFO] TTS model ready")
 
     # ------------------------------------------------------------------

@@ -11,7 +11,7 @@ Local voice generation and playback for WoW 1.12 (Vanilla) private servers.
 
 **What it does:**
 - In game narration: quests, speech bubbles, items, books, etc. 
-- Generates NPC voices locally on CPU or GPU (1060) using [Chatterbox TTS](https://huggingface.co/resemble-ai/chatterbox)
+- Generates NPC voices locally on CPU or GPU using [OmniVoice](https://huggingface.co/k2-fsa/OmniVoice)
 - Sound queue with skip support
 - Wide quest dialog with speaker portraits
 - Syncs missing data from game back to a local csv for sharing/filling gaps 
@@ -73,18 +73,11 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 3. Hugging Face required for VO
+### 3. OmniVoice model
 
-The Chatterbox model requires a free Hugging Face account.
-
-1. Create an account at [huggingface.co](https://huggingface.co)
-2. Generate a token at [huggingface.co/settings/tokens](https://huggingface.co/settings/tokens) (Read is sufficient)
-3. Authenticate:
-
-```sh
-pip install --upgrade huggingface_hub
-huggingface-cli login
-```
+The first audio run downloads `k2-fsa/OmniVoice` from Hugging Face. The model is
+public, so authentication is normally unnecessary. You can still run `hf auth
+login` if you need authenticated Hugging Face downloads.
 
 ### 4. FFmpeg (OPTIONAL)
 
@@ -138,6 +131,19 @@ Voice samples are selected by NPC race and sex. Priority order:
 1. NPC-specific sample: `samples/bolvar.wav`
 2. Race + sex: `samples/night_elf_female.wav`
 3. Fallback (if configured)
+
+OmniVoice works best with a clean 3–10 second reference sample. To avoid loading
+an ASR model, place an exact transcript beside a sample using the same basename:
+
+```text
+samples/orc_male.wav
+samples/orc_male.txt
+```
+
+If the `.txt` file is absent, BetterQuest transcribes the sample once with
+`openai/whisper-tiny.en` and caches the resulting voice prompt for the run.
+Generation defaults to 16 diffusion steps for speed; use `--tts-steps 32` when
+you prefer the higher-quality setting. `--tts-speed` controls speaking speed.
 
 **Generate for a specific NPC:**
 
@@ -225,4 +231,3 @@ Most useful contributions:
 - Getting fixes/patches that improve the game improves my enjoyment aswell as yours
 - Contributions to the database npc makes the addon better
 - I have a ko-fi and getting tips is always nice
-
