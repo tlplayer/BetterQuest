@@ -1,0 +1,51 @@
+import "src/domain.sev" as domain
+import "src/utils.sev" as utils
+
+def parseCategoryYaml(contents: string) -> map[string, string]:
+    lookup := {}
+    category := ""
+    for rawLine in contents.split("\n"):
+        line = rawLine.strip()
+        if size(line) == 0 or line.startsWith("#"):
+            continue
+        if line.endsWith(":") and not line.startsWith("-"):
+            category = line[0:-1].strip()
+        else line.startsWith("- ") and size(category) > 0:
+            name = utils.normalizeName(line[2:].strip())
+            if size(name) > 0:
+                lookup[name] = category
+    return lookup
+
+def metadataFor(name: string, races: map[string, string], sexes: map[string, string], zones: map[string, string]) -> domain.NpcMetadata:
+    normalized = utils.normalizeName(name)
+    return domain.NpcMetadata(
+        normalized,
+        races.get(normalized, ""),
+        sexes.get(normalized, ""),
+        zones.get(normalized, ""),
+    )
+
+def luaEscape(value: string) -> string:
+    return value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+
+def renderLuaEntry(row: domain.Dialog, metadata: domain.NpcMetadata, soundPath: string) -> string:
+    key = utils.createTextHash(row.text)
+    return "[\"" + luaEscape(row.npcName) + "\"] = { race = \"" + luaEscape(metadata.race) + "\", sex = \"" + luaEscape(metadata.sex) + "\", dialogs = { [\"" + luaEscape(key) + "\"] = { file = \"" + luaEscape(soundPath) + "\", type = \"" + luaEscape(row.dialogType) + "\", quest = \"" + luaEscape(row.questId) + "\" } } }"
+
+def renderLuaDatabase(rows: list[domain.Dialog], metadata: list[domain.NpcMetadata], soundPaths: list[string]) -> string:
+    output := "BetterQuest_NPCDatabase = {\n"
+    for index in range(size(rows)):
+        output += "  " + renderLuaEntry(rows[index], metadata[index], soundPaths[index]) + ",\n"
+    output += "}\n"
+    return output
+
+test "YAML overrides and Lua metadata preserve normalized NPC identity":
+    races = parseCategoryYaml("orc:\n- Thrall\n- Nazgrel\nhuman:\n- Jaina Proudmoore\n")
+    sexes = parseCategoryYaml("male:\n- Thrall\nfemale:\n- Jaina Proudmoore\n")
+    metadata = metadataFor("Thrall", races, sexes, {})
+    assert(metadata.race == "orc")
+    assert(metadata.sex == "male")
+    row = domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "", "Honor, hero!")
+    rendered = renderLuaEntry(row, metadata, "Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\honor.wav")
+    assert(rendered.find("honor hero") >= 0)
+    assert(rendered.find("race = \"orc\"") >= 0)

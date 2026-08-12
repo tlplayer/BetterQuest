@@ -1,0 +1,43 @@
+class Dialog:
+    npcName: string
+    sex: string
+    zone: string
+    expansion: string
+    clientVersion: string
+    dialogType: string
+    questId: string
+    text: string
+
+class NpcMetadata:
+    name: string
+    race: string
+    sex: string
+    zone: string
+
+class GenerationRequest:
+    npcName: string
+    narrator: string
+    text: string
+    referenceAudio: string
+    referenceText: string
+    outputPath: string
+    language: string
+    steps: int
+    device: string
+
+class PipelineReport:
+    sourceRows: int
+    filteredRows: int
+    uniqueRows: int
+    generatedRows: int
+    outputPath: string
+    commandStatus: int
+
+def emptyDialog() -> Dialog:
+    return Dialog("", "", "", "", "", "", "", "")
+
+test "domain records retain pipeline values":
+    row = Dialog("Thrall", "male", "Durotar", "vanilla", "1.12.1", "gossip", "", "Lok'tar")
+    assert(row.npcName == "Thrall")
+    assert(row.dialogType == "gossip")
+    assert(row.text == "Lok'tar")

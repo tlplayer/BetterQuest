@@ -1,0 +1,103 @@
+import "src/domain.sev" as domain
+
+def findMatchingBrace(text: string, start: int) -> int:
+    if start < 0 or start >= size(text) or text[start] != "{":
+        return -1
+    depth := 0
+    inString := false
+    quote := ""
+    index := start
+    while index < size(text):
+        character = text[index]
+        if inString:
+            if character == quote and (index == 0 or text[index - 1] != "\\"):
+                inString = false
+        else character == "\"" or character == "'":
+            inString = true
+            quote = character
+        else character == "{":
+            depth += 1
+        else character == "}":
+            depth -= 1
+            if depth == 0:
+                return index
+        index += 1
+    return -1
+
+def fieldString(block: string, fieldName: string) -> string:
+    marker = "[\"" + fieldName + "\"]"
+    position = block.find(marker)
+    if position < 0:
+        return ""
+    equals = block[position:].find("=")
+    if equals < 0:
+        return ""
+    start := position + equals + 1
+    while start < size(block) and block[start] == " ":
+        start += 1
+    if start >= size(block) or (block[start] != "\"" and block[start] != "'"):
+        return ""
+    quote = block[start]
+    output := ""
+    index := start + 1
+    while index < size(block) and block[index] != quote:
+        output += block[index]
+        index += 1
+    return output
+
+def extractMissingDialogs(luaText: string) -> list[domain.Dialog]:
+    dialogs := []
+    marker = "[\"missingNPCs\"]"
+    missingPosition = luaText.find(marker)
+    if missingPosition < 0:
+        return dialogs
+    tableOffset = luaText[missingPosition:].find("{")
+    if tableOffset < 0:
+        return dialogs
+    tableStart = missingPosition + tableOffset
+    tableEnd = findMatchingBrace(luaText, tableStart)
+    if tableEnd < 0:
+        return dialogs
+    table = luaText[tableStart:tableEnd + 1]
+    cursor := 0
+    while cursor < size(table):
+        nameStartOffset = table[cursor:].find("[\"")
+        if nameStartOffset < 0:
+            break
+        nameStart = cursor + nameStartOffset + 2
+        nameEndOffset = table[nameStart:].find("\"")
+        if nameEndOffset < 0:
+            break
+        nameEnd = nameStart + nameEndOffset
+        npcName = table[nameStart:nameEnd]
+        blockOffset = table[nameEnd:].find("{")
+        if blockOffset < 0:
+            break
+        blockStart = nameEnd + blockOffset
+        blockEnd = findMatchingBrace(table, blockStart)
+        if blockEnd < 0:
+            break
+        block = table[blockStart:blockEnd + 1]
+        dialogText = fieldString(block, "text")
+        if size(dialogText) > 0:
+            dialogs.append(domain.Dialog(
+                npcName,
+                fieldString(block, "sex"),
+                fieldString(block, "zone"),
+                fieldString(block, "expansion"),
+                fieldString(block, "client_version"),
+                fieldString(block, "dialog_type"),
+                fieldString(block, "quest_id"),
+                dialogText,
+            ))
+        cursor = blockEnd + 1
+    return dialogs
+
+test "SavedVariables parser respects nested braces and quoted braces":
+    lua = "BetterQuestDB = {[\"missingNPCs\"] = {[\"Nazgrel\"] = {[\"text\"] = \"For {the} Horde!\", [\"zone\"] = \"Outland\", [\"dialog_type\"] = \"gossip\"}}}"
+    rows = extractMissingDialogs(lua)
+    assert(size(rows) == 1)
+    assert(rows[0].npcName == "Nazgrel")
+    assert(rows[0].text == "For {the} Horde!")
+    assert(rows[0].zone == "Outland")
+

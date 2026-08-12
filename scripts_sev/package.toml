@@ -1,0 +1,10 @@
+[package]
+name = "betterquest-pipeline"
+version = "0.1.0"
+edition = "2026"
+description = "Native Severian conversion of the BetterQuest data and TTS pipeline"
+
+[[bin]]
+name = "betterquest-pipeline"
+path = "src/core.sev"
+

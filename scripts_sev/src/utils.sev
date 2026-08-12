@@ -1,0 +1,127 @@
+def collapseSpaces(text: string) -> string:
+    output := ""
+    previousSpace := false
+    for character in text.characters():
+        isSpace = character == " " or character == "\t" or character == "\r"
+        if isSpace:
+            if not previousSpace:
+                output += " "
+            previousSpace = true
+        else:
+            output += character
+            previousSpace = false
+    return output.strip()
+
+def normalizeName(name: string) -> string:
+    output := ""
+    parenthesisDepth := 0
+    for character in name.characters():
+        if character == "(":
+            parenthesisDepth += 1
+        else character == ")" and parenthesisDepth > 0:
+            parenthesisDepth -= 1
+        else parenthesisDepth == 0 and character != "\"" and character != "'" and character != "\\":
+            output += character
+    return collapseSpaces(output)
+
+def sanitizeFilename(name: string) -> string:
+    output := ""
+    previousSeparator := false
+    allowed = "abcdefghijklmnopqrstuvwxyz0123456789_-"
+    for rawCharacter in name.lower().characters():
+        if allowed.find(rawCharacter) >= 0:
+            output += rawCharacter
+            previousSeparator = false
+        else:
+            if not previousSeparator and size(output) > 0:
+                output += "_"
+            previousSeparator = true
+    while output.endsWith("_"):
+        output = output[0:-1]
+    return output
+
+def removeAudioCues(text: string) -> string:
+    output := ""
+    squareDepth := 0
+    roundDepth := 0
+    angleDepth := 0
+    inAsterisks := false
+    for character in text.characters():
+        if character == "[":
+            squareDepth += 1
+        else character == "]" and squareDepth > 0:
+            squareDepth -= 1
+        else character == "(":
+            roundDepth += 1
+        else character == ")" and roundDepth > 0:
+            roundDepth -= 1
+        else character == "<":
+            angleDepth += 1
+        else character == ">" and angleDepth > 0:
+            angleDepth -= 1
+        else character == "*":
+            inAsterisks = not inAsterisks
+        else squareDepth == 0 and roundDepth == 0 and angleDepth == 0 and not inAsterisks:
+            output += character
+    return collapseSpaces(output)
+
+def replaceGenderToken(text: string) -> string:
+    output := ""
+    index := 0
+    while index < size(text):
+        if index + 1 < size(text) and text[index] == "$" and text[index + 1].lower() == "g":
+            output += "adventurer"
+            index += 2
+            while index < size(text) and text[index] != ";":
+                index += 1
+            if index < size(text):
+                index += 1
+        else:
+            output += text[index]
+            index += 1
+    return output
+
+def normalizeDialogText(text: string) -> string:
+    normalized := text.replace("$B", "\n").replace("$b", "\n")
+    normalized = replaceGenderToken(normalized)
+    normalized = normalized.replace("$N", "adventurer").replace("$n", "adventurer")
+    normalized = normalized.replace("$R", "adventurer").replace("$r", "adventurer")
+    normalized = normalized.replace("$C", "adventurer").replace("$c", "adventurer")
+    normalized = normalized.replace("$L", "adventurer").replace("$l", "adventurer")
+    return removeAudioCues(normalized)
+
+def normalizeTextForMatching(text: string) -> string:
+    normalized = normalizeDialogText(text).lower()
+    output := ""
+    allowed = "abcdefghijklmnopqrstuvwxyz0123456789 "
+    for character in normalized.characters():
+        if allowed.find(character) >= 0:
+            output += character
+        else:
+            output += " "
+    return collapseSpaces(output)
+
+def createTextHash(text: string) -> string:
+    normalized = normalizeTextForMatching(text)
+    if size(normalized) <= 50:
+        return normalized
+    return normalized[0:50]
+
+def createDialogSignature(text: string, race: string, sex: string) -> string:
+    return normalizeTextForMatching(text) + "|" + race.lower() + "|" + sex.lower()
+
+def shellQuote(value: string) -> string:
+    return "'" + value.replace("'", "'\"'\"'") + "'"
+
+test "names and filenames match Python adapter behavior":
+    assert(normalizeName("  Thrall (Warchief)  ") == "Thrall")
+    assert(normalizeName("Jaina's \"Image\"") == "Jainas Image")
+    assert(sanitizeFilename("High Overlord Saurfang!") == "high_overlord_saurfang")
+
+test "dialog tokens and cues become speech-safe text":
+    value = normalizeDialogText("<Thrall laughs.> Honor, $N.$B$GHe:She; stands ready.")
+    assert(value == "Honor, adventurer.\nadventurer stands ready.")
+    assert(createTextHash("Hello, HERO!!!") == "hello hero")
+
+test "shell quoting cannot terminate the argument":
+    assert(shellQuote("Lok'tar") == "'Lok'\"'\"'tar'")

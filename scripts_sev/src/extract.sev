@@ -1,0 +1,106 @@
+import "src/domain.sev" as domain
+
+def splitCsvRecords(contents: string) -> list[string]:
+    records := []
+    current := ""
+    inQuotes := false
+    index := 0
+    while index < size(contents):
+        character = contents[index]
+        if character == "\"":
+            current += character
+            if inQuotes and index + 1 < size(contents) and contents[index + 1] == "\"":
+                current += "\""
+                index += 1
+            else:
+                inQuotes = not inQuotes
+        else character == "\n" and not inQuotes:
+            if size(current.strip()) > 0:
+                records.append(current)
+            current = ""
+        else:
+            current += character
+        index += 1
+    if size(current.strip()) > 0:
+        records.append(current)
+    return records
+
+def parseCsvFields(record: string) -> list[string]:
+    fields := []
+    current := ""
+    inQuotes := false
+    index := 0
+    while index < size(record):
+        character = record[index]
+        if character == "\"":
+            if inQuotes and index + 1 < size(record) and record[index + 1] == "\"":
+                current += "\""
+                index += 1
+            else:
+                inQuotes = not inQuotes
+        else character == "," and not inQuotes:
+            fields.append(current)
+            current = ""
+        else:
+            current += character
+        index += 1
+    fields.append(current)
+    return fields
+
+def parseDialogCsv(contents: string) -> list[domain.Dialog]:
+    dialogs := []
+    records = splitCsvRecords(contents)
+    for index, record in enumerate(records):
+        if index == 0:
+            continue
+        fields = parseCsvFields(record)
+        if size(fields) == 8 and size(fields[7].strip()) > 0:
+            dialogs.append(domain.Dialog(
+                fields[0].strip(),
+                fields[1].strip(),
+                fields[2].strip(),
+                fields[3].strip(),
+                fields[4].strip(),
+                fields[5].strip(),
+                fields[6].strip(),
+                fields[7].strip(),
+            ))
+    return dialogs
+
+def isCleanText(text: string, exclusions: list[string]) -> bool:
+    candidate = text.strip().lower()
+    if size(candidate) == 0:
+        return false
+    for exclusion in exclusions:
+        if candidate.find(exclusion.lower()) >= 0:
+            return false
+    return true
+
+def dialogKey(row: domain.Dialog) -> string:
+    return row.npcName + "|" + row.dialogType + "|" + row.questId + "|" + row.text
+
+def detectRegressions(oldRows: list[domain.Dialog], newRows: list[domain.Dialog]) -> list[string]:
+    newKeys := {}
+    for row in newRows:
+        newKeys[dialogKey(row)] = true
+    missing := []
+    for row in oldRows:
+        key = dialogKey(row)
+        if not newKeys.get(key, false):
+            missing.append(key)
+    return missing
+
+test "CSV parser handles commas quotes and embedded newlines":
+    csv = "npc_name,sex,zone,expansion,client_version,dialog_type,quest_id,text\nThrall,0,Durotar,vanilla,1.12.1,gossip,,\"Honor, hero.\"\nJaina,1,Stormwind,vanilla,1.12.1,gossip,,\"First line\nSecond line\"\n"
+    rows = parseDialogCsv(csv)
+    assert(size(rows) == 2)
+    assert(rows[0].text == "Honor, hero.")
+    assert(rows[1].text == "First line\nSecond line")
+
+test "extraction rejects combat noise and detects regressions":
+    exclusions = ["dies.", "begins to cast"]
+    assert(isCleanText("For the Horde!", exclusions))
+    assert(not isCleanText("The guard dies.", exclusions))
+    oldRows = [domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "", "Honor")]
+    assert(size(detectRegressions(oldRows, [])) == 1)
+    assert(size(detectRegressions(oldRows, oldRows)) == 0)

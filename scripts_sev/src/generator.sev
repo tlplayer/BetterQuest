@@ -1,0 +1,95 @@
+import "src/domain.sev" as domain
+import "src/utils.sev" as utils
+
+def chunkTextRobust(text: string, maxCharacters: int = 300) -> list[string]:
+    chunks := []
+    current := ""
+    for word in text.split(" "):
+        if size(word) == 0:
+            continue
+        candidate = word if size(current) == 0 else current + " " + word
+        if size(candidate) > maxCharacters and size(current) > 0:
+            chunks.append(current)
+            current = word
+        else:
+            current = candidate
+    if size(current) > 0:
+        chunks.append(current)
+    return chunks
+
+def filterDialogs(rows: list[domain.Dialog], npcName: string, dialogType: string, expansion: string, limit: int) -> list[domain.Dialog]:
+    filtered := []
+    for row in rows:
+        npcMatches = size(npcName) == 0 or row.npcName == npcName
+        typeMatches = size(dialogType) == 0 or row.dialogType == dialogType
+        expansionMatches = size(expansion) == 0 or row.expansion.lower() == expansion.lower()
+        if npcMatches and typeMatches and expansionMatches:
+            filtered.append(row)
+            if limit > 0 and size(filtered) >= limit:
+                break
+    return filtered
+
+def deduplicateDialogs(rows: list[domain.Dialog], races: map[string, string], sexes: map[string, string]) -> list[domain.Dialog]:
+    unique := []
+    seen := {}
+    for row in rows:
+        race = races.get(row.npcName, "unknown")
+        sex = sexes.get(row.npcName, row.sex)
+        signature = utils.createDialogSignature(row.text, race, sex)
+        if not seen.get(signature, false):
+            seen[signature] = true
+            unique.append(row)
+    return unique
+
+def narratorFor(row: domain.Dialog, races: map[string, string], sexes: map[string, string], override: string = "") -> string:
+    if size(override) > 0:
+        return override
+    if row.dialogType == "book" or row.dialogType == "item_text":
+        return "narrator"
+    race = races.get(row.npcName, "")
+    sex = sexes.get(row.npcName, "")
+    if size(race) == 0:
+        return ""
+    if sex == "female":
+        return race + "_female"
+    return race
+
+def outputPath(row: domain.Dialog, outputDirectory: string) -> string:
+    stem := utils.sanitizeFilename(row.npcName)
+    if size(row.questId) > 0:
+        stem += "_" + utils.sanitizeFilename(row.questId)
+    stem += "_" + utils.sanitizeFilename(row.dialogType)
+    return outputDirectory + "/" + stem + ".wav"
+
+def generationRequest(row: domain.Dialog, races: map[string, string], sexes: map[string, string], samplesDirectory: string, outputDirectory: string, steps: int, device: string) -> domain.GenerationRequest:
+    narrator = narratorFor(row, races, sexes)
+    return domain.GenerationRequest(
+        row.npcName,
+        narrator,
+        utils.normalizeDialogText(row.text),
+        samplesDirectory + "/" + narrator + ".wav",
+        "Everything the light touches is our kingdom. A king's time as ruler rises and falls like the sun. One day, Simba, the sun will set on my time here and will rise with you as the new king.",
+        outputPath(row, outputDirectory),
+        "English",
+        steps,
+        device,
+    )
+
+test "filter dedup and narrator selection preserve pipeline parity":
+    rows = [
+        domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "4974", "Honor, $N!"),
+        domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "4974", "Honor, $N!"),
+        domain.Dialog("Jaina", "1", "", "vanilla", "1.12.1", "gossip", "", "Welcome"),
+    ]
+    filtered = filterDialogs(rows, "Thrall", "", "vanilla", 10)
+    assert(size(filtered) == 2)
+    unique = deduplicateDialogs(filtered, {"Thrall": "orc"}, {"Thrall": "male"})
+    assert(size(unique) == 1)
+    assert(narratorFor(unique[0], {"Thrall": "orc"}, {"Thrall": "male"}) == "orc")
+    request = generationRequest(unique[0], {"Thrall": "orc"}, {"Thrall": "male"}, "samples", "output", 4, "cpu")
+    assert(request.referenceAudio == "samples/orc.wav")
+    assert(request.outputPath == "output/thrall_4974_gossip.wav")
+
+test "long text is chunked without dropping words":
+    chunks = chunkTextRobust("one two three four five six", 9)
+    assert(chunks == ["one two", "three", "four five", "six"])

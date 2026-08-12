@@ -1,0 +1,146 @@
+import "src/domain.sev" as domain
+import "src/utils.sev" as utils
+import "src/extract.sev" as extract
+import "src/game_adapter.sev" as gameAdapter
+import "src/db_adapter.sev" as dbAdapter
+import "src/generator.sev" as generator
+import "src/omnivoice_backend.sev" as omnivoice
+
+native("__sev_file_read") def fileRead(path: string) -> Result[string, IOError]
+native("__sev_file_write") def fileWrite(path: string, contents: string) -> Result[unit, IOError]
+
+def readRequired(path: string) -> string:
+    switch fileRead(path):
+        ok contents:
+            return contents
+        failure error:
+            print("Could not read", path, error)
+            return ""
+
+def writeRequired(path: string, contents: string) -> bool:
+    switch fileWrite(path, contents):
+        ok:
+            return true
+        failure error:
+            print("Could not write", path, error)
+            return false
+
+def runPipeline(csvPath: string, racePath: string, sexPath: string, samplesDirectory: string, outputDirectory: string, npcName: string, limit: int, executeAudio: bool) -> domain.PipelineReport:
+    rows = extract.parseDialogCsv(readRequired(csvPath))
+    races = dbAdapter.parseCategoryYaml(readRequired(racePath))
+    sexes = dbAdapter.parseCategoryYaml(readRequired(sexPath))
+    filtered = generator.filterDialogs(rows, npcName, "", "vanilla", limit)
+    normalized := []
+    for row in filtered:
+        normalized.append(domain.Dialog(
+            row.npcName,
+            row.sex,
+            row.zone,
+            row.expansion,
+            row.clientVersion,
+            row.dialogType,
+            row.questId,
+            utils.normalizeDialogText(row.text),
+        ))
+    unique = generator.deduplicateDialogs(normalized, races, sexes)
+    if size(unique) == 0:
+        return domain.PipelineReport(size(rows), size(filtered), 0, 0, "", 1)
+    row = unique[0]
+    request = generator.generationRequest(row, races, sexes, samplesDirectory, outputDirectory, 4, "cpu")
+    metadata = dbAdapter.metadataFor(row.npcName, races, sexes, {})
+    luaPath = outputDirectory + "/trial_npc_database.lua"
+    lua = dbAdapter.renderLuaDatabase([row], [metadata], [request.outputPath])
+    directoryStatus = omnivoice.ensureDirectory(outputDirectory)
+    wroteLua = writeRequired(luaPath, lua)
+    if directoryStatus != 0 or not wroteLua:
+        return domain.PipelineReport(size(rows), size(filtered), size(unique), 0, request.outputPath, 1)
+    status := 0
+    generated := 0
+    if executeAudio:
+        status = omnivoice.generate(request)
+        if status == 0:
+            generated = 1
+    return domain.PipelineReport(size(rows), size(filtered), size(unique), generated, request.outputPath, status)
+
+def main():
+    print("BetterQuest Severian trial: production data -> OmniVoice -> WAV")
+    stagedCsv = "scripts_sev/output/trial_dialog.csv"
+    directoryStatus = omnivoice.ensureDirectory("scripts_sev/output")
+    stageStatus = omnivoice.stageFirstNpcRow("data/all_npc_dialog.csv", stagedCsv, "Thrall")
+    if directoryStatus != 0 or stageStatus != 0:
+        print("Could not stage the production CSV row")
+        return
+    report = runPipeline(
+        stagedCsv,
+        "data/npc_race.yaml",
+        "data/npc_sex.yaml",
+        "samples",
+        "scripts_sev/output",
+        "Thrall",
+        1,
+        true,
+    )
+    print("source rows:", report.sourceRows)
+    print("filtered rows:", report.filteredRows)
+    print("unique rows:", report.uniqueRows)
+    print("generated rows:", report.generatedRows)
+    print("audio:", report.outputPath)
+    if report.commandStatus != 0:
+        print("OmniVoice failed with status", report.commandStatus)
+
+test "pipeline can run production-shaped data without invoking the model":
+    csvPath = "/tmp/betterquest-severian-dialog.csv"
+    racePath = "/tmp/betterquest-severian-race.yaml"
+    sexPath = "/tmp/betterquest-severian-sex.yaml"
+    outputDirectory = "/tmp/betterquest-severian-output"
+    csv = "npc_name,sex,zone,expansion,client_version,dialog_type,quest_id,text\nThrall,0,Durotar,vanilla,1.12.1,gossip,4974,\"Honor, $N!\"\n"
+    assert(writeRequired(csvPath, csv))
+    assert(writeRequired(racePath, "orc:\n- Thrall\n"))
+    assert(writeRequired(sexPath, "male:\n- Thrall\n"))
+    report = runPipeline(csvPath, racePath, sexPath, "samples", outputDirectory, "Thrall", 1, false)
+    assert(report.sourceRows == 1)
+    assert(report.filteredRows == 1)
+    assert(report.uniqueRows == 1)
+    assert(report.generatedRows == 0)
+    assert(report.commandStatus == 0)
+    assert(report.outputPath.endsWith("thrall_4974_gossip.wav"))
+
+test "pipeline reports an empty filter without touching audio":
+    csvPath = "/tmp/betterquest-severian-empty-dialog.csv"
+    racePath = "/tmp/betterquest-severian-empty-race.yaml"
+    sexPath = "/tmp/betterquest-severian-empty-sex.yaml"
+    csv = "npc_name,sex,zone,expansion,client_version,dialog_type,quest_id,text\nJaina,1,Stormwind,vanilla,1.12.1,gossip,,Welcome\n"
+    assert(writeRequired(csvPath, csv))
+    assert(writeRequired(racePath, "human:\n- Jaina\n"))
+    assert(writeRequired(sexPath, "female:\n- Jaina\n"))
+    report = runPipeline(csvPath, racePath, sexPath, "samples", "/tmp/betterquest-severian-empty-output", "Thrall", 1, false)
+    assert(report.filteredRows == 0)
+    assert(report.uniqueRows == 0)
+    assert(report.commandStatus == 1)
+
+test "converted game and extraction adapters retain parity behavior":
+    empty = domain.emptyDialog()
+    assert(empty.npcName == "")
+    lua = "BetterQuestDB = {[\"missingNPCs\"] = {[\"Nazgrel\"] = {[\"text\"] = \"For {the} Horde!\", [\"zone\"] = \"Outland\", [\"dialog_type\"] = \"gossip\"}}}"
+    imported = gameAdapter.extractMissingDialogs(lua)
+    assert(size(imported) == 1)
+    assert(imported[0].npcName == "Nazgrel")
+    assert(imported[0].text == "For {the} Horde!")
+    exclusions = ["dies.", "begins to cast"]
+    assert(extract.isCleanText("For the Horde!", exclusions))
+    assert(not extract.isCleanText("The guard dies.", exclusions))
+    assert(size(extract.detectRegressions(imported, [])) == 1)
+    assert(size(extract.detectRegressions(imported, imported)) == 0)
+
+test "converted generator and model boundary produce a complete request":
+    row = domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "4974", "Honor, $N!")
+    races = {"Thrall": "orc"}
+    sexes = {"Thrall": "male"}
+    request = generator.generationRequest(row, races, sexes, "samples", "scripts_sev/output", 4, "cpu")
+    assert(request.text == "Honor, adventurer!")
+    assert(request.referenceAudio == "samples/orc.wav")
+    assert(request.outputPath.endsWith("thrall_4974_gossip.wav"))
+    command = omnivoice.buildCommand(request)
+    assert(command.find("omnivoice-infer") >= 0)
+    assert(command.find("--ref_audio 'samples/orc.wav'") >= 0)
+    assert(generator.chunkTextRobust("one two three four five six", 9) == ["one two", "three", "four five", "six"])
