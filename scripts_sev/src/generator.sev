@@ -11,14 +11,12 @@ import "src/utils.sev" as utils
 
 int DEFAULT_SAMPLE_RATE = 24000
 
-def directory_entries(directory: string) -> list[string]:
-    switch os.ls(directory):
-        ok entries:
-            return entries
-        failure _error:
-            return []
+def directory_entries(directory: string) -> Result[list[string], IOError]:
+    if not os.exists(directory):
+        return []
+    return os.ls(directory)
 
-def build_ref_codes(samples_root: string = "../samples") -> map[string, domain.ReferenceCode]:
+def build_ref_codes(samples_root: string = "../samples") -> Result[map[string, domain.ReferenceCode], IOError]:
     references := {}
     for filename in directory_entries(samples_root):
         if filename.ends_with(".wav"):
@@ -31,8 +29,8 @@ def sentences(text: string) -> list[string]:
     current := ""
     for character in text.characters():
         current += character
-        if character == "." or character == "?" or character == "!" or character == ";" or character == "…":
-            if size(current.strip()) > 0:
+        if character in [".", "?", "!", ";", "…"]:
+            if not current.strip().is_empty():
                 output.append(current.strip())
             current = ""
     if size(current.strip()) > 0:
@@ -40,7 +38,7 @@ def sentences(text: string) -> list[string]:
     return output
 
 def chunk_text_robust(text: string, min_chars: int = 150, max_chars: int = 300) -> list[string]:
-    if size(text) == 0:
+    if text.is_empty():
         return []
     chunks := []
     current := ""
@@ -136,7 +134,7 @@ def is_positive_quest_id(value: string) -> bool:
     normalized := value.strip()
     if normalized.ends_with(".0"):
         normalized = normalized[0:-2]
-    if size(normalized) == 0:
+    if normalized.is_empty():
         return false
     for character in normalized.characters():
         if not character.is_digit():
@@ -148,8 +146,7 @@ def is_positive_quest_id(value: string) -> bool:
             return false
 
 def normalized_quest_id(value: string) -> string:
-    normalized = value.strip()
-    return normalized[0:-2] if normalized.ends_with(".0") else normalized
+    return value.strip().remove_suffix(".0")
 
 def audio_target(
     row: domain.Dialog,
@@ -245,47 +242,31 @@ def pcm16_wav(samples: list[float], sample_rate: int) -> list[int]:
         append_u16(output, unsigned)
     return output
 
-def file_byte_size(file_path: string) -> int:
-    switch os.stat(file_path):
-        ok information:
-            return information.size
-        failure _error:
-            return -1
+def file_byte_size(file_path: string) -> Result[int, IOError]:
+    information = os.stat(file_path)
+    return information.size
 
-def file_modified(file_path: string) -> float:
-    switch os.stat(file_path):
-        ok information:
-            return information.modified_seconds
-        failure _error:
-            return -1.0
+def file_modified(file_path: string) -> Result[float, IOError]:
+    information = os.stat(file_path)
+    return information.modified_seconds
 
-def delete_file(file_path: string):
+def delete_file(file_path: string) -> Result[unit, IOError]:
     if os.exists(file_path):
-        switch os.rm(file_path):
-            ok:
-                print("[REGEN] Removed", file_path)
-            failure error:
-                print("[ERROR] Could not remove", file_path, error)
+        _removed = os.rm(file_path)
+        print("[REGEN] Removed", file_path)
+    return
 
-def write_wav(file_path: string, audio: domain.AudioSamples) -> bool:
-    switch os.mkdir(path.dirname(file_path)):
-        ok:
-            switch write_bytes(file_path, pcm16_wav(audio.samples, audio.sample_rate)):
-                ok:
-                    return true
-                failure error:
-                    print("[ERROR] Could not write WAV", file_path, error)
-                    return false
-        failure error:
-            print("[ERROR] Could not create output directory", error)
-            return false
+def write_wav(file_path: string, audio: domain.AudioSamples) -> Result[unit, IOError]:
+    _directory = os.mkdir(path.dirname(file_path))
+    _written = write_bytes(file_path, pcm16_wav(audio.samples, audio.sample_rate))
+    return
 
 def maybe_incremental_sync(
     row: domain.Dialog,
     target: domain.AudioTarget,
     npc_lookup: map[string, domain.NpcMetadata],
     options: domain.GenerationOptions,
-):
+) -> Result[unit, exception]:
     if not options.incremental_sync:
         return
     quest_id = target.quest_id if target.has_quest_id and target.dialog_type != "gossip" else ""
@@ -298,6 +279,7 @@ def maybe_incremental_sync(
         npc_lookup,
         options.database,
     )
+    return
 
 def generate_tts_for_row(
     row: domain.Dialog,
@@ -306,23 +288,24 @@ def generate_tts_for_row(
     npc_lookup: map[string, domain.NpcMetadata],
     options: domain.GenerationOptions,
     seen_quest_types: map[string, bool],
-) -> domain.GenerationResult:
+) -> Result[domain.GenerationResult, exception]:
     if row.skip_generation:
         return domain.GenerationResult("", "duplicate", row.link_to_npc)
     target = audio_target(row, npc_lookup, references, options.sounds_directory, seen_quest_types, options.narrator_override)
     if size(target.path) == 0:
         return domain.GenerationResult("", "missing_narrator", row.npc_name)
     if os.exists(target.path):
-        existing_size = file_byte_size(target.path)
+        existing_size: int = file_byte_size(target.path)
         if existing_size == 0:
-            delete_file(target.path)
+            _deleted = delete_file(target.path)
         else options.cutoff_seconds >= 0.0:
-            if file_modified(target.path) >= options.cutoff_seconds:
-                maybe_incremental_sync(row, target, npc_lookup, options)
+            modified: float = file_modified(target.path)
+            if modified >= options.cutoff_seconds:
+                _synced = maybe_incremental_sync(row, target, npc_lookup, options)
                 return domain.GenerationResult(target.path, "existing", "")
-            delete_file(target.path)
+            _deleted = delete_file(target.path)
         else not options.regenerate:
-            maybe_incremental_sync(row, target, npc_lookup, options)
+            _synced = maybe_incremental_sync(row, target, npc_lookup, options)
             return domain.GenerationResult(target.path, "existing", "")
     chunks = chunk_text_robust(row.text)
     if size(chunks) == 0:
@@ -343,10 +326,9 @@ def generate_tts_for_row(
                     break
         if size(failure_message) == 0:
             audio = domain.AudioSamples(combined, sample_rate)
-            if write_wav(target.path, audio):
-                maybe_incremental_sync(row, target, npc_lookup, options)
-                return domain.GenerationResult(target.path, "generated", "")
-            return domain.GenerationResult("", "error", "could not write WAV")
+            _written = write_wav(target.path, audio)
+            _synced = maybe_incremental_sync(row, target, npc_lookup, options)
+            return domain.GenerationResult(target.path, "generated", "")
         lowered = failure_message.lower()
         retryable = lowered.find("out of memory") >= 0 or lowered.find("cuda") >= 0
         attempt += 1
@@ -354,7 +336,7 @@ def generate_tts_for_row(
             print("[RETRY] Generation failed; waiting", options.retry_wait, "seconds")
             time.sleep(float(options.retry_wait))
         else:
-            delete_file(target.path)
+            _deleted = delete_file(target.path)
             return domain.GenerationResult("", "error", failure_message)
     return domain.GenerationResult("", "error", "generation attempts exhausted")
 
@@ -364,7 +346,7 @@ def generate_audio(
     references: map[string, domain.ReferenceCode],
     npc_lookup: map[string, domain.NpcMetadata],
     options: domain.GenerationOptions,
-) -> list[domain.GenerationResult]:
+) -> Result[list[domain.GenerationResult], exception]:
     print("=== STEP 2: Generating TTS audio ===")
     results := []
     seen_quest_types := {}

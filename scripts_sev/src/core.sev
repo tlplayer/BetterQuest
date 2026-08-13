@@ -30,33 +30,13 @@ def default_options() -> domain.CliOptions:
 
 def parse_decimal(value: string, fallback: float) -> float:
     text = value.strip()
-    if size(text) == 0:
+    if text.is_empty():
         return fallback
-    negative := false
-    index := 0
-    if text[0] == "-":
-        negative = true
-        index = 1
-    whole := 0
-    fraction := 0
-    scale := 1
-    decimal := false
-    while index < size(text):
-        character = text[index]
-        if character == "." and not decimal:
-            decimal = true
-        else:
-            digit = "0123456789".find(character)
-            if digit < 0:
-                return fallback
-            if decimal:
-                fraction = fraction * 10 + digit
-                scale *= 10
-            else:
-                whole = whole * 10 + digit
-        index += 1
-    result = float(whole) + float(fraction) / float(scale)
-    return -result if negative else result
+    switch float.parse(text):
+        ok parsed:
+            return parsed
+        failure _error:
+            return fallback
 
 def integer_value(value: string, fallback: int) -> int:
     switch int.parse(value):
@@ -68,7 +48,7 @@ def integer_value(value: string, fallback: int) -> int:
 def add_requested_values(destination: list[string], raw: string):
     for value in raw.split(","):
         normalized = value.strip().lower().replace("_", " ")
-        if size(normalized) > 0 and not (normalized in destination):
+        if not normalized.is_empty() and not (normalized in destination):
             destination.append(normalized)
 
 def parse_args(arguments: list[string]) -> domain.CliOptions:
@@ -163,14 +143,10 @@ def parse_args(arguments: list[string]) -> domain.CliOptions:
             index += 1
     return options
 
-def load_csv(csv_path: string) -> list[domain.Dialog]:
-    switch file.read(csv_path):
-        ok loaded_file:
-            rows: list[list[string]] = loaded_file.value()
-            return extract.parse_dialog_rows(rows)
-        failure error:
-            print("[ERROR] Could not read dialog CSV:", error)
-            return []
+def load_csv(csv_path: string) -> Result[list[domain.Dialog], exception]:
+    loaded_file = file.read(csv_path)
+    rows: list[list[string]] = loaded_file.value()
+    return extract.parse_dialog_rows(rows)
 
 def normalized_filter_value(value: string) -> string:
     return value.lower().replace("_", " ").strip()
@@ -219,7 +195,7 @@ def prepare_for_generation(rows: list[domain.Dialog]) -> list[domain.Dialog]:
     return generator.merge_item_text_rows(normalized)
 
 def cutoff_seconds(value: string) -> float:
-    if size(value) == 0:
+    if value.is_empty():
         return -1.0
     switch time.parse_date(value):
         ok timestamp:
@@ -234,11 +210,12 @@ def run_pipeline(
     references: map[string, domain.ReferenceCode],
     backend: omnivoice_backend.SpeechBackend,
     betterquest_path: string,
-) -> domain.PipelineReport:
+) -> Result[domain.PipelineReport, exception]:
     csv_path = "data/all_npc_dialog.csv"
     new_rows := 0
     if not options.skip_sync:
-        new_rows = game_adapter.sync_game_data(csv_path, betterquest_path)
+        synced_rows: int = game_adapter.sync_game_data(csv_path, betterquest_path)
+        new_rows = synced_rows
     else:
         print("=== STEP 1: Syncing game data [SKIPPED] ===")
     full = load_csv(csv_path)
@@ -277,7 +254,7 @@ def run_daemon(
     npc_lookup: map[string, domain.NpcMetadata],
     references: map[string, domain.ReferenceCode],
     backend: omnivoice_backend.SpeechBackend,
-):
+) -> Result[unit, exception]:
     betterquest_path = game_adapter.find_betterquest_file(options.wtf_path)
     if size(betterquest_path) == 0:
         print("[ERROR] BetterQuest.lua not found under", options.wtf_path)
@@ -291,7 +268,7 @@ def run_daemon(
             modified = current
             _report = run_pipeline(options, npc_lookup, references, backend, betterquest_path)
 
-def main():
+def main() -> Result[unit, exception]:
     options = parse_args(process.arguments())
     print("UNIFIED TTS PIPELINE")
     config = database_config()
@@ -308,9 +285,10 @@ def main():
         print("[INFO] Loading", options.tts_model, "on", options.device)
     backend: omnivoice_backend.SpeechBackend = omnivoice_backend.from_pretrained(options.tts_model, options.device, options.tts_language, options.tts_steps, options.tts_speed, options.asr_model) if not options.skip_audio else omnivoice_backend.DisabledBackend()
     if options.daemon:
-        run_daemon(options, npc_lookup, references, backend)
+        _daemon = run_daemon(options, npc_lookup, references, backend)
     else:
         _report = run_pipeline(options, npc_lookup, references, backend, "../../../../WTF/Account/ADMIN/SavedVariables/BetterQuest.lua")
+    return
 
 test "CLI parsing supports repeatable comma filters and generation controls":
     options = parse_args(["betterquest", "--zone", "Elwynn_Forest,Durotar", "--zone", "Nagrand", "--expansion", "vanilla,tbc", "--limit", "4", "--skip-audio", "--tts-speed", "1.15"])

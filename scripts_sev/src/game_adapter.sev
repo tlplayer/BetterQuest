@@ -1,4 +1,4 @@
-from file import write_text as native_write_text, append_text
+from file import append_text
 import csv
 import data
 import file
@@ -9,33 +9,6 @@ import "src/dialog_data.sev" as dialog_data
 import "src/domain.sev" as domain
 import "src/utils.sev" as utils
 
-def text_or_empty(source_path: string) -> string:
-    switch file.read(source_path):
-        ok loaded_file:
-            switch loaded_file.text():
-                ok contents:
-                    return contents
-                failure _error:
-                    return ""
-        failure _error:
-            return ""
-
-def csv_or_empty(source_path: string) -> csv.CSV:
-    switch file.read(source_path):
-        ok loaded_file:
-            rows: list[list[string]] = loaded_file.value()
-            return csv.CSV(source_path, rows)
-        failure _error:
-            return csv.CSV(source_path, [])
-
-def write_text_checked(source_path: string, contents: string) -> bool:
-    switch native_write_text(source_path, contents):
-        ok:
-            return true
-        failure error:
-            print("[ERROR] Could not write", source_path, error)
-            return false
-
 def mtime_or_negative(source_path: string) -> float:
     switch os.stat(source_path):
         ok information:
@@ -43,20 +16,10 @@ def mtime_or_negative(source_path: string) -> float:
         failure _error:
             return -1.0
 
-def directory_entries(directory: string) -> list[string]:
-    switch os.ls(directory):
-        ok entries:
-            return entries
-        failure _error:
-            return []
-
-def make_directory(directory: string) -> bool:
-    switch os.mkdir(directory):
-        ok:
-            return true
-        failure error:
-            print("[ERROR] Could not create", directory, error)
-            return false
+def directory_entries(directory: string) -> Result[list[string], IOError]:
+    if not os.exists(directory):
+        return []
+    return os.ls(directory)
 
 def newest_file(matches: list[string]) -> string:
     selected := ""
@@ -70,7 +33,7 @@ def newest_file(matches: list[string]) -> string:
         print("[INFO]", size(matches), "BetterQuest.lua files found, using most recent:", selected)
     return selected
 
-def saved_variable_files(parent: string) -> list[string]:
+def saved_variable_files(parent: string) -> Result[list[string], IOError]:
     matches := []
     for entry in directory_entries(parent):
         candidate = path.join(path.join(parent, entry), "SavedVariables/BetterQuest.lua")
@@ -78,7 +41,7 @@ def saved_variable_files(parent: string) -> list[string]:
             matches.append(candidate)
     return matches
 
-def find_betterquest_file(base_path: string = "../../../../WTF") -> string:
+def find_betterquest_file(base_path: string = "../../../../WTF") -> Result[string, IOError]:
     account_matches = saved_variable_files(path.join(base_path, "Account"))
     if size(account_matches) > 0:
         return newest_file(account_matches)
@@ -89,24 +52,6 @@ def find_betterquest_file(base_path: string = "../../../../WTF") -> string:
     if path.is_file(direct):
         return direct
     return ""
-
-def monitor_file_changes(filepath: string, check_interval: int, callback: fn[string, unit]):
-    if not os.exists(filepath):
-        print("[ERROR] File not found:", filepath)
-        return
-    print("[DAEMON] Monitoring:", filepath)
-    print("[DAEMON] Interval:", check_interval, "seconds | Ctrl-C to stop")
-    last_modified := mtime_or_negative(filepath)
-    while true:
-        time.sleep(float(check_interval))
-        current_modified = mtime_or_negative(filepath)
-        if current_modified > last_modified:
-            print("[DAEMON] File modified")
-            last_modified = current_modified
-            callback(filepath)
-            print("[DAEMON] Waiting for next change...")
-        else current_modified < 0.0:
-            print("[WARNING] File disappeared:", filepath)
 
 def find_matching_brace(text: string, start: int) -> int:
     if start < 0 or start >= size(text) or text[start] != "{":
@@ -317,7 +262,7 @@ def extract_missing_npcs_from_lua(lua_text: string) -> list[domain.Dialog]:
             break
         npc_block = top[npc_start:npc_end + 1]
         original_name = field_string(npc_block, "originalName")
-        npc_name = (original_name if size(original_name) > 0 else npc_key).strip()
+        npc_name = (original_name if not original_name.is_empty() else npc_key).strip()
         zones = string_table_values(npc_block, "zones")
         legacy_zone = zones[0] if size(zones) == 1 else ""
         dialogs = field_table(npc_block, "dialogs")
@@ -326,30 +271,32 @@ def extract_missing_npcs_from_lua(lua_text: string) -> list[domain.Dialog]:
         cursor = npc_end + 1
     return output
 
-def ensure_csv_schema(csv_path: string) -> data.Data:
-    loaded_csv := csv_or_empty(csv_path)
+def ensure_csv_schema(csv_path: string) -> Result[data.Data, exception]:
+    loaded_csv := csv.CSV(csv_path, [])
+    if os.exists(csv_path):
+        loaded_file = file.read(csv_path)
+        rows: list[list[string]] = loaded_file.value()
+        loaded_csv = csv.CSV(csv_path, rows)
     original = loaded_csv.data()
     table = original.require_columns(dialog_data.columns())
     if os.exists(csv_path) and original.columns() != table.columns():
         loaded_csv.set_data(table)
-        switch loaded_csv.write():
-            ok:
-                print("[INFO] Upgraded CSV columns in", csv_path)
-            failure error:
-                print("[ERROR] Could not upgrade CSV columns in", csv_path, error)
+        _written = loaded_csv.write()
+        print("[INFO] Upgraded CSV columns in", csv_path)
     return table
 
-def sync_game_data(csv_path: string, lua_path: string) -> int:
+def sync_game_data(csv_path: string, lua_path: string) -> Result[int, exception]:
     print("=== STEP 1: Syncing game data from BetterQuest.lua ===")
     if not os.exists(lua_path):
         print("[SKIP] BetterQuest.lua not found:", lua_path)
         return 0
-    missing = extract_missing_npcs_from_lua(text_or_empty(lua_path))
+    lua_text = file.read_text(lua_path)
+    missing = extract_missing_npcs_from_lua(lua_text)
     if size(missing) == 0:
         print("[INFO] No missingNPCs found in BetterQuest.lua")
         return 0
-    table = ensure_csv_schema(csv_path)
-    existing = table.index_by(dialog_data.key_columns(), |column, value| dialog_data.normalize_key(column, value))
+    table: data.Data = ensure_csv_schema(csv_path)
+    existing: map[string, bool] = table.index_by(dialog_data.key_columns(), |column, value| dialog_data.normalize_key(column, value))
     additions := data.Data(table.columns(), [])
     for source in missing:
         row = domain.dialog(
@@ -371,16 +318,12 @@ def sync_game_data(csv_path: string, lua_path: string) -> int:
         print("[INFO] No new missingNPC dialogs to append.")
         return 0
     parent = path.dirname(csv_path)
-    if size(parent) > 0 and not make_directory(parent):
-        return 0
+    if not parent.is_empty():
+        _directory = os.mkdir(parent)
     output = csv.CSV("", additions.records() if not os.exists(csv_path) else additions.values()).encode()
-    switch append_text(csv_path, output):
-        ok:
-            print("[OK] Appended", additions.row_count(), "rows to", csv_path)
-            return additions.row_count()
-        failure error:
-            print("[ERROR] Could not append", csv_path, error)
-            return 0
+    _appended = append_text(csv_path, output)
+    print("[OK] Appended", additions.row_count(), "rows to", csv_path)
+    return additions.row_count()
 
 test "SavedVariables parser accepts legacy and schema-v2 dialog records":
     lua = "BetterQuestDB = {[\"metadata\"] = {[\"expansion\"] = \"vanilla\", [\"clientVersion\"] = \"1.12.1\"}, [\"Wrong Key\"] = {[\"originalName\"] = \"Nazgrel\", [\"zones\"] = {[1] = \"Outland\"}, [\"dialogs\"] = {[\"old\"] = \"For {the} Horde!\", [\"new\"] = {[\"text\"] = \"Victory\\nawaits.\", [\"zone\"] = \"Nagrand\"}}}}}"

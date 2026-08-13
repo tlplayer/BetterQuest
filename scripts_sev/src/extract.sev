@@ -267,12 +267,9 @@ def extract_all_dialog(config: domain.ExtractionConfig) -> Result[list[domain.Di
         _written = write_text(config.investigation_csv, csv_contents(unknown))
     old_rows := []
     if os.exists(config.output_csv):
-        switch file.read(config.output_csv):
-            ok loaded_file:
-                rows: list[list[string]] = loaded_file.value()
-                old_rows = parse_dialog_rows(rows)
-            failure _error:
-                old_rows = []
+        loaded_file = file.read(config.output_csv)
+        rows: list[list[string]] = loaded_file.value()
+        old_rows = parse_dialog_rows(rows)
     regressions = detect_regressions(old_rows, known)
     if size(regressions) > 0:
         _closed = mysql.close(connection)

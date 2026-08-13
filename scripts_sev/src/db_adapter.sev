@@ -30,20 +30,17 @@ def text_or_empty(file_path: string) -> string:
         failure _error:
             return ""
 
-def load_yaml_mapping(file_path: string) -> map[string, string]:
+def load_yaml_mapping(file_path: string) -> Result[map[string, string], exception]:
     lookup := {}
     if not os.exists(file_path):
         return lookup
-    switch file.read(file_path):
-        ok loaded_file:
-            mapping: map[string, list[string]] = loaded_file.value()
-            for category in mapping.keys():
-                for raw_name in mapping[category]:
-                    normalized = utils.normalize_name(raw_name)
-                    if size(normalized) > 0 and size(category) > 0:
-                        lookup[normalized] = category
-        failure error:
-            print("[METADATA] Invalid YAML", file_path, error)
+    loaded_file = file.read(file_path)
+    mapping: map[string, list[string]] = loaded_file.value()
+    for category in mapping.keys():
+        for raw_name in mapping[category]:
+            normalized = utils.normalize_name(raw_name)
+            if not normalized.is_empty() and not category.is_empty():
+                lookup[normalized] = category
     return lookup
 
 def json_string_field(value: Any, key: string, fallback: string = "") -> string:
@@ -85,51 +82,47 @@ def load_npc_metadata(
     race_file: string,
     sex_file: string,
     zone_file: string,
-) -> map[string, domain.NpcMetadata]:
+) -> Result[map[string, domain.NpcMetadata], exception]:
     lookup := {}
-    switch file.read(json_path):
-        ok source:
-            document = source.value()
-            if json.kind(document) == "array":
-                values: list[Any] = document
-                for value in values:
-                    metadata = metadata_from_json(value)
-                    if size(metadata.name) > 0:
-                        lookup[metadata.name] = metadata
-            else json.kind(document) == "object":
-                for name in json.object_keys(document):
-                    metadata = metadata_from_json(json.object_get(document, name), name)
-                    lookup[name] = metadata
-            else:
-                print("[METADATA] Unsupported JSON root in", json_path)
-                return {}
-        failure error:
-            print("[METADATA] Could not read JSON", json_path, error)
-            return {}
-    apply_metadata_overrides(lookup, load_yaml_mapping(race_file), "race")
-    apply_metadata_overrides(lookup, load_yaml_mapping(sex_file), "sex")
-    apply_metadata_overrides(lookup, load_yaml_mapping(zone_file), "zone")
+    source = file.read(json_path)
+    document = source.value()
+    if json.kind(document) == "array":
+        values: list[Any] = document
+        for value in values:
+            metadata = metadata_from_json(value)
+            if not metadata.name.is_empty():
+                lookup[metadata.name] = metadata
+    else json.kind(document) == "object":
+        for name in json.object_keys(document):
+            metadata = metadata_from_json(json.object_get(document, name), name)
+            lookup[name] = metadata
+    else:
+        print("[METADATA] Unsupported JSON root in", json_path)
+        return {}
+    races: map[string, string] = load_yaml_mapping(race_file)
+    sexes: map[string, string] = load_yaml_mapping(sex_file)
+    zones: map[string, string] = load_yaml_mapping(zone_file)
+    apply_metadata_overrides(lookup, races, "race")
+    apply_metadata_overrides(lookup, sexes, "sex")
+    apply_metadata_overrides(lookup, zones, "zone")
     return lookup
 
 def u32_le(bytes: list[int], offset: int) -> int:
     return bytes[offset] + bytes[offset + 1] * 256 + bytes[offset + 2] * 65536 + bytes[offset + 3] * 16777216
 
-def get_wav_duration_seconds(file_path: string) -> float:
-    switch file.read(file_path):
-        ok wav_file:
-            loaded = wav_file.raw()
-            byte_rate = u32_le(loaded, 28)
-            cursor := 12
-            while cursor + 8 <= size(loaded):
-                chunk_size = u32_le(loaded, cursor + 4)
-                if loaded[cursor:cursor + 4] == [100, 97, 116, 97]:
-                    if byte_rate <= 0:
-                        return -1.0
-                    return math.round(float(chunk_size) / float(byte_rate), 3)
-                cursor += 8 + chunk_size + (chunk_size % 2)
-            return -1.0
-        failure _error:
-            return -1.0
+def get_wav_duration_seconds(file_path: string) -> Result[float, exception]:
+    wav_file = file.read(file_path)
+    loaded = wav_file.raw()
+    byte_rate = u32_le(loaded, 28)
+    cursor := 12
+    while cursor + 8 <= size(loaded):
+        chunk_size = u32_le(loaded, cursor + 4)
+        if loaded[cursor:cursor + 4] == [100, 97, 116, 97]:
+            if byte_rate <= 0:
+                return -1.0
+            return math.round(float(chunk_size) / float(byte_rate), 3)
+        cursor += 8 + chunk_size + (chunk_size % 2)
+    return -1.0
 
 def find_matching_brace(text: string, start: int) -> int:
     if start < 0 or start >= size(text) or text[start] != "{":
@@ -219,8 +212,7 @@ def sound_path_to_fs(sound_path: string, addon_root: string = "..") -> string:
 def fs_path_to_lua(file_path: string, sounds_directory: string) -> string:
     normalized = file_path.replace("\\", "/")
     sounds := sounds_directory.replace("\\", "/")
-    while sounds.ends_with("/"):
-        sounds = sounds[0:-1]
+    sounds = sounds.trim_suffix("/")
     relative := ""
     if normalized.starts_with(sounds + "/"):
         relative = normalized[size(sounds) + 1:]
@@ -233,7 +225,7 @@ def fs_path_to_lua(file_path: string, sounds_directory: string) -> string:
     return "Interface\\AddOns\\BetterQuest\\sounds\\" + relative.replace("/", "\\")
 
 def lua_escape(value: string) -> string:
-    return value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "")
+    return value.replace_many({"\\": "\\\\", "\"": "\\\"", "\n": "\\n", "\r": ""})
 
 def make_npc_entry(race: string, sex: string, zone: string, model_id: string) -> domain.LuaNpc:
     narrator = race + "_female" if size(race) > 0 and sex == "female" else (race if size(race) > 0 else "narrator")
@@ -273,23 +265,22 @@ def update_lua_database_incremental(
     quest_id: string,
     npc_lookup: map[string, domain.NpcMetadata],
     config: domain.DatabaseConfig,
-) -> bool:
+) -> Result[bool, exception]:
     normalized_name = utils.normalize_name(npc_name)
     metadata = npc_lookup.get(npc_name, domain.NpcMetadata("", "", "", "", ""))
     if size(metadata.name) == 0:
         return false
-    races = load_yaml_mapping(config.race_file)
-    sexes = load_yaml_mapping(config.sex_file)
-    zones = load_yaml_mapping(config.zone_file)
+    races: map[string, string] = load_yaml_mapping(config.race_file)
+    sexes: map[string, string] = load_yaml_mapping(config.sex_file)
+    zones: map[string, string] = load_yaml_mapping(config.zone_file)
     race = races.get(normalized_name, metadata.race)
     sex = metadata.sex if size(metadata.sex) > 0 else sexes.get(normalized_name, "male")
     zone = zones.get(normalized_name, "")
     entry = make_npc_entry(race, sex, zone, metadata.model_id)
-    duration := get_wav_duration_seconds(audio_filepath)
-    if duration < 0.0:
-        duration = 0.0
+    duration: float = get_wav_duration_seconds(audio_filepath)
+    effective_duration = 0.0 if duration < 0.0 else duration
     text_hash = utils.create_text_hash(dialog_text)
-    info = domain.LuaDialog(fs_path_to_lua(audio_filepath, config.sounds_directory), dialog_type, quest_id, duration, "")
+    info = domain.LuaDialog(fs_path_to_lua(audio_filepath, config.sounds_directory), dialog_type, quest_id, effective_duration, "")
     lock_path = config.output_lua + ".lock"
     switch lock(lock_path):
         ok handle:
@@ -334,10 +325,8 @@ def merge_item_rows(rows: list[domain.Dialog]) -> list[domain.Dialog]:
     return dialog_data.merge_text_rows(rows, ["item_text", "book"])
 
 def positive_quest_id(value: string) -> string:
-    normalized := value.strip()
-    if normalized.ends_with(".0"):
-        normalized = normalized[0:-2]
-    if size(normalized) == 0:
+    normalized = value.strip().remove_suffix(".0")
+    if normalized.is_empty():
         return ""
     for character in normalized.characters():
         if not character.is_digit():
@@ -352,11 +341,11 @@ def sync_metadata(
     source_rows: list[domain.Dialog],
     npc_lookup: map[string, domain.NpcMetadata],
     config: domain.DatabaseConfig,
-) -> bool:
+) -> Result[unit, exception]:
     print("=== STEP 3: Syncing metadata to Lua database ===")
-    races = load_yaml_mapping(config.race_file)
-    sexes = load_yaml_mapping(config.sex_file)
-    zones = load_yaml_mapping(config.zone_file)
+    races: map[string, string] = load_yaml_mapping(config.race_file)
+    sexes: map[string, string] = load_yaml_mapping(config.sex_file)
+    zones: map[string, string] = load_yaml_mapping(config.zone_file)
     database := {}
     missing := []
     for npc_name, metadata in npc_lookup.items():
@@ -412,7 +401,7 @@ def sync_metadata(
             fs_path = path.join(path.join(path.join(config.sounds_directory, entry.narrator), npc_dir), filename)
         if size(filename) == 0 or not os.exists(fs_path):
             continue
-        duration = get_wav_duration_seconds(fs_path)
+        duration: float = get_wav_duration_seconds(fs_path)
         if duration < 0.0:
             continue
         sound_path := fs_path_to_lua(fs_path, config.sounds_directory)
@@ -435,22 +424,19 @@ def sync_metadata(
     _missing_parent = os.mkdir(path.dirname(config.missing_race_file))
     _missing_written = write_text(config.missing_race_file, missing_output)
     _output_parent = os.mkdir(path.dirname(config.output_lua))
-    switch write_text(config.output_lua, render_lua_database(database)):
-        ok:
-            print("[OK]", size(database), "NPCs written")
-            print("[OK] Output:", config.output_lua)
-            return true
-        failure error:
-            print("[ERROR] Could not write Lua database:", error)
-            return false
+    _written = write_text(config.output_lua, render_lua_database(database))
+    print("[OK]", size(database), "NPCs written")
+    print("[OK] Output:", config.output_lua)
+    return
 
 test "YAML mappings and JSON null metadata preserve Python override rules":
     yaml_path = "/tmp/betterquest-sev-metadata.yaml"
     _yaml_written = write_text(yaml_path, "orc:\n- Thrall\nfemale: Jaina Proudmoore\n")
-    assert(load_yaml_mapping(yaml_path).get("Thrall", "") == "orc")
+    mapping: map[string, string] = load_yaml_mapping(yaml_path)
+    assert(mapping.get("Thrall", "") == "orc")
     metadata_path = "/tmp/betterquest-sev-metadata.json"
     _written = write_text(metadata_path, "[{\"name\":\"A-Me 01\",\"race\":\"mechanical\",\"sex\":\"male\",\"zone\":null,\"model_id\":8841}]")
-    lookup = load_npc_metadata(metadata_path, "/tmp/missing-races.yaml", "/tmp/missing-sex.yaml", "/tmp/missing-zone.yaml")
+    lookup: map[string, domain.NpcMetadata] = load_npc_metadata(metadata_path, "/tmp/missing-races.yaml", "/tmp/missing-sex.yaml", "/tmp/missing-zone.yaml")
     assert(lookup["A-Me 01"].race == "mechanical")
     assert(lookup["A-Me 01"].zone == "")
     assert(lookup["A-Me 01"].model_id == "8841")
@@ -459,7 +445,8 @@ test "WAV duration and Lua rendering use the generator's native PCM layout":
     wav_path = "/tmp/betterquest-sev-duration.wav"
     bytes := [82, 73, 70, 70, 40, 0, 0, 0, 87, 65, 86, 69, 102, 109, 116, 32, 16, 0, 0, 0, 1, 0, 1, 0, 192, 93, 0, 0, 128, 187, 0, 0, 2, 0, 16, 0, 100, 97, 116, 97, 4, 0, 0, 0, 0, 0, 0, 0]
     _written = write_bytes(wav_path, bytes)
-    assert(get_wav_duration_seconds(wav_path) == 0.0)
+    duration: float = get_wav_duration_seconds(wav_path)
+    assert(duration == 0.0)
     entry := make_npc_entry("orc", "male", "Durotar", "123")
     entry.dialogs["loktar"] = domain.LuaDialog("Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\loktar.wav", "gossip", "", 1.25, "")
     rendered = render_lua_database({"Thrall": entry})

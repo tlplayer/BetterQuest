@@ -26,13 +26,19 @@ indexing, and uniqueness use the format-independent `data.Data` layer. Shared
 dialog/table conversion lives in `src/dialog_data.sev`, and filesystem metadata
 and directory operations use `os`/`path` rather than the `file` content API.
 
-The remaining blocker is the model itself. Severian does not yet implement the
-OmniVoice architecture, audio tokenizer, Whisper fallback, weight loader, and
-CUDA kernels required by `OmniVoiceBackend`. The backend therefore returns a
-typed failure instead of silently producing substitute audio or spawning the
-Python implementation. Data sync, extraction, metadata output, and deterministic
-test backends are native today; production OmniVoice synthesis is not yet at
-1:1 parity.
+The model layer now supplies OmniVoice's time-shifted unmask schedule,
+classifier-free guidance, Gumbel selection, codebook penalties, duration
+estimation, typed voice prompts, generic audio-model/codec boundaries, lazy F32
+safetensor views, and both sharded and single-file safetensor stores. The
+BetterQuest backend uses those primitives for transcript caching and native
+generation planning.
+
+Production synthesis still stops with a typed error at the remaining honest
+boundary: Severian cannot yet execute OmniVoice's Qwen3 audio graph or the
+Higgs audio tokenizer/vocoder, and has no native Whisper fallback. It does not
+silently create substitute audio or spawn Python. Data sync, extraction,
+metadata output, generation planning, and deterministic test backends are
+native; waveform synthesis is not yet at 1:1 parity.
 
 ## Run and test
 

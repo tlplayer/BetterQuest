@@ -31,6 +31,11 @@ version = "0.1.0"
 source = "path+/home/tplayer/Applications/wow/Interface/AddOns/BetterQuest/scripts_sev/../../../../../../Documents/Severian/library/math"
 
 [[packages]]
+name = "model.speech"
+version = "0.1.0"
+source = "path+/home/tplayer/Applications/wow/Interface/AddOns/BetterQuest/scripts_sev/../../../../../../Documents/Severian/library/model/speech"
+
+[[packages]]
 name = "mysql"
 version = "0.1.0"
 source = "path+/home/tplayer/Applications/wow/Interface/AddOns/BetterQuest/scripts_sev/../../../../../../Documents/Severian/library/mysql"
@@ -54,6 +59,11 @@ source = "path+/home/tplayer/Documents/Severian/library/data/../platform"
 name = "process"
 version = "0.1.0"
 source = "path+/home/tplayer/Applications/wow/Interface/AddOns/BetterQuest/scripts_sev/../../../../../../Documents/Severian/library/process"
+
+[[packages]]
+name = "random"
+version = "0.1.0"
+source = "path+/home/tplayer/Documents/Severian/library/model/speech/../../random"
 
 [[packages]]
 name = "regex"

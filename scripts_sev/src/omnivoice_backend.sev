@@ -1,7 +1,31 @@
+import file
+import path
+import speech
 import "src/domain.sev" as domain
 
 class BackendError:
     message: string
+
+class NativeVoicePrompt:
+    audio_path: string
+    reference_text: string
+    target_frames: int
+
+def load_reference_text(audio_path: string) -> Result[string, BackendError]:
+    stem = path.basename(audio_path).remove_suffix(path.extension(audio_path))
+    transcript_path = path.join(path.dirname(audio_path), stem + ".txt")
+    if not path.is_file(transcript_path):
+        return failure(BackendError(
+            "reference transcript is missing at " + transcript_path + "; native Whisper loading is not implemented yet",
+        ))
+    switch file.read_text(transcript_path):
+        ok transcript:
+            normalized = transcript.strip()
+            if normalized.is_empty():
+                return failure(BackendError("reference transcript is empty: " + transcript_path))
+            return normalized
+        failure error:
+            return failure(BackendError(error.message))
 
 trait SpeechBackend:
     sampling_rate() -> int
@@ -21,13 +45,37 @@ class OmniVoiceBackend: SpeechBackend
     num_step: int
     speed: float
     asr_model_name: string
+    prompts: map[string, NativeVoicePrompt]
 
     def sampling_rate() -> int:
         return 24000
 
-    def generate(_request: domain.GenerationRequest) -> Result[domain.AudioSamples, BackendError]:
+    def voice_prompt(request: domain.GenerationRequest) -> Result[NativeVoicePrompt, BackendError]:
+        key = path.absolute(request.audio_prompt_path)
+        if key in prompts.keys():
+            return prompts[key]
+        transcript = load_reference_text(request.audio_prompt_path)
+        # OmniVoice's Python implementation uses the reference token rate for
+        # this estimate.  Until the native Higgs codec is connected, use its
+        # documented fallback (25 tokens for "Nice to meet you.").
+        frames = speech.estimate_audio_tokens(request.text, transcript, 25, speed)
+        prompt = NativeVoicePrompt(key, transcript, frames)
+        prompts[key] = prompt
+        return prompt
+
+    def generate(request: domain.GenerationRequest) -> Result[domain.AudioSamples, BackendError]:
+        key = path.absolute(request.audio_prompt_path)
+        prompt := NativeVoicePrompt("", "", 0)
+        if key in prompts.keys():
+            prompt = prompts[key]
+        else:
+            transcript = load_reference_text(request.audio_prompt_path)
+            frames = speech.estimate_audio_tokens(request.text, transcript, 25, speed)
+            prompt = NativeVoicePrompt(key, transcript, frames)
+            prompts[key] = prompt
+        schedule = speech.unmask_schedule(prompt.target_frames * 8, num_step, 0.1)
         return failure(BackendError(
-            "OmniVoice is not yet implemented by Severian's native model runtime; refusing to invoke Python or a shell fallback",
+            "native OmniVoice prepared " + string(prompt.target_frames) + " frames across " + string(size(schedule)) + " decoding steps, but the Qwen3 audio graph and Higgs codec are not executable in Severian yet; refusing to invoke Python or a shell fallback",
         ))
 
 def from_pretrained(
@@ -38,7 +86,7 @@ def from_pretrained(
     speed: float = 1.0,
     asr_model_name: string = "openai/whisper-tiny.en",
 ) -> OmniVoiceBackend:
-    return OmniVoiceBackend(model_name, device, language, num_step, speed, asr_model_name)
+    return OmniVoiceBackend(model_name, device, language, num_step, speed, asr_model_name, {})
 
 class DeterministicBackend: SpeechBackend
     rate: int
@@ -52,16 +100,37 @@ class DeterministicBackend: SpeechBackend
 
 test "native boundary fails explicitly instead of spawning Python":
     backend = from_pretrained()
-    request = domain.GenerationRequest("hello", "samples/human.wav")
+    transcript_path = "/tmp/betterquest-omnivoice-reference.txt"
+    _written = file.write_text(transcript_path, "A steady human voice.")
+    request = domain.GenerationRequest("hello", "/tmp/betterquest-omnivoice-reference.wav")
     switch backend.generate(request):
         ok _audio:
             assert(false, "native OmniVoice should not be represented as implemented yet")
         failure error:
             assert(error.message.find("refusing to invoke Python") >= 0)
 
+test "voice prompts cache transcripts and use the shared model schedule":
+    transcript_path = "/tmp/betterquest-omnivoice-cache.txt"
+    _written = file.write_text(transcript_path, "Lok'tar, friend.")
+    backend = from_pretrained(speed = 1.0, num_step = 4)
+    request = domain.GenerationRequest("For the Horde!", "/tmp/betterquest-omnivoice-cache.wav")
+    first ?= backend.voice_prompt(request)
+    second ?= backend.voice_prompt(request)
+    switch first:
+        ok prompt:
+            assert(prompt.reference_text == "Lok'tar, friend.")
+            assert(prompt.target_frames > 0)
+        failure error:
+            assert(false, error.message)
+    switch second:
+        ok prompt:
+            assert(prompt.audio_path == path.absolute(request.audio_prompt_path))
+        failure error:
+            assert(false, error.message)
+
 test "speech backends are testable without external model processes":
     backend = DeterministicBackend(24000, [0.0, 0.5, -0.5])
-    audio ?= backend.generate(domain.GenerationRequest("hello", "sample.wav"))
+    audio = backend.generate(domain.GenerationRequest("hello", "sample.wav"))
     assert(audio.sample_rate == 24000)
     assert(audio.samples == [0.0, 0.5, -0.5])
 
