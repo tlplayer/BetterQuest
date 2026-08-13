@@ -1,20 +1,132 @@
+from file import write_text as native_write_text, append_text
+import csv
+import data
+import file
+import os
+import path
+import time
+import "src/dialog_data.sev" as dialog_data
 import "src/domain.sev" as domain
+import "src/utils.sev" as utils
 
-def findMatchingBrace(text: string, start: int) -> int:
+def text_or_empty(source_path: string) -> string:
+    switch file.read(source_path):
+        ok loaded_file:
+            switch loaded_file.text():
+                ok contents:
+                    return contents
+                failure _error:
+                    return ""
+        failure _error:
+            return ""
+
+def csv_or_empty(source_path: string) -> csv.CSV:
+    switch file.read(source_path):
+        ok loaded_file:
+            rows: list[list[string]] = loaded_file.value()
+            return csv.CSV(source_path, rows)
+        failure _error:
+            return csv.CSV(source_path, [])
+
+def write_text_checked(source_path: string, contents: string) -> bool:
+    switch native_write_text(source_path, contents):
+        ok:
+            return true
+        failure error:
+            print("[ERROR] Could not write", source_path, error)
+            return false
+
+def mtime_or_negative(source_path: string) -> float:
+    switch os.stat(source_path):
+        ok information:
+            return information.modified_seconds
+        failure _error:
+            return -1.0
+
+def directory_entries(directory: string) -> list[string]:
+    switch os.ls(directory):
+        ok entries:
+            return entries
+        failure _error:
+            return []
+
+def make_directory(directory: string) -> bool:
+    switch os.mkdir(directory):
+        ok:
+            return true
+        failure error:
+            print("[ERROR] Could not create", directory, error)
+            return false
+
+def newest_file(matches: list[string]) -> string:
+    selected := ""
+    selected_time := -1.0
+    for candidate in matches:
+        candidate_time = mtime_or_negative(candidate)
+        if candidate_time > selected_time:
+            selected = candidate
+            selected_time = candidate_time
+    if size(matches) > 1:
+        print("[INFO]", size(matches), "BetterQuest.lua files found, using most recent:", selected)
+    return selected
+
+def saved_variable_files(parent: string) -> list[string]:
+    matches := []
+    for entry in directory_entries(parent):
+        candidate = path.join(path.join(parent, entry), "SavedVariables/BetterQuest.lua")
+        if path.is_file(candidate):
+            matches.append(candidate)
+    return matches
+
+def find_betterquest_file(base_path: string = "../../../../WTF") -> string:
+    account_matches = saved_variable_files(path.join(base_path, "Account"))
+    if size(account_matches) > 0:
+        return newest_file(account_matches)
+    direct_matches = saved_variable_files(base_path)
+    if size(direct_matches) > 0:
+        return newest_file(direct_matches)
+    direct = path.join(base_path, "SavedVariables/BetterQuest.lua")
+    if path.is_file(direct):
+        return direct
+    return ""
+
+def monitor_file_changes(filepath: string, check_interval: int, callback: fn[string, unit]):
+    if not os.exists(filepath):
+        print("[ERROR] File not found:", filepath)
+        return
+    print("[DAEMON] Monitoring:", filepath)
+    print("[DAEMON] Interval:", check_interval, "seconds | Ctrl-C to stop")
+    last_modified := mtime_or_negative(filepath)
+    while true:
+        time.sleep(float(check_interval))
+        current_modified = mtime_or_negative(filepath)
+        if current_modified > last_modified:
+            print("[DAEMON] File modified")
+            last_modified = current_modified
+            callback(filepath)
+            print("[DAEMON] Waiting for next change...")
+        else current_modified < 0.0:
+            print("[WARNING] File disappeared:", filepath)
+
+def find_matching_brace(text: string, start: int) -> int:
     if start < 0 or start >= size(text) or text[start] != "{":
         return -1
     depth := 0
-    inString := false
-    quote := ""
     index := start
     while index < size(text):
         character = text[index]
-        if inString:
-            if character == quote and (index == 0 or text[index - 1] != "\\"):
-                inString = false
-        else character == "\"" or character == "'":
-            inString = true
+        if character == "\"" or character == "'":
             quote = character
+            index += 1
+            while index < size(text):
+                if text[index] == "\\":
+                    index += 2
+                else text[index] == quote:
+                    index += 1
+                    break
+                else:
+                    index += 1
+            continue
         else character == "{":
             depth += 1
         else character == "}":
@@ -24,80 +136,269 @@ def findMatchingBrace(text: string, start: int) -> int:
         index += 1
     return -1
 
-def fieldString(block: string, fieldName: string) -> string:
-    marker = "[\"" + fieldName + "\"]"
+def parse_lua_string(text: string, start: int) -> tuple[string, int]:
+    if start < 0 or start >= size(text) or (text[start] != "\"" and text[start] != "'"):
+        return ("", start)
+    quote = text[start]
+    output := ""
+    index := start + 1
+    while index < size(text):
+        character = text[index]
+        if character == "\\":
+            index += 1
+            if index >= size(text):
+                return ("", start)
+            escaped = text[index]
+            if escaped == "n":
+                output += "\n"
+            else escaped == "t":
+                output += "\t"
+            else escaped == "r":
+                output += "\r"
+            else:
+                output += escaped
+            index += 1
+        else character == quote:
+            return (output, index + 1)
+        else:
+            output += character
+            index += 1
+    return ("", start)
+
+def field_string(block: string, field_name: string) -> string:
+    marker = "[\"" + field_name + "\"]"
     position = block.find(marker)
     if position < 0:
         return ""
-    equals = block[position:].find("=")
-    if equals < 0:
+    relative_equals = block[position:].find("=")
+    if relative_equals < 0:
         return ""
-    start := position + equals + 1
-    while start < size(block) and block[start] == " ":
+    start := position + relative_equals + 1
+    while start < size(block) and (block[start] == " " or block[start] == "\t" or block[start] == "\r" or block[start] == "\n"):
         start += 1
-    if start >= size(block) or (block[start] != "\"" and block[start] != "'"):
-        return ""
-    quote = block[start]
-    output := ""
-    index := start + 1
-    while index < size(block) and block[index] != quote:
-        output += block[index]
-        index += 1
-    return output
+    parsed, _after = parse_lua_string(block, start)
+    return parsed
 
-def extractMissingDialogs(luaText: string) -> list[domain.Dialog]:
-    dialogs := []
-    marker = "[\"missingNPCs\"]"
-    missingPosition = luaText.find(marker)
-    if missingPosition < 0:
-        return dialogs
-    tableOffset = luaText[missingPosition:].find("{")
-    if tableOffset < 0:
-        return dialogs
-    tableStart = missingPosition + tableOffset
-    tableEnd = findMatchingBrace(luaText, tableStart)
-    if tableEnd < 0:
-        return dialogs
-    table = luaText[tableStart:tableEnd + 1]
+def field_table(block: string, field_name: string) -> string:
+    marker = "[\"" + field_name + "\"]"
+    position = block.find(marker)
+    if position < 0:
+        return ""
+    relative_equals = block[position:].find("=")
+    if relative_equals < 0:
+        return ""
+    search_start = position + relative_equals
+    relative_start = block[search_start:].find("{")
+    if relative_start < 0:
+        return ""
+    table_start = search_start + relative_start
+    table_end = find_matching_brace(block, table_start)
+    if table_end < 0:
+        return ""
+    return block[table_start:table_end + 1]
+
+def string_table_values(block: string, field_name: string) -> list[string]:
+    table = field_table(block, field_name)
+    values := []
     cursor := 0
     while cursor < size(table):
-        nameStartOffset = table[cursor:].find("[\"")
-        if nameStartOffset < 0:
+        relative_equals = table[cursor:].find("=")
+        if relative_equals < 0:
             break
-        nameStart = cursor + nameStartOffset + 2
-        nameEndOffset = table[nameStart:].find("\"")
-        if nameEndOffset < 0:
-            break
-        nameEnd = nameStart + nameEndOffset
-        npcName = table[nameStart:nameEnd]
-        blockOffset = table[nameEnd:].find("{")
-        if blockOffset < 0:
-            break
-        blockStart = nameEnd + blockOffset
-        blockEnd = findMatchingBrace(table, blockStart)
-        if blockEnd < 0:
-            break
-        block = table[blockStart:blockEnd + 1]
-        dialogText = fieldString(block, "text")
-        if size(dialogText) > 0:
-            dialogs.append(domain.Dialog(
-                npcName,
-                fieldString(block, "sex"),
-                fieldString(block, "zone"),
-                fieldString(block, "expansion"),
-                fieldString(block, "client_version"),
-                fieldString(block, "dialog_type"),
-                fieldString(block, "quest_id"),
-                dialogText,
-            ))
-        cursor = blockEnd + 1
-    return dialogs
+        value_start := cursor + relative_equals + 1
+        while value_start < size(table) and (table[value_start] == " " or table[value_start] == "\t" or table[value_start] == "\r" or table[value_start] == "\n"):
+            value_start += 1
+        if value_start < size(table) and (table[value_start] == "\"" or table[value_start] == "'"):
+            value, after = parse_lua_string(table, value_start)
+            if after > value_start and not (value in values):
+                values.append(value)
+            cursor = after if after > value_start else value_start + 1
+        else:
+            cursor = value_start + 1
+    return values
 
-test "SavedVariables parser respects nested braces and quoted braces":
-    lua = "BetterQuestDB = {[\"missingNPCs\"] = {[\"Nazgrel\"] = {[\"text\"] = \"For {the} Horde!\", [\"zone\"] = \"Outland\", [\"dialog_type\"] = \"gossip\"}}}"
-    rows = extractMissingDialogs(lua)
-    assert(size(rows) == 1)
-    assert(rows[0].npcName == "Nazgrel")
-    assert(rows[0].text == "For {the} Horde!")
+def append_dialog_records(
+    dialogs_block: string,
+    npc_name: string,
+    legacy_zone: string,
+    saved_expansion: string,
+    saved_client_version: string,
+    output: list[domain.Dialog],
+):
+    cursor := 0
+    while cursor < size(dialogs_block):
+        relative_key = dialogs_block[cursor:].find("[\"")
+        if relative_key < 0:
+            break
+        key_start = cursor + relative_key + 2
+        relative_key_end = dialogs_block[key_start:].find("\"]")
+        if relative_key_end < 0:
+            break
+        key_end = key_start + relative_key_end
+        relative_equals = dialogs_block[key_end:].find("=")
+        if relative_equals < 0:
+            cursor = key_end + 2
+            continue
+        value_start := key_end + relative_equals + 1
+        while value_start < size(dialogs_block) and (dialogs_block[value_start] == " " or dialogs_block[value_start] == "\t" or dialogs_block[value_start] == "\r" or dialogs_block[value_start] == "\n"):
+            value_start += 1
+        if value_start < size(dialogs_block) and (dialogs_block[value_start] == "\"" or dialogs_block[value_start] == "'"):
+            dialog_text, after = parse_lua_string(dialogs_block, value_start)
+            if after > value_start:
+                output.append(domain.dialog(npc_name, "", legacy_zone, saved_expansion, saved_client_version, "gossip", "", dialog_text))
+            cursor = after if after > value_start else value_start + 1
+        else value_start < size(dialogs_block) and dialogs_block[value_start] == "{":
+            value_end = find_matching_brace(dialogs_block, value_start)
+            if value_end < 0:
+                cursor = value_start + 1
+                continue
+            value_block = dialogs_block[value_start:value_end + 1]
+            dialog_text = field_string(value_block, "text")
+            if size(dialog_text) > 0:
+                zone = field_string(value_block, "zone")
+                expansion = field_string(value_block, "expansion")
+                client_version = field_string(value_block, "clientVersion")
+                output.append(domain.dialog(
+                    npc_name,
+                    "",
+                    zone if size(zone) > 0 else legacy_zone,
+                    expansion if size(expansion) > 0 else saved_expansion,
+                    client_version if size(client_version) > 0 else saved_client_version,
+                    "gossip",
+                    "",
+                    dialog_text,
+                ))
+            cursor = value_end + 1
+        else:
+            cursor = value_start + 1
+
+def extract_missing_npcs_from_lua(lua_text: string) -> list[domain.Dialog]:
+    output := []
+    marker_position = lua_text.find("BetterQuestDB")
+    if marker_position < 0:
+        return output
+    equals_offset = lua_text[marker_position:].find("=")
+    if equals_offset < 0:
+        return output
+    brace_offset = lua_text[marker_position + equals_offset:].find("{")
+    if brace_offset < 0:
+        return output
+    table_start = marker_position + equals_offset + brace_offset
+    table_end = find_matching_brace(lua_text, table_start)
+    if table_end < 0:
+        return output
+    top = lua_text[table_start:table_end + 1]
+    metadata = field_table(top, "metadata")
+    saved_expansion = field_string(metadata, "expansion")
+    saved_client_version = field_string(metadata, "clientVersion")
+    cursor := 0
+    while cursor < size(top):
+        relative_key = top[cursor:].find("[\"")
+        if relative_key < 0:
+            break
+        key_start = cursor + relative_key + 2
+        relative_key_end = top[key_start:].find("\"]")
+        if relative_key_end < 0:
+            break
+        key_end = key_start + relative_key_end
+        npc_key = top[key_start:key_end]
+        relative_equals = top[key_end:].find("=")
+        if relative_equals < 0:
+            cursor = key_end + 2
+            continue
+        search_start = key_end + relative_equals
+        relative_brace = top[search_start:].find("{")
+        if relative_brace < 0:
+            cursor = search_start + 1
+            continue
+        npc_start = search_start + relative_brace
+        npc_end = find_matching_brace(top, npc_start)
+        if npc_end < 0:
+            break
+        npc_block = top[npc_start:npc_end + 1]
+        original_name = field_string(npc_block, "originalName")
+        npc_name = (original_name if size(original_name) > 0 else npc_key).strip()
+        zones = string_table_values(npc_block, "zones")
+        legacy_zone = zones[0] if size(zones) == 1 else ""
+        dialogs = field_table(npc_block, "dialogs")
+        if size(dialogs) > 0:
+            append_dialog_records(dialogs, npc_name, legacy_zone, saved_expansion, saved_client_version, output)
+        cursor = npc_end + 1
+    return output
+
+def ensure_csv_schema(csv_path: string) -> data.Data:
+    loaded_csv := csv_or_empty(csv_path)
+    original = loaded_csv.data()
+    table = original.require_columns(dialog_data.columns())
+    if os.exists(csv_path) and original.columns() != table.columns():
+        loaded_csv.set_data(table)
+        switch loaded_csv.write():
+            ok:
+                print("[INFO] Upgraded CSV columns in", csv_path)
+            failure error:
+                print("[ERROR] Could not upgrade CSV columns in", csv_path, error)
+    return table
+
+def sync_game_data(csv_path: string, lua_path: string) -> int:
+    print("=== STEP 1: Syncing game data from BetterQuest.lua ===")
+    if not os.exists(lua_path):
+        print("[SKIP] BetterQuest.lua not found:", lua_path)
+        return 0
+    missing = extract_missing_npcs_from_lua(text_or_empty(lua_path))
+    if size(missing) == 0:
+        print("[INFO] No missingNPCs found in BetterQuest.lua")
+        return 0
+    table = ensure_csv_schema(csv_path)
+    existing = table.index_by(dialog_data.key_columns(), |column, value| dialog_data.normalize_key(column, value))
+    additions := data.Data(table.columns(), [])
+    for source in missing:
+        row = domain.dialog(
+            source.npc_name.strip(),
+            "",
+            source.zone.strip(),
+            source.expansion.strip().lower(),
+            source.client_version.strip(),
+            "gossip",
+            "",
+            source.text.collapse_space(),
+        )
+        candidate = dialog_data.row(row)
+        key = data.callback_key(candidate, dialog_data.key_columns(), |column, value| dialog_data.normalize_key(column, value))
+        if size(row.text) > 0 and not existing.get(key, false):
+            additions.append_row(candidate)
+            existing[key] = true
+    if additions.row_count() == 0:
+        print("[INFO] No new missingNPC dialogs to append.")
+        return 0
+    parent = path.dirname(csv_path)
+    if size(parent) > 0 and not make_directory(parent):
+        return 0
+    output = csv.CSV("", additions.records() if not os.exists(csv_path) else additions.values()).encode()
+    switch append_text(csv_path, output):
+        ok:
+            print("[OK] Appended", additions.row_count(), "rows to", csv_path)
+            return additions.row_count()
+        failure error:
+            print("[ERROR] Could not append", csv_path, error)
+            return 0
+
+test "SavedVariables parser accepts legacy and schema-v2 dialog records":
+    lua = "BetterQuestDB = {[\"metadata\"] = {[\"expansion\"] = \"vanilla\", [\"clientVersion\"] = \"1.12.1\"}, [\"Wrong Key\"] = {[\"originalName\"] = \"Nazgrel\", [\"zones\"] = {[1] = \"Outland\"}, [\"dialogs\"] = {[\"old\"] = \"For {the} Horde!\", [\"new\"] = {[\"text\"] = \"Victory\\nawaits.\", [\"zone\"] = \"Nagrand\"}}}}}"
+    rows = extract_missing_npcs_from_lua(lua)
+    assert(size(rows) == 2)
+    assert(rows[0].npc_name == "Nazgrel")
     assert(rows[0].zone == "Outland")
+    assert(rows[0].expansion == "vanilla")
+    assert(rows[1].text == "Victory\nawaits.")
+    assert(rows[1].zone == "Nagrand")
 
+test "CSV parser and renderer preserve commas quotes and embedded newlines":
+    record = "Thrall,0,Durotar,vanilla,1.12.1,gossip,,\"Honor, \"\"hero\"\".\nNow.\""
+    csv_file = csv.document(record)
+    parsed: list[list[string]] = csv_file.value()
+    fields = parsed[0]
+    assert(size(fields) == 8)
+    assert(fields[7] == "Honor, \"hero\".\nNow.")
+    rendered = csv.document(csv.CSV("", [fields]).encode())
+    rendered_rows: list[list[string]] = rendered.value()
+    assert(rendered_rows[0] == fields)

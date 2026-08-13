@@ -1,51 +1,475 @@
+from file import lock, unlock, write_bytes, write_text
+import file
+import json
+import math
+import os
+import path
+import "src/dialog_data.sev" as dialog_data
 import "src/domain.sev" as domain
 import "src/utils.sev" as utils
 
-def parseCategoryYaml(contents: string) -> map[string, string]:
-    lookup := {}
-    category := ""
-    for rawLine in contents.split("\n"):
-        line = rawLine.strip()
-        if size(line) == 0 or line.startsWith("#"):
-            continue
-        if line.endsWith(":") and not line.startsWith("-"):
-            category = line[0:-1].strip()
-        else line.startsWith("- ") and size(category) > 0:
-            name = utils.normalizeName(line[2:].strip())
-            if size(name) > 0:
-                lookup[name] = category
-    return lookup
-
-def metadataFor(name: string, races: map[string, string], sexes: map[string, string], zones: map[string, string]) -> domain.NpcMetadata:
-    normalized = utils.normalizeName(name)
-    return domain.NpcMetadata(
-        normalized,
-        races.get(normalized, ""),
-        sexes.get(normalized, ""),
-        zones.get(normalized, ""),
+def default_config() -> domain.DatabaseConfig:
+    return domain.DatabaseConfig(
+        "../data/npc_metadata.json",
+        "../data/npc_race.yaml",
+        "../data/npc_sex.yaml",
+        "../data/npc_zone.yaml",
+        "../data/missing_race.yaml",
+        "../db/npc_database.lua",
+        "../sounds",
     )
 
-def luaEscape(value: string) -> string:
-    return value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n")
+def text_or_empty(file_path: string) -> string:
+    switch file.read(file_path):
+        ok loaded_file:
+            switch loaded_file.text():
+                ok contents:
+                    return contents
+                failure _error:
+                    return ""
+        failure _error:
+            return ""
 
-def renderLuaEntry(row: domain.Dialog, metadata: domain.NpcMetadata, soundPath: string) -> string:
-    key = utils.createTextHash(row.text)
-    return "[\"" + luaEscape(row.npcName) + "\"] = { race = \"" + luaEscape(metadata.race) + "\", sex = \"" + luaEscape(metadata.sex) + "\", dialogs = { [\"" + luaEscape(key) + "\"] = { file = \"" + luaEscape(soundPath) + "\", type = \"" + luaEscape(row.dialogType) + "\", quest = \"" + luaEscape(row.questId) + "\" } } }"
+def load_yaml_mapping(file_path: string) -> map[string, string]:
+    lookup := {}
+    if not os.exists(file_path):
+        return lookup
+    switch file.read(file_path):
+        ok loaded_file:
+            mapping: map[string, list[string]] = loaded_file.value()
+            for category in mapping.keys():
+                for raw_name in mapping[category]:
+                    normalized = utils.normalize_name(raw_name)
+                    if size(normalized) > 0 and size(category) > 0:
+                        lookup[normalized] = category
+        failure error:
+            print("[METADATA] Invalid YAML", file_path, error)
+    return lookup
 
-def renderLuaDatabase(rows: list[domain.Dialog], metadata: list[domain.NpcMetadata], soundPaths: list[string]) -> string:
-    output := "BetterQuest_NPCDatabase = {\n"
-    for index in range(size(rows)):
-        output += "  " + renderLuaEntry(rows[index], metadata[index], soundPaths[index]) + ",\n"
-    output += "}\n"
-    return output
+def json_string_field(value: Any, key: string, fallback: string = "") -> string:
+    if not (key in json.object_keys(value)):
+        return fallback
+    field = json.object_get(value, key)
+    if json.is_null(field):
+        return fallback
+    if json.kind(field) == "string":
+        return json.as_string(field)
+    return string(field)
 
-test "YAML overrides and Lua metadata preserve normalized NPC identity":
-    races = parseCategoryYaml("orc:\n- Thrall\n- Nazgrel\nhuman:\n- Jaina Proudmoore\n")
-    sexes = parseCategoryYaml("male:\n- Thrall\nfemale:\n- Jaina Proudmoore\n")
-    metadata = metadataFor("Thrall", races, sexes, {})
-    assert(metadata.race == "orc")
-    assert(metadata.sex == "male")
-    row = domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "", "Honor, hero!")
-    rendered = renderLuaEntry(row, metadata, "Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\honor.wav")
-    assert(rendered.find("honor hero") >= 0)
-    assert(rendered.find("race = \"orc\"") >= 0)
+def metadata_from_json(value: Any, fallback_name: string = "") -> domain.NpcMetadata:
+    return domain.NpcMetadata(
+        json_string_field(value, "name", fallback_name),
+        json_string_field(value, "race"),
+        json_string_field(value, "sex"),
+        json_string_field(value, "zone"),
+        json_string_field(value, "model_id"),
+    )
+
+def apply_metadata_overrides(
+    lookup: map[string, domain.NpcMetadata],
+    overrides: map[string, string],
+    field_name: string,
+):
+    for name, value in overrides.items():
+        current := lookup.get(name, domain.NpcMetadata(name, "", "", "", ""))
+        if field_name == "race":
+            current.race = value
+        else field_name == "sex":
+            current.sex = value
+        else field_name == "zone":
+            current.zone = value
+        lookup[name] = current
+
+def load_npc_metadata(
+    json_path: string,
+    race_file: string,
+    sex_file: string,
+    zone_file: string,
+) -> map[string, domain.NpcMetadata]:
+    lookup := {}
+    switch file.read(json_path):
+        ok source:
+            document = source.value()
+            if json.kind(document) == "array":
+                values: list[Any] = document
+                for value in values:
+                    metadata = metadata_from_json(value)
+                    if size(metadata.name) > 0:
+                        lookup[metadata.name] = metadata
+            else json.kind(document) == "object":
+                for name in json.object_keys(document):
+                    metadata = metadata_from_json(json.object_get(document, name), name)
+                    lookup[name] = metadata
+            else:
+                print("[METADATA] Unsupported JSON root in", json_path)
+                return {}
+        failure error:
+            print("[METADATA] Could not read JSON", json_path, error)
+            return {}
+    apply_metadata_overrides(lookup, load_yaml_mapping(race_file), "race")
+    apply_metadata_overrides(lookup, load_yaml_mapping(sex_file), "sex")
+    apply_metadata_overrides(lookup, load_yaml_mapping(zone_file), "zone")
+    return lookup
+
+def u32_le(bytes: list[int], offset: int) -> int:
+    return bytes[offset] + bytes[offset + 1] * 256 + bytes[offset + 2] * 65536 + bytes[offset + 3] * 16777216
+
+def get_wav_duration_seconds(file_path: string) -> float:
+    switch file.read(file_path):
+        ok wav_file:
+            loaded = wav_file.raw()
+            byte_rate = u32_le(loaded, 28)
+            cursor := 12
+            while cursor + 8 <= size(loaded):
+                chunk_size = u32_le(loaded, cursor + 4)
+                if loaded[cursor:cursor + 4] == [100, 97, 116, 97]:
+                    if byte_rate <= 0:
+                        return -1.0
+                    return math.round(float(chunk_size) / float(byte_rate), 3)
+                cursor += 8 + chunk_size + (chunk_size % 2)
+            return -1.0
+        failure _error:
+            return -1.0
+
+def find_matching_brace(text: string, start: int) -> int:
+    if start < 0 or start >= size(text) or text[start] != "{":
+        return -1
+    depth := 0
+    quoted := false
+    escaped := false
+    index := start
+    while index < size(text):
+        character = text[index]
+        if quoted:
+            if escaped:
+                escaped = false
+            else character == "\\":
+                escaped = true
+            else character == "\"":
+                quoted = false
+        else character == "\"":
+            quoted = true
+        else character == "{":
+            depth += 1
+        else character == "}":
+            depth -= 1
+            if depth == 0:
+                return index
+        index += 1
+    return -1
+
+def load_existing_lua_database(output_lua: string) -> map[string, list[string]]:
+    cache := {}
+    content = text_or_empty(output_lua)
+    if size(content) == 0:
+        return cache
+    marker = content.find("NPC_DATABASE")
+    table_start = content[marker:].find("{") + marker if marker >= 0 else -1
+    if table_start < 0:
+        return cache
+    cursor := table_start + 1
+    while cursor < size(content):
+        relative_name = content[cursor:].find("[\"")
+        if relative_name < 0:
+            break
+        name_start = cursor + relative_name + 2
+        relative_end = content[name_start:].find("\"]")
+        if relative_end < 0:
+            break
+        name_end = name_start + relative_end
+        npc_name = content[name_start:name_end]
+        relative_brace = content[name_end:].find("{")
+        if relative_brace < 0:
+            break
+        npc_start = name_end + relative_brace
+        npc_end = find_matching_brace(content, npc_start)
+        if npc_end < 0:
+            break
+        block = content[npc_start:npc_end + 1]
+        dialogs_marker = block.find("dialogs =")
+        if dialogs_marker >= 0:
+            dialogs_relative = block[dialogs_marker:].find("{")
+            dialogs_start = dialogs_marker + dialogs_relative
+            dialogs_end = find_matching_brace(block, dialogs_start)
+            hashes := []
+            inner_cursor := dialogs_start + 1
+            while dialogs_end > inner_cursor:
+                relative_hash = block[inner_cursor:dialogs_end].find("[\"")
+                if relative_hash < 0:
+                    break
+                hash_start = inner_cursor + relative_hash + 2
+                relative_hash_end = block[hash_start:dialogs_end].find("\"]")
+                if relative_hash_end < 0:
+                    break
+                hash_end = hash_start + relative_hash_end
+                hashes.append(block[hash_start:hash_end])
+                inner_cursor = hash_end + 2
+            if size(hashes) > 0:
+                cache[npc_name] = hashes
+        cursor = npc_end + 1
+    return cache
+
+def sound_path_to_fs(sound_path: string, addon_root: string = "..") -> string:
+    marker = sound_path.find("BetterQuest\\")
+    if marker < 0:
+        return ""
+    relative = sound_path[marker + size("BetterQuest\\"):].replace("\\", "/")
+    return path.join(addon_root, relative)
+
+def fs_path_to_lua(file_path: string, sounds_directory: string) -> string:
+    normalized = file_path.replace("\\", "/")
+    sounds := sounds_directory.replace("\\", "/")
+    while sounds.ends_with("/"):
+        sounds = sounds[0:-1]
+    relative := ""
+    if normalized.starts_with(sounds + "/"):
+        relative = normalized[size(sounds) + 1:]
+    else:
+        marker = normalized.find("/sounds/")
+        if marker >= 0:
+            relative = normalized[marker + 8:]
+        else:
+            relative = path.basename(normalized)
+    return "Interface\\AddOns\\BetterQuest\\sounds\\" + relative.replace("/", "\\")
+
+def lua_escape(value: string) -> string:
+    return value.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n").replace("\r", "")
+
+def make_npc_entry(race: string, sex: string, zone: string, model_id: string) -> domain.LuaNpc:
+    narrator = race + "_female" if size(race) > 0 and sex == "female" else (race if size(race) > 0 else "narrator")
+    return domain.LuaNpc(race, sex, race if size(race) > 0 else "default", zone, model_id, narrator, {})
+
+def quest_id_lua(quest_id: string) -> string:
+    return quest_id if size(quest_id) > 0 else "nil"
+
+def render_dialog(text_hash: string, info: domain.LuaDialog) -> string:
+    output := "      [\"" + lua_escape(text_hash) + "\"] = { path=\"" + lua_escape(info.path) + "\", dialog_type=\"" + lua_escape(info.dialog_type) + "\", quest_id=" + quest_id_lua(info.quest_id) + ", seconds=" + string(info.seconds)
+    if size(info.linked_to) > 0:
+        output += ", linked_to=\"" + lua_escape(info.linked_to) + "\""
+    return output + " },\n"
+
+def render_lua_database(database: map[string, domain.LuaNpc]) -> string:
+    output := "-- Auto-generated unified NPC database\n-- Contains metadata + dialog mappings\n-- DO NOT EDIT MANUALLY\n\nNPC_DATABASE = {\n"
+    for npc_name in database.keys().sorted():
+        entry := database[npc_name]
+        output += "  [\"" + lua_escape(npc_name) + "\"] = {\n"
+        output += "    race = \"" + lua_escape(entry.race) + "\",\n"
+        output += "    sex = \"" + lua_escape(entry.sex) + "\",\n"
+        output += "    portrait = \"" + lua_escape(entry.portrait) + "\",\n"
+        output += "    zone = \"" + lua_escape(entry.zone) + "\",\n"
+        output += "    model_id = " + (entry.model_id if size(entry.model_id) > 0 else "nil") + ",\n"
+        output += "    narrator = \"" + lua_escape(entry.narrator) + "\",\n"
+        output += "    dialogs = {\n"
+        for text_hash in entry.dialogs.keys().sorted():
+            output += render_dialog(text_hash, entry.dialogs[text_hash])
+        output += "    },\n  },\n"
+    return output + "}\n"
+
+def update_lua_database_incremental(
+    npc_name: string,
+    dialog_text: string,
+    audio_filepath: string,
+    dialog_type: string,
+    quest_id: string,
+    npc_lookup: map[string, domain.NpcMetadata],
+    config: domain.DatabaseConfig,
+) -> bool:
+    normalized_name = utils.normalize_name(npc_name)
+    metadata = npc_lookup.get(npc_name, domain.NpcMetadata("", "", "", "", ""))
+    if size(metadata.name) == 0:
+        return false
+    races = load_yaml_mapping(config.race_file)
+    sexes = load_yaml_mapping(config.sex_file)
+    zones = load_yaml_mapping(config.zone_file)
+    race = races.get(normalized_name, metadata.race)
+    sex = metadata.sex if size(metadata.sex) > 0 else sexes.get(normalized_name, "male")
+    zone = zones.get(normalized_name, "")
+    entry = make_npc_entry(race, sex, zone, metadata.model_id)
+    duration := get_wav_duration_seconds(audio_filepath)
+    if duration < 0.0:
+        duration = 0.0
+    text_hash = utils.create_text_hash(dialog_text)
+    info = domain.LuaDialog(fs_path_to_lua(audio_filepath, config.sounds_directory), dialog_type, quest_id, duration, "")
+    lock_path = config.output_lua + ".lock"
+    switch lock(lock_path):
+        ok handle:
+            content := text_or_empty(config.output_lua)
+            if size(content) == 0:
+                content = "-- Auto-generated unified NPC database\n-- DO NOT EDIT MANUALLY\n\nNPC_DATABASE = {\n}\n"
+            npc_marker = "[\"" + lua_escape(normalized_name) + "\"] = {"
+            npc_position = content.find(npc_marker)
+            if npc_position >= 0:
+                dialogs_marker = content[npc_position:].find("dialogs = {")
+                dialogs_start = npc_position + dialogs_marker + size("dialogs = ")
+                dialogs_end = find_matching_brace(content, dialogs_start)
+                if dialogs_marker >= 0 and dialogs_end >= 0:
+                    content = content[0:dialogs_end] + render_dialog(text_hash, info) + content[dialogs_end:]
+            else:
+                entry.dialogs[text_hash] = info
+                rendered = render_lua_database({normalized_name: entry})
+                body_start = rendered.find("NPC_DATABASE = {") + size("NPC_DATABASE = {\n")
+                body_end = rendered.rfind("}\n")
+                insertion = rendered[body_start:body_end]
+                final_brace = content.rfind("}")
+                content = content[0:final_brace] + insertion + content[final_brace:]
+            parent = path.dirname(config.output_lua)
+            _directory = os.mkdir(parent)
+            written := false
+            switch write_text(config.output_lua, content):
+                ok:
+                    written = true
+                failure error:
+                    print("[LIVE-VO] Failed:", error)
+            _unlocked = unlock(handle)
+            if os.exists(lock_path):
+                _removed = os.rm(lock_path)
+            if written:
+                print("[LIVE-VO]", normalized_name, "→", text_hash[0:min(16, size(text_hash))], "ready")
+            return written
+        failure error:
+            print("[LIVE-VO] Could not acquire lock:", error)
+            return false
+
+def merge_item_rows(rows: list[domain.Dialog]) -> list[domain.Dialog]:
+    return dialog_data.merge_text_rows(rows, ["item_text", "book"])
+
+def positive_quest_id(value: string) -> string:
+    normalized := value.strip()
+    if normalized.ends_with(".0"):
+        normalized = normalized[0:-2]
+    if size(normalized) == 0:
+        return ""
+    for character in normalized.characters():
+        if not character.is_digit():
+            return ""
+    switch int.parse(normalized):
+        ok parsed:
+            return normalized if parsed > 0 else ""
+        failure _error:
+            return ""
+
+def sync_metadata(
+    source_rows: list[domain.Dialog],
+    npc_lookup: map[string, domain.NpcMetadata],
+    config: domain.DatabaseConfig,
+) -> bool:
+    print("=== STEP 3: Syncing metadata to Lua database ===")
+    races = load_yaml_mapping(config.race_file)
+    sexes = load_yaml_mapping(config.sex_file)
+    zones = load_yaml_mapping(config.zone_file)
+    database := {}
+    missing := []
+    for npc_name, metadata in npc_lookup.items():
+        key = utils.normalize_name(npc_name)
+        if size(key) == 0:
+            continue
+        race = races.get(key, metadata.race)
+        sex = metadata.sex if size(metadata.sex) > 0 else sexes.get(key, "male")
+        zone = zones.get(key, "")
+        if size(race) == 0:
+            missing.append(npc_name)
+        database[key] = make_npc_entry(race, sex, zone, metadata.model_id)
+    signatures := {}
+    seen_quest_types := {}
+    for row in merge_item_rows(source_rows):
+        npc_name = utils.normalize_name(row.npc_name)
+        if size(npc_name) == 0:
+            continue
+        if size(database.get(npc_name, domain.LuaNpc("", "", "", "", "", "", {})).narrator) == 0:
+            race = races.get(npc_name, "")
+            sex = "female" if row.sex == "1" else ("male" if row.sex == "0" else sexes.get(npc_name, "male"))
+            zone = zones.get(npc_name, row.zone.strip())
+            if size(race) == 0:
+                missing.append(npc_name)
+            database[npc_name] = make_npc_entry(race, sex, zone, row.model_id)
+        entry := database[npc_name]
+        if size(entry.zone) == 0 and size(row.zone.strip()) > 0:
+            entry.zone = row.zone.strip()
+        dialog_type := row.dialog_type.lower() if size(row.dialog_type) > 0 else "gossip"
+        text_hash = utils.create_text_hash(row.text)
+        if size(text_hash) == 0:
+            continue
+        npc_dir = path.sanitize_name(npc_name)
+        quest_id := ""
+        filename := ""
+        fs_path := ""
+        if dialog_type == "book" or dialog_type == "item_text":
+            filename = npc_dir + ".wav"
+            fs_path = path.join(path.join(config.sounds_directory, entry.narrator), filename)
+        else:
+            quest_id = positive_quest_id(row.quest_id)
+            if size(quest_id) > 0 and dialog_type != "gossip":
+                dedup_key = entry.narrator + "_" + quest_id + "_" + dialog_type + ".wav"
+                if not seen_quest_types.get(dedup_key, false):
+                    seen_quest_types[dedup_key] = true
+                    filename = quest_id + "_" + dialog_type + ".wav"
+                else:
+                    quest_id = ""
+                    dialog_type = "gossip"
+            if size(filename) == 0:
+                clean = path.sanitize_name(row.text)
+                filename = clean[0:min(50, size(clean))] + ".wav" if size(clean) > 0 else ""
+            fs_path = path.join(path.join(path.join(config.sounds_directory, entry.narrator), npc_dir), filename)
+        if size(filename) == 0 or not os.exists(fs_path):
+            continue
+        duration = get_wav_duration_seconds(fs_path)
+        if duration < 0.0:
+            continue
+        sound_path := fs_path_to_lua(fs_path, config.sounds_directory)
+        signature = utils.create_dialog_signature(row.text, entry.race, entry.sex)
+        existing_npc = signatures.get(signature, "")
+        linked_to := ""
+        if size(existing_npc) > 0:
+            linked_to = existing_npc
+            existing_dialogs: map[string, domain.LuaDialog] = database[existing_npc].dialogs
+            original = existing_dialogs.get(text_hash, domain.LuaDialog("", "", "", 0.0, ""))
+            if size(original.path) > 0:
+                sound_path = original.path
+        else:
+            signatures[signature] = npc_name
+        entry.dialogs[text_hash] = domain.LuaDialog(sound_path, dialog_type, quest_id, duration, linked_to)
+        database[npc_name] = entry
+    missing_output := "unknown:\n"
+    for name in missing.sorted():
+        missing_output += "- " + name + "\n"
+    _missing_parent = os.mkdir(path.dirname(config.missing_race_file))
+    _missing_written = write_text(config.missing_race_file, missing_output)
+    _output_parent = os.mkdir(path.dirname(config.output_lua))
+    switch write_text(config.output_lua, render_lua_database(database)):
+        ok:
+            print("[OK]", size(database), "NPCs written")
+            print("[OK] Output:", config.output_lua)
+            return true
+        failure error:
+            print("[ERROR] Could not write Lua database:", error)
+            return false
+
+test "YAML mappings and JSON null metadata preserve Python override rules":
+    yaml_path = "/tmp/betterquest-sev-metadata.yaml"
+    _yaml_written = write_text(yaml_path, "orc:\n- Thrall\nfemale: Jaina Proudmoore\n")
+    assert(load_yaml_mapping(yaml_path).get("Thrall", "") == "orc")
+    metadata_path = "/tmp/betterquest-sev-metadata.json"
+    _written = write_text(metadata_path, "[{\"name\":\"A-Me 01\",\"race\":\"mechanical\",\"sex\":\"male\",\"zone\":null,\"model_id\":8841}]")
+    lookup = load_npc_metadata(metadata_path, "/tmp/missing-races.yaml", "/tmp/missing-sex.yaml", "/tmp/missing-zone.yaml")
+    assert(lookup["A-Me 01"].race == "mechanical")
+    assert(lookup["A-Me 01"].zone == "")
+    assert(lookup["A-Me 01"].model_id == "8841")
+
+test "WAV duration and Lua rendering use the generator's native PCM layout":
+    wav_path = "/tmp/betterquest-sev-duration.wav"
+    bytes := [82, 73, 70, 70, 40, 0, 0, 0, 87, 65, 86, 69, 102, 109, 116, 32, 16, 0, 0, 0, 1, 0, 1, 0, 192, 93, 0, 0, 128, 187, 0, 0, 2, 0, 16, 0, 100, 97, 116, 97, 4, 0, 0, 0, 0, 0, 0, 0]
+    _written = write_bytes(wav_path, bytes)
+    assert(get_wav_duration_seconds(wav_path) == 0.0)
+    entry := make_npc_entry("orc", "male", "Durotar", "123")
+    entry.dialogs["loktar"] = domain.LuaDialog("Interface\\AddOns\\BetterQuest\\sounds\\orc\\thrall\\loktar.wav", "gossip", "", 1.25, "")
+    rendered = render_lua_database({"Thrall": entry})
+    assert(rendered.find("NPC_DATABASE") >= 0)
+    assert(rendered.find("model_id = 123") >= 0)
+    assert(rendered.find("seconds=1.25") >= 0)
+
+test "existing Lua cache reads dialog hashes without treating them as NPCs":
+    lua = "NPC_DATABASE = { [\"Thrall\"] = { race = \"orc\", dialogs = { [\"first\"] = { path=\"a\" }, [\"second\"] = { path=\"b\" }, }, }, }"
+    lua_path = "/tmp/betterquest-sev-cache.lua"
+    _written = write_text(lua_path, lua)
+    cache = load_existing_lua_database(lua_path)
+    assert(cache["Thrall"] == ["first", "second"])

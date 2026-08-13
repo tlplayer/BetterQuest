@@ -1,32 +1,68 @@
 # BetterQuest Severian pipeline
 
-This directory is the Severian conversion of the Python modules in `scripts/`.
-The native program owns CSV and SavedVariables parsing, text normalization,
-filtering, deduplication, narrator selection, output naming, Lua metadata
-rendering, and orchestration. The final model invocation is the installed
-OmniVoice inference executable; none of the BetterQuest Python modules are
-loaded or executed.
+This package ports the BetterQuest data pipeline from `scripts/*.py` to native
+Severian. It never invokes Python, a shell, or `omnivoice-infer`.
 
-From the add-on root, use the freshly built Severian CLI:
+## Current parity
+
+Implemented in `.sev`:
+
+- BetterQuest SavedVariables discovery, schema-v2/legacy Lua parsing, daemon
+  monitoring, CSV schema upgrades, escaping, indexing, and append-only sync;
+- dialog normalization, filtering, item/book merging, deduplication, narrator
+  resolution, Python-compatible MD5 signatures, and audio path selection;
+- chunked generation orchestration, retry policy, regeneration cutoffs, and a
+  native mono PCM16 WAV writer;
+- JSON plus YAML NPC metadata loading, WAV duration parsing, locked incremental
+  Lua updates, full metadata synchronization, missing-race output, and linked
+  dialog entries;
+- native MariaDB extraction for ScriptDev2/dbscripts, recursive gossip owners,
+  recursive page text, quest text and greetings, AI/spell sources, orphan
+  broadcasts, investigation CSV output, and source-of-truth regression checks;
+- the Python CLI filters, skip flags, generation controls, and daemon workflow.
+
+CSV parsing stays with `file.read(...)`/`csv.CSV`; schema, filtering, grouping,
+indexing, and uniqueness use the format-independent `data.Data` layer. Shared
+dialog/table conversion lives in `src/dialog_data.sev`, and filesystem metadata
+and directory operations use `os`/`path` rather than the `file` content API.
+
+The remaining blocker is the model itself. Severian does not yet implement the
+OmniVoice architecture, audio tokenizer, Whisper fallback, weight loader, and
+CUDA kernels required by `OmniVoiceBackend`. The backend therefore returns a
+typed failure instead of silently producing substitute audio or spawning the
+Python implementation. Data sync, extraction, metadata output, and deterministic
+test backends are native today; production OmniVoice synthesis is not yet at
+1:1 parity.
+
+## Run and test
+
+Run commands from the add-on root so the paths in `core.sev` resolve to
+`data/`, `samples/`, `sounds/`, and `db/`:
 
 ```sh
-sev build scripts_sev
-sev test scripts_sev
-sev coverage scripts_sev
-sev scripts_sev/src/core.sev
-aplay scripts_sev/output/thrall_4974_quest_complete.wav
+sev check scripts_sev
+sev run scripts_sev -- --skip-audio
+
+# Exercise every converted module, not only the binary entry point.
+for source in scripts_sev/src/*.sev; do
+    sev test "$source" || exit 1
+done
 ```
 
-`sev run scripts_sev` is the equivalent package-oriented invocation.
+Useful pipeline examples:
 
-The bounded trial stages one Thrall record from the production
-`data/all_npc_dialog.csv`, then parses that record and the production
-`data/npc_race.yaml` and `data/npc_sex.yaml` in Severian. It clones the
-`samples/orc.wav` reference and writes the result under `scripts_sev/output/`.
-The bounded staging avoids the current runtime's quadratic cost when building
-multi-megabyte immutable strings one character at a time.
+```sh
+# Sync SavedVariables and rebuild Lua metadata without attempting audio.
+sev run scripts_sev -- --skip-audio
 
-For reproducible Python/Severian parity, the OmniVoice command sets both
-position and class sampling temperatures to zero. With identical model dtype,
-text, reference audio and transcript, the Severian-run WAV is byte-for-byte
-identical to direct Python `OmniVoice.generate` output.
+# Filter generation work exactly as the Python CLI does.
+sev run scripts_sev -- --race orc --zone Durotar --type gossip --limit 20
+
+# Watch the newest BetterQuest.lua under a WoW WTF directory.
+sev run scripts_sev -- --daemon --wtf-path ../../../../WTF --skip-audio
+```
+
+The package depends on the accompanying Severian standard-library additions
+for native file/directory operations, MD5, JSON nulls, MariaDB, file locking,
+process arguments, and date parsing. The compiler changes also make conditional
+expressions lazy and complete native lowering for map iteration/access.

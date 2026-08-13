@@ -1,95 +1,442 @@
+from file import write_bytes
+import math
+import os
+import path
+import time
+import "src/db_adapter.sev" as db_adapter
+import "src/dialog_data.sev" as dialog_data
 import "src/domain.sev" as domain
+import "src/omnivoice_backend.sev" as omnivoice_backend
 import "src/utils.sev" as utils
 
-def chunkTextRobust(text: string, maxCharacters: int = 300) -> list[string]:
+int DEFAULT_SAMPLE_RATE = 24000
+
+def directory_entries(directory: string) -> list[string]:
+    switch os.ls(directory):
+        ok entries:
+            return entries
+        failure _error:
+            return []
+
+def build_ref_codes(samples_root: string = "../samples") -> map[string, domain.ReferenceCode]:
+    references := {}
+    for filename in directory_entries(samples_root):
+        if filename.ends_with(".wav"):
+            name = filename[0:-4]
+            references[name] = domain.ReferenceCode(name, path.join(samples_root, filename))
+    return references
+
+def sentences(text: string) -> list[string]:
+    output := []
+    current := ""
+    for character in text.characters():
+        current += character
+        if character == "." or character == "?" or character == "!" or character == ";" or character == "…":
+            if size(current.strip()) > 0:
+                output.append(current.strip())
+            current = ""
+    if size(current.strip()) > 0:
+        output.append(current.strip())
+    return output
+
+def chunk_text_robust(text: string, min_chars: int = 150, max_chars: int = 300) -> list[string]:
+    if size(text) == 0:
+        return []
     chunks := []
     current := ""
-    for word in text.split(" "):
-        if size(word) == 0:
-            continue
-        candidate = word if size(current) == 0 else current + " " + word
-        if size(candidate) > maxCharacters and size(current) > 0:
-            chunks.append(current)
-            current = word
+    for original_sentence in sentences(text):
+        sentence := original_sentence
+        if size(sentence) > max_chars:
+            temporary := ""
+            for word in sentence.split(" "):
+                if size(temporary) + size(word) + 1 > max_chars:
+                    if size(temporary) > 0:
+                        chunks.append(temporary.strip())
+                    temporary = word
+                else:
+                    temporary += (" " + word) if size(temporary) > 0 else word
+            sentence = temporary
+            if size(sentence) == 0:
+                continue
+        if size(current) + size(sentence) + 1 > max_chars:
+            if size(current) > 0:
+                chunks.append(current.strip())
+            current = sentence
         else:
-            current = candidate
+            current += (" " + sentence) if size(current) > 0 else sentence
     if size(current) > 0:
-        chunks.append(current)
-    return chunks
+        chunks.append(current.strip())
+    final := []
+    for chunk in chunks:
+        if size(final) > 0 and size(chunk) < min_chars:
+            previous = final.pop()
+            final.append(previous + " " + chunk)
+        else:
+            final.append(chunk)
+    return final
 
-def filterDialogs(rows: list[domain.Dialog], npcName: string, dialogType: string, expansion: string, limit: int) -> list[domain.Dialog]:
-    filtered := []
-    for row in rows:
-        npcMatches = size(npcName) == 0 or row.npcName == npcName
-        typeMatches = size(dialogType) == 0 or row.dialogType == dialogType
-        expansionMatches = size(expansion) == 0 or row.expansion.lower() == expansion.lower()
-        if npcMatches and typeMatches and expansionMatches:
-            filtered.append(row)
-            if limit > 0 and size(filtered) >= limit:
-                break
-    return filtered
-
-def deduplicateDialogs(rows: list[domain.Dialog], races: map[string, string], sexes: map[string, string]) -> list[domain.Dialog]:
-    unique := []
-    seen := {}
-    for row in rows:
-        race = races.get(row.npcName, "unknown")
-        sex = sexes.get(row.npcName, row.sex)
-        signature = utils.createDialogSignature(row.text, race, sex)
-        if not seen.get(signature, false):
-            seen[signature] = true
-            unique.append(row)
-    return unique
-
-def narratorFor(row: domain.Dialog, races: map[string, string], sexes: map[string, string], override: string = "") -> string:
-    if size(override) > 0:
-        return override
-    if row.dialogType == "book" or row.dialogType == "item_text":
-        return "narrator"
-    race = races.get(row.npcName, "")
-    sex = sexes.get(row.npcName, "")
-    if size(race) == 0:
+def narrator_for_row(
+    row: domain.Dialog,
+    npc_lookup: map[string, domain.NpcMetadata],
+    references: map[string, domain.ReferenceCode],
+    narrator_override: string = "",
+) -> string:
+    if size(narrator_override) > 0 and references.get(narrator_override, domain.ReferenceCode("", "")).name == narrator_override:
+        return narrator_override
+    if (row.dialog_type.lower() == "book" or row.dialog_type.lower() == "item_text") and size(npc_lookup) == 0:
+        if references.get("narrator", domain.ReferenceCode("", "")).name == "narrator":
+            return "narrator"
         return ""
-    if sex == "female":
-        return race + "_female"
-    return race
+    npc_name = row.npc_name.remove("'’")
+    metadata = npc_lookup.get(npc_name, domain.NpcMetadata("", "", "", "", ""))
+    if size(metadata.name) == 0 or size(metadata.race) == 0:
+        return ""
+    narrator := metadata.race.lower()
+    if size(metadata.sex) > 0:
+        narrator += "_" + metadata.sex
+    if references.get(narrator, domain.ReferenceCode("", "")).name == narrator:
+        return narrator
+    race = metadata.race.lower()
+    if references.get(race, domain.ReferenceCode("", "")).name == race:
+        return race
+    return ""
 
-def outputPath(row: domain.Dialog, outputDirectory: string) -> string:
-    stem := utils.sanitizeFilename(row.npcName)
-    if size(row.questId) > 0:
-        stem += "_" + utils.sanitizeFilename(row.questId)
-    stem += "_" + utils.sanitizeFilename(row.dialogType)
-    return outputDirectory + "/" + stem + ".wav"
+def deduplicate_dialogs(rows: list[domain.Dialog], npc_lookup: map[string, domain.NpcMetadata]) -> list[domain.Dialog]:
+    output := []
+    seen := {}
+    for source in rows:
+        row := domain.copy_dialog(source)
+        metadata = npc_lookup.get(row.npc_name, domain.NpcMetadata("", "", "", "", ""))
+        if size(row.npc_name) > 0 and size(metadata.race) > 0 and size(metadata.sex) > 0 and size(row.text.strip()) > 0:
+            signature = utils.create_dialog_signature(row.text.strip(), metadata.race, metadata.sex)
+            first_npc = seen.get(signature, "")
+            if size(first_npc) > 0:
+                row.skip_generation = true
+                row.link_to_npc = first_npc
+            else:
+                seen[signature] = row.npc_name
+        output.append(row)
+    return output
 
-def generationRequest(row: domain.Dialog, races: map[string, string], sexes: map[string, string], samplesDirectory: string, outputDirectory: string, steps: int, device: string) -> domain.GenerationRequest:
-    narrator = narratorFor(row, races, sexes)
-    return domain.GenerationRequest(
-        row.npcName,
-        narrator,
-        utils.normalizeDialogText(row.text),
-        samplesDirectory + "/" + narrator + ".wav",
-        "Everything the light touches is our kingdom. A king's time as ruler rises and falls like the sun. One day, Simba, the sun will set on my time here and will rise with you as the new king.",
-        outputPath(row, outputDirectory),
-        "English",
-        steps,
-        device,
+def build_gossip_index_map(rows: list[domain.Dialog]) -> map[string, list[string]]:
+    gossip := {}
+    for row in rows:
+        if size(row.npc_name) == 0 or row.dialog_type.lower().find("gossip") < 0 or size(row.text) == 0:
+            continue
+        existing = gossip.get(row.npc_name, [])
+        if not (row.text in existing):
+            existing.append(row.text)
+        gossip[row.npc_name] = existing
+    return gossip
+
+def merge_item_text_rows(rows: list[domain.Dialog]) -> list[domain.Dialog]:
+    return dialog_data.merge_text_rows(rows, ["item_text"])
+
+def is_positive_quest_id(value: string) -> bool:
+    normalized := value.strip()
+    if normalized.ends_with(".0"):
+        normalized = normalized[0:-2]
+    if size(normalized) == 0:
+        return false
+    for character in normalized.characters():
+        if not character.is_digit():
+            return false
+    switch int.parse(normalized):
+        ok parsed:
+            return parsed > 0
+        failure _error:
+            return false
+
+def normalized_quest_id(value: string) -> string:
+    normalized = value.strip()
+    return normalized[0:-2] if normalized.ends_with(".0") else normalized
+
+def audio_target(
+    row: domain.Dialog,
+    npc_lookup: map[string, domain.NpcMetadata],
+    references: map[string, domain.ReferenceCode],
+    sounds_directory: string,
+    seen_quest_types: map[string, bool],
+    narrator_override: string = "",
+) -> domain.AudioTarget:
+    narrator = narrator_for_row(row, npc_lookup, references, narrator_override)
+    if size(narrator) == 0:
+        return domain.AudioTarget("", "", "", "", false)
+    natural = narrator_for_row(row, npc_lookup, references)
+    folder_race = natural if size(natural) > 0 else narrator
+    npc_name = row.npc_name if size(row.npc_name) > 0 else "narrator"
+    dialog_type := row.dialog_type.lower() if size(row.dialog_type) > 0 else "gossip"
+    if dialog_type == "book" or dialog_type == "item_text":
+        return domain.AudioTarget(
+            path.join(path.join(sounds_directory, folder_race), path.sanitize_name(npc_name) + ".wav"),
+            narrator,
+            dialog_type,
+            "",
+            false,
+        )
+    base = path.join(path.join(sounds_directory, folder_race), path.sanitize_name(npc_name))
+    has_quest_id = is_positive_quest_id(row.quest_id)
+    quest_id := ""
+    filename := ""
+    if has_quest_id and dialog_type != "gossip":
+        quest_id = normalized_quest_id(row.quest_id)
+        dedup_key = folder_race + "_" + quest_id + "_" + dialog_type + ".wav"
+        if not seen_quest_types.get(dedup_key, false):
+            seen_quest_types[dedup_key] = true
+            filename = quest_id + "_" + dialog_type + ".wav"
+        else:
+            quest_id = ""
+            dialog_type = "gossip"
+            clean = path.sanitize_name(row.text)
+            filename = clean[0:min(size(clean), 50)] + ".wav" if size(clean) > 0 else ""
+    else:
+        clean = path.sanitize_name(row.text)
+        filename = clean[0:min(size(clean), 50)] + ".wav" if size(clean) > 0 else ""
+    if size(filename) == 0:
+        return domain.AudioTarget("", narrator, dialog_type, quest_id, has_quest_id)
+    return domain.AudioTarget(path.join(base, filename), narrator, dialog_type, quest_id, has_quest_id)
+
+def append_u16(bytes: list[int], value: int):
+    bytes.append(value % 256)
+    bytes.append((value / 256) % 256)
+
+def append_u32(bytes: list[int], value: int):
+    bytes.append(value % 256)
+    bytes.append((value / 256) % 256)
+    bytes.append((value / 65536) % 256)
+    bytes.append((value / 16777216) % 256)
+
+def append_ascii(bytes: list[int], text: string):
+    for character in text.characters():
+        position = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 ".find(character)
+        if position >= 0:
+            if position < 26:
+                bytes.append(65 + position)
+            else position < 52:
+                bytes.append(97 + position - 26)
+            else position < 62:
+                bytes.append(48 + position - 52)
+            else:
+                bytes.append(32)
+
+def truncate_float(value: float) -> int:
+    if value < 0.0:
+        return -math.floor(-value)
+    return math.floor(value)
+
+def pcm16_wav(samples: list[float], sample_rate: int) -> list[int]:
+    data_size = size(samples) * 2
+    output := []
+    append_ascii(output, "RIFF")
+    append_u32(output, 36 + data_size)
+    append_ascii(output, "WAVEfmt ")
+    append_u32(output, 16)
+    append_u16(output, 1)
+    append_u16(output, 1)
+    append_u32(output, sample_rate)
+    append_u32(output, sample_rate * 2)
+    append_u16(output, 2)
+    append_u16(output, 16)
+    append_ascii(output, "data")
+    append_u32(output, data_size)
+    for sample in samples:
+        scaled = truncate_float(max(-32768.0, min(32767.0, sample * 32767.0)))
+        unsigned = scaled + 65536 if scaled < 0 else scaled
+        append_u16(output, unsigned)
+    return output
+
+def file_byte_size(file_path: string) -> int:
+    switch os.stat(file_path):
+        ok information:
+            return information.size
+        failure _error:
+            return -1
+
+def file_modified(file_path: string) -> float:
+    switch os.stat(file_path):
+        ok information:
+            return information.modified_seconds
+        failure _error:
+            return -1.0
+
+def delete_file(file_path: string):
+    if os.exists(file_path):
+        switch os.rm(file_path):
+            ok:
+                print("[REGEN] Removed", file_path)
+            failure error:
+                print("[ERROR] Could not remove", file_path, error)
+
+def write_wav(file_path: string, audio: domain.AudioSamples) -> bool:
+    switch os.mkdir(path.dirname(file_path)):
+        ok:
+            switch write_bytes(file_path, pcm16_wav(audio.samples, audio.sample_rate)):
+                ok:
+                    return true
+                failure error:
+                    print("[ERROR] Could not write WAV", file_path, error)
+                    return false
+        failure error:
+            print("[ERROR] Could not create output directory", error)
+            return false
+
+def maybe_incremental_sync(
+    row: domain.Dialog,
+    target: domain.AudioTarget,
+    npc_lookup: map[string, domain.NpcMetadata],
+    options: domain.GenerationOptions,
+):
+    if not options.incremental_sync:
+        return
+    quest_id = target.quest_id if target.has_quest_id and target.dialog_type != "gossip" else ""
+    _synced = db_adapter.update_lua_database_incremental(
+        row.npc_name,
+        row.text,
+        target.path,
+        target.dialog_type,
+        quest_id,
+        npc_lookup,
+        options.database,
     )
 
-test "filter dedup and narrator selection preserve pipeline parity":
-    rows = [
-        domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "4974", "Honor, $N!"),
-        domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "4974", "Honor, $N!"),
-        domain.Dialog("Jaina", "1", "", "vanilla", "1.12.1", "gossip", "", "Welcome"),
-    ]
-    filtered = filterDialogs(rows, "Thrall", "", "vanilla", 10)
-    assert(size(filtered) == 2)
-    unique = deduplicateDialogs(filtered, {"Thrall": "orc"}, {"Thrall": "male"})
-    assert(size(unique) == 1)
-    assert(narratorFor(unique[0], {"Thrall": "orc"}, {"Thrall": "male"}) == "orc")
-    request = generationRequest(unique[0], {"Thrall": "orc"}, {"Thrall": "male"}, "samples", "output", 4, "cpu")
-    assert(request.referenceAudio == "samples/orc.wav")
-    assert(request.outputPath == "output/thrall_4974_gossip.wav")
+def generate_tts_for_row(
+    row: domain.Dialog,
+    backend: omnivoice_backend.SpeechBackend,
+    references: map[string, domain.ReferenceCode],
+    npc_lookup: map[string, domain.NpcMetadata],
+    options: domain.GenerationOptions,
+    seen_quest_types: map[string, bool],
+) -> domain.GenerationResult:
+    if row.skip_generation:
+        return domain.GenerationResult("", "duplicate", row.link_to_npc)
+    target = audio_target(row, npc_lookup, references, options.sounds_directory, seen_quest_types, options.narrator_override)
+    if size(target.path) == 0:
+        return domain.GenerationResult("", "missing_narrator", row.npc_name)
+    if os.exists(target.path):
+        existing_size = file_byte_size(target.path)
+        if existing_size == 0:
+            delete_file(target.path)
+        else options.cutoff_seconds >= 0.0:
+            if file_modified(target.path) >= options.cutoff_seconds:
+                maybe_incremental_sync(row, target, npc_lookup, options)
+                return domain.GenerationResult(target.path, "existing", "")
+            delete_file(target.path)
+        else not options.regenerate:
+            maybe_incremental_sync(row, target, npc_lookup, options)
+            return domain.GenerationResult(target.path, "existing", "")
+    chunks = chunk_text_robust(row.text)
+    if size(chunks) == 0:
+        return domain.GenerationResult("", "empty", row.npc_name)
+    reference = references.get(target.narrator, domain.ReferenceCode("", ""))
+    attempt := 0
+    while attempt < options.max_retries:
+        combined := []
+        failure_message := ""
+        sample_rate := backend.sampling_rate()
+        for chunk in chunks:
+            switch backend.generate(domain.GenerationRequest(chunk, reference.audio_path)):
+                ok audio:
+                    sample_rate = audio.sample_rate
+                    combined.extend(audio.samples)
+                failure error:
+                    failure_message = error.message
+                    break
+        if size(failure_message) == 0:
+            audio = domain.AudioSamples(combined, sample_rate)
+            if write_wav(target.path, audio):
+                maybe_incremental_sync(row, target, npc_lookup, options)
+                return domain.GenerationResult(target.path, "generated", "")
+            return domain.GenerationResult("", "error", "could not write WAV")
+        lowered = failure_message.lower()
+        retryable = lowered.find("out of memory") >= 0 or lowered.find("cuda") >= 0
+        attempt += 1
+        if retryable and attempt < options.max_retries:
+            print("[RETRY] Generation failed; waiting", options.retry_wait, "seconds")
+            time.sleep(float(options.retry_wait))
+        else:
+            delete_file(target.path)
+            return domain.GenerationResult("", "error", failure_message)
+    return domain.GenerationResult("", "error", "generation attempts exhausted")
 
-test "long text is chunked without dropping words":
-    chunks = chunkTextRobust("one two three four five six", 9)
-    assert(chunks == ["one two", "three", "four five", "six"])
+def generate_audio(
+    rows: list[domain.Dialog],
+    backend: omnivoice_backend.SpeechBackend,
+    references: map[string, domain.ReferenceCode],
+    npc_lookup: map[string, domain.NpcMetadata],
+    options: domain.GenerationOptions,
+) -> list[domain.GenerationResult]:
+    print("=== STEP 2: Generating TTS audio ===")
+    results := []
+    seen_quest_types := {}
+    generated := 0
+    existing := 0
+    duplicates := 0
+    failures := 0
+    for index, row in enumerate(rows):
+        print("[", index + 1, "/", size(rows), "]", row.npc_name, row.dialog_type)
+        result = generate_tts_for_row(row, backend, references, npc_lookup, options, seen_quest_types)
+        results.append(result)
+        if result.status == "generated":
+            generated += 1
+        else result.status == "existing":
+            existing += 1
+        else result.status == "duplicate":
+            duplicates += 1
+        else result.status == "error" or result.status == "missing_narrator":
+            failures += 1
+    print("[AUDIO]", generated, "generated,", existing, "existing,", duplicates, "linked,", failures, "failed")
+    return results
+
+test "reference discovery, narrator fallback, and deduplication match Python":
+    references = {
+        "orc": domain.ReferenceCode("orc", "samples/orc.wav"),
+        "human_female": domain.ReferenceCode("human_female", "samples/human_female.wav"),
+    }
+    metadata = {
+        "Thrall": domain.NpcMetadata("Thrall", "orc", "male", "Durotar", ""),
+        "Jaina": domain.NpcMetadata("Jaina", "human", "female", "Stormwind", ""),
+    }
+    thrall = domain.dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "", "Lok'tar")
+    assert(narrator_for_row(thrall, metadata, references) == "orc")
+    jaina = domain.dialog("Jaina", "1", "", "vanilla", "1.12.1", "gossip", "", "Welcome")
+    assert(narrator_for_row(jaina, metadata, references) == "human_female")
+    duplicate = domain.dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "", "Lok'tar")
+    rows = deduplicate_dialogs([thrall, duplicate], metadata)
+    assert(not rows[0].skip_generation)
+    assert(rows[1].skip_generation)
+    assert(rows[1].link_to_npc == "Thrall")
+
+test "chunking retains Python's long sentence and short-tail behavior":
+    assert(chunk_text_robust("one two three four five six", 3, 9) == ["one two", "three", "four five", "six"])
+    assert(chunk_text_robust("First. Tiny.", 10, 20) == ["First. Tiny."])
+
+test "audio paths mirror quest, gossip, and duplicate quest downgrade rules":
+    references = {"orc": domain.ReferenceCode("orc", "samples/orc.wav")}
+    metadata = {"Thrall": domain.NpcMetadata("Thrall", "orc", "male", "Durotar", "")}
+    seen := {}
+    quest = domain.dialog("Thrall", "0", "", "vanilla", "1.12.1", "quest_complete", "4974", "For the Horde!")
+    first = audio_target(quest, metadata, references, "sounds", seen)
+    second = audio_target(quest, metadata, references, "sounds", seen)
+    assert(first.path == "sounds/orc/thrall/4974_quest_complete.wav")
+    assert(first.quest_id == "4974")
+    assert(second.path == "sounds/orc/thrall/for_the_horde.wav")
+    assert(second.dialog_type == "gossip")
+
+test "native PCM writer emits a valid mono 16-bit WAV header and samples":
+    wav = pcm16_wav([0.0, 1.0, -1.0], 24000)
+    assert(size(wav) == 50)
+    assert(wav[0:4] == [82, 73, 70, 70])
+    assert(wav[22:24] == [1, 0])
+    assert(wav[24:28] == [192, 93, 0, 0])
+    assert(wav[44:50] == [0, 0, 255, 127, 1, 128])
+
+test "batch generation retains result order and quest filename state":
+    backend = omnivoice_backend.DeterministicBackend(24000, [0.0, 0.1])
+    references = {"orc": domain.ReferenceCode("orc", "samples/orc.wav")}
+    metadata = {"Thrall": domain.NpcMetadata("Thrall", "orc", "male", "Durotar", "")}
+    rows = [domain.dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "", "Batch test line")]
+    config = domain.DatabaseConfig("", "", "", "", "", "/tmp/betterquest-sev-batch.lua", "/tmp/betterquest-sev-batch")
+    options = domain.GenerationOptions("/tmp/betterquest-sev-batch", "", true, -1.0, false, 1, 0, config)
+    results = generate_audio(rows, backend, references, metadata, options)
+    assert(size(results) == 1)
+    assert(results[0].status == "generated")

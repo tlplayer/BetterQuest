@@ -1,0 +1,77 @@
+import data
+import "src/domain.sev" as domain
+
+def columns() -> list[string]:
+    return ["npc_name", "sex", "zone", "expansion", "client_version", "dialog_type", "quest_id", "text"]
+
+def key_columns() -> list[string]:
+    return ["npc_name", "dialog_type", "quest_id", "text", "zone", "expansion"]
+
+def normalize_key(column: string, value: Any) -> Any:
+    normalized = value.strip()
+    return normalized.lower() if column == "expansion" else normalized
+
+def row(value: domain.Dialog) -> data.Row:
+    return data.Row(columns(), [
+        value.npc_name,
+        value.sex,
+        value.zone,
+        value.expansion,
+        value.client_version,
+        value.dialog_type,
+        value.quest_id,
+        value.text,
+    ])
+
+def to_dialog(row: data.Row) -> domain.Dialog:
+    return domain.dialog(
+        row.get("npc_name").strip(),
+        row.get("sex").strip(),
+        row.get("zone").strip(),
+        row.get("expansion").strip(),
+        row.get("client_version").strip(),
+        row.get("dialog_type").strip(),
+        row.get("quest_id").strip(),
+        row.get("text").strip(),
+    )
+
+def from_dialogs(values: list[domain.Dialog]) -> data.Data:
+    table := data.Data(columns(), [])
+    for value in values:
+        table.append_row(row(value))
+    return table
+
+def dialogs(table: data.Data) -> list[domain.Dialog]:
+    values := []
+    for row in table.rows():
+        values.append(to_dialog(row))
+    return values
+
+def merge_text_rows(values: list[domain.Dialog], dialog_types: list[string]) -> list[domain.Dialog]:
+    table = from_dialogs(values)
+    merged = dialogs(table.filter(|record| not (record.get("dialog_type").lower() in dialog_types)))
+    mergeable = table.filter(|record| record.get("dialog_type").lower() in dialog_types)
+    seen_texts := {}
+    for group in mergeable.group(["npc_name"]):
+        texts := []
+        for record in group.rows():
+            text = record.get("text")
+            if not seen_texts.get(text, false):
+                texts.append(text)
+                seen_texts[text] = true
+        if size(texts) > 0:
+            combined := to_dialog(group.rows()[0])
+            combined.text = texts.join(" ").strip()
+            if size(combined.text) > 0:
+                merged.append(combined)
+    return merged
+
+test "dialog tables group and merge selected text types in source order":
+    rows = [
+        domain.Dialog("Book", "", "", "vanilla", "", "item_text", "", "Page one.", "", false, ""),
+        domain.Dialog("Guard", "", "", "vanilla", "", "gossip", "", "Halt!", "", false, ""),
+        domain.Dialog("Book", "", "", "vanilla", "", "item_text", "", "Page two.", "", false, ""),
+    ]
+    merged = merge_text_rows(rows, ["item_text"])
+    assert(size(merged) == 2)
+    assert(merged[1].text == "Page one. Page two.")

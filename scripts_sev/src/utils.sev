@@ -1,71 +1,47 @@
-def collapseSpaces(text: string) -> string:
-    output := ""
-    previousSpace := false
-    for character in text.characters():
-        isSpace = character == " " or character == "\t" or character == "\r"
-        if isSpace:
-            if not previousSpace:
-                output += " "
-            previousSpace = true
-        else:
-            output += character
-            previousSpace = false
-    return output.strip()
+import hash
+import regex
 
-def normalizeName(name: string) -> string:
+def remove_parenthetical_suffixes(value: string) -> string:
     output := ""
-    parenthesisDepth := 0
-    for character in name.characters():
-        if character == "(":
-            parenthesisDepth += 1
-        else character == ")" and parenthesisDepth > 0:
-            parenthesisDepth -= 1
-        else parenthesisDepth == 0 and character != "\"" and character != "'" and character != "\\":
-            output += character
-    return collapseSpaces(output)
-
-def sanitizeFilename(name: string) -> string:
-    output := ""
-    previousSeparator := false
-    allowed = "abcdefghijklmnopqrstuvwxyz0123456789_-"
-    for rawCharacter in name.lower().characters():
-        if allowed.find(rawCharacter) >= 0:
-            output += rawCharacter
-            previousSeparator = false
+    index := 0
+    while index < size(value):
+        if value[index] == "(":
+            while size(output) > 0 and output.ends_with(" "):
+                output = output[0:-1]
+            index += 1
+            while index < size(value) and value[index] != ")":
+                index += 1
+            if index < size(value):
+                index += 1
         else:
-            if not previousSeparator and size(output) > 0:
-                output += "_"
-            previousSeparator = true
-    while output.endsWith("_"):
-        output = output[0:-1]
+            output += value[index]
+            index += 1
     return output
 
-def removeAudioCues(text: string) -> string:
-    output := ""
-    squareDepth := 0
-    roundDepth := 0
-    angleDepth := 0
-    inAsterisks := false
-    for character in text.characters():
-        if character == "[":
-            squareDepth += 1
-        else character == "]" and squareDepth > 0:
-            squareDepth -= 1
-        else character == "(":
-            roundDepth += 1
-        else character == ")" and roundDepth > 0:
-            roundDepth -= 1
-        else character == "<":
-            angleDepth += 1
-        else character == ">" and angleDepth > 0:
-            angleDepth -= 1
-        else character == "*":
-            inAsterisks = not inAsterisks
-        else squareDepth == 0 and roundDepth == 0 and angleDepth == 0 and not inAsterisks:
-            output += character
-    return collapseSpaces(output)
+def normalize_name(name: string) -> string:
+    return remove_parenthetical_suffixes(name).trim_prefix("\\").strip().remove("’\"'")
 
-def replaceGenderToken(text: string) -> string:
+def is_short_sound_line(line: string) -> bool:
+    stripped = line.strip()
+    if size(stripped) == 0:
+        return false
+    letters := 0
+    for character in stripped.lower().characters():
+        if character.is_alpha():
+            letters += 1
+        else character != "." and character != "!" and character != "?" and character != "…":
+            return false
+    return letters >= 1 and letters <= 4
+
+def remove_audio_cues(text: string) -> string:
+    cleaned = regex.sub("\\[[^]]*\\]|\\([^)]*\\)|<[^>]*>|\\*[^*]*\\*", "", text)
+    return "\n".join(cleaned.split_lines().filter(|line| not is_audio_cue_line(line)))
+
+def is_audio_cue_line(line: string) -> bool:
+    lowered = line.strip().lower()
+    return lowered.starts_with("sfx:") or lowered.starts_with("audio:") or lowered.starts_with("sound:") or is_short_sound_line(line)
+
+def replace_gender_token(text: string) -> string:
     output := ""
     index := 0
     while index < size(text):
@@ -81,47 +57,90 @@ def replaceGenderToken(text: string) -> string:
             index += 1
     return output
 
-def normalizeDialogText(text: string) -> string:
-    normalized := text.replace("$B", "\n").replace("$b", "\n")
-    normalized = replaceGenderToken(normalized)
-    normalized = normalized.replace("$N", "adventurer").replace("$n", "adventurer")
-    normalized = normalized.replace("$R", "adventurer").replace("$r", "adventurer")
-    normalized = normalized.replace("$C", "adventurer").replace("$c", "adventurer")
-    normalized = normalized.replace("$L", "adventurer").replace("$l", "adventurer")
-    return removeAudioCues(normalized)
+def is_boundary(character: string) -> bool:
+    return character == " " or character == "\t" or character == "\r" or character == "\n" or character == "." or character == "?" or character == "!" or character == ";"
 
-def normalizeTextForMatching(text: string) -> string:
-    normalized = normalizeDialogText(text).lower()
+def replace_lad_lass_token(text: string) -> string:
     output := ""
-    allowed = "abcdefghijklmnopqrstuvwxyz0123456789 "
+    index := 0
+    while index < size(text):
+        tail = text[index:].lower()
+        token_size := 0
+        if tail.starts_with("$lass"):
+            token_size = 5
+        else tail.starts_with("$lad"):
+            token_size = 4
+        if token_size > 0 and (index + token_size == size(text) or is_boundary(text[index + token_size])):
+            output += "adventurer"
+            index += token_size
+            while index < size(text) and text[index] != "." and text[index] != "?" and text[index] != "!" and text[index] != ";" and text[index] != "\n":
+                index += 1
+        else:
+            output += text[index]
+            index += 1
+    return output
+
+def replace_wow_tokens(text: string) -> string:
+    output := ""
+    index := 0
+    while index < size(text):
+        if text[index] == "$" and index + 1 < size(text):
+            token = text[index + 1].lower()
+            if token == "n" or token == "r" or token == "c":
+                output += "adventurer"
+                index += 2
+            else:
+                index += 2
+                while index < size(text) and text[index].is_word():
+                    index += 1
+        else:
+            output += text[index]
+            index += 1
+    return output
+
+def collapse_blank_lines(text: string) -> string:
+    output := text
+    while output.find("\n\n\n") >= 0:
+        output = output.replace("\n\n\n", "\n\n")
+    return output
+
+def normalize_dialog_text(text: string) -> string:
+    normalized := text.replace("$B", "\n").replace("$b", "\n")
+    normalized = remove_audio_cues(normalized)
+    normalized = replace_lad_lass_token(normalized)
+    normalized = replace_gender_token(normalized)
+    normalized = replace_wow_tokens(normalized)
+    return collapse_blank_lines(normalized.collapse_horizontal_space()).strip()
+
+def normalize_text_for_matching(text: string) -> string:
+    normalized = normalize_dialog_text(text).lower().replace("\n", " ")
+    output := ""
     for character in normalized.characters():
-        if allowed.find(character) >= 0:
+        if character.is_word() or character == " ":
             output += character
         else:
             output += " "
-    return collapseSpaces(output)
+    return output.collapse_space()
 
-def createTextHash(text: string) -> string:
-    normalized = normalizeTextForMatching(text)
+def create_text_hash(text: string) -> string:
+    normalized = normalize_text_for_matching(text)
     if size(normalized) <= 50:
         return normalized
     return normalized[0:50]
 
-def createDialogSignature(text: string, race: string, sex: string) -> string:
-    return normalizeTextForMatching(text) + "|" + race.lower() + "|" + sex.lower()
+def create_dialog_signature(text: string, race: string, sex: string) -> string:
+    signature = text.strip() + "|" + (race if size(race) > 0 else "unknown") + "|" + (sex if size(sex) > 0 else "unknown")
+    return hash.md5(signature)[0:16]
 
-def shellQuote(value: string) -> string:
-    return "'" + value.replace("'", "'\"'\"'") + "'"
+test "names match Python behavior":
+    assert(normalize_name("  Thrall (Warchief)  ") == "Thrall")
+    assert(normalize_name("\\Jaina’s \"Image\"") == "Jainas Image")
 
-test "names and filenames match Python adapter behavior":
-    assert(normalizeName("  Thrall (Warchief)  ") == "Thrall")
-    assert(normalizeName("Jaina's \"Image\"") == "Jainas Image")
-    assert(sanitizeFilename("High Overlord Saurfang!") == "high_overlord_saurfang")
-
-test "dialog tokens and cues become speech-safe text":
-    value = normalizeDialogText("<Thrall laughs.> Honor, $N.$B$GHe:She; stands ready.")
+test "dialog normalization handles cues and every WoW token class":
+    value = normalize_dialog_text("<Thrall laughs.> Honor, $N.$B$GHe:She; stands ready.")
     assert(value == "Honor, adventurer.\nadventurer stands ready.")
-    assert(createTextHash("Hello, HERO!!!") == "hello hero")
+    assert(normalize_dialog_text("[bell] $lad of Stormwind, report!") == "adventurer!")
+    assert(create_text_hash("Hello, HERO!!!") == "hello hero")
 
-test "shell quoting cannot terminate the argument":
-    assert(shellQuote("Lok'tar") == "'Lok'\"'\"'tar'")
+test "dialog signatures are Python-compatible MD5 prefixes":
+    assert(create_dialog_signature("Hello", "human", "male") == "1fd8e3e78b65e5ce")

@@ -1,40 +1,74 @@
 import "src/domain.sev" as domain
-import "src/utils.sev" as utils
 
-native("system") def system(command: string) -> int
+class BackendError:
+    message: string
 
-def buildCommand(request: domain.GenerationRequest) -> string:
-    command := "PYENV_VERSION=betterquest /home/tplayer/.pyenv/shims/omnivoice-infer"
-    command += " --text " + utils.shellQuote(request.text)
-    command += " --output " + utils.shellQuote(request.outputPath)
-    command += " --ref_audio " + utils.shellQuote(request.referenceAudio)
-    command += " --ref_text " + utils.shellQuote(request.referenceText)
-    command += " --language " + utils.shellQuote(request.language)
-    command += " --num_step " + string(request.steps)
-    command += " --device " + utils.shellQuote(request.device)
-    command += " --position_temperature 0"
-    command += " --class_temperature 0"
-    return command
+trait SpeechBackend:
+    sampling_rate() -> int
+    generate(_request: domain.GenerationRequest) -> Result[domain.AudioSamples, BackendError]
 
-def ensureDirectory(path: string) -> int:
-    return system("mkdir -p " + utils.shellQuote(path))
+class DisabledBackend: SpeechBackend
+    def sampling_rate() -> int:
+        return 24000
 
-def stageFirstNpcRow(sourcePath: string, destinationPath: string, npcName: string) -> int:
-    command := "head -n 1 " + utils.shellQuote(sourcePath) + " > " + utils.shellQuote(destinationPath)
-    command += "; grep -m 1 " + utils.shellQuote("^" + npcName + ",") + " " + utils.shellQuote(sourcePath) + " >> " + utils.shellQuote(destinationPath)
-    return system(command)
+    def generate(_request: domain.GenerationRequest) -> Result[domain.AudioSamples, BackendError]:
+        return failure(BackendError("audio generation is disabled"))
 
-def generate(request: domain.GenerationRequest) -> int:
-    return system(buildCommand(request))
+class OmniVoiceBackend: SpeechBackend
+    model_name: string
+    device: string
+    language: string
+    num_step: int
+    speed: float
+    asr_model_name: string
 
-test "OmniVoice command carries every typed request field":
-    request = domain.GenerationRequest("Thrall", "orc", "Lok'tar, friend.", "samples/orc.wav", "Everything the light touches is our kingdom.", "output/thrall.wav", "English", 4, "cpu")
-    command = buildCommand(request)
-    assert(command.find("omnivoice-infer") >= 0)
-    assert(command.find("--ref_audio 'samples/orc.wav'") >= 0)
-    assert(command.find("--ref_text 'Everything the light touches is our kingdom.'") >= 0)
-    assert(command.find("--num_step 4") >= 0)
-    assert(command.find("--device 'cpu'") >= 0)
-    assert(command.find("--position_temperature 0") >= 0)
-    assert(command.find("--class_temperature 0") >= 0)
-    assert(command.find("'Lok'\"'\"'tar, friend.'") >= 0)
+    def sampling_rate() -> int:
+        return 24000
+
+    def generate(_request: domain.GenerationRequest) -> Result[domain.AudioSamples, BackendError]:
+        return failure(BackendError(
+            "OmniVoice is not yet implemented by Severian's native model runtime; refusing to invoke Python or a shell fallback",
+        ))
+
+def from_pretrained(
+    model_name: string = "k2-fsa/OmniVoice",
+    device: string = "cuda",
+    language: string = "English",
+    num_step: int = 16,
+    speed: float = 1.0,
+    asr_model_name: string = "openai/whisper-tiny.en",
+) -> OmniVoiceBackend:
+    return OmniVoiceBackend(model_name, device, language, num_step, speed, asr_model_name)
+
+class DeterministicBackend: SpeechBackend
+    rate: int
+    output: list[float]
+
+    def sampling_rate() -> int:
+        return rate
+
+    def generate(_request: domain.GenerationRequest) -> Result[domain.AudioSamples, BackendError]:
+        return domain.AudioSamples(output, rate)
+
+test "native boundary fails explicitly instead of spawning Python":
+    backend = from_pretrained()
+    request = domain.GenerationRequest("hello", "samples/human.wav")
+    switch backend.generate(request):
+        ok _audio:
+            assert(false, "native OmniVoice should not be represented as implemented yet")
+        failure error:
+            assert(error.message.find("refusing to invoke Python") >= 0)
+
+test "speech backends are testable without external model processes":
+    backend = DeterministicBackend(24000, [0.0, 0.5, -0.5])
+    audio ?= backend.generate(domain.GenerationRequest("hello", "sample.wav"))
+    assert(audio.sample_rate == 24000)
+    assert(audio.samples == [0.0, 0.5, -0.5])
+
+test "disabled backend is safe for skip-audio pipeline runs":
+    backend = DisabledBackend()
+    switch backend.generate(domain.GenerationRequest("hello", "sample.wav")):
+        ok _audio:
+            assert(false)
+        failure error:
+            assert(error.message == "audio generation is disabled")

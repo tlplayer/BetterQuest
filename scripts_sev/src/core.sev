@@ -1,146 +1,331 @@
+import file
+import process
+import time
+import "src/db_adapter.sev" as db_adapter
 import "src/domain.sev" as domain
-import "src/utils.sev" as utils
 import "src/extract.sev" as extract
-import "src/game_adapter.sev" as gameAdapter
-import "src/db_adapter.sev" as dbAdapter
+import "src/game_adapter.sev" as game_adapter
 import "src/generator.sev" as generator
-import "src/omnivoice_backend.sev" as omnivoice
+import "src/omnivoice_backend.sev" as omnivoice_backend
+import "src/utils.sev" as utils
 
-native("__sev_file_read") def fileRead(path: string) -> Result[string, IOError]
-native("__sev_file_write") def fileWrite(path: string, contents: string) -> Result[unit, IOError]
-
-def readRequired(path: string) -> string:
-    switch fileRead(path):
-        ok contents:
-            return contents
-        failure error:
-            print("Could not read", path, error)
-            return ""
-
-def writeRequired(path: string, contents: string) -> bool:
-    switch fileWrite(path, contents):
-        ok:
-            return true
-        failure error:
-            print("Could not write", path, error)
-            return false
-
-def runPipeline(csvPath: string, racePath: string, sexPath: string, samplesDirectory: string, outputDirectory: string, npcName: string, limit: int, executeAudio: bool) -> domain.PipelineReport:
-    rows = extract.parseDialogCsv(readRequired(csvPath))
-    races = dbAdapter.parseCategoryYaml(readRequired(racePath))
-    sexes = dbAdapter.parseCategoryYaml(readRequired(sexPath))
-    filtered = generator.filterDialogs(rows, npcName, "", "vanilla", limit)
-    normalized := []
-    for row in filtered:
-        normalized.append(domain.Dialog(
-            row.npcName,
-            row.sex,
-            row.zone,
-            row.expansion,
-            row.clientVersion,
-            row.dialogType,
-            row.questId,
-            utils.normalizeDialogText(row.text),
-        ))
-    unique = generator.deduplicateDialogs(normalized, races, sexes)
-    if size(unique) == 0:
-        return domain.PipelineReport(size(rows), size(filtered), 0, 0, "", 1)
-    row = unique[0]
-    request = generator.generationRequest(row, races, sexes, samplesDirectory, outputDirectory, 4, "cpu")
-    metadata = dbAdapter.metadataFor(row.npcName, races, sexes, {})
-    luaPath = outputDirectory + "/trial_npc_database.lua"
-    lua = dbAdapter.renderLuaDatabase([row], [metadata], [request.outputPath])
-    directoryStatus = omnivoice.ensureDirectory(outputDirectory)
-    wroteLua = writeRequired(luaPath, lua)
-    if directoryStatus != 0 or not wroteLua:
-        return domain.PipelineReport(size(rows), size(filtered), size(unique), 0, request.outputPath, 1)
-    status := 0
-    generated := 0
-    if executeAudio:
-        status = omnivoice.generate(request)
-        if status == 0:
-            generated = 1
-    return domain.PipelineReport(size(rows), size(filtered), size(unique), generated, request.outputPath, status)
-
-def main():
-    print("BetterQuest Severian trial: production data -> OmniVoice -> WAV")
-    stagedCsv = "scripts_sev/output/trial_dialog.csv"
-    directoryStatus = omnivoice.ensureDirectory("scripts_sev/output")
-    stageStatus = omnivoice.stageFirstNpcRow("data/all_npc_dialog.csv", stagedCsv, "Thrall")
-    if directoryStatus != 0 or stageStatus != 0:
-        print("Could not stage the production CSV row")
-        return
-    report = runPipeline(
-        stagedCsv,
+def database_config() -> domain.DatabaseConfig:
+    return domain.DatabaseConfig(
+        "data/npc_metadata.json",
         "data/npc_race.yaml",
         "data/npc_sex.yaml",
-        "samples",
-        "scripts_sev/output",
-        "Thrall",
-        1,
-        true,
+        "data/npc_zone.yaml",
+        "data/missing_race.yaml",
+        "db/npc_database.lua",
+        "sounds",
     )
-    print("source rows:", report.sourceRows)
-    print("filtered rows:", report.filteredRows)
-    print("unique rows:", report.uniqueRows)
-    print("generated rows:", report.generatedRows)
-    print("audio:", report.outputPath)
-    if report.commandStatus != 0:
-        print("OmniVoice failed with status", report.commandStatus)
 
-test "pipeline can run production-shaped data without invoking the model":
-    csvPath = "/tmp/betterquest-severian-dialog.csv"
-    racePath = "/tmp/betterquest-severian-race.yaml"
-    sexPath = "/tmp/betterquest-severian-sex.yaml"
-    outputDirectory = "/tmp/betterquest-severian-output"
-    csv = "npc_name,sex,zone,expansion,client_version,dialog_type,quest_id,text\nThrall,0,Durotar,vanilla,1.12.1,gossip,4974,\"Honor, $N!\"\n"
-    assert(writeRequired(csvPath, csv))
-    assert(writeRequired(racePath, "orc:\n- Thrall\n"))
-    assert(writeRequired(sexPath, "male:\n- Thrall\n"))
-    report = runPipeline(csvPath, racePath, sexPath, "samples", outputDirectory, "Thrall", 1, false)
-    assert(report.sourceRows == 1)
-    assert(report.filteredRows == 1)
-    assert(report.uniqueRows == 1)
-    assert(report.generatedRows == 0)
-    assert(report.commandStatus == 0)
-    assert(report.outputPath.endsWith("thrall_4974_gossip.wav"))
+def default_options() -> domain.CliOptions:
+    return domain.CliOptions(
+        "", "", "", [], [], "", "", 0,
+        false, "", "cuda", "k2-fsa/OmniVoice", "English", 16, 1.0,
+        "openai/whisper-tiny.en", false, false, false,
+        0.85, 5, 10, 3, 10, false, 5, "../../../../WTF",
+    )
 
-test "pipeline reports an empty filter without touching audio":
-    csvPath = "/tmp/betterquest-severian-empty-dialog.csv"
-    racePath = "/tmp/betterquest-severian-empty-race.yaml"
-    sexPath = "/tmp/betterquest-severian-empty-sex.yaml"
-    csv = "npc_name,sex,zone,expansion,client_version,dialog_type,quest_id,text\nJaina,1,Stormwind,vanilla,1.12.1,gossip,,Welcome\n"
-    assert(writeRequired(csvPath, csv))
-    assert(writeRequired(racePath, "human:\n- Jaina\n"))
-    assert(writeRequired(sexPath, "female:\n- Jaina\n"))
-    report = runPipeline(csvPath, racePath, sexPath, "samples", "/tmp/betterquest-severian-empty-output", "Thrall", 1, false)
-    assert(report.filteredRows == 0)
-    assert(report.uniqueRows == 0)
-    assert(report.commandStatus == 1)
+def parse_decimal(value: string, fallback: float) -> float:
+    text = value.strip()
+    if size(text) == 0:
+        return fallback
+    negative := false
+    index := 0
+    if text[0] == "-":
+        negative = true
+        index = 1
+    whole := 0
+    fraction := 0
+    scale := 1
+    decimal := false
+    while index < size(text):
+        character = text[index]
+        if character == "." and not decimal:
+            decimal = true
+        else:
+            digit = "0123456789".find(character)
+            if digit < 0:
+                return fallback
+            if decimal:
+                fraction = fraction * 10 + digit
+                scale *= 10
+            else:
+                whole = whole * 10 + digit
+        index += 1
+    result = float(whole) + float(fraction) / float(scale)
+    return -result if negative else result
 
-test "converted game and extraction adapters retain parity behavior":
-    empty = domain.emptyDialog()
-    assert(empty.npcName == "")
-    lua = "BetterQuestDB = {[\"missingNPCs\"] = {[\"Nazgrel\"] = {[\"text\"] = \"For {the} Horde!\", [\"zone\"] = \"Outland\", [\"dialog_type\"] = \"gossip\"}}}"
-    imported = gameAdapter.extractMissingDialogs(lua)
-    assert(size(imported) == 1)
-    assert(imported[0].npcName == "Nazgrel")
-    assert(imported[0].text == "For {the} Horde!")
-    exclusions = ["dies.", "begins to cast"]
-    assert(extract.isCleanText("For the Horde!", exclusions))
-    assert(not extract.isCleanText("The guard dies.", exclusions))
-    assert(size(extract.detectRegressions(imported, [])) == 1)
-    assert(size(extract.detectRegressions(imported, imported)) == 0)
+def integer_value(value: string, fallback: int) -> int:
+    switch int.parse(value):
+        ok parsed:
+            return parsed
+        failure _error:
+            return fallback
 
-test "converted generator and model boundary produce a complete request":
-    row = domain.Dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "4974", "Honor, $N!")
-    races = {"Thrall": "orc"}
-    sexes = {"Thrall": "male"}
-    request = generator.generationRequest(row, races, sexes, "samples", "scripts_sev/output", 4, "cpu")
-    assert(request.text == "Honor, adventurer!")
-    assert(request.referenceAudio == "samples/orc.wav")
-    assert(request.outputPath.endsWith("thrall_4974_gossip.wav"))
-    command = omnivoice.buildCommand(request)
-    assert(command.find("omnivoice-infer") >= 0)
-    assert(command.find("--ref_audio 'samples/orc.wav'") >= 0)
-    assert(generator.chunkTextRobust("one two three four five six", 9) == ["one two", "three", "four five", "six"])
+def add_requested_values(destination: list[string], raw: string):
+    for value in raw.split(","):
+        normalized = value.strip().lower().replace("_", " ")
+        if size(normalized) > 0 and not (normalized in destination):
+            destination.append(normalized)
+
+def parse_args(arguments: list[string]) -> domain.CliOptions:
+    options := default_options()
+    index := 1
+    while index < size(arguments):
+        argument = arguments[index]
+        has_value = index + 1 < size(arguments)
+        if argument == "--race" and has_value:
+            options.race = arguments[index + 1]
+            index += 2
+        else argument == "--sex" and has_value:
+            options.sex = arguments[index + 1]
+            index += 2
+        else argument == "--npc" and has_value:
+            options.npc = arguments[index + 1]
+            index += 2
+        else argument == "--zone" and has_value:
+            add_requested_values(options.zones, arguments[index + 1])
+            index += 2
+        else argument == "--expansion" and has_value:
+            add_requested_values(options.expansions, arguments[index + 1])
+            index += 2
+        else argument == "--type" and has_value:
+            options.dialog_type = arguments[index + 1]
+            index += 2
+        else argument == "--narrator" and has_value:
+            options.narrator = arguments[index + 1]
+            index += 2
+        else argument == "--limit" and has_value:
+            options.limit = integer_value(arguments[index + 1], 0)
+            index += 2
+        else argument == "--time" and has_value:
+            options.time_cutoff = arguments[index + 1]
+            index += 2
+        else argument == "--device" and has_value:
+            options.device = arguments[index + 1]
+            index += 2
+        else argument == "--tts-model" and has_value:
+            options.tts_model = arguments[index + 1]
+            index += 2
+        else argument == "--tts-language" and has_value:
+            options.tts_language = arguments[index + 1]
+            index += 2
+        else argument == "--tts-steps" and has_value:
+            options.tts_steps = integer_value(arguments[index + 1], 16)
+            index += 2
+        else argument == "--tts-speed" and has_value:
+            options.tts_speed = parse_decimal(arguments[index + 1], 1.0)
+            index += 2
+        else argument == "--asr-model" and has_value:
+            options.asr_model = arguments[index + 1]
+            index += 2
+        else argument == "--gpu-threshold" and has_value:
+            options.gpu_threshold = parse_decimal(arguments[index + 1], 0.85)
+            index += 2
+        else argument == "--gpu-wait" and has_value:
+            options.gpu_wait = integer_value(arguments[index + 1], 5)
+            index += 2
+        else argument == "--gpu-check-interval" and has_value:
+            options.gpu_check_interval = integer_value(arguments[index + 1], 10)
+            index += 2
+        else argument == "--max-retries" and has_value:
+            options.max_retries = integer_value(arguments[index + 1], 3)
+            index += 2
+        else argument == "--retry-wait" and has_value:
+            options.retry_wait = integer_value(arguments[index + 1], 10)
+            index += 2
+        else argument == "--daemon-interval" and has_value:
+            options.daemon_interval = integer_value(arguments[index + 1], 5)
+            index += 2
+        else argument == "--wtf-path" and has_value:
+            options.wtf_path = arguments[index + 1]
+            index += 2
+        else argument == "--regenerate":
+            options.regenerate = true
+            index += 1
+        else argument == "--skip-sync":
+            options.skip_sync = true
+            index += 1
+        else argument == "--skip-audio":
+            options.skip_audio = true
+            index += 1
+        else argument == "--skip-metadata":
+            options.skip_metadata = true
+            index += 1
+        else argument == "--daemon":
+            options.daemon = true
+            index += 1
+        else:
+            print("[WARNING] Ignoring unknown or incomplete option:", argument)
+            index += 1
+    return options
+
+def load_csv(csv_path: string) -> list[domain.Dialog]:
+    switch file.read(csv_path):
+        ok loaded_file:
+            rows: list[list[string]] = loaded_file.value()
+            return extract.parse_dialog_rows(rows)
+        failure error:
+            print("[ERROR] Could not read dialog CSV:", error)
+            return []
+
+def normalized_filter_value(value: string) -> string:
+    return value.lower().replace("_", " ").strip()
+
+def filter_rows(
+    rows: list[domain.Dialog],
+    options: domain.CliOptions,
+    npc_lookup: map[string, domain.NpcMetadata],
+) -> list[domain.Dialog]:
+    output := []
+    for row in rows:
+        metadata = npc_lookup.get(row.npc_name, domain.NpcMetadata("", "", "", "", ""))
+        if size(options.npc) > 0 and row.npc_name != options.npc:
+            continue
+        if size(options.dialog_type) > 0 and row.dialog_type != options.dialog_type:
+            continue
+        if size(options.race) > 0 and metadata.race != options.race:
+            continue
+        if size(options.sex) > 0 and metadata.sex != options.sex:
+            continue
+        if size(options.zones) > 0:
+            zone := normalized_filter_value(row.zone)
+            if size(zone) == 0:
+                zone = normalized_filter_value(metadata.zone)
+            if not (zone in options.zones):
+                continue
+        if size(options.expansions) > 0 and not (normalized_filter_value(row.expansion) in options.expansions):
+            continue
+        output.append(domain.copy_dialog(row))
+        if options.limit > 0 and size(output) >= options.limit:
+            break
+    return output
+
+def prepare_for_generation(rows: list[domain.Dialog]) -> list[domain.Dialog]:
+    normalized := []
+    seen := {}
+    for source in rows:
+        key = source.npc_name + "|" + source.text
+        if seen.get(key, false):
+            continue
+        row := domain.copy_dialog(source)
+        row.text = utils.normalize_dialog_text(row.text)
+        if size(row.text) > 0:
+            normalized.append(row)
+            seen[key] = true
+    return generator.merge_item_text_rows(normalized)
+
+def cutoff_seconds(value: string) -> float:
+    if size(value) == 0:
+        return -1.0
+    switch time.parse_date(value):
+        ok timestamp:
+            return timestamp
+        failure error:
+            print("[WARNING] Invalid --time value:", error)
+            return -1.0
+
+def run_pipeline(
+    options: domain.CliOptions,
+    npc_lookup: map[string, domain.NpcMetadata],
+    references: map[string, domain.ReferenceCode],
+    backend: omnivoice_backend.SpeechBackend,
+    betterquest_path: string,
+) -> domain.PipelineReport:
+    csv_path = "data/all_npc_dialog.csv"
+    new_rows := 0
+    if not options.skip_sync:
+        new_rows = game_adapter.sync_game_data(csv_path, betterquest_path)
+    else:
+        print("=== STEP 1: Syncing game data [SKIPPED] ===")
+    full = load_csv(csv_path)
+    generated := 0
+    filtered := 0
+    if not options.skip_audio:
+        selected := filter_rows(full, options, npc_lookup)
+        filtered = size(selected)
+        if options.daemon and new_rows > 0 and new_rows < size(selected):
+            selected = selected[size(selected) - new_rows:] + selected[0:size(selected) - new_rows]
+        prepared = generator.deduplicate_dialogs(prepare_for_generation(selected), npc_lookup)
+        generation_options = domain.GenerationOptions(
+            "sounds", options.narrator, options.regenerate, cutoff_seconds(options.time_cutoff),
+            false, options.max_retries, options.retry_wait, database_config(),
+        )
+        results = generator.generate_audio(prepared, backend, references, npc_lookup, generation_options)
+        for result in results:
+            if result.status == "generated":
+                generated += 1
+    else:
+        print("=== STEP 2: Generating TTS audio [SKIPPED] ===")
+    if not options.skip_metadata:
+        metadata_rows := []
+        for source in full:
+            row := domain.copy_dialog(source)
+            row.text = utils.normalize_dialog_text(row.text)
+            metadata_rows.append(row)
+        _synced = db_adapter.sync_metadata(metadata_rows, npc_lookup, database_config())
+    else:
+        print("=== STEP 3: Syncing metadata [SKIPPED] ===")
+    print("PIPELINE COMPLETE")
+    return domain.PipelineReport(size(full), filtered, generated, new_rows, 0)
+
+def run_daemon(
+    options: domain.CliOptions,
+    npc_lookup: map[string, domain.NpcMetadata],
+    references: map[string, domain.ReferenceCode],
+    backend: omnivoice_backend.SpeechBackend,
+):
+    betterquest_path = game_adapter.find_betterquest_file(options.wtf_path)
+    if size(betterquest_path) == 0:
+        print("[ERROR] BetterQuest.lua not found under", options.wtf_path)
+        return
+    print("[DAEMON] Monitoring:", betterquest_path)
+    modified := game_adapter.mtime_or_negative(betterquest_path)
+    while true:
+        time.sleep(float(options.daemon_interval))
+        current = game_adapter.mtime_or_negative(betterquest_path)
+        if current > modified:
+            modified = current
+            _report = run_pipeline(options, npc_lookup, references, backend, betterquest_path)
+
+def main():
+    options = parse_args(process.arguments())
+    print("UNIFIED TTS PIPELINE")
+    config = database_config()
+    print("[STARTUP] Loading NPC metadata")
+    npc_lookup = db_adapter.load_npc_metadata(config.npc_metadata_json, config.race_file, config.sex_file, config.zone_file)
+    print("[STARTUP] Loaded NPC metadata:", size(npc_lookup))
+    print("[STARTUP] Discovering voice references")
+    references = generator.build_ref_codes("samples")
+    print("[STARTUP] Loaded voice references:", size(references))
+    if size(options.narrator) > 0 and not (options.narrator in references.keys()):
+        print("[ERROR] Narrator not found:", options.narrator)
+        process.exit(1)
+    if not options.skip_audio:
+        print("[INFO] Loading", options.tts_model, "on", options.device)
+    backend: omnivoice_backend.SpeechBackend = omnivoice_backend.from_pretrained(options.tts_model, options.device, options.tts_language, options.tts_steps, options.tts_speed, options.asr_model) if not options.skip_audio else omnivoice_backend.DisabledBackend()
+    if options.daemon:
+        run_daemon(options, npc_lookup, references, backend)
+    else:
+        _report = run_pipeline(options, npc_lookup, references, backend, "../../../../WTF/Account/ADMIN/SavedVariables/BetterQuest.lua")
+
+test "CLI parsing supports repeatable comma filters and generation controls":
+    options = parse_args(["betterquest", "--zone", "Elwynn_Forest,Durotar", "--zone", "Nagrand", "--expansion", "vanilla,tbc", "--limit", "4", "--skip-audio", "--tts-speed", "1.15"])
+    assert(options.zones == ["elwynn forest", "durotar", "nagrand"])
+    assert(options.expansions == ["vanilla", "tbc"])
+    assert(options.limit == 4)
+    assert(options.skip_audio)
+    assert(options.tts_speed == 1.15)
+
+test "filtering uses metadata zone fallback and preparation deduplicates normalized rows":
+    metadata = {"Thrall": domain.NpcMetadata("Thrall", "orc", "male", "Durotar", "")}
+    rows = [domain.dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "", "Honor, $N!"), domain.dialog("Thrall", "0", "", "vanilla", "1.12.1", "gossip", "", "Honor, $N!")]
+    options := default_options()
+    options.zones.append("durotar")
+    selected = filter_rows(rows, options, metadata)
+    prepared = prepare_for_generation(selected)
+    assert(size(prepared) == 1)
+    assert(prepared[0].text == "Honor, adventurer!")
