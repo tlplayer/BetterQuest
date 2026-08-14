@@ -21,8 +21,9 @@ Implemented in `.sev`:
   broadcasts, investigation CSV output, and source-of-truth regression checks;
 - the Python CLI filters, skip flags, generation controls, and daemon workflow.
 
-CSV parsing stays with `file.read(...)`/`csv.CSV`; schema, filtering, grouping,
-indexing, and uniqueness use the format-independent `data.Data` layer. Shared
+Decoded JSON, YAML, and CSV values load through extension-aware `file.load(...)`;
+document mutation and raw binary access stay with `file.read(...)`. Schema,
+filtering, grouping, indexing, and uniqueness use the format-independent `data.Data` layer. Shared
 dialog/table conversion lives in `src/dialog_data.sev`, and filesystem metadata
 and directory operations use `os`/`path` rather than the `file` content API.
 

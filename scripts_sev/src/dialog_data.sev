@@ -47,24 +47,37 @@ def dialogs(table: data.Data) -> list[domain.Dialog]:
         values.append(to_dialog(row))
     return values
 
+def merge_columns() -> list[string]:
+    return ["npc_name", "sex", "zone", "expansion", "client_version", "dialog_type", "quest_id"]
+
+def merge_text_group(group: data.Data) -> data.Row:
+    seen := {}
+    texts := []
+    for record in group.rows():
+        text = record.get("text").strip()
+        if not seen.get(text, false):
+            texts.append(text)
+            seen[text] = true
+    combined := to_dialog(group.rows()[0])
+    combined.text = texts.join(" ")
+    return row(combined)
+
 def merge_text_rows(values: list[domain.Dialog], dialog_types: list[string]) -> list[domain.Dialog]:
-    table = from_dialogs(values)
-    merged = dialogs(table.filter(|record| not (record.get("dialog_type").lower() in dialog_types)))
-    mergeable = table.filter(|record| record.get("dialog_type").lower() in dialog_types)
-    seen_texts := {}
-    for group in mergeable.group(["npc_name"]):
-        texts := []
-        for record in group.rows():
-            text = record.get("text")
-            if not seen_texts.get(text, false):
-                texts.append(text)
-                seen_texts[text] = true
-        if size(texts) > 0:
-            combined := to_dialog(group.rows()[0])
-            combined.text = texts.join(" ").strip()
-            if size(combined.text) > 0:
-                merged.append(combined)
-    return merged
+    normalized_types := []
+    for dialog_type in dialog_types:
+        normalized_types.append(dialog_type.strip().lower())
+    table = from_dialogs(values).filter(
+        |record| not (
+            record.get("dialog_type").strip().lower() in normalized_types
+            and size(record.get("text").strip()) == 0
+        )
+    )
+    merged = table.group_merge(
+        |record| record.get("dialog_type").strip().lower() in normalized_types,
+        merge_columns(),
+        |group| merge_text_group(group),
+    )
+    return dialogs(merged)
 
 test "dialog tables group and merge selected text types in source order":
     rows = [
@@ -74,4 +87,18 @@ test "dialog tables group and merge selected text types in source order":
     ]
     merged = merge_text_rows(rows, ["item_text"])
     assert(size(merged) == 2)
-    assert(merged[1].text == "Page one. Page two.")
+    assert(merged[0].text == "Page one. Page two.")
+    assert(merged[1].npc_name == "Guard")
+
+test "dialog text merging scopes uniqueness and metadata to each group":
+    rows = [
+        domain.Dialog("Book", "", "Durotar", "vanilla", "1.12.1", "item_text", "1", "Shared.", "", false, ""),
+        domain.Dialog("Letter", "", "Durotar", "vanilla", "1.12.1", "item_text", "2", "Shared.", "", false, ""),
+        domain.Dialog("Book", "", "Durotar", "vanilla", "1.12.1", "item_text", "1", "Continued.", "", false, ""),
+        domain.Dialog("Book", "", "Elwynn", "vanilla", "1.12.1", "item_text", "1", "Other zone.", "", false, ""),
+    ]
+    merged = merge_text_rows(rows, [" ITEM_TEXT "])
+    assert(size(merged) == 3)
+    assert(merged[0].text == "Shared. Continued.")
+    assert(merged[1].text == "Shared.")
+    assert(merged[2].text == "Other zone.")

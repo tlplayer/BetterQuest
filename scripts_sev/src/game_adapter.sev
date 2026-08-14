@@ -274,8 +274,7 @@ def extract_missing_npcs_from_lua(lua_text: string) -> list[domain.Dialog]:
 def ensure_csv_schema(csv_path: string) -> Result[data.Data, exception]:
     loaded_csv := csv.CSV(csv_path, [])
     if os.exists(csv_path):
-        loaded_file = file.read(csv_path)
-        rows: list[list[string]] = loaded_file.value()
+        rows: list[list[string]] = file.load(csv_path)
         loaded_csv = csv.CSV(csv_path, rows)
     original = loaded_csv.data()
     table = original.require_columns(dialog_data.columns())

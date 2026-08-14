@@ -267,8 +267,7 @@ def extract_all_dialog(config: domain.ExtractionConfig) -> Result[list[domain.Di
         _written = write_text(config.investigation_csv, csv_contents(unknown))
     old_rows := []
     if os.exists(config.output_csv):
-        loaded_file = file.read(config.output_csv)
-        rows: list[list[string]] = loaded_file.value()
+        rows: list[list[string]] = file.load(config.output_csv)
         old_rows = parse_dialog_rows(rows)
     regressions = detect_regressions(old_rows, known)
     if size(regressions) > 0:

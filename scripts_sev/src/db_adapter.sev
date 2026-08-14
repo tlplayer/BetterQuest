@@ -34,8 +34,7 @@ def load_yaml_mapping(file_path: string) -> Result[map[string, string], exceptio
     lookup := {}
     if not os.exists(file_path):
         return lookup
-    loaded_file = file.read(file_path)
-    mapping: map[string, list[string]] = loaded_file.value()
+    mapping: map[string, list[string]] = file.load(file_path)
     for category in mapping.keys():
         for raw_name in mapping[category]:
             normalized = utils.normalize_name(raw_name)
@@ -84,8 +83,7 @@ def load_npc_metadata(
     zone_file: string,
 ) -> Result[map[string, domain.NpcMetadata], exception]:
     lookup := {}
-    source = file.read(json_path)
-    document = source.value()
+    document = file.load(json_path)
     if json.kind(document) == "array":
         values: list[Any] = document
         for value in values:
