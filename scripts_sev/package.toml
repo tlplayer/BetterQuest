@@ -7,18 +7,3 @@ description = "Native Severian conversion of the BetterQuest data and TTS pipeli
 [[bin]]
 name = "betterquest-pipeline"
 path = "src/core.sev"
-
-[dependencies]
-csv = { path = "../../../../../../Documents/Severian/library/csv", version = "0.1.0" }
-data = { path = "../../../../../../Documents/Severian/library/data", version = "0.1.0" }
-file = { path = "../../../../../../Documents/Severian/library/file", version = "0.1.0" }
-hash = { path = "../../../../../../Documents/Severian/library/hash", version = "0.1.0" }
-json = { path = "../../../../../../Documents/Severian/library/json", version = "0.1.0" }
-math = { path = "../../../../../../Documents/Severian/library/math", version = "0.1.0" }
-speech = { package = "model.speech", path = "../../../../../../Documents/Severian/library/model/speech", version = "0.1.0" }
-mysql = { path = "../../../../../../Documents/Severian/library/mysql", version = "0.1.0" }
-os = { path = "../../../../../../Documents/Severian/library/os", version = "0.1.0" }
-path = { path = "../../../../../../Documents/Severian/library/path", version = "0.1.0" }
-process = { path = "../../../../../../Documents/Severian/library/process", version = "0.1.0" }
-regex = { path = "../../../../../../Documents/Severian/library/regex", version = "0.1.0" }
-time = { path = "../../../../../../Documents/Severian/library/time", version = "0.1.0" }

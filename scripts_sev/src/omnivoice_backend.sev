@@ -1,6 +1,6 @@
 import file
 import path
-import speech
+import model.speech as speech
 import "src/domain.sev" as domain
 
 class BackendError:

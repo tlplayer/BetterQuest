@@ -69,7 +69,8 @@ sev run scripts_sev -- --race orc --zone Durotar --type gossip --limit 20
 sev run scripts_sev -- --daemon --wtf-path ../../../../WTF --skip-audio
 ```
 
-The package depends on the accompanying Severian standard-library additions
-for native file/directory operations, MD5, JSON nulls, MariaDB, file locking,
-process arguments, and date parsing. The compiler changes also make conditional
+The pipeline imports Severian's shipped libraries directly; they require no
+entries in this package's dependency manifest. Those libraries provide native
+file/directory operations, MD5, JSON nulls, MariaDB, file locking, process
+arguments, and date parsing. The compiler changes also make conditional
 expressions lazy and complete native lowering for map iteration/access.
