@@ -1,0 +1,133 @@
+import data
+import csv
+import json
+import yaml
+
+def remove_cue(text: string, opening: string, closing: string) -> string:
+    result := ""
+    inside := false
+    cursor := 0
+    while cursor < size(text):
+        character = text[cursor:cursor + 1]
+        if not inside and character == opening:
+            inside = true
+            cursor += 1
+            continue
+        if inside and character == closing:
+            inside = false
+            cursor += 1
+            continue
+        if not inside:
+            result += character
+        cursor += 1
+    return result
+
+def expand_wow_tokens(text: string) -> string:
+    result := ""
+    cursor := 0
+    while cursor < size(text):
+        character = text[cursor:cursor + 1]
+        if character != "$":
+            result += character
+            cursor += 1
+            continue
+        remaining = text[cursor:].lower()
+        if remaining.starts_with("$b"):
+            result += "\n"
+            cursor += 2
+            while cursor < size(text) and text[cursor:cursor + 1].lower() == "b":
+                cursor += 1
+            continue
+        if remaining.starts_with("$lad") or remaining.starts_with("$lass"):
+            result += "adventurer"
+            cursor += 4 if remaining.starts_with("$lad") else 5
+            while cursor < size(text) and text[cursor:cursor + 1] not in [".", "?", "!", ";", "\n"]:
+                cursor += 1
+            continue
+        if size(remaining) >= 2 and remaining[1:2] in ["n", "r", "c"]:
+            result += "adventurer"
+            cursor += 2
+            continue
+        if remaining.starts_with("$g"):
+            result += "adventurer"
+            cursor += 2
+            while cursor < size(text) and text[cursor:cursor + 1] != ";":
+                cursor += 1
+            if cursor < size(text):
+                cursor += 1
+            continue
+        cursor += 1
+        while cursor < size(text) and text[cursor:cursor + 1].lower() in "abcdefghijklmnopqrstuvwxyz0123456789_":
+            cursor += 1
+    return result
+
+def normalize_dialog_text(value: Any) -> Any:
+    text := remove_cue(string(value), "[", "]")
+    text = remove_cue(text, "(", ")")
+    text = remove_cue(text, "<", ">")
+    text = remove_cue(text, "*", "*")
+    text = expand_wow_tokens(text)
+    text = text.replace("\t", " ")
+    while text.contains("  "):
+        text = text.replace("  ", " ")
+    while text.contains("\n\n\n"):
+        text = text.replace("\n\n\n", "\n\n")
+    return text.strip()
+
+def normalize_dialogs(columns: list[string], source_rows: list[list[Any]]) -> data.Data:
+    text_position := -1
+    for index, column in enumerate(columns):
+        if column == "text":
+            text_position = index
+    rows: list[list[Any]] := []
+    for original in source_rows:
+        values: list[Any] := []
+        for index in range(int(size(original))):
+            if index == text_position:
+                values.append(normalize_dialog_text(original[index]))
+            else:
+                values.append(original[index])
+        rows.append(values)
+    return data.Data(columns, rows)
+
+def prepare_dialogs(path: string) -> data.Data:
+    dialogs := data.table(csv.read(path))
+        .where_not_empty("text")
+        .unique(["npc_name", "text"])
+    prepared := dialogs
+        .lower("dialog_type")
+        .collapse_text("dialog_type", ["item_text"], ["npc_name"], "text")
+    return normalize_dialogs(prepared.columns(), prepared.values())
+
+def metadata(path: string) -> data.Data:
+    return data.table(json.read(path))
+
+def overrides(path: string) -> data.Data:
+    return data.table(yaml.read(path))
+
+test "all BetterQuest NPC data follows the Python preparation pipeline":
+    root = "/home/tplayer/Applications/wow/Interface/AddOns/BetterQuest/data/"
+    assert(normalize_dialog_text("[SFX] Hello, $N.$B  Welcome.") == "Hello, adventurer.\n Welcome.")
+    dialogs = data.table(csv.read(root + "all_npc_dialog.csv"))
+    assert(dialogs.row_count() == 25181)
+    assert(dialogs.columns() == ["npc_name", "sex", "zone", "expansion", "client_version", "dialog_type", "quest_id", "text"])
+
+    prepared = prepare_dialogs(root + "all_npc_dialog.csv")
+    assert(prepared.row_count() == 22304)
+    item_rows := 0
+    for row in prepared.rows():
+        if row.get("dialog_type") == "item_text":
+            item_rows += 1
+    assert(item_rows == 361)
+    sql_item = prepared.sql("SELECT npc_name, text FROM self WHERE dialog_type = item_text LIMIT 1").collect()
+    assert(sql_item.columns() == ["npc_name", "text"])
+    assert(sql_item.row_count() == 1)
+    npc_metadata = metadata(root + "npc_metadata.json")
+    assert(npc_metadata.row_count() == 2620)
+    assert(npc_metadata.has_column("name"))
+    assert(npc_metadata.has_column("narrator"))
+    assert(npc_metadata.select(["name", "narrator"]).limit(3).row_count() == 3)
+
+    race_overrides = overrides(root + "npc_race.yaml")
+    assert(race_overrides.columns() == ["key", "value"])
+    assert(race_overrides.row_count() > 0)

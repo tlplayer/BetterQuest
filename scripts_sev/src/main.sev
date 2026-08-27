@@ -1,0 +1,104 @@
+import data
+import csv
+import json
+import file
+import process
+
+
+def csv_cell(value: string) -> string:
+    escaped = value.replace("\"", "\"\"")
+    if value.contains(",") or value.contains("\"") or value.contains("\n"):
+        return "\"" + escaped + "\""
+    return escaped
+
+
+def populated(current: string, fallback: string) -> string:
+    return fallback if current.strip() == "" else current
+
+
+def main():
+    data_root = "/home/tplayer/Applications/wow/Interface/AddOns/BetterQuest/data"
+    dialog_path = data_root + "/all_npc_dialog.csv"
+    metadata_path = data_root + "/npc_metadata.json"
+    output_path = data_root + "/all_npc_dialog_populated.csv"
+
+    dialogs = data.table(csv.read(dialog_path))
+    metadata = data.table(json.read(metadata_path))
+
+    npc_ids: map[string, string] := {}
+    races: map[string, string] := {}
+    sexes: map[string, string] := {}
+    zones: map[string, string] := {}
+    narrators: map[string, string] := {}
+    portraits: map[string, string] := {}
+    model_ids: map[string, string] := {}
+
+    for npc in metadata.rows():
+        name = string(npc.get("name"))
+
+        if name.strip() == "":
+            continue
+
+        npc_ids[name] = string(npc.get("npc_id"))
+        races[name] = string(npc.get("race"))
+        sexes[name] = string(npc.get("sex"))
+        zones[name] = string(npc.get("zone"))
+        narrators[name] = string(npc.get("narrator"))
+        portraits[name] = string(npc.get("portrait"))
+        model_ids[name] = string(npc.get("model_id"))
+
+    columns: list[string] := []
+    for column in dialogs.columns():
+        columns.append(column)
+
+    for column in [
+        "npc_id",
+        "race",
+        "narrator",
+        "portrait",
+        "model_id",
+    ]:
+        if column not in columns:
+            columns.append(column)
+
+    lines: list[string] := []
+
+    header: list[string] := []
+    for column in columns:
+        header.append(csv_cell(column))
+    lines.append(header.join(","))
+
+    for dialog in dialogs.rows():
+        npc_name = string(dialog.get("npc_name"))
+        cells: list[string] := []
+
+        for column in columns:
+            value = string(dialog.get(column))
+
+            if column == "npc_id":
+                value = populated(value, npc_ids.get(npc_name, ""))
+            if column == "race":
+                value = populated(value, races.get(npc_name, ""))
+            if column == "sex":
+                value = populated(value, sexes.get(npc_name, ""))
+            if column == "zone":
+                value = populated(value, zones.get(npc_name, ""))
+            if column == "narrator":
+                value = populated(value, narrators.get(npc_name, ""))
+            if column == "portrait":
+                value = populated(value, portraits.get(npc_name, ""))
+            if column == "model_id":
+                value = populated(value, model_ids.get(npc_name, ""))
+
+            cells.append(csv_cell(value))
+
+        lines.append(cells.join(","))
+
+    status = file.write(output_path, lines.join("\n") + "\n")
+    assert(status >= 0, "failed to write populated NPC CSV")
+
+    print("Saved populated NPC CSV to:", output_path)
+
+    head_command = "head -n 6 " + output_path
+    print("$", head_command)
+    assert(process.run(head_command) == 0, "head command failed")

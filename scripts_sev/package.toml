@@ -1,9 +1,77 @@
+# Severian package manifest.
+# Generated from the compiler-owned configuration catalog.
+
+### PACKAGE ############################################################
+
 [package]
-name = "betterquest-pipeline"
+name = "app"
 version = "0.1.0"
 edition = "2026"
-description = "Native Severian conversion of the BetterQuest data and TTS pipeline"
+license = "Severian License"
+default-run = "app"
+
+### TARGETS ############################################################
 
 [[bin]]
-name = "betterquest-pipeline"
-path = "src/core.sev"
+name = "app"
+path = "src/main.sev"
+
+# [lib]
+# name = "app"
+# path = "src/lib.sev"
+
+### DEPENDENCIES #######################################################
+
+[dependencies]
+
+[dev-dependencies]
+
+### LANGUAGE ############################################################
+
+[language]
+type-safe = true
+
+### BUILD ###############################################################
+
+[build]
+profile = "dev"
+target = "host"
+incremental = true
+
+### DIAGNOSTICS #########################################################
+
+[diagnostics]
+mode = "user"
+message-format = "text"
+max-errors = 5
+verify-each = false
+
+### DEVELOPMENT PROFILE #################################################
+
+[profile.dev]
+opt-level = 0
+debug-symbols = true
+strip = false
+lto = false
+
+### RELEASE PROFILE #####################################################
+
+[profile.release]
+opt-level = 3
+debug-symbols = false
+strip = true
+lto = true
+
+### TESTING #############################################################
+
+[test]
+coverage-min = 0
+memory-max = "4GB"
+leaks = "deny"
+
+### PUBLISHING ##########################################################
+
+[publish]
+registry = "default"
+include-source = true
+include-interface = true
