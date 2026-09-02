@@ -16,6 +16,10 @@ default-run = "app"
 name = "app"
 path = "src/main.sev"
 
+[[bin]]
+name = "omnivoice-cpu"
+path = "src/omnivoice_cpu.sev"
+
 # [lib]
 # name = "app"
 # path = "src/lib.sev"
@@ -23,6 +27,8 @@ path = "src/main.sev"
 ### DEPENDENCIES #######################################################
 
 [dependencies]
+model = { path = "/home/tplayer/Documents/Severian/library/model", version = "0.1.0" }
+tensor = { path = "/home/tplayer/Documents/Severian/library/tensor", version = "0.1.0" }
 
 [dev-dependencies]
 

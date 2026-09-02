@@ -1,0 +1,60 @@
+import model
+import process
+import tensor
+
+
+# Native OmniVoice checkpoint probe for BetterQuest. The model operations in
+# this file and library/model are typed Severian code lowered through MLIR; no
+# Python, PyTorch, ONNX runtime, or inference subprocess is involved.
+def main():
+    arguments = process.arguments()
+    checkpoint := "/home/tplayer/.cache/huggingface/hub/models--k2-fsa--OmniVoice/snapshots/c5fdb5ccb189668d56333f77ba2629f4cd7535f4"
+    if size(arguments) > 1:
+        checkpoint = arguments[1]
+    voice = model.load_omnivoice(checkpoint)
+    attention = model.scoped(borrow voice.parameters, "llm.layers.0.self_attn")
+
+    assert(attention.contains("q_proj.weight"), "OmniVoice q_proj is missing")
+    assert(attention.contains("q_norm.weight"), "OmniVoice q_norm is missing")
+    assert(attention.entry("q_proj.weight").shape == [2048, 1024])
+    assert(attention.entry("q_norm.weight").shape == [128])
+
+    hidden_values: list[float] := []
+    for _index in range(0, voice.configuration.transformer.hidden_size):
+        hidden_values.append(0.0)
+    hidden = tensor.f32(tensor.ranked(hidden_values, [1, 1024]))
+    projected = model.linear_f32(borrow attention, "q_proj", copy hidden)
+    assert(tensor.shape(projected) == [1, 2048])
+
+    head_values: list[float] := []
+    for _index in range(0, voice.configuration.transformer.head_dimension):
+        head_values.append(2.0)
+    head = tensor.f32(tensor.ranked(head_values, [1, 1, 128]))
+    normalized = model.RmsNorm(
+        attention.f32("q_norm.weight"),
+        voice.configuration.transformer.rms_epsilon,
+    ).forward(head)
+    assert(tensor.shape(normalized) == [1, 1, 128])
+
+    mask_ids: list[float] := []
+    for _codebook in range(0, voice.configuration.audio_codebooks):
+        mask_ids.append(float(voice.configuration.audio_mask))
+    audio_ids = tensor.i64(tensor.ranked(mask_ids, [1, 8, 1]))
+    audio_embedding = model.audio_embeddings_f32(
+        borrow voice.parameters,
+        borrow voice.configuration,
+        audio_ids,
+    )
+    assert(tensor.shape(audio_embedding) == [1, 1, 1024])
+
+    print("Loaded native OmniVoice checkpoint:", checkpoint)
+    print("CPU q_proj output:", tensor.shape(projected))
+    print("CPU Q/K RMSNorm output:", tensor.shape(normalized))
+    print("Eight-codebook audio embedding:", tensor.shape(audio_embedding))
+    if size(arguments) > 2:
+        if arguments[2] == "--full-logits":
+            logits = voice.forward(tensor.reshape(hidden, [1, 1, 1024]))
+            assert(tensor.shape(logits) == [1, 8, 1, 1025])
+            print("Full 28-layer logits:", tensor.shape(logits))
+    print("Next native stage: tokenizer + iterative codebooks + Higgs codec")
+    assert(voice.close())

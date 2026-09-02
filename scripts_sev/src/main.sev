@@ -22,8 +22,8 @@ def main():
     metadata_path = data_root + "/npc_metadata.json"
     output_path = data_root + "/all_npc_dialog_populated.csv"
 
-    dialogs = data.table(csv.read(dialog_path))
-    metadata = data.table(json.read(metadata_path))
+    dialogs = data.table(file.read(dialog_path))
+    metadata = data.table(file.read(metadata_path))
 
     npc_ids: map[string, string] := {}
     races: map[string, string] := {}
@@ -73,7 +73,7 @@ def main():
         cells: list[string] := []
 
         for column in columns:
-            value = string(dialog.get(column))
+            value := string(dialog.get(column))
 
             if column == "npc_id":
                 value = populated(value, npc_ids.get(npc_name, ""))
