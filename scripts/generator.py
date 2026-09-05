@@ -13,11 +13,15 @@ import gc
 import os
 import re
 import time
+import textwrap
+import tempfile
 from pathlib import Path
 
 import pandas as pd
 import soundfile as sf
 import torch
+
+from pipeline_config import CONFIG
 
 from db_adapter import (
     get_wav_duration_seconds,
@@ -35,7 +39,7 @@ from utils import (
 # REFERENCE AUDIO DISCOVERY
 # ---------------------------------------------------------------------------
 
-def build_ref_codes(samples_root="../samples"):
+def build_ref_codes(samples_root=CONFIG["samples_dir"]):
     """
     Scan samples_root for .wav files.
     Returns { narrator_name: { "audio_path": str } }
@@ -56,52 +60,29 @@ def build_ref_codes(samples_root="../samples"):
 
 def chunk_text_robust(text, min_chars=150, max_chars=300):
     """
-    Split text into TTS-friendly chunks of roughly min_chars–max_chars characters.
-    Respects sentence boundaries (.?!;…).  Merges short trailing sentences.
+    Split in reading order, preferring sentence/word boundaries.
+    max_chars is a hard cap, including long words and merged short sentences.
+    min_chars is retained for compatibility; it never overrides the hard cap.
     """
+    if max_chars < 1:
+        raise ValueError("max_chars must be positive")
     if not text:
         return []
-
-    sentence_pattern = r'.*?(?:\.\.\.|[.?!;]|$)'
-    sentences = [s.strip() for s in re.findall(sentence_pattern, text, flags=re.DOTALL) if s.strip()]
-
+    sentences = re.findall(r'.*?(?:\.\.\.|[.?!;…]|$)', text, flags=re.DOTALL)
     chunks = []
     current = ""
-
     for sentence in sentences:
-        if len(sentence) > max_chars:
-            words = sentence.split()
-            temp  = ""
-            for word in words:
-                if len(temp) + len(word) + 1 > max_chars:
-                    if temp:
-                        chunks.append(temp.strip())
-                    temp = word
-                else:
-                    temp += (" " + word) if temp else word
-            sentence = temp if temp else ""
-            if not sentence:
-                continue
-
-        if len(current) + len(sentence) + 1 > max_chars:
-            if current:
-                chunks.append(current.strip())
-            current = sentence
-        else:
-            current += (" " + sentence) if current else sentence
-
+        for piece in textwrap.wrap(sentence.strip(), width=max_chars,
+                                   break_long_words=True, break_on_hyphens=False):
+            candidate = f"{current} {piece}".strip()
+            if current and len(candidate) > max_chars:
+                chunks.append(current)
+                current = piece
+            else:
+                current = candidate
     if current:
-        chunks.append(current.strip())
-
-    # Merge short trailing chunks
-    final = []
-    for chunk in chunks:
-        if final and len(chunk) < min_chars:
-            final[-1] += " " + chunk
-        else:
-            final.append(chunk)
-
-    return final
+        chunks.append(current)
+    return chunks
 
 
 # ---------------------------------------------------------------------------
@@ -116,12 +97,15 @@ def get_gpu_memory_info():
         return None
     allocated = torch.cuda.memory_allocated() / 1024**3
     reserved  = torch.cuda.memory_reserved()  / 1024**3
-    total     = torch.cuda.get_device_properties(0).total_memory / 1024**3
+    free_bytes, total_bytes = torch.cuda.mem_get_info()
+    total = total_bytes / 1024**3
+    used = (total_bytes - free_bytes) / 1024**3
     return {
         "allocated_gb":   allocated,
         "reserved_gb":    reserved,
         "total_gb":       total,
-        "usage_percent":  allocated / total if total > 0 else 0,
+        "used_gb":        used,
+        "usage_percent":  used / total if total > 0 else 0,
     }
 
 
@@ -137,14 +121,14 @@ def wait_for_gpu_memory(threshold=0.85, wait_seconds=5, max_retries=10):
         info = get_gpu_memory_info()
         if info["usage_percent"] < threshold:
             if attempt > 0:
-                print(f"[GPU] Memory freed: {info['allocated_gb']:.2f}/{info['total_gb']:.2f} GB")
+                print(f"[GPU] Memory freed: {info['used_gb']:.2f}/{info['total_gb']:.2f} GB")
             return True
-        print(f"[GPU] {info['allocated_gb']:.2f}/{info['total_gb']:.2f} GB  ({info['usage_percent']*100:.1f}%)  waiting {wait_seconds}s…")
+        print(f"[GPU] {info['used_gb']:.2f}/{info['total_gb']:.2f} GB  ({info['usage_percent']*100:.1f}%)  waiting {wait_seconds}s…")
         gc.collect()
         torch.cuda.empty_cache()
         time.sleep(wait_seconds)
 
-    print("[GPU] WARNING: still high after max retries, proceeding anyway.")
+    print("[GPU] WARNING: still high after max retries; stopping generation.")
     return False
 
 
@@ -326,6 +310,7 @@ def generate_tts_for_row(
     max_retries=3,
     retry_wait=10,
     config=None,
+    chunk_chars=200,
 ):
     """
     Generate and write a single WAV file for one dialog row.
@@ -411,7 +396,6 @@ def generate_tts_for_row(
                 )
                 return filepath
             else:
-                os.remove(filepath)
                 print(f"[REGEN] Older than cutoff ({mtime.date()}): {filepath}")
         elif not regenerate:
             _maybe_incremental_sync(
@@ -425,14 +409,18 @@ def generate_tts_for_row(
     # ------------------------------------------------------------------
     print(f"[GEN] {filepath}  (voice: {narrator_voice})")
     ref        = ref_codes[narrator_voice]
-    text_chunks = chunk_text_robust(row["text"])
+    text_chunks = chunk_text_robust(row["text"], max_chars=chunk_chars)
     if not text_chunks:
         return None
 
     for attempt in range(max_retries):
+        # Only publish a complete file. Failure or Ctrl-C leaves an old WAV intact.
+        fd, temp_path = tempfile.mkstemp(prefix=".tts-", suffix=".wav", dir=base_dir)
+        os.close(fd)
+        retry_oom = False
         try:
             sample_rate = getattr(tts, "sampling_rate", DEFAULT_SAMPLE_RATE)
-            with sf.SoundFile(filepath, mode="w", samplerate=sample_rate, channels=1, subtype="PCM_16") as f:
+            with sf.SoundFile(temp_path, mode="w", samplerate=sample_rate, channels=1, subtype="PCM_16") as f:
                 with torch.no_grad():
                     for chunk_idx, chunk in enumerate(text_chunks):
                         wav = tts.generate(chunk, audio_prompt_path=ref["audio_path"])
@@ -444,6 +432,7 @@ def generate_tts_for_row(
                         del wav
                         torch.cuda.empty_cache()
 
+            os.replace(temp_path, filepath)
             if incremental_sync:
                 quest_id_for_sync = quest_id if (has_quest_id and dialog_type != "gossip") else None
                 update_lua_database_incremental(
@@ -458,28 +447,37 @@ def generate_tts_for_row(
 
             return filepath
 
+        except MemoryError:
+            raise
         except RuntimeError as e:
-            is_oom = "out of memory" in str(e).lower() or "cuda" in str(e).lower()
-            if is_oom and attempt < max_retries - 1:
-                print(f"[RETRY] OOM on attempt {attempt+1}/{max_retries}. Waiting {retry_wait}s…")
-                if torch.cuda.is_available():
-                    torch.cuda.empty_cache()
-                    torch.cuda.synchronize()
-                gc.collect()
-                time.sleep(retry_wait)
-                if os.path.exists(filepath):
-                    os.remove(filepath)
-                continue
-            print(f"[ERROR] Generation failed after {attempt+1} attempts: {e}")
-            if os.path.exists(filepath):
-                os.remove(filepath)
-            return None
-
+            is_oom = isinstance(e, torch.OutOfMemoryError) or any(
+                message in str(e).lower() for message in ("out of memory", "can't allocate memory")
+            )
+            if not is_oom:
+                print(f"[ERROR] Generation failed: {e}")
+                return None
+            if attempt >= max_retries - 1 or chunk_chars <= 50:
+                raise MemoryError("OmniVoice exhausted memory after smaller-chunk retries; stopping. Completed WAVs are preserved.") from e
+            retry_oom = True
         except Exception as e:
             print(f"[ERROR] Unexpected error: {e}")
-            if os.path.exists(filepath):
-                os.remove(filepath)
             return None
+        finally:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+
+        # Outside the exception handler: its traceback must release model tensors
+        # before collecting garbage and asking CUDA to release cached allocations.
+        if retry_oom:
+            chunk_chars = max(50, chunk_chars // 2)
+            text_chunks = chunk_text_robust(row["text"], max_chars=chunk_chars)
+            if hasattr(tts, "clear_prompt_cache"):
+                tts.clear_prompt_cache()
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+            print(f"[RETRY] OOM: reducing chunks to {chunk_chars} characters; waiting {retry_wait}s")
+            time.sleep(retry_wait)
 
     return None
 
@@ -520,6 +518,7 @@ def generate_audio(
     incremental_sync=False,
     time_cutoff=None,
     config=None,
+    chunk_chars=200,
 ):
     """
     Generate TTS audio for every row in df.
@@ -559,10 +558,11 @@ def generate_audio(
         except ValueError:
             print(f"[ERROR] Invalid --time value '{time_cutoff}'. Ignoring.")
 
-    if torch.cuda.is_available():
+    use_cuda = torch.cuda.is_available() and str(getattr(tts, "device", "cuda")).startswith("cuda")
+    if use_cuda:
         info = get_gpu_memory_info()
         print(
-            f"[GPU] {info['allocated_gb']:.2f}/{info['total_gb']:.2f} GB  "
+            f"[GPU] {info['used_gb']:.2f}/{info['total_gb']:.2f} GB  "
             f"threshold={gpu_threshold*100:.0f}%  "
             f"check_interval={gpu_check_interval}"
         )
@@ -571,11 +571,12 @@ def generate_audio(
     files_processed   = 0
 
     for idx, row in df.iterrows():
-        if torch.cuda.is_available() and files_processed > 0 and files_processed % gpu_check_interval == 0:
+        if use_cuda and files_processed > 0 and files_processed % gpu_check_interval == 0:
             info = get_gpu_memory_info()
-            print(f"[GPU] {files_processed} files  {info['allocated_gb']:.2f}/{info['total_gb']:.2f} GB")
+            print(f"[GPU] {files_processed} files  {info['used_gb']:.2f}/{info['total_gb']:.2f} GB")
             if info["usage_percent"] >= gpu_threshold:
-                wait_for_gpu_memory(threshold=gpu_threshold, wait_seconds=gpu_wait)
+                if not wait_for_gpu_memory(threshold=gpu_threshold, wait_seconds=gpu_wait):
+                    raise MemoryError("GPU memory remains above the configured threshold; stopping.")
 
         result = generate_tts_for_row(
             row,
@@ -590,6 +591,7 @@ def generate_audio(
             max_retries=max_retries,
             retry_wait=retry_wait,
             config=config,
+            chunk_chars=chunk_chars,
         )
 
         if result and result != "SKIPPED_DUPLICATE":
@@ -601,12 +603,12 @@ def generate_audio(
 
     if missing_narrators:
         import pandas as _pd
-        missing_csv = os.path.join("../data", "missing_narrators.csv")
+        missing_csv = (config or CONFIG).get("missing_narrators_csv", CONFIG["missing_narrators_csv"])
         _pd.DataFrame(missing_narrators).drop_duplicates(subset=["npc_name"]).to_csv(missing_csv, index=False)
         print(f"[WARN] {len(missing_narrators)} rows with no narrator → {missing_csv}")
 
-    if torch.cuda.is_available():
+    if use_cuda:
         info = get_gpu_memory_info()
-        print(f"[GPU] Final: {info['allocated_gb']:.2f}/{info['total_gb']:.2f} GB")
+        print(f"[GPU] Final: {info['used_gb']:.2f}/{info['total_gb']:.2f} GB")
 
     print(f"[OK] Audio generation complete ({files_processed} files written)")

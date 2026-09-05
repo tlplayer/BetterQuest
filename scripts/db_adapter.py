@@ -40,15 +40,7 @@ from utils import (
 
 SEX_MAP = {0: "male", 1: "female"}
 
-_DEFAULT_CONFIG = {
-    "npc_metadata_json": "../data/npc_metadata.json",
-    "race_file":         "../data/npc_race.yaml",
-    "sex_file":          "../data/npc_sex.yaml",
-    "zone_file":         "../data/npc_zone.yaml",
-    "missing_race_file": "../data/missing_race.yaml",
-    "output_lua":        "../db/npc_database.lua",
-    "sounds_dir":        "../sounds",
-}
+from pipeline_config import CONFIG as _DEFAULT_CONFIG
 
 
 # ---------------------------------------------------------------------------

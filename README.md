@@ -100,10 +100,10 @@ sudo apt install ffmpeg
 # activate env
 source venv/bin/activate
 
-cd scripts
+# test generation from the addon root (auto-selects GPU or CPU)
+python scripts/core.py --limit 1
 
-# test generation (CPU, single file)
-python core.py --limit 1 --device cpu
+# Running from scripts/ with python core.py also works.
 
 ```
 
@@ -141,9 +141,41 @@ samples/orc_male.txt
 ```
 
 If the `.txt` file is absent, BetterQuest transcribes the sample once with
-`openai/whisper-tiny.en` and caches the resulting voice prompt for the run.
-Generation defaults to 16 diffusion steps for speed; use `--tts-steps 32` when
-you prefer the higher-quality setting. `--tts-speed` controls speaking speed.
+`openai/whisper-tiny.en` on CPU. Up to eight voice prompts are cached on CPU;
+least recently used prompts are evicted. For references longer than 20 seconds
+without transcripts, only the first 10 seconds are read and transcribed. If a
+transcript exists, shorten the WAV and its transcript together before running.
+Generation defaults to 32 diffusion steps for quality; use `--tts-steps 16` for
+speed. `--tts-speed` controls speaking speed.
+
+Memory controls are enabled by default:
+
+- `--device auto` selects CUDA when available, otherwise CPU.
+- `--tts-dtype auto` uses bfloat16 on CPU and supported GPUs, otherwise float16.
+  Use `--tts-dtype float32` if your CPU cannot run bfloat16 (requires more RAM).
+- `--tts-threads 4` limits PyTorch CPU threads to keep the machine responsive.
+- `--tts-chunk-chars 200` limits each text chunk. OOM retries halve this limit
+  down to 50 characters, then stop the run if memory is still exhausted.
+- `--prompt-cache-size 8` bounds the number of retained voice prompts.
+- `--gpu-memory-fraction 0.8` caps the PyTorch CUDA allocator at 80% of VRAM.
+  This does not cap allocations made outside PyTorch.
+- Linux runs stop before loading/generation if available RAM falls below 2 GiB.
+  This headroom check cannot guarantee protection against an OS kill during a
+  large native allocation. GPU pressure checks also stop after a bounded wait.
+
+WAVs are published only when complete, so failed generation preserves existing
+files. Restart the command to reuse completed audio. For a smaller-memory trial:
+
+```sh
+python scripts/core.py --skip-sync --limit 1 --tts-chunk-chars 100 --prompt-cache-size 1
+```
+
+Model options follow the [OmniVoice Python API](https://github.com/k2-fsa/OmniVoice#python-api).
+Pipeline regression tests run without model downloads:
+
+```sh
+python3 -m unittest discover -s tests -v
+```
 
 **Generate for a specific NPC:**
 

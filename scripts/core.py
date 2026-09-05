@@ -45,19 +45,7 @@ from utils import normalize_dialog_text
 # DEFAULTS  (override via --config or env if desired)
 # ---------------------------------------------------------------------------
 
-CONFIG = {
-    "npc_dialog_csv":    "../data/all_npc_dialog.csv",
-    "npc_metadata_json": "../data/npc_metadata.json",
-    "race_file":         "../data/npc_race.yaml",
-    "sex_file":          "../data/npc_sex.yaml",
-    "zone_file":         "../data/npc_zone.yaml",
-    "missing_race_file": "../data/missing_race.yaml",
-    "output_lua":        "../db/npc_database.lua",
-    "sounds_dir":        "../sounds",
-    "samples_dir":       "../samples",
-    "betterquest_lua":   "../../../../WTF/Account/ADMIN/SavedVariables/BetterQuest.lua",
-    "wtf_path":          "../../../../WTF",
-}
+from pipeline_config import CONFIG
 
 # ---------------------------------------------------------------------------
 # ARG PARSING
@@ -87,16 +75,23 @@ def parse_args():
     # Generation control
     p.add_argument("--regenerate",     action="store_true", help="Overwrite existing audio files")
     p.add_argument("--time",           metavar="YYYY-MM-DD", help="Regenerate files older than this date")
-    p.add_argument("--device",         choices=["cpu", "cuda"], default="cuda")
+    p.add_argument("--device",         choices=["auto", "cpu", "cuda"], default="auto")
     p.add_argument("--tts-model",      default="k2-fsa/OmniVoice", help="OmniVoice model ID or local path")
     p.add_argument("--tts-language",   default="English", help="OmniVoice language name or code")
-    p.add_argument("--tts-steps",      type=int, default=16, help="Diffusion steps; 16 is fast, 32 favors quality")
+    p.add_argument("--tts-steps",      type=int, default=32, help="Diffusion steps; 32 favors quality, 16 is faster")
     p.add_argument("--tts-speed",      type=float, default=1.0, help="Speaking speed multiplier")
     p.add_argument(
         "--asr-model",
         default="openai/whisper-tiny.en",
         help="ASR model used only when a reference sample has no matching .txt transcript",
     )
+
+    p.add_argument("--tts-dtype", choices=["auto", "float32", "float16", "bfloat16"], default="auto",
+                   help="auto uses bfloat16 on CPU/supported CUDA, otherwise float16")
+    p.add_argument("--tts-threads", type=int, default=4, help="Maximum PyTorch CPU threads")
+    p.add_argument("--tts-chunk-chars", type=int, default=200, help="Maximum characters per generation chunk")
+    p.add_argument("--prompt-cache-size", type=int, default=8, help="Maximum cached voice prompts (on CPU)")
+    p.add_argument("--gpu-memory-fraction", type=float, default=0.8, help="PyTorch CUDA allocator cap (0–1)")
 
     # Skip flags
     p.add_argument("--skip-sync",      action="store_true")
@@ -115,7 +110,18 @@ def parse_args():
     p.add_argument("--daemon-interval", type=int, default=5)
     p.add_argument("--wtf-path",        default=CONFIG["wtf_path"])
 
-    return p.parse_args()
+    args = p.parse_args()
+    for name in ("tts_steps", "tts_threads", "tts_chunk_chars", "prompt_cache_size", "gpu_check_interval", "max_retries"):
+        if getattr(args, name) <= 0:
+            p.error(f"--{name.replace('_', '-')} must be positive")
+    for name in ("gpu_memory_fraction", "gpu_threshold"):
+        if not 0 < getattr(args, name) <= 1:
+            p.error(f"--{name.replace('_', '-')} must be in (0, 1]")
+    if not 0 < args.tts_speed < float("inf"):
+        p.error("--tts-speed must be finite and positive")
+    if args.gpu_wait < 0 or args.retry_wait < 0:
+        p.error("wait times must be nonnegative")
+    return args
 
 
 # ---------------------------------------------------------------------------
@@ -252,6 +258,7 @@ def run_pipeline(args, npc_lookup, ref_codes, tts, betterquest_path=None):
             incremental_sync=False,
             time_cutoff=args.time,
             config=CONFIG,
+            chunk_chars=args.tts_chunk_chars,
         )
     else:
         print("\n=== STEP 2: Generating TTS audio [SKIPPED] ===")
@@ -308,6 +315,10 @@ def main():
             num_step=args.tts_steps,
             speed=args.tts_speed,
             asr_model_name=args.asr_model,
+            dtype=args.tts_dtype,
+            cpu_threads=args.tts_threads,
+            prompt_cache_size=args.prompt_cache_size,
+            gpu_memory_fraction=args.gpu_memory_fraction,
         )
         print("[INFO] TTS model ready")
 
@@ -334,4 +345,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except MemoryError as exc:
+        print(f"[ERROR] {exc}", file=sys.stderr)
+        sys.exit(1)
